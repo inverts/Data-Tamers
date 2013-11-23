@@ -12,6 +12,7 @@
 <p>Lynn's first commit</p>
 <p>Gwen's first commit</p>
 <p>Andrew's first commit</p>
+<p>Dave's last commit</p>
 <P>  The time on the server is ${serverTime}. </P>
 </body>
 </html>
