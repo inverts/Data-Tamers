@@ -1,4 +1,4 @@
-package io.analytics.site;
+package io.analytics.site.controllers;
 
 import java.text.DateFormat;
 import java.util.Date;
