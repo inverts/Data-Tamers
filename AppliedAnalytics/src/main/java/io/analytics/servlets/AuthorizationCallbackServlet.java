@@ -3,8 +3,6 @@ package io.analytics.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,9 +18,11 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson.JacksonFactory;
 
 
-public class CalendarServletCallbackSample extends AbstractAuthorizationCodeCallbackServlet {
+public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallbackServlet {
 
-  @Override
+	private static final long serialVersionUID = -7856464786872438430L;
+
+@Override
   protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential)
       throws ServletException, IOException {
 	  HttpSession session = req.getSession();
@@ -30,12 +30,6 @@ public class CalendarServletCallbackSample extends AbstractAuthorizationCodeCall
 	  
 	  resp.sendRedirect("/site/success");
 	  
-	  /*
-	  ServletContext sc = getServletContext();
-      RequestDispatcher rd = sc.getRequestDispatcher("/success");
-      req.setAttribute("credentials", credential);
-      rd.forward(req,resp);
-      */
   }
 
   @Override
@@ -59,6 +53,7 @@ public class CalendarServletCallbackSample extends AbstractAuthorizationCodeCall
   protected AuthorizationCodeFlow initializeFlow() throws IOException {
 	  ArrayList<String> scopes = new ArrayList<String>();
 	  scopes.add("https://www.googleapis.com/auth/analytics");
+	  scopes.add("https://www.googleapis.com/auth/plus.login");
 	  
 	  // TODO: Change this to use the GoogleClientSecrets object and load the ID and client secret from JSON elsewhere.
 	  GoogleAuthorizationCodeFlow.Builder builder = new GoogleAuthorizationCodeFlow.Builder(new NetHttpTransport(), new JacksonFactory(), 
@@ -71,9 +66,10 @@ public class CalendarServletCallbackSample extends AbstractAuthorizationCodeCall
 
   @Override
   protected String getUserId(HttpServletRequest req) throws ServletException, IOException {
-	  
-	  //TODO: Replace with a unique user ID from this person's session
-    return "dave";
+	  //TODO: This needs to be double-checked that it is an acceptable way of getting the user ID.
+	  //Find out exactly what getUserId is for, and what kind of unique ID it needs to function properly.
+	  HttpSession session = req.getSession();
+	  return session.getId();
   }
 }
 

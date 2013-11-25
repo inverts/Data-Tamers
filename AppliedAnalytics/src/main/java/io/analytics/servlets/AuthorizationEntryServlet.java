@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeServlet;
@@ -14,9 +15,11 @@ import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson.JacksonFactory;
 
-public class CalendarServletSample extends AbstractAuthorizationCodeServlet {
+public class AuthorizationEntryServlet extends AbstractAuthorizationCodeServlet {
 
-	  @Override
+	private static final long serialVersionUID = 3525725378482642400L;
+
+	@Override
 	  protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	      throws IOException {
 	    initializeFlow();
@@ -33,6 +36,9 @@ public class CalendarServletSample extends AbstractAuthorizationCodeServlet {
 	  protected AuthorizationCodeFlow initializeFlow() throws IOException {
 		  ArrayList<String> scopes = new ArrayList<String>();
 		  scopes.add("https://www.googleapis.com/auth/analytics");
+		  scopes.add("https://www.googleapis.com/auth/plus.login");
+		  //TODO: Look at https://developers.google.com/accounts/docs/OAuth2Login#validatinganidtoken as a possible alternative.
+		  //	With the Google+ API, it requires that the user's Google+ account is set up.
 
 		  // TODO: Change this to use the GoogleClientSecrets object and load the ID and client secret from JSON elsewhere.
 		  GoogleAuthorizationCodeFlow.Builder builder = new GoogleAuthorizationCodeFlow.Builder(new NetHttpTransport(), new JacksonFactory(), 
@@ -46,9 +52,9 @@ public class CalendarServletSample extends AbstractAuthorizationCodeServlet {
 
 	  @Override
 	  protected String getUserId(HttpServletRequest req) throws ServletException, IOException {
-		  
-
-		  //TODO: Replace with a unique user ID from this person's session
-	    return "dave";
+		  //TODO: This needs to be double-checked that it is an acceptable way of getting the user ID.
+		  //Find out exactly what getUserId is for, and what kind of unique ID it needs to function properly.
+		  HttpSession session = req.getSession();
+		  return session.getId();
 	  }
 	}

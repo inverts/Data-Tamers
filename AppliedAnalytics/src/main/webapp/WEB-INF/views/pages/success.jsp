@@ -3,6 +3,7 @@
 <html>
 <head>
 	<title>Success</title>
+	<!-- This page is temporary, for debugging purposes, and should be removed at a later point. -->
 </head>
 <body>
 <h1>
