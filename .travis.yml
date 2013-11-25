@@ -1,8 +1,17 @@
 language: java
 
-# branch whitelist:
+# Branch white list:
 branches:
  only:
   - master
-  
+
+# Change into the correct directory before we try to build.
 before_script: cd AppliedAnalytics
+
+
+notifications:
+  email:
+    - invertedaerials@gmail.com
+    - tesiagao@gmail.com
+    - gwen.knight2@gmail.com
+    - u0530964@gmail.com
