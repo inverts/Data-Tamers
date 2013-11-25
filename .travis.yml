@@ -2,5 +2,5 @@ language: java
 
 # branch whitelist:
 branches:
-	only:
-		- master
+ only:
+  - master
