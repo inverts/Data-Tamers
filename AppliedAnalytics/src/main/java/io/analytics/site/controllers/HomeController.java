@@ -10,6 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.google.api.client.auth.oauth2.Credential;
 
 /**
  * Handles requests for the application home page.
@@ -18,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	
+
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -34,6 +37,14 @@ public class HomeController {
 		model.addAttribute("serverTime", formattedDate );
 		
 		return "home";
+	}
+	
+	
+	@RequestMapping(value = "/success", method = RequestMethod.GET)
+	public String success() { //@RequestParam("credentials") Credential credentials
+		logger.info("Successfully authorized.");
+		
+		return "success";
 	}
 	
 }

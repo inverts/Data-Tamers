@@ -2,15 +2,14 @@
 <%@ page session="false" %>
 <html>
 <head>
-	<title>Home</title>
+	<title>Success</title>
 </head>
 <body>
 <h1>
-	Hello world!  
+	Success! 
 </h1>
 
-<P>  The time on the server is ${serverTime}. </P>
-
+<P>You have successfully granted the application access to view your Google Analytics data.</P>
 
 </body>
 </html>

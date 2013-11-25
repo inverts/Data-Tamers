@@ -24,10 +24,29 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>CalendarServletSample</servlet-name>
+		<servlet-class>io.analytics.servlets.CalendarServletSample</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>CalendarServletCallbackSample</servlet-name>
+		<servlet-class>io.analytics.servlets.CalendarServletCallbackSample</servlet-class>
+	</servlet>
 		
 	<servlet-mapping>
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>CalendarServletSample</servlet-name>
+		<url-pattern>/login/</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>CalendarServletCallbackSample</servlet-name>
+		<url-pattern>/oauth2callback</url-pattern>
 	</servlet-mapping>
 
 </web-app>
