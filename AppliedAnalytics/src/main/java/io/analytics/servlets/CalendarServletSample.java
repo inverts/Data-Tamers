@@ -39,6 +39,8 @@ public class CalendarServletSample extends AbstractAuthorizationCodeServlet {
 	    		"409721414292.apps.googleusercontent.com", "ZJkn2D7ciulmkd0oyJ6jX-DU", scopes);
 		  
 		  builder.setAccessType("offline"); //This is so we can retain the refresh token, and not have to ask the user again.
+		  builder.setApprovalPrompt("force");
+
 		  return builder.build();
 	  }
 

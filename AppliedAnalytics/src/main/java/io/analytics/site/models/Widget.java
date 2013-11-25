@@ -10,8 +10,6 @@ public abstract class Widget {
 
 	// A Widgets relation to its frame should be defined by the frame. (No positional data here)
 		
-	//TODO: Possibly add a method for getting the widget's contents?
-	
 	//TODO: Add something requiring that the widget have information about how to
 	//		update its data - or possibly create an UpdatableWidget model.
 	//		Maybe some reference to what API call it needs to make to the system?

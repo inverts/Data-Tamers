@@ -8,6 +8,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.AuthorizationCodeResponseUrl;
@@ -24,10 +25,17 @@ public class CalendarServletCallbackSample extends AbstractAuthorizationCodeCall
   @Override
   protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential)
       throws ServletException, IOException {
+	  HttpSession session = req.getSession();
+	  session.setAttribute("credentials", credential);
+	  
+	  resp.sendRedirect("/site/success");
+	  
+	  /*
 	  ServletContext sc = getServletContext();
       RequestDispatcher rd = sc.getRequestDispatcher("/success");
       req.setAttribute("credentials", credential);
       rd.forward(req,resp);
+      */
   }
 
   @Override
@@ -57,6 +65,7 @@ public class CalendarServletCallbackSample extends AbstractAuthorizationCodeCall
     		"409721414292.apps.googleusercontent.com", "ZJkn2D7ciulmkd0oyJ6jX-DU", scopes);
 	  
 	  builder.setAccessType("offline"); //This is so we can retain the refresh token, and not have to ask the user again.
+	  builder.setApprovalPrompt("force");
 	  return builder.build();
   }
 
