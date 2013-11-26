@@ -27,8 +27,8 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
       throws ServletException, IOException {
 	  HttpSession session = req.getSession();
 	  session.setAttribute("credentials", credential);
-	  
-	  resp.sendRedirect("/site/success");
+	  String contextPath = session.getServletContext().getContextPath();
+	  resp.sendRedirect(contextPath + "/success");
 	  
   }
 
@@ -45,7 +45,8 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
   @Override
   protected String getRedirectUri(HttpServletRequest req) throws ServletException, IOException {
     GenericUrl url = new GenericUrl(req.getRequestURL().toString());
-    url.setRawPath("/site/oauth2callback");
+	String contextPath = req.getSession().getServletContext().getContextPath();
+    url.setRawPath(contextPath + "/oauth2callback");
     return url.build();
   }
 
