@@ -15,6 +15,7 @@
 	<annotation-driven />
 
 	<!-- Handles HTTP GET requests for /cache/** by efficiently serving up static resources in the ${webappRoot}/WEB-INF/cache/ directory -->
+
 	<resources mapping="/cache/**" location="/resources/cache/" />
 
  
