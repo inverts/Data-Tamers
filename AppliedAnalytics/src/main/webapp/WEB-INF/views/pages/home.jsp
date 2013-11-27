@@ -10,5 +10,9 @@
 </h1>
 
 <P>  The time on the server is ${serverTime}. </P>
+
+<input type="button" value="Log in" onclick="document.location.href = '/appliedanalytics/login';" />
+
+
 </body>
 </html>
