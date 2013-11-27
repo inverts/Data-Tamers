@@ -11,8 +11,8 @@
 </h1>
 
 <P>You have successfully granted the application access to view your Google Analytics data.</P>
-<p>Your ACCESS TOKEN is: <strong>${accessToken}</strong></p>
-<p>Your REFRESH TOKEN is: <strong>${refreshToken}</strong></p>
+<p>Your ACCESS TOKEN is: <strong>${model.accessToken}</strong></p>
+<p>Your REFRESH TOKEN is: <strong>${model.refreshToken}</strong></p>
 
 </body>
 </html>
