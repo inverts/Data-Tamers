@@ -18,6 +18,8 @@ public class PageRenderer extends InternalResourceView {
         	request.setAttribute("page_footer", "/WEB-INF/views/includes/footer.jsp");
         }
         
+        request.setAttribute("model", model);
+        
         // set original view being asked for as a request parmeter
         request.setAttribute("page_frame", dispatcherPath.substring(dispatcherPath.lastIndexOf("/") + 1));
         // force everything to be template.jsp

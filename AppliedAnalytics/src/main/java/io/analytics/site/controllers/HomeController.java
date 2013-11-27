@@ -5,9 +5,9 @@ import io.analytics.aspect.HeaderFooter;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
-
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.api.client.auth.oauth2.Credential;
@@ -40,14 +39,20 @@ public class HomeController {
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
 		String formattedDate = dateFormat.format(date);
 		
-		model.addAttribute("serverTime", formattedDate );
+		model.addAttribute("serverTime", formattedDate);
 		
-		return new ModelAndView("home", "model", model.asMap());
+		//ModelAndView viewModel = new ModelAndView("home");
+		
+		//viewModel.addObject("serverTime", formattedDate );
+		
+		//return viewModel;
+		
+		return new ModelAndView("home", model.asMap());
 	}
 	
 	
 	@RequestMapping(value = "/success", method = RequestMethod.GET)
-	public String success(HttpSession session, Model model) { //@RequestParam("credentials") Credential credentials
+	public ModelAndView success(HttpSession session, Model model) { //@RequestParam("credentials") Credential credentials
 		logger.info("Successfully authorized.");
 		Credential credentials = (Credential) session.getAttribute("credentials");
 		if (credentials != null) {
@@ -56,7 +61,8 @@ public class HomeController {
 		} else {
 			logger.info("Missing credentials.");
 		}
-		return "success";
+		
+		return new ModelAndView("success", model.asMap());
 	}
 	
 	/*
