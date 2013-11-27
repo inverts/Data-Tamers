@@ -15,11 +15,13 @@
 	<annotation-driven />
 
 	<!-- Handles HTTP GET requests for /cache/** by efficiently serving up static resources in the ${webappRoot}/WEB-INF/cache/ directory -->
-	<resources mapping="/cache/**" location="/WEB-INF/cache/" />
+
+	<resources mapping="/cache/**" location="/resources/cache/" />
 
  
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="viewClass" value="io.analytics.site.PageRenderer" />
 		<beans:property name="prefix" value="/WEB-INF/views/pages/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
