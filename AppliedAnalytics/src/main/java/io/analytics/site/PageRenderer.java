@@ -13,16 +13,15 @@ public class PageRenderer extends InternalResourceView {
     protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String dispatcherPath = prepareForRendering(request, response);
              
-        if (model.containsKey("HeaderFooter") && (Boolean)model.get("HeaderFooter")) {
-        	request.setAttribute("page_header", "/WEB-INF/views/includes/header.jsp");
-        	request.setAttribute("page_footer", "/WEB-INF/views/includes/footer.jsp");
-        }
-        
+        request.setAttribute("HEADER", model.get("HEADER"));
+        request.setAttribute("FOOTER", model.get("FOOTER"));
+
         request.setAttribute("model", model);
         
-        // set original view being asked for as a request parmeter
+        // set the content
         request.setAttribute("page_frame", dispatcherPath.substring(dispatcherPath.lastIndexOf("/") + 1));
-        // force everything to be template.jsp
+        
+        // route to page-template
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/pages/page-template.jsp");
         
         rd.include(request, response);

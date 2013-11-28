@@ -40,14 +40,8 @@ public class HomeController {
 		String formattedDate = dateFormat.format(date);
 		
 		model.addAttribute("serverTime", formattedDate);
-		
-		//ModelAndView viewModel = new ModelAndView("home");
-		
-		//viewModel.addObject("serverTime", formattedDate );
-		
-		//return viewModel;
-		
-		return new ModelAndView("home", model.asMap());
+				
+		return new ModelAndView("home");
 	}
 	
 	
@@ -62,7 +56,7 @@ public class HomeController {
 			logger.info("Missing credentials.");
 		}
 		
-		return new ModelAndView("success", model.asMap());
+		return new ModelAndView("success", "model", model);
 	}
 	
 	/*

@@ -12,8 +12,10 @@ public class SiteAspect {
 	public void HeaderFooterAdvice(JoinPoint joinPoint)
 	{
 		System.out.println("HeaderFooterAdvice!");
-		Model m = (Model)joinPoint.getArgs()[1];
-		m.addAttribute("HeaderFooter", true);
+		Model model = (Model)joinPoint.getArgs()[1];
+		
+		model.addAttribute("HEADER", "/WEB-INF/views/includes/header.jsp");
+		model.addAttribute("FOOTER", "/WEB-INF/views/includes/footer.jsp");
 	}
 
 }
