@@ -39,7 +39,7 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate);
 				
-		return new ModelAndView("pages/home");
+		return new ModelAndView("home");
 	}
 	
 	@RequestMapping(value = "/widget", method = RequestMethod.GET)
@@ -61,7 +61,7 @@ public class HomeController {
 			logger.info("Missing credentials.");
 		}
 		
-		return new ModelAndView("pages/success");
+		return new ModelAndView("success");
 	}
 	
 	/*
