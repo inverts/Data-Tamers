@@ -1,0 +1,30 @@
+@CHARSET "ISO-8859-1";
+
+
+.widget_wrapper {
+	max-width: 800px;
+	padding:15px;
+	background-color: #CCC;
+}
+
+.widget_header {
+	height:50px;
+}
+
+.widget_title {
+	font: 1.4em arial,sans-serif;
+	float: left;
+}
+
+
+.widget_input {
+	
+}
+
+.widget_input {
+	float: right;	
+}
+
+.widget_input label {
+	font: 1.1em arial,sans-serif;
+}
