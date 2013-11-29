@@ -12,13 +12,14 @@ public class PageRenderer extends InternalResourceView {
 	@Override
     protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String dispatcherPath = prepareForRendering(request, response);
-             
+        
+        // Set the header and footer if applicable
         request.setAttribute("HEADER", model.get("HEADER"));
         request.setAttribute("FOOTER", model.get("FOOTER"));
-
-        request.setAttribute("model", model);
         
-        // set the content
+        request.setAttribute("model", model);
+
+    	// set the content
         request.setAttribute("page_frame", dispatcherPath.substring(dispatcherPath.lastIndexOf("/") + 1));
         
         // route to page-template

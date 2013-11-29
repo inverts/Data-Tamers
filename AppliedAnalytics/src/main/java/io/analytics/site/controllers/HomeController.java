@@ -5,9 +5,7 @@ import io.analytics.aspect.HeaderFooter;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
 
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -41,7 +39,14 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate);
 				
-		return new ModelAndView("home");
+		return new ModelAndView("pages/home");
+	}
+	
+	@RequestMapping(value = "/widget", method = RequestMethod.GET)
+	public ModelAndView hypotheticalFutureView(Locale locale, Model model) {
+		
+		return new ModelAndView("HypotheticalFuture");
+
 	}
 	
 	
@@ -56,7 +61,7 @@ public class HomeController {
 			logger.info("Missing credentials.");
 		}
 		
-		return new ModelAndView("success", "model", model);
+		return new ModelAndView("pages/success");
 	}
 	
 	/*

@@ -11,7 +11,7 @@ public class SiteAspect {
 	@After("@annotation(io.analytics.aspect.HeaderFooter)")
 	public void HeaderFooterAdvice(JoinPoint joinPoint)
 	{
-		System.out.println("HeaderFooterAdvice!");
+		//TODO: Figure out a better way to find the Model argument
 		Model model = (Model)joinPoint.getArgs()[1];
 		
 		model.addAttribute("HEADER", "/WEB-INF/views/includes/header.jsp");
