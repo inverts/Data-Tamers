@@ -1,0 +1,12 @@
+@CHARSET "ISO-8859-1";
+
+.hf_legend {
+	height: 20px;
+	background-color: #732;
+}
+
+.hf_visual {
+	background-color: #FFF;
+	/* temp */
+	height: 180px;
+}
