@@ -42,13 +42,6 @@ public class HomeController {
 		return new ModelAndView("home");
 	}
 	
-	@RequestMapping(value = "/widget", method = RequestMethod.GET)
-	public ModelAndView hypotheticalFutureView(Locale locale, Model model) {
-		
-		return new ModelAndView("HypotheticalFuture");
-
-	}
-	
 	
 	@RequestMapping(value = "/success", method = RequestMethod.GET)
 	public ModelAndView success(HttpSession session, Model model) { //@RequestParam("credentials") Credential credentials

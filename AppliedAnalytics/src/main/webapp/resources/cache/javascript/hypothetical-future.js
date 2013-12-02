@@ -4,7 +4,7 @@
 
 $(document).ready(function() {
 	
-	$.get("widget", null, function(response) {
+	$.get("HypotheticalFuture", null, function(response) {
 		$('#testWidget').append(response);
 	});
 	

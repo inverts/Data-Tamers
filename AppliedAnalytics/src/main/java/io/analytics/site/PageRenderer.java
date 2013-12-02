@@ -6,6 +6,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.view.InternalResourceView;
 
 public class PageRenderer extends InternalResourceView {
