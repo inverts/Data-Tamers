@@ -6,7 +6,6 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.view.InternalResourceView;
 
 public class PageRenderer extends InternalResourceView {
@@ -21,10 +20,10 @@ public class PageRenderer extends InternalResourceView {
         request.setAttribute("model", model);
 
     	// set the content
-        request.setAttribute("page_frame", dispatcherPath.substring(dispatcherPath.lastIndexOf("/") + 1));
+        request.setAttribute("BODY", dispatcherPath.substring(dispatcherPath.lastIndexOf("/") + 1));
         
         // route to page-template
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/pages/page-template.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/pages/Master.jsp");
         
         rd.include(request, response);
 	 }

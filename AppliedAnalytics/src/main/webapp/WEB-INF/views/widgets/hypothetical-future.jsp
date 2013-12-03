@@ -16,11 +16,15 @@
 			</div>
 			<div class="widget_input"> 
 				<label>CHANGE:</label>
-				<select id="change_pct"></select>
+				<select id="change_pct">
+				<c:forEach var="option" items="${changeOptions}" >
+					<option value="${option.getKey()}" ${option.getValue()}> ${option.getKey()}%</option>
+				</c:forEach>
+				</select>
 			</div>
 		</div>
-		<div class="hf_legend"></div>
 		<div id="hypotheticalFutureGraph" class="hf_visual">
+			<!-- add Visualization elements -->
 		</div>
 	</form>
 </div>

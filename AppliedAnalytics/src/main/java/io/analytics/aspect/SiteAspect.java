@@ -9,10 +9,10 @@ import org.springframework.ui.Model;
 @Aspect
 public class SiteAspect {
 	
+	// @HeaderFooter
 	@After("@annotation(io.analytics.aspect.HeaderFooter)")
 	public void HeaderFooterAdvice(JoinPoint joinPoint) throws Exception
 	{
-		//TODO: Figure out a better way to find the Model argument
 		Model model = this.getModel(joinPoint.getArgs());
 		
 		model.addAttribute("HEADER", "/WEB-INF/views/includes/header.jsp");
@@ -20,6 +20,14 @@ public class SiteAspect {
 	}
 	
 
+	// @SidePanel
+	/*@After("@annotation(io.analytics.aspect.SidePanel)")
+	public void SidePanelAdvice(JoinPoint joinPoint) throws Exception
+	{
+		Model model = this.getModel(joinPoint.getArgs());
+		
+		model.addAttribute("SIDEPANEL", "");
+	}*/
 
 	
 	
