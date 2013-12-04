@@ -15,7 +15,6 @@ public class WidgetController {
 	
 
 	@RequestMapping(value = "/HypotheticalFuture", method = RequestMethod.POST)
-	@ResponseBody
 	public ModelAndView hypotheticalFutureView(Model viewMap,	// note: in order for @RequestParam to work, you do need a default value
 												@RequestParam(value = "change", defaultValue = "05") String adjustBy,
 												@RequestParam(value = "source", defaultValue = "") String source) {
