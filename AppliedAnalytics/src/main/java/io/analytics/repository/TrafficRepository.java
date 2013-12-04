@@ -3,13 +3,16 @@ import io.analytics.domain.Traffic;
 
 public class TrafficRepository implements ITrafficRepository {
 	public Traffic getTrafficSources() {
-		// GA library method call?
+		// GA library method call? 
+		// Are the traffic sources always the same or do we 
+		//   need to query GA for each user?
 		String d = null;
 		return trafficMapper(d);
 	}
 	
 	private Traffic trafficMapper(String json){
 		Traffic t = new Traffic();
+		// parse json
 		String[] ts = {"all visits",
 				"new visitors",
 				"returning visitors",
