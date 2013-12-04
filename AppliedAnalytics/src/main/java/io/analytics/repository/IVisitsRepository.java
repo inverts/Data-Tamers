@@ -4,5 +4,5 @@ import io.analytics.domain.Visits;
 
 public interface IVisitsRepository extends Serializable{ 
 	
-	Visits getAllVisits();
+	Visits getAllVisitsCount();
 }
