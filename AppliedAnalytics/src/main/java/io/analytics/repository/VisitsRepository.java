@@ -2,7 +2,7 @@ package io.analytics.repository;
 import io.analytics.domain.Visits;
 
 public class VisitsRepository implements IVisitsRepository{
-	// calls the GA library function to return v
+	// calls the GA library function 
 	public Visits getAllVisitsCount() {
 		String d = null ; // GA library method call
 		return visitsMapper(d);
