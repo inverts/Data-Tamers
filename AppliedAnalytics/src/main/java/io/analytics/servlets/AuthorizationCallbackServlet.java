@@ -53,8 +53,9 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
   @Override
   protected AuthorizationCodeFlow initializeFlow() throws IOException {
 	  ArrayList<String> scopes = new ArrayList<String>();
+	  scopes.add("openid");
+	  scopes.add("email");
 	  scopes.add("https://www.googleapis.com/auth/analytics");
-	  scopes.add("https://www.googleapis.com/auth/plus.login");
 	  
 	  // TODO: Change this to use the GoogleClientSecrets object and load the ID and client secret from JSON elsewhere.
 	  GoogleAuthorizationCodeFlow.Builder builder = new GoogleAuthorizationCodeFlow.Builder(new NetHttpTransport(), new JacksonFactory(), 

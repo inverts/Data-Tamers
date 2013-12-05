@@ -1,2 +1,2 @@
-/AppliedAnalytics/target/m2e-wtp/web-resources/META-INF/maven/io.analytics/site/pom.properties
-/AppliedAnalytics/target/m2e-wtp/web-resources/META-INF/MANIFEST.MF
+# Ignore all build files:
+AppliedAnalytics/target/**
