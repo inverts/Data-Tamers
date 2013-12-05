@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <script src="<c:url value="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" />"></script>
 
-<title>Insert title here</title>
+<title>${pageTitle}</title>
 </head>
 <body>
 	<header><jsp:include page="${HEADER}"/></header>
