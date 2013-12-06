@@ -1,8 +1,10 @@
 package io.analytics.servlets;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
+import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +15,10 @@ import com.google.api.client.auth.oauth2.AuthorizationCodeResponseUrl;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeCallbackServlet;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson.JacksonFactory;
 
@@ -22,6 +27,8 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
 
 	private static final long serialVersionUID = -7856464786872438430L;
 
+	private final String clientID = "409721414292.apps.googleusercontent.com";
+	private final String clientSecret = "ZJkn2D7ciulmkd0oyJ6jX-DU";
 @Override
   protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential)
       throws ServletException, IOException {
@@ -30,6 +37,17 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
 	  String contextPath = session.getServletContext().getContextPath();
 	  resp.sendRedirect(contextPath + "/success");
 	  
+	  final String accessToken = credential.getAccessToken();
+	  GoogleCredential cred = new GoogleCredential.Builder()
+	  .setTransport(new NetHttpTransport()).setJsonFactory( new JacksonFactory())
+	  .setClientSecrets(clientID, clientSecret).setRequestInitializer((new HttpRequestInitializer(){
+	                  @Override
+	                  public void initialize(HttpRequest request)
+	                          throws IOException {
+	                      request.getHeaders().put("Authorization", "Bearer " + accessToken);
+	                  }
+	              })).build();
+	  cred.getServiceAccountId();
   }
 
   @Override
@@ -53,12 +71,13 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
   @Override
   protected AuthorizationCodeFlow initializeFlow() throws IOException {
 	  ArrayList<String> scopes = new ArrayList<String>();
+	  scopes.add("openid");
+	  scopes.add("email");
 	  scopes.add("https://www.googleapis.com/auth/analytics");
-	  scopes.add("https://www.googleapis.com/auth/plus.login");
 	  
 	  // TODO: Change this to use the GoogleClientSecrets object and load the ID and client secret from JSON elsewhere.
 	  GoogleAuthorizationCodeFlow.Builder builder = new GoogleAuthorizationCodeFlow.Builder(new NetHttpTransport(), new JacksonFactory(), 
-    		"409721414292.apps.googleusercontent.com", "ZJkn2D7ciulmkd0oyJ6jX-DU", scopes);
+    		clientID, clientSecret, scopes);
 	  
 	  builder.setAccessType("offline"); //This is so we can retain the refresh token, and not have to ask the user again.
 	  builder.setApprovalPrompt("force");
