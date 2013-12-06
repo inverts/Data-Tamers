@@ -13,6 +13,11 @@
 <P>You have successfully granted the application access to view your Google Analytics data.</P>
 <p>Your ACCESS TOKEN is: <strong>${model.accessToken}</strong></p>
 <p>Your REFRESH TOKEN is: <strong>${model.refreshToken}</strong></p>
+<c:if test="${not empty model.picture}" >
+<img style="padding: 10px; border: 3px solid #444;" src="${model.picture}" /><br />
+</c:if>
+<p>Name: <strong>${model.name}</strong></p>
+<p>Email: <strong>${model.email}</strong></p>
 
 </body>
 </html>

@@ -1,6 +1,7 @@
 package io.analytics.site.controllers;
 
 import io.analytics.aspect.HeaderFooter;
+import io.analytics.site.models.GoogleUserData;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -46,14 +47,18 @@ public class HomeController {
 	@RequestMapping(value = "/success", method = RequestMethod.GET)
 	public ModelAndView success(HttpSession session, Model model) { //@RequestParam("credentials") Credential credentials
 		logger.info("Successfully authorized.");
-		Credential credentials = (Credential) session.getAttribute("credentials");
-		if (credentials != null) {
+		try {
+			Credential credentials = (Credential) session.getAttribute("credentials");
+			GoogleUserData userData = (GoogleUserData) session.getAttribute("userData");
 			model.addAttribute("accessToken", credentials.getAccessToken());
 			model.addAttribute("refreshToken", credentials.getRefreshToken());
-		} else {
+			model.addAttribute("name", userData.getName());
+			model.addAttribute("email", userData.getEmail());
+			model.addAttribute("picture", userData.getPicture());
+		} catch (ClassCastException e) {
+			//TODO: Handle error where session set with invalid data.
 			logger.info("Missing credentials.");
 		}
-		
 		return new ModelAndView("success");
 	}
 	

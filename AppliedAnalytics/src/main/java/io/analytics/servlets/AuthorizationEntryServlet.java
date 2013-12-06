@@ -38,6 +38,7 @@ public class AuthorizationEntryServlet extends AbstractAuthorizationCodeServlet 
 		  ArrayList<String> scopes = new ArrayList<String>();
 		  scopes.add("openid");
 		  scopes.add("email");
+		  scopes.add("https://www.googleapis.com/auth/userinfo.profile");
 		  scopes.add("https://www.googleapis.com/auth/analytics");
 		  //scopes.add("https://www.googleapis.com/auth/plus.login");
 		  //TODO: Look at https://developers.google.com/accounts/docs/OAuth2Login#validatinganidtoken as a possible alternative.
