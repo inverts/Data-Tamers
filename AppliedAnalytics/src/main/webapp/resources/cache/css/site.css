@@ -1,0 +1,21 @@
+@CHARSET "ISO-8859-1";
+
+/* Styling for basic site modules */
+
+
+body {
+	padding:0 auto;
+	margin:0 auto;
+}
+
+.wrapper {
+	width: 100%;
+	overflow:hidden;
+}
+
+.content {
+	visibility: hidden;
+	padding:10px;
+	min-height:600px;	
+	float:left;
+}
