@@ -145,7 +145,7 @@
                     	<artifactId>google-http-client-jackson</artifactId>
                     	<version>1.17.0-rc</version>
                 </dependency>
-                
+				
                 <!--  Gson: Java to Json conversion -->
                 
 				<dependency>
@@ -154,7 +154,15 @@
 						<version>2.2.4</version>
         				<scope>provided</scope>
 				</dependency>
-                
+				
+				<!-- Google Analytics services API -->
+
+			    <dependency>
+			      <groupId>com.google.apis</groupId>
+			      <artifactId>google-api-services-analytics</artifactId>
+			      <version>v3-rev75-1.17.0-rc</version>
+			    </dependency>
+              
         </dependencies>
     <build>
         <plugins>
