@@ -1,0 +1,45 @@
+@CHARSET "ISO-8859-1";
+
+
+.header, .footer {
+	margin: 0 auto;
+}
+
+.header {
+	height:60px;
+	width:inherit;
+	background:#ccc;
+}
+
+.avatar, .messages {
+	height:50px;
+	width:50px;
+	float:right;
+	margin:5px 20px 5px 0;
+}
+
+.avatar {
+	background-color:#131483;
+}
+
+.messages {
+	background-color:#239371;
+}
+
+
+.filter-div {
+	height:35px;
+	width:inherit;
+	background:#000;
+}
+
+
+
+
+
+.footer {
+	background:#000;
+	color:#ddd;
+	min-height:150px;
+	clear:both;
+}

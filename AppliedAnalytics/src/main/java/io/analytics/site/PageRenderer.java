@@ -6,7 +6,6 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.view.InternalResourceView;
 
 
@@ -16,6 +15,10 @@ public class PageRenderer extends InternalResourceView {
         String dispatcherPath = prepareForRendering(request, response);
         //model.put("pageTitle", "Applied Analytics");
         request.setAttribute("pageTitle", "Applied Analytics");
+        
+       
+        request.setAttribute("SIDEPANEL", model.get("SIDEPANEL"));
+        request.setAttribute("SIDEPANEL_animate", model.get("SIDEPANEL_animate"));
         
         // Set the header and footer if applicable
         request.setAttribute("HEADER", model.get("HEADER"));

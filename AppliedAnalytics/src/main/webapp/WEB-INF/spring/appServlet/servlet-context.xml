@@ -17,6 +17,7 @@
 	<!-- Handles HTTP GET requests for /cache/** by efficiently serving up static resources in the ${webappRoot}/WEB-INF/cache/ directory -->
 
 	<resources mapping="/cache/**" location="/resources/cache/" />
+	<resources mapping="/images/**" location="/resources/images/" />
 		
 		<!-- XMLViewResolver for widgets.xml --> 
 	<beans:bean class="org.springframework.web.servlet.view.XmlViewResolver">

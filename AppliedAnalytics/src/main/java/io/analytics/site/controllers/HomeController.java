@@ -1,6 +1,7 @@
 package io.analytics.site.controllers;
 
 import io.analytics.aspect.HeaderFooter;
+import io.analytics.aspect.SidePanel;
 import io.analytics.site.models.GoogleUserData;
 
 import java.text.DateFormat;

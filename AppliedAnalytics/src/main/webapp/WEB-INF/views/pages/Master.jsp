@@ -5,14 +5,26 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<script src="<c:url value="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" />"></script>
 
-<title>${pageTitle}</title>
+<link href="<c:url value="/cache/css/site.css" />" rel="stylesheet">
+<link href="<c:url value="/cache/css/sidepanel.css" />" rel="stylesheet">
+<link href="<c:url value="/cache/css/headerfooter.css" />" rel="stylesheet">
+
+<script src="<c:url value="cache/javascript/libs/jquery-1.10.2.min.js" />"></script>
+<script src="<c:url value="cache/javascript/libs/jquery-ui-1.10.3.custom.min.js" />"></script>
+<script src="<c:url value="cache/javascript/libs/processing-1.4.1.min.js" />"></script>
+<script src="<c:url value="cache/javascript/site.js" />"></script>
+
+<title>${TITLE}</title>
 </head>
 <body>
-	<header><jsp:include page="${HEADER}"/></header>
-	<!--<jsp:include page="${SIDEPANEL}"/>-->
-	<jsp:include page="${BODY}"/>
-	<footer><jsp:include page="${FOOTER}"/></footer>
+	<div class="wrapper">
+		<jsp:include page="${SIDEPANEL}"/>
+		<jsp:include page="${HEADER}"/>
+		<div class="content">
+			<jsp:include page="${BODY}"/>
+		</div>
+		<jsp:include page="${FOOTER}"/>
+	</div>
 </body>
 </html>
