@@ -1,13 +1,18 @@
 package io.analytics.aspect;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.ui.Model;
 
 @Aspect
 public class SiteAspect {
+	
+	@Pointcut("execution(public * *(..))")
+    public void publicMethod() {}
 	
 	// @HeaderFooter
 	@After("@annotation(io.analytics.aspect.HeaderFooter)")
@@ -21,13 +26,16 @@ public class SiteAspect {
 	
 
 	// @SidePanel
-	/*@After("@annotation(io.analytics.aspect.SidePanel)")
-	public void SidePanelAdvice(JoinPoint joinPoint) throws Exception
+	@Around("publicMethod() && @annotation(sidepanel)")
+	public Object SidePanelAdvice(ProceedingJoinPoint joinPoint, SidePanel sidepanel) throws Throwable
 	{
 		Model model = this.getModel(joinPoint.getArgs());
 		
-		model.addAttribute("SIDEPANEL", "");
-	}*/
+		model.addAttribute("SIDEPANEL", "/WEB-INF/views/includes/sidepanel.jsp");
+		model.addAttribute("SIDEPANEL_animate", sidepanel.animate());
+		
+		return joinPoint.proceed();
+	}
 
 	
 	

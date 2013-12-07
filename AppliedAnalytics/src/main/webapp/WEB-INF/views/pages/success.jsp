@@ -3,7 +3,7 @@
 <html>
 <head>
 	<title>Success</title>
-	<!-- This page is temporary, for debugging purposes, and should be removed at a later point. -->
+	<link rel="stylesheet" href="<%=request.getContextPath()%>/cache/css/main.css" />
 </head>
 <body>
 <h1>
@@ -13,11 +13,19 @@
 <P>You have successfully granted the application access to view your Google Analytics data.</P>
 <p>Your ACCESS TOKEN is: <strong>${model.accessToken}</strong></p>
 <p>Your REFRESH TOKEN is: <strong>${model.refreshToken}</strong></p>
-<c:if test="${not empty model.picture}" >
-<img style="padding: 10px; border: 3px solid #444;" src="${model.picture}" /><br />
-</c:if>
-<p>Name: <strong>${model.name}</strong></p>
-<p>Email: <strong>${model.email}</strong></p>
+User Info:
+<div class="profile-info">
+	<c:choose>
+	<c:when test="${not empty model.picture}" >
+	<img class="profile-image" src="${model.picture}?sz=90" /><br />
+	</c:when>
+	<c:otherwise>
+	<img class="profile-image" src="<%=request.getContextPath()%>/cache/images/default_user.png" /><br />
+	</c:otherwise>
+	</c:choose>
+	<p><strong>${model.name}</strong></p>
+	<p><strong>${model.email}</strong></p>
+</div>
 
 </body>
 </html>

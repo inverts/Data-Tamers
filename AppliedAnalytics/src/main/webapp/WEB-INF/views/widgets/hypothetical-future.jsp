@@ -5,11 +5,12 @@
 
 <link href="<c:url value="/cache/css/widget.css" />" rel="stylesheet">
 <link href="<c:url value="/cache/css/hypothetical-future.css" />" rel="stylesheet">
-    
-<div class="widget_wrapper">
+
+   
+<div class="widget_wrapper widgetView">
 	<form id="hypotheticalFutureSettings">
 		<div class="widget_header">
-			<span class="widget_title">HYPOTHETICAL FUTURE</span>
+			<span class="widget_title">HYPOTHETICAL FUTURE</span> 
 			<div class="widget_input">
 				<label>TRAFFIC SOURCE:</label>
 				<select id="traffic_source"></select> 
@@ -25,6 +26,8 @@
 		</div>
 		<div id="hypotheticalFutureGraph" class="hf_visual">
 			<!-- add Visualization elements -->
+			<canvas data-processing-source="/pde/hello_sketch.pde"></canvas>			
+			
 		</div>
 	</form>
 </div>

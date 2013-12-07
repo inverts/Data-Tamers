@@ -1,5 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
 
- 
-<p> This is a header </p>
+<header>
+	<div class="header">
+		<div class="avatar"></div>
+		<div class="messages"></div>		
+	</div>
+	<div class="filter-div"></div>
+</header>

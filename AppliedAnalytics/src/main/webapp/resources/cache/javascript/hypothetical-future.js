@@ -1,10 +1,16 @@
 /**
- * Hypothetical Future Widget JS
+ * hypothetical-future.js
  */
 
 $(document).ready(function() {
 	
 	GetWidget('testWidget');
+	
+	GetWidget('testWidget2');
+	
+	GetWidget('testWidget3');
+	
+	GetWidget('testWidget4');
 
 });
 

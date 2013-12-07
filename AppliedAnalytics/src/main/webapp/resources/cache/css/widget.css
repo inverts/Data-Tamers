@@ -17,6 +17,10 @@
 }
 
 
+.widgetView {
+	visibility:'hidden';
+}
+
 .widget_input {
 	
 }

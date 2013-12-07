@@ -1,6 +1,7 @@
 package io.analytics.site.controllers;
 
 import io.analytics.aspect.HeaderFooter;
+import io.analytics.aspect.SidePanel;
 import io.analytics.site.models.GoogleUserData;
 
 import java.text.DateFormat;
@@ -50,14 +51,19 @@ public class HomeController {
 		try {
 			Credential credentials = (Credential) session.getAttribute("credentials");
 			GoogleUserData userData = (GoogleUserData) session.getAttribute("userData");
+			if (credentials == null || userData ==null) {
+				//User is not logged in.
+				//TODO: Redirect the user to login again with a message.
+				return new ModelAndView("success");
+			}
 			model.addAttribute("accessToken", credentials.getAccessToken());
 			model.addAttribute("refreshToken", credentials.getRefreshToken());
 			model.addAttribute("name", userData.getName());
 			model.addAttribute("email", userData.getEmail());
 			model.addAttribute("picture", userData.getPicture());
 		} catch (ClassCastException e) {
-			//TODO: Handle error where session set with invalid data.
-			logger.info("Missing credentials.");
+			logger.info("Corrupted session information. See below for more info.");
+			logger.info(e.getMessage());
 		}
 		return new ModelAndView("success");
 	}
