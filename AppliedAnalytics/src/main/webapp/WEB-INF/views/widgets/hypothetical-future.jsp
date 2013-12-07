@@ -5,7 +5,9 @@
 
 <link href="<c:url value="/cache/css/widget.css" />" rel="stylesheet">
 <link href="<c:url value="/cache/css/hypothetical-future.css" />" rel="stylesheet">
-    
+<script src="<c:url value="/cache/javascript/processing-1.4.1.min.js" />"></script>
+
+   
 <div class="widget_wrapper">
 	<form id="hypotheticalFutureSettings">
 		<div class="widget_header">
@@ -25,6 +27,8 @@
 		</div>
 		<div id="hypotheticalFutureGraph" class="hf_visual">
 			<!-- add Visualization elements -->
+			<canvas data-processing-source="/pde/hello_sketch.pde"></canvas>			
+			
 		</div>
 	</form>
 </div>
