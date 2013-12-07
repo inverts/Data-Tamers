@@ -11,7 +11,7 @@
 <div class="widget_wrapper">
 	<form id="hypotheticalFutureSettings">
 		<div class="widget_header">
-			<span class="widget_title">HYPOTHETICAL FUTURE</span>
+			<span class="widget_title">HYPOTHETICAL FUTURE</span> 
 			<div class="widget_input">
 				<label>TRAFFIC SOURCE:</label>
 				<select id="traffic_source"></select> 
