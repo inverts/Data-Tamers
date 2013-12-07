@@ -1,13 +1,5 @@
-<<<<<<< Upstream, based on origin/master
-Manifest-Version: 1.0
-Built-By: Knight
-Build-Jdk: 1.7.0_45
-Created-By: Maven Integration for Eclipse
-
-=======
 Manifest-Version: 1.0
 Built-By: lgao
 Build-Jdk: 1.7.0_45
 Created-By: Maven Integration for Eclipse
 
->>>>>>> d291c57 lynn's commit 12/6
