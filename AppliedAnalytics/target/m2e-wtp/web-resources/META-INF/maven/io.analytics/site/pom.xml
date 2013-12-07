@@ -155,13 +155,21 @@
         				<scope>provided</scope>
 				</dependency>
 				
-				<!-- Google Analytics services API -->
+				<!-- Google Analytics services for data retrieval  API -->
 
 			    <dependency>
 			      <groupId>com.google.apis</groupId>
 			      <artifactId>google-api-services-analytics</artifactId>
 			      <version>v3-rev75-1.17.0-rc</version>
 			    </dependency>
+			    
+			    <!-- Google Analytics gdata library for a different data retrieval method (older) -->
+			    
+			    <dependency>
+					<groupId>com.google.gdata</groupId>
+					<artifactId>core</artifactId>
+					<version>1.47.1</version>
+				</dependency>
               
         </dependencies>
     <build>
