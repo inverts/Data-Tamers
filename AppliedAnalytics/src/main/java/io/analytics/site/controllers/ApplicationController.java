@@ -4,10 +4,13 @@ import io.analytics.aspect.HeaderFooter;
 import io.analytics.aspect.SidePanel;
 import io.analytics.site.models.GoogleUserData;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -31,7 +34,7 @@ public class ApplicationController {
 	@HeaderFooter
 	@SidePanel(animate = true)
 	@RequestMapping(value = "/application", method = RequestMethod.GET)
-	public ModelAndView home(Locale locale, Model model, HttpSession session) {
+	public ModelAndView home(Locale locale, Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
 		/*
 		 * Below is the authorization process. We may move this later.
 		 */
@@ -40,8 +43,14 @@ public class ApplicationController {
 			GoogleUserData userData = (GoogleUserData) session.getAttribute("userData");
 			if (credentials == null || userData ==null) {
 				//User is not logged in.
-				//TODO: Redirect the user to login again with a message.
-				return new ModelAndView("home");
+				String contextPath = session.getServletContext().getContextPath();
+				try {
+					//We cannot turn this into a returnable view, since it needs to direct to the servlet.
+					response.sendRedirect(contextPath + "/login");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return null;
 			}
 			model.addAttribute("accessToken", credentials.getAccessToken());
 			model.addAttribute("refreshToken", credentials.getRefreshToken());

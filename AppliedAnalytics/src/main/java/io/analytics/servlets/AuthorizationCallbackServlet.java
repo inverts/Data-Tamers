@@ -116,7 +116,7 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
 		// If the authorization failed or was denied, go back to the home page.
 		HttpSession session = req.getSession();
 		String contextPath = session.getServletContext().getContextPath();
-		resp.sendRedirect(contextPath + "/home");
+		resp.sendRedirect(contextPath + "/");
 	}
 
 	@Override
