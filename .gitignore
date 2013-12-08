@@ -1,3 +1,4 @@
 # Ignore all build files:
 AppliedAnalytics/target/**
 /AppliedAnalytics/target/**
+target/**
