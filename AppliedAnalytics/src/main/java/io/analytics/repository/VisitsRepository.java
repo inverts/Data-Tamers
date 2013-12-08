@@ -82,76 +82,66 @@ public class VisitsRepository implements IVisitsRepository{
 
 	    // Make a request to the API.
 	    DataFeed dataFeed = analyticsService.getFeed(query.getUrl(), DataFeed.class);
-
-	    // Output data to the screen.
-	    System.out.println("----------- Data Feed Results ----------");
-	    for (DataEntry entry : dataFeed.getEntries()) {
-	      System.out.println(
-	        "\nPage Title = " + entry.stringValueOf("ga:pageTitle") +
-	        "\nPage Path  = " + entry.stringValueOf("ga:pagePath") +
-	        "\nPageviews  = " + entry.stringValueOf("ga:pageviews"));
-	    }
+	    
 	    return dataFeed;
 	  }
 
 	private Visits visitsMapper(DataFeed dataFeed) {
 		Visits v = new Visits();
-	    // parse dataFeed
-			
-	    //if (dataFeed.getEntries().isEmpty()) {
+		
+		// parse dataFeed
+	
+		// Check for error conditions (What action to take upon error?)
+
+		//if (dataFeed.getEntries().isEmpty()) {
 			// set v.setAllVisitsCount to indicate error condition
 	    //  return null;
 	    //}
-	    DataEntry singleEntry = dataFeed.getEntries().get(0);
-	    // dimensions = day number
-	    List<String> feedDataDay = new ArrayList<String>();
-	    List<String> metricNames = new ArrayList<String>();
-	    List<Long> feedDataValues = new ArrayList<Long>();
 
-	    // get the metric names. There should only be one.
-	    for (Metric metric : singleEntry.getMetrics()) {
-	         metricNames.add(metric.getName());
-	    }
-	    
-	   // if (metricNames.size()>1){
+	    // Error, expect only one metric, visits. 
+	    //for (Metric metric : singleEntry.getMetrics()) {
+	    //      metricNames.add(metric.getName());
+	    // }  
+	    // if (metricNames.size()>1){
 	    	// set v.setAllVisitsCount to indicate error condition
 	    //	return null; 
-	   // }
-	    	// Error, expect only one metric, visits.
-	    // Put all the dimensions into an array.
-	    for (Dimension dimension : singleEntry.getDimensions()) {
-	    	feedDataDay.add(dimension.getName());
-	    }
-
-	    // Put the metric value for each day into the list.
-	    // REVISIT? Is there an entry for each day or is there one 
-	    //   entry for the whole metric?
-	    for (DataEntry entry : dataFeed.getEntries()) {  
-	      for (String dataDay : feedDataDay) {
-	    	  feedDataValues.add(entry.longValueOf(dataDay));
-	      }
-	    }
-	    
-	    // create data array
-	    long[][] twoDimData = new long[2][feedDataValues.size()];
-	    
-	    //System.out.println("");
-	    for (int i = 0; i<twoDimData.length; i++){
-			twoDimData[0][i] = Long.parseLong(feedDataDay.get(i));
-			twoDimData[1][i] = feedDataValues.get(i);
-			// Output data to the screen
-			//System.out.println(""+twoDimData[0][i]+", "+twoDimData[1][i]);
-	    }
-	    //System.out.println("");
+	    // }
+	    	
+	    // containers for retrieved data
+	    List<String> dayList = new ArrayList<String>();
+	    List<Long> visitsList = new ArrayList<Long>();
 		
-		/*int[] tmp = {88,135,114,131,104,139,138,106,102,85,137,139,132,109,88,114,92,90,149,138,134,108,106,95,132,112,104,76,96,91};
-		int[][] pd = new int[2][30];
-		for (int i = 0; i<30; i++) {
-			pd[0][i]=i+1;
-			pd[1][i] = tmp[i];
-		}*/
+	    // Retrieve data from DataFeed
+	    for (DataEntry entry : dataFeed.getEntries()) {
+		      dayList.add(entry.stringValueOf("ga:day"));
+		      visitsList.add(entry.longValueOf("ga:visits"));
+		    }
+	   
+	    // create the return object
+	    long[][] twoDimData = new long[2][dayList.size()];
+	  
+	    System.out.println("Day    Visits");
+	    // put data into return object 
+	    for (int i = 0; i<dayList.size(); i++){	
+			twoDimData[0][i] = Long.parseLong(dayList.get(i));
+			twoDimData[1][i] = visitsList.get(i);
+			// Output data to the screen
+			System.out.println(""+twoDimData[0][i]+", "+twoDimData[1][i]);
+	    }
+	    System.out.println("");
+		
 		v.setAllVisitsCount(twoDimData);
 		return v;
 	}	
+	
+	// print method for debugging
+  private static void printData(String title, DataFeed dataFeed) {
+	    System.out.println(title);
+	    for (DataEntry entry : dataFeed.getEntries()) {
+	      System.out.println("\t\tDay: " + entry.stringValueOf("ga:day"));
+	      System.out.println("\t\tVisits: " + entry.stringValueOf("ga:visits"));
+	    }
+	    System.out.println();
+	  }
 		
 }
