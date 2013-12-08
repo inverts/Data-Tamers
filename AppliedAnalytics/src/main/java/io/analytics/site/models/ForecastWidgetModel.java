@@ -3,7 +3,7 @@ package io.analytics.site.models;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 
-public class ForecastWidgetModel extends LineGraphWidget {
+public class ForecastWidgetModel extends LineGraphWidgetModel {
 
 	Integer futureStartX;
 	

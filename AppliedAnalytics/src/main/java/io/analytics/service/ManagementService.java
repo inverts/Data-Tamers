@@ -5,19 +5,19 @@ import com.google.api.services.analytics.model.*;
 
 import io.analytics.domain.GoogleUserData;
 import io.analytics.repository.ManagementRepository;
+import io.analytics.repository.ManagementRepository.CredentialException;
 
 /**
- * A service for accessing the following:
- * - Google Analytics Management API
- * - Google user information
+ * A service for accessing the following: - Google Analytics Management API -
+ * Google user information
  * 
  * @author Dave Wong
- *
+ * 
  */
 public class ManagementService implements IManagementService {
 	private final ManagementRepository REPOSITORY;
-	
-	public ManagementService(Credential credential) {
+
+	public ManagementService(Credential credential) throws CredentialException {
 		this.REPOSITORY = new ManagementRepository(credential);
 	}
 
@@ -33,11 +33,11 @@ public class ManagementService implements IManagementService {
 	public Accounts getAccounts() {
 		return REPOSITORY.getAccounts();
 	}
-	
+
 	public Webproperties getWebproperties(Account a) {
 		return REPOSITORY.getWebproperties(a);
 	}
-	
+
 	public Profiles getProfiles(Account a, Webproperty w) {
 		return REPOSITORY.getProfiles(a, w);
 	}

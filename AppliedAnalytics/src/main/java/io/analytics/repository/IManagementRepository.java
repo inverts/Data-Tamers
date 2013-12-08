@@ -13,8 +13,8 @@ public interface IManagementRepository {
 	public GoogleUserData getGoogleUserData();
 
 	public Accounts getAccounts();
-	
+
 	public Webproperties getWebproperties(Account a);
-	
+
 	public Profiles getProfiles(Account a, Webproperty w);
 }

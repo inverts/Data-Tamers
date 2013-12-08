@@ -6,7 +6,7 @@ package io.analytics.site.models;
  * @author Dave Wong
  *
  */
-public abstract class Widget {
+public abstract class WidgetModel {
 
 	// Note: A Widgets relation to its frame should be defined by the frame. (No positional data here)
 		

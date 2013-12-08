@@ -2,3 +2,5 @@
 AppliedAnalytics/target/**
 /AppliedAnalytics/target/**
 target/**
+Servers/**
+RemoteSystemsTempFiles/**
