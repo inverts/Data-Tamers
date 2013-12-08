@@ -1,6 +1,8 @@
 package io.analytics.servlets;
 
 import io.analytics.domain.GoogleUserData;
+import io.analytics.service.IManagementService;
+import io.analytics.service.ManagementService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -50,56 +52,64 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
 		if (credential == null) {
 			// TODO: Handle error.
 		}
+//
+//		final String ACCESS_TOKEN = credential.getAccessToken();
+//		GoogleUserData userData = null;
+//
+//		try {
+//			URL url = new URL("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + ACCESS_TOKEN);
+//			BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+//			Gson gson = new Gson();
+//			userData = gson.fromJson(reader, GoogleUserData.class);
+//			reader.close();
+//		} catch (MalformedURLException e) {
+//			// TODO: Add error handling
+//		} catch (IOException e) {
+//			// TODO: Add error handling
+//		}
+//		try {
+//			Analytics analytics = new Analytics.Builder(TRANSPORT, JSON_FACTORY, credential).setApplicationName(
+//					"datatamers-appliedanalytics-0.1").build();
+//
+//			Accounts accounts = analytics.management().accounts().list().execute();
+//			if (!accounts.getItems().isEmpty()) {
+//				for (Account acc : accounts.getItems()) {
+//					System.out.println(acc.getId() + " - " + acc.getName());
+//					// Maybe we should do this section at a later point when the user chooses which account they want.
+//					/*
+//					Webproperties webproperties = analytics.management().webproperties().list(acc.getId()).execute();
+//					if (webproperties.getItems().isEmpty())
+//						continue;
+//					for (Webproperty wp : webproperties.getItems()) {
+//						if (wp.getProfileCount() < 1)
+//							continue;
+//						Profiles profiles = analytics.management().profiles().list(acc.getId(), wp.getId()).execute();
+//						for (Profile prof : profiles.getItems()) {
+//							System.out.println(prof.getId() + " - " + prof.getName());
+//						}
+//	
+//					}
+//					 */
+//				}
+//			} else {
+//				//TODO: Handle users with no analytics accounts
+//			}
+//
+//		} catch (GoogleJsonResponseException e) {
+//			System.err.println("There was a service error: " + e.getDetails().getCode() + " : "
+//					+ e.getDetails().getMessage());
+//		} catch (Throwable t) {
+//			t.printStackTrace();
+//		}
 
-		final String ACCESS_TOKEN = credential.getAccessToken();
-		GoogleUserData userData = null;
-
-		try {
-			URL url = new URL("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + ACCESS_TOKEN);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-			Gson gson = new Gson();
-			userData = gson.fromJson(reader, GoogleUserData.class);
-			reader.close();
-		} catch (MalformedURLException e) {
-			// TODO: Add error handling
-		} catch (IOException e) {
-			// TODO: Add error handling
+		IManagementService management = new ManagementService(credential);
+		GoogleUserData userData = management.getGoogleUserData();
+		Accounts accounts = management.getAccounts();
+		if (!accounts.getItems().isEmpty()) {
+			for(Account a : accounts.getItems())
+				System.out.println(a.getName());
 		}
-		try {
-			Analytics analytics = new Analytics.Builder(TRANSPORT, JSON_FACTORY, credential).setApplicationName(
-					"datatamers-appliedanalytics-0.1").build();
-
-			Accounts accounts = analytics.management().accounts().list().execute();
-			if (!accounts.getItems().isEmpty()) {
-				for (Account acc : accounts.getItems()) {
-					System.out.println(acc.getId() + " - " + acc.getName());
-					// Maybe we should do this section at a later point when the user chooses which account they want.
-					/*
-					Webproperties webproperties = analytics.management().webproperties().list(acc.getId()).execute();
-					if (webproperties.getItems().isEmpty())
-						continue;
-					for (Webproperty wp : webproperties.getItems()) {
-						if (wp.getProfileCount() < 1)
-							continue;
-						Profiles profiles = analytics.management().profiles().list(acc.getId(), wp.getId()).execute();
-						for (Profile prof : profiles.getItems()) {
-							System.out.println(prof.getId() + " - " + prof.getName());
-						}
-	
-					}
-					 */
-				}
-			} else {
-				//TODO: Handle users with no analytics accounts
-			}
-
-		} catch (GoogleJsonResponseException e) {
-			System.err.println("There was a service error: " + e.getDetails().getCode() + " : "
-					+ e.getDetails().getMessage());
-		} catch (Throwable t) {
-			t.printStackTrace();
-		}
-
+		
 		HttpSession session = req.getSession();
 
 		session.setAttribute("credentials", credential);
