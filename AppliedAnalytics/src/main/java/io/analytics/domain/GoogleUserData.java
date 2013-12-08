@@ -1,6 +1,13 @@
-package io.analytics.site.models;
+package io.analytics.domain;
 
-public class GoogleUserData {
+import java.io.Serializable;
+
+public class GoogleUserData implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8530457342959938233L;
+	
 	private String id;
 	private String email;
 	private String verified_email;

@@ -1,6 +1,6 @@
 package io.analytics.servlets;
 
-import io.analytics.site.models.GoogleUserData;
+import io.analytics.domain.GoogleUserData;
 
 import java.io.BufferedReader;
 import java.io.IOException;
