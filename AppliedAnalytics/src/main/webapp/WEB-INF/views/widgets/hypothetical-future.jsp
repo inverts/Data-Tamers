@@ -28,7 +28,7 @@
 		</div>
 		<div id="hypotheticalFutureGraph" class="hf_visual">
 			<!-- add Visualization elements -->
-			<canvas id="hypotheticalFutureData" data-processing-sources="cache/pde/hello_sketch.pde"></canvas>
+			<canvas id="hypotheticalFutureData" data-processing-sources="cache/pde/LineGraph.pde cache/pde/Grapher.pde"></canvas>
 								
 		</div>
 	</form>
