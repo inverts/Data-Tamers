@@ -2,7 +2,7 @@
 
 .sidepanel {
 	height:100%;
-	background-color:blue;
+	background: #444;
 	float:left;
 	box-shadow: 0 1px 5px #000;
 }
@@ -32,7 +32,7 @@
 }
 
 .nav-txt {
-	font: 1.7em Helvetica;
+	font-size: 20px;
 	color:#FFF;
 	line-height:15px;
 	margin-left:10px;

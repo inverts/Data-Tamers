@@ -12,6 +12,7 @@ var transitionOptions = {
 
 $(document).ready(function() {
 	
+	//What is this, "PHPScript"? :)
 	var $header = $('.header');
 	var $footer = $('.footer');
 	var $sidePanel = $('#sidepanel');
@@ -23,7 +24,10 @@ $(document).ready(function() {
 		displaySidePanel($sidePanel, displayContent);
 	else
 		displayContent();
-	
+
+
+	/* Add any necessary events */
+	$(".profile-image").attr("onclick","showProfileInfo();");
 	
 });
 
@@ -35,14 +39,14 @@ function displaySidePanel($sidePanel, callback) {
 		// set panel height to content + header
 		$sidePanel.css('height', $('.wrapper').height());
 		if ($sidePanel.data('animate')) {
-			$sidePanel.animate({width: "400px"}, 500, 'swing', function() {
+			$sidePanel.animate({width: "310px"}, 500, 'swing', function() {
 				$('.sidepanel-content').show();
 				callback();
 				displayWidgets();
 			});
 		}
 		else {
-			$sidePanel.css('width', 400);
+			$sidePanel.css('width', 310);
 			$('.sidepanel-content').show();
 			callback();
 		}
@@ -73,4 +77,9 @@ function displayContent() {
 	
 	$('.content').css('visibility', 'visible');
 	
+}
+
+function showProfileInfo() {
+	//TODO: Display a hovering box with profile information and a link to account settings.
+	alert("UNIMPLEMENTED:\nDisplay a hovering box with profile information and a link to account settings.");
 }

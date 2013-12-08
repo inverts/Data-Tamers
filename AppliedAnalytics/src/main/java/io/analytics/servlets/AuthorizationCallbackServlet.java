@@ -19,11 +19,19 @@ import com.google.api.client.auth.oauth2.AuthorizationCodeResponseUrl;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeCallbackServlet;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson.JacksonFactory;
+import com.google.api.services.analytics.Analytics;
+import com.google.api.services.analytics.model.Account;
+import com.google.api.services.analytics.model.Accounts;
+import com.google.api.services.analytics.model.Profile;
+import com.google.api.services.analytics.model.Profiles;
+import com.google.api.services.analytics.model.Webproperties;
+import com.google.api.services.analytics.model.Webproperty;
 import com.google.gson.Gson;
 
 public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallbackServlet {
@@ -38,11 +46,11 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
 	@Override
 	protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential)
 			throws ServletException, IOException {
-		
+
 		if (credential == null) {
-			//TODO: Handle error.
+			// TODO: Handle error.
 		}
-		
+
 		final String ACCESS_TOKEN = credential.getAccessToken();
 		GoogleUserData userData = null;
 
@@ -57,23 +65,58 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
 		} catch (IOException e) {
 			// TODO: Add error handling
 		}
+		try {
+			Analytics analytics = new Analytics.Builder(TRANSPORT, JSON_FACTORY, credential).setApplicationName(
+					"datatamers-appliedanalytics-0.1").build();
+
+			Accounts accounts = analytics.management().accounts().list().execute();
+			if (!accounts.getItems().isEmpty()) {
+				for (Account acc : accounts.getItems()) {
+					System.out.println(acc.getId() + " - " + acc.getName());
+					// Maybe we should do this section at a later point when the user chooses which account they want.
+					/*
+					Webproperties webproperties = analytics.management().webproperties().list(acc.getId()).execute();
+					if (webproperties.getItems().isEmpty())
+						continue;
+					for (Webproperty wp : webproperties.getItems()) {
+						if (wp.getProfileCount() < 1)
+							continue;
+						Profiles profiles = analytics.management().profiles().list(acc.getId(), wp.getId()).execute();
+						for (Profile prof : profiles.getItems()) {
+							System.out.println(prof.getId() + " - " + prof.getName());
+						}
+	
+					}
+					 */
+				}
+			} else {
+				//TODO: Handle users with no analytics accounts
+			}
+
+		} catch (GoogleJsonResponseException e) {
+			System.err.println("There was a service error: " + e.getDetails().getCode() + " : "
+					+ e.getDetails().getMessage());
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
 
 		HttpSession session = req.getSession();
+
 		session.setAttribute("credentials", credential);
-		String contextPath = session.getServletContext().getContextPath();
-		resp.sendRedirect(contextPath + "/success");
-		if (userData != null) {
+		if (userData != null)
 			session.setAttribute("userData", userData);
-		}
+
+		String contextPath = session.getServletContext().getContextPath();
+		resp.sendRedirect(contextPath + "/application");
 	}
 
 	@Override
 	protected void onError(HttpServletRequest req, HttpServletResponse resp, AuthorizationCodeResponseUrl errorResponse)
 			throws ServletException, IOException {
-		resp.getWriter().print("<p>You've declined to authorize this application.</p>");
-		resp.getWriter().print("<p><a href=\"/login\">Visit this page</a> to try again.</p>");
-		resp.setStatus(200);
-		resp.addHeader("Content-Type", "text/html");
+		// If the authorization failed or was denied, go back to the home page.
+		HttpSession session = req.getSession();
+		String contextPath = session.getServletContext().getContextPath();
+		resp.sendRedirect(contextPath + "/");
 	}
 
 	@Override
@@ -86,6 +129,7 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
 
 	@Override
 	protected AuthorizationCodeFlow initializeFlow() throws IOException {
+		// TODO: Do we need all of these scopes?
 		ArrayList<String> scopes = new ArrayList<String>();
 		scopes.add("openid");
 		scopes.add("email");

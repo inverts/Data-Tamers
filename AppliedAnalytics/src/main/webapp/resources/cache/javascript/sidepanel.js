@@ -10,7 +10,7 @@ $(document).ready(function() {
 	$('.nav-cell').hover(function(){
 		$(this).animate({ backgroundColor: 'gray' }, 100, 'swing');
 	}, function() {
-		$(this).animate({ backgroundColor: 'blue' }, 0, 'swing');
+		$(this).animate({ backgroundColor: 'transparent' }, 0, 'swing');
 	});
 	
 	
