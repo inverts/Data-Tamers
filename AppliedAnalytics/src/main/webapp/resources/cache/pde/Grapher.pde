@@ -1,3 +1,4 @@
+
 float[] values = new float[20];
 float plotX1, plotX2, plotY1, plotY2;
 int leftMargin = 20;
@@ -17,6 +18,7 @@ int count = 301;
 
 void setup() {
   size(640, 480);
+ 
 
   smooth();
   helvetica = createFont("Helvetica-Bold", 14);
@@ -248,4 +250,30 @@ void drawTickMarks()
   text("11/3", xaxis+510+8, yaxis+15);
   
 }
+
+
+class Label {
+   
+  Label(String txt, float x, float y) {
+     
+    // get text width
+    float labelW = textWidth(txt);
+     
+    // check if label would go beyond screen dims
+    if (x + labelW + 20 > width) {
+      x -= labelW + 20;
+    }
+     
+    // draw bg
+    fill(255);
+    noStroke();
+    rectMode(CORNER); // note: this is the default mode. confusing b/c similar to CORNERS (plural)
+    rect(x+10, y-30, labelW+10, 22);
+     
+    // draw text
+    fill(0);
+    text(txt, x+15, y-15);
+  }
+}
+
 

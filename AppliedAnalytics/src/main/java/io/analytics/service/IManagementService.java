@@ -1,3 +1,4 @@
+
 package io.analytics.service;
 
 import io.analytics.domain.GoogleUserData;
@@ -13,8 +14,8 @@ public interface IManagementService {
 	public GoogleUserData getGoogleUserData();
 
 	public Accounts getAccounts();
-
+	
 	public Webproperties getWebproperties(Account a);
-
+	
 	public Profiles getProfiles(Account a, Webproperty w);
 }

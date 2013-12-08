@@ -22,7 +22,7 @@ function GetWidget(id, source, change) {
 	$.post("HypotheticalFuture", { source: source, change: change }, 
 		function(response) {
 			$element.empty().append(response);
-			new Processing.loadSketchFromSources('hypotheticalFutureData', ['cache/pde/hello_sketch.pde']);
+			new Processing.loadSketchFromSources('hypotheticalFutureData', ['cache/pde/Grapher.pde']);
 			
 			// Setup change event
 			$('select').on('change', function() {
