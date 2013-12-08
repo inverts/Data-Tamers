@@ -9,7 +9,7 @@
 <div id="sidepanel" class="sidepanel" data-animate="${SIDEPANEL_animate}">
 	<div class="sidepanel-content">
 		<div class="sidepanel-header">
-			<img src="images/appliedanalytics.png" />
+			<img src="<c:url value="cache/images/logo-280.png" />" />
 		</div>
 		<div class="sidepanel-nav">
 			<div id="dashboard" class="nav-cell">

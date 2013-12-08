@@ -6,14 +6,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
+<!-- CSS -->
 <link href="<c:url value="/cache/css/site.css" />" rel="stylesheet">
 <link href="<c:url value="/cache/css/sidepanel.css" />" rel="stylesheet">
 <link href="<c:url value="/cache/css/headerfooter.css" />" rel="stylesheet">
 
-<script src="<c:url value="cache/javascript/libs/jquery-1.10.2.min.js" />"></script>
-<script src="<c:url value="cache/javascript/libs/jquery-ui-1.10.3.custom.min.js" />"></script>
-<script src="<c:url value="cache/javascript/libs/processing-1.4.1.min.js" />"></script>
-<script src="<c:url value="cache/javascript/site.js" />"></script>
+<!-- JavaScript -->
+<script src="<c:url value="/cache/javascript/libs/jquery-1.10.2.min.js" />"></script>
+<script src="<c:url value="/cache/javascript/libs/jquery-ui-1.10.3.custom.min.js" />"></script>
+<script src="<c:url value="/cache/javascript/libs/processing-1.4.1.min.js" />"></script>
+<script src="<c:url value="/cache/javascript/site.js" />"></script>
 
 <title>${TITLE}</title>
 </head>

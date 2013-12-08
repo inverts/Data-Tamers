@@ -34,7 +34,6 @@ public class HomeController {
 	@HeaderFooter
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView home(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
 		Date date = new Date();
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
 		String formattedDate = dateFormat.format(date);
@@ -44,7 +43,14 @@ public class HomeController {
 		return new ModelAndView("home");
 	}
 	
-	
+	/**
+	 * This page is deprecated.
+	 * 
+	 * @deprecated
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/success", method = RequestMethod.GET)
 	public ModelAndView success(HttpSession session, Model model) { //@RequestParam("credentials") Credential credentials
 		logger.info("Successfully authorized.");
