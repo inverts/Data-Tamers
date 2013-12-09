@@ -7,7 +7,7 @@
 					<img class="profile-image" title="" src="${model.picture}?sz=50" /><br />
 				</c:when>
 				<c:otherwise>
-					<img class="profile-image" src="<%=request.getContextPath()%>/cache/images/default_user_50.png" /><br />
+					<img class="profile-image" src="<c:url value="/cache/images/default_user_50.png" />" /><br />
 				</c:otherwise>
 			</c:choose>
 		</div>

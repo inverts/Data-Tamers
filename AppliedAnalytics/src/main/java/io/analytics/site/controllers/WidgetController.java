@@ -1,5 +1,9 @@
 package io.analytics.site.controllers;
 
+import javax.servlet.http.HttpSession;
+
+import io.analytics.repository.ManagementRepository.CredentialException;
+import io.analytics.service.ManagementService;
 import io.analytics.site.models.*;
 
 import org.springframework.stereotype.Controller;
@@ -10,11 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.api.client.auth.oauth2.Credential;
+
 @Controller
 public class WidgetController {
 	
 
-	@RequestMapping(value = "/HypotheticalFuture", method = RequestMethod.POST)
+	@RequestMapping(value = "/HypotheticalFuture", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView hypotheticalFutureView(Model viewMap,	// note: in order for @RequestParam to work, you do need a default value
 												@RequestParam(value = "change", defaultValue = "05") String adjustBy,
 												@RequestParam(value = "source", defaultValue = "") String source) {
@@ -27,6 +33,44 @@ public class WidgetController {
 		viewMap.addAttribute("changeOptions", hypotheticalFuture.getChangePercentOptions());
 	
 		return new ModelAndView("HypotheticalFuture");
+
+	}
+	
+	@RequestMapping(value = "/settings", method = {RequestMethod.POST, RequestMethod.GET})
+	public ModelAndView settingsView(Model viewMap, HttpSession session, 
+			@RequestParam(value = "account", defaultValue = "none") String accountId,
+			@RequestParam(value = "property", defaultValue = "none") String propertyId,
+			@RequestParam(value = "profile", defaultValue = "none") String profileId,
+			@RequestParam(value = "update", defaultValue = "") String update) {
+
+		SettingsModel settings = (SettingsModel) session.getAttribute("settings");
+		
+		if (settings == null) {
+			Credential credential = (Credential) session.getAttribute("credentials");
+			ManagementService management;
+			try {
+				management = new ManagementService(credential);
+			} catch (CredentialException e) {
+				//Invalid credentials
+				return new ModelAndView("unavailable");
+			}
+			settings = new SettingsModel(management);
+			session.setAttribute("settings", settings);
+		}
+
+		//Only one change should be made/possible at a time.
+		if (!accountId.equals("none"))
+			settings.setAccountSelection(accountId);
+		else if (!propertyId.equals("none"))
+			settings.setPropertySelection(propertyId);
+		else if (!profileId.equals("none"))
+			settings.setProfileSelection(profileId);
+		else if (!update.equals(""))
+			settings.setActiveProfile();
+		
+		viewMap.addAttribute("settings", settings);
+	
+		return new ModelAndView("settings");
 
 	}
 

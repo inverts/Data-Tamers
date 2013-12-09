@@ -49,3 +49,35 @@ body, h1, h2, h3, h4, a, img {
 .profile-image {
 	cursor: pointer;
 }
+
+select {
+	font: inherit;
+}
+
+input {
+	font: inherit;
+}
+
+/******SETTINGS******/
+.settings {
+	margin-top: 20px;
+}
+.settings .rowlabel {
+	width: 85px;
+	font-weight: bold;
+}
+
+.settings  .profile-image-large {
+	border: 3px solid #1F5514;
+}
+
+.settings .left-pane {
+	width: 150px; 
+	height: 100%; 
+	float: left; 
+	margin-right: 20px; 
+	padding: 0px 10px;
+}
+.settings tr {
+	height: 25px;
+}

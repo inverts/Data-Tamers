@@ -41,4 +41,12 @@ public class ManagementService implements IManagementService {
 	public Profiles getProfiles(Account a, Webproperty w) {
 		return REPOSITORY.getProfiles(a, w);
 	}
+	
+	public Webproperties getWebproperties(String accountId) {
+		return REPOSITORY.getWebproperties(accountId);
+	}
+	
+	public Profiles getProfiles(String accountId, String webpropertyId) {
+		return REPOSITORY.getProfiles(accountId, webpropertyId);
+	}
 }

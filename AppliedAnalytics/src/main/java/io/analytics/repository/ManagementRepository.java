@@ -67,11 +67,6 @@ public class ManagementRepository implements IManagementRepository {
 		}
 	}
 
-	/**
-	 * Gets information about a Google user.
-	 * 
-	 * @return
-	 */
 	public GoogleUserData getGoogleUserData() {
 		GoogleUserData data = null;
 		try {
@@ -89,11 +84,6 @@ public class ManagementRepository implements IManagementRepository {
 		return data;
 	}
 
-	/**
-	 * Gets a list of accounts and relevant data.
-	 * 
-	 * @return
-	 */
 	public Accounts getAccounts() {
 		Accounts accounts = null;
 		try {
@@ -109,17 +99,19 @@ public class ManagementRepository implements IManagementRepository {
 		return accounts;
 	}
 
-	/**
-	 * Gets a list of web properties for an account.
-	 * 
-	 * @param a
-	 * @return
-	 */
 	public Webproperties getWebproperties(Account a) {
+		return getWebproperties(a.getId());
+	}
+
+	public Profiles getProfiles(Account a, Webproperty w) {
+		return getProfiles(a.getId(), w.getId());
+	}
+
+	public Webproperties getWebproperties(String accountId) {
 		Webproperties properties = null;
 		try {
 
-			properties = MANAGEMENT.webproperties().list(a.getId()).execute();
+			properties = MANAGEMENT.webproperties().list(accountId).execute();
 
 		} catch (GoogleJsonResponseException e) {
 			handleGoogleJsonResponseException(e);
@@ -129,18 +121,12 @@ public class ManagementRepository implements IManagementRepository {
 
 		return properties;
 	}
-
-	/**
-	 * Gets a list of web properties for an account.
-	 * 
-	 * @param a
-	 * @return
-	 */
-	public Profiles getProfiles(Account a, Webproperty w) {
+	
+	public Profiles getProfiles(String accountId, String webpropertyId) {
 		Profiles profiles = null;
 		try {
 
-			profiles = MANAGEMENT.profiles().list(a.getId(), w.getId()).execute();
+			profiles = MANAGEMENT.profiles().list(accountId, webpropertyId).execute();
 
 		} catch (GoogleJsonResponseException e) {
 			handleGoogleJsonResponseException(e);
@@ -150,7 +136,7 @@ public class ManagementRepository implements IManagementRepository {
 
 		return profiles;
 	}
-
+	
 	private void handleGoogleJsonResponseException(GoogleJsonResponseException e) {
 		System.err.println("There was a service error: " + e.getDetails().getCode() + " : "
 				+ e.getDetails().getMessage());

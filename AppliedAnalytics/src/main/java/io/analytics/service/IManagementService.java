@@ -18,4 +18,8 @@ public interface IManagementService {
 	public Webproperties getWebproperties(Account a);
 	
 	public Profiles getProfiles(Account a, Webproperty w);
+	
+	public Webproperties getWebproperties(String accountId);
+	
+	public Profiles getProfiles(String accountId, String webpropertyId);
 }
