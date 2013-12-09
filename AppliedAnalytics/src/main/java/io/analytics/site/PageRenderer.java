@@ -14,7 +14,7 @@ public class PageRenderer extends InternalResourceView {
     protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String dispatcherPath = prepareForRendering(request, response);
         //model.put("pageTitle", "Applied Analytics");
-        request.setAttribute("pageTitle", "Applied Analytics");
+        request.setAttribute("TITLE", "Applied Analytics");
         
        
         request.setAttribute("SIDEPANEL", model.get("SIDEPANEL"));
@@ -22,6 +22,7 @@ public class PageRenderer extends InternalResourceView {
         
         // Set the header and footer if applicable
         request.setAttribute("HEADER", model.get("HEADER"));
+        request.setAttribute("SETTINGS", model.get("SETTINGS"));
         request.setAttribute("FOOTER", model.get("FOOTER"));
         
         request.setAttribute("model", model);

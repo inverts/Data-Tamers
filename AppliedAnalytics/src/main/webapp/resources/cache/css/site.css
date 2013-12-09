@@ -59,19 +59,31 @@ input {
 }
 
 /******SETTINGS******/
+
 .settings {
-	margin-top: 20px;
+	width:0;
+	float:right;
+	background:#183190;
+	position:absolute;
+	right: 0;
+	display:none;
 }
-.settings .rowlabel {
+
+.settings-content {
+	margin-top: 20px;
+	padding:20px;
+	display:none;
+}
+.settings-content .rowlabel {
 	width: 85px;
 	font-weight: bold;
 }
 
-.settings  .profile-image-large {
+.settings-content  .profile-image-large {
 	border: 3px solid #1F5514;
 }
 
-.settings .left-pane {
+.settings-content .left-pane {
 	width: 150px; 
 	height: 100%; 
 	float: left; 

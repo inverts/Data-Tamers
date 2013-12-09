@@ -1,8 +1,6 @@
 package io.analytics.aspect;
 
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -15,13 +13,18 @@ public class SiteAspect {
     public void publicMethod() {}
 	
 	// @HeaderFooter
-	@After("@annotation(io.analytics.aspect.HeaderFooter)")
-	public void HeaderFooterAdvice(JoinPoint joinPoint) throws Exception
+	@Around("publicMethod() && @annotation(headerfooter)")
+	public Object HeaderFooterAdvice(ProceedingJoinPoint joinPoint, HeaderFooter headerfooter) throws Throwable
 	{
 		Model model = this.getModel(joinPoint.getArgs());
 		
 		model.addAttribute("HEADER", "/WEB-INF/views/includes/header.jsp");
+		
+		model.addAttribute("SETTINGS", headerfooter.showSettings() ? "/WEB-INF/views/includes/settings.jsp" : "");
+		
 		model.addAttribute("FOOTER", "/WEB-INF/views/includes/footer.jsp");
+		
+		return joinPoint.proceed();
 	}
 	
 

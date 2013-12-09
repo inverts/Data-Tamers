@@ -6,11 +6,11 @@ $(document).ready(function() {
 	
 	GetWidget('testWidget');
 	
-	GetWidget('testWidget2');
+	//GetWidget('testWidget2');
 	
-	GetWidget('testWidget3');
+	//GetWidget('testWidget3');
 	
-	GetWidget('testWidget4');
+	//GetWidget('testWidget4');
 
 });
 
@@ -23,6 +23,7 @@ function GetWidget(id, source, change) {
 		function(response) {
 			$element.empty().append(response);
 			new Processing.loadSketchFromSources('hypotheticalFutureData', ['cache/pde/Grapher.pde']);
+			
 			
 			// Setup change event
 			$('select').on('change', function() {

@@ -10,38 +10,40 @@ var transitionOptions = {
 		offsetRight: "20px"
 };
 
+var panelHeight = 0;
+
 $(document).ready(function() {
 	
 	//What is this, "PHPScript"? :)
 	var $header = $('.header');
 	var $footer = $('.footer');
 	var $sidePanel = $('#sidepanel');
-	
-	displayContent();
-	
+	var $settings = $('.settings');
+	panelHeight = $('.wrapper').height();
 	/* Do appropriate animations */
 	if ($sidePanel.length)
-		displaySidePanel($sidePanel, displayContent);
+		displaySidePanel($sidePanel, panelHeight, displayContent);
 	else
 		displayContent();
 
-
-	/* Add any necessary events */
-	$(".profile-image").attr("onclick","showProfileInfo();");
+	$('.profile-image').click(function() {
+		showSettingsPanel($settings, panelHeight);
+	});
 	
 });
 
 
 /* Animates the side panel (if toggled) */
-function displaySidePanel($sidePanel, callback) {
+function displaySidePanel($sidePanel, panelHeight, callback) {
 	
 	if ($sidePanel.length) {
 		// set panel height to content + header
-		$sidePanel.css('height', $('.wrapper').height());
+		$sidePanel.css('height', panelHeight);
 		if ($sidePanel.data('animate')) {
 			$sidePanel.animate({width: "310px"}, 500, 'swing', function() {
 				$('.sidepanel-content').show();
-				callback();
+				if (typeof(callback != 'undefined'))
+					callback();
 				displayWidgets();
 			});
 		}
@@ -79,7 +81,32 @@ function displayContent() {
 	
 }
 
-function showProfileInfo() {
-	//TODO: Display a hovering box with profile information and a link to account settings.
-	alert("UNIMPLEMENTED:\nDisplay a hovering box with profile information and a link to account settings.");
+function showSettingsPanel($settings, panelHeight, callback) {
+	
+	if ($settings.length) {
+		// set panel height to wrapper height
+		$settings.css('height', panelHeight).show();
+		
+		$settings.animate({width: "250px"}, 500, 'swing', function() {
+			$('.settings-content').show();
+			
+			$(window).on('click.settings', function() {
+				hideSettingsPanel($settings);
+			});
+					
+			if (callback)
+				callback();
+			
+		}).click(function(e){ e.stopPropagation(); });
+
+	}
 }
+
+function hideSettingsPanel($settings) {
+	$settings.animate({width: 0}, 500, 'swing', function() {
+		$(this).hide();
+		$(window).off('click.settings');
+	});
+	
+}
+

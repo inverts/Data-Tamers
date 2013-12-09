@@ -11,6 +11,7 @@
 				</c:otherwise>
 			</c:choose>
 		</div>
-		<div class="messages"></div>		
-	</div>
+		<div class="messages"></div>
+			
+	</div>	
 </header>
