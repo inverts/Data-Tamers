@@ -1,9 +1,11 @@
 package io.analytics.site.controllers;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import io.analytics.repository.ManagementRepository.CredentialException;
 import io.analytics.service.ManagementService;
+import io.analytics.service.SecurityService;
 import io.analytics.site.models.*;
 
 import org.springframework.stereotype.Controller;
@@ -37,26 +39,33 @@ public class WidgetController {
 	}
 	
 	@RequestMapping(value = "/settings", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView settingsView(Model viewMap, HttpSession session, 
+	public ModelAndView settingsView(Model viewMap,  HttpServletResponse response, HttpSession session, 
 			@RequestParam(value = "account", defaultValue = "none") String accountId,
 			@RequestParam(value = "property", defaultValue = "none") String propertyId,
 			@RequestParam(value = "profile", defaultValue = "none") String profileId,
 			@RequestParam(value = "update", defaultValue = "") String update) {
 
-		SettingsModel settings = (SettingsModel) session.getAttribute("settings");
-		
-		if (settings == null) {
-			Credential credential = (Credential) session.getAttribute("credentials");
-			ManagementService management;
-			try {
-				management = new ManagementService(credential);
-			} catch (CredentialException e) {
-				//Invalid credentials
-				return new ModelAndView("unavailable");
-			}
-			settings = new SettingsModel(management);
-			session.setAttribute("settings", settings);
+		SettingsModel settings;
+		Credential credential;
+		if (SecurityService.checkAuthorization(session)) {
+			settings = SecurityService.getUserSettings();
+			credential = SecurityService.getCredentials();
+		} else {
+			SecurityService.redirectToLogin(session, response);
+			return new ModelAndView("unavailable");
 		}
+		/***** GWEN *****
+		 
+		//This is your Profile object
+		settings.getActiveProfile();
+		
+		//This is your Profile ID or "Table ID"
+		settings.getActiveProfile().getId();
+		
+		//This is your Credential object
+		credential
+		
+		*/
 
 		//Only one change should be made/possible at a time.
 		if (!accountId.equals("none"))

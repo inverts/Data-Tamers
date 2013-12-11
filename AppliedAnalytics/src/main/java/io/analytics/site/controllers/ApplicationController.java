@@ -5,6 +5,7 @@ import io.analytics.aspect.SidePanel;
 import io.analytics.domain.GoogleUserData;
 import io.analytics.repository.ManagementRepository.CredentialException;
 import io.analytics.service.ManagementService;
+import io.analytics.service.SecurityService;
 import io.analytics.site.models.SettingsModel;
 
 import java.io.IOException;
@@ -38,58 +39,19 @@ public class ApplicationController {
 	@SidePanel(animate = true)
 	@RequestMapping(value = "/application", method = RequestMethod.GET)
 	public ModelAndView home(Locale locale, Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
-		/*
-		 * Below is the authorization process. We may move this later.
-		 */
-		try {
-			Credential credentials = (Credential) session.getAttribute("credentials");
-			GoogleUserData userData = (GoogleUserData) session.getAttribute("userData");
-			if (credentials == null || userData ==null) {
-				//User is not logged in.
-				String contextPath = session.getServletContext().getContextPath();
-				try {
-					//We cannot turn this into a returnable view, since it needs to direct to the servlet.
-					response.sendRedirect(contextPath + "/login");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				return null;
-			}
-
-			//TODO: Reconsider the placement of the code below
+		
+		boolean success = SecurityService.checkAuthorization(session);
+		if (success) {
+			//If authorization succeeded, the following must succeed.
 			SettingsModel settings = (SettingsModel) session.getAttribute("settings");
-			
-			if (settings == null) {
-				Credential credential = (Credential) session.getAttribute("credentials");
-				ManagementService management;
-				try {
-					management = new ManagementService(credential);
-				} catch (CredentialException e) {
-					//Invalid credentials
-					return new ModelAndView("unavailable");
-				}
-				settings = new SettingsModel(management);
-				session.setAttribute("settings", settings);
-			}
-			
 			model.addAttribute("settings", settings);
-			//END TODO :)
-			
-			/*
-			model.addAttribute("accessToken", credentials.getAccessToken());
-			model.addAttribute("refreshToken", credentials.getRefreshToken());
-			model.addAttribute("firstName", userData.getName());
-			model.addAttribute("fullName", userData.getName());
-			model.addAttribute("email", userData.getEmail());
-			model.addAttribute("picture", userData.getPicture());
-			*/
-			
-		} catch (ClassCastException e) {
-			logger.info("Corrupted session information. See below for more info.");
-			logger.info(e.getMessage());
+		} else if (SecurityService.redirectToLogin(session, response)) {
+			return null;
+		} else {
+			return new ModelAndView("unavailable");
 		}
 		
 		return new ModelAndView("dashboard");
 	}
-
+	
 }

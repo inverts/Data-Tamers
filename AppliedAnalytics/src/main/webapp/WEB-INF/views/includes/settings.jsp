@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 	<div class="settings-wrapper">
-		<h3>Settings</h3>
+		<h2>Settings</h2>
 		<div class="settings-content">
 			<div class="left-pane">
 				<c:choose>
