@@ -19,10 +19,12 @@ import javax.servlet.http.HttpSession;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.AuthorizationCodeResponseUrl;
+import com.google.api.client.auth.oauth2.BearerToken;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeCallbackServlet;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.client.http.BasicAuthentication;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -67,13 +69,10 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
 				}
 			}
 
-			session.setAttribute("credentials", credential);
-			if (userData != null)
-				session.setAttribute("userData", userData);
-
 		} catch (CredentialException e) {
 			System.err.println("Invalid credentials.");
 		}
+		session.setAttribute("credentials", credential);
 		String contextPath = session.getServletContext().getContextPath();
 		resp.sendRedirect(contextPath + "/application");
 	}

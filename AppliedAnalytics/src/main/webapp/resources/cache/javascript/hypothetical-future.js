@@ -29,8 +29,6 @@ function GetWidget(id, source, change) {
 		function(response) {
 			$element.empty().append(response);
 			
-					
-			
 			canvas = document.getElementById('hypotheticalFutureData');
 			var p = new Processing(canvas, hypotheticalSketch);
 			

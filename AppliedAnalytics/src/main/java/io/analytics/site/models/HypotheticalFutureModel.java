@@ -8,22 +8,29 @@ public class HypotheticalFutureModel extends ForecastWidgetModel {
 	
 	private Map<String, String> changePct;
 	private Map<String, String> trafficSrc;
-	//Grapher g;
 	
 	String[] adjustments = { "05", "10", "20", "30" }; // temp, should defined by an enum in a service;
-	
-	
+
+
+	//TODO: Require the CoreReportingService to create this
 	public HypotheticalFutureModel(String change, String source) {	
 		this.changePct = setDropDownOptions(change, adjustments);
+	}
 	
+	@Override
+	public String getName() {
+		return "Hypothetical Future";
+	}
+
+	@Override
+	public String getDescription() {
+		return "View a forecast of your data depending on hypothetical conditions.";
 	}
 	
 	
 	public Map<String, String> getChangePercentOptions() {
 		return this.changePct;
 	}
-	
-	
 	
 	
 	// Helper method for establishing the dropdown options which uses a map to set a boolean

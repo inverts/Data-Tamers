@@ -32,7 +32,7 @@ public class WidgetController {
 		// annotation located on each getter method.
 		HypotheticalFutureModel hypotheticalFuture = new HypotheticalFutureModel(adjustBy, source);
 		
-		viewMap.addAttribute("changeOptions", hypotheticalFuture.getChangePercentOptions());
+		viewMap.addAttribute("hfModel", hypotheticalFuture);
 	
 		return new ModelAndView("HypotheticalFuture");
 
@@ -46,26 +46,12 @@ public class WidgetController {
 			@RequestParam(value = "update", defaultValue = "") String update) {
 
 		SettingsModel settings;
-		Credential credential;
 		if (SecurityService.checkAuthorization(session)) {
 			settings = SecurityService.getUserSettings();
-			credential = SecurityService.getCredentials();
 		} else {
 			SecurityService.redirectToLogin(session, response);
 			return new ModelAndView("unavailable");
 		}
-		/***** GWEN *****
-		 
-		//This is your Profile object
-		settings.getActiveProfile();
-		
-		//This is your Profile ID or "Table ID"
-		settings.getActiveProfile().getId();
-		
-		//This is your Credential object
-		credential
-		
-		*/
 
 		//Only one change should be made/possible at a time.
 		if (!accountId.equals("none"))
