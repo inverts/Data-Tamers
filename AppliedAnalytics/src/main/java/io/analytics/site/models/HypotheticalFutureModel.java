@@ -3,10 +3,12 @@ package io.analytics.site.models;
 import java.util.Map;
 import java.util.TreeMap;
 
+
 public class HypotheticalFutureModel extends ForecastWidgetModel {
 	
 	private Map<String, String> changePct;
 	private Map<String, String> trafficSrc;
+	//Grapher g;
 	
 	String[] adjustments = { "05", "10", "20", "30" }; // temp, should defined by an enum in a service;
 	

@@ -1,5 +1,5 @@
 
-float[] values = new float[1];
+float[] values;
 float plotX1, plotX2, plotY1, plotY2;
 int leftMargin = 20;
 int topMargin = 100;
@@ -57,7 +57,7 @@ void draw() {
   rect(plotX1, plotY1, plotX2, plotY2);
   
   drawTickMarks();
-  generatePoints(points);
+  //generatePoints(points);
   
   noFill();
   stroke(255, 128, 0);
@@ -139,7 +139,7 @@ void draw() {
 
 void keyPressed() {
   //generateValues();
-  generatePoints(points);
+  //generatePoints(points);
 }
 
 void generateValues() {
