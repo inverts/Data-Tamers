@@ -12,19 +12,8 @@ public class TrafficRepository implements ITrafficRepository {
 	
 	private Traffic trafficMapper(String json){
 		Traffic t = new Traffic();
-		// parse json
-		String[] ts = {"all visits",
-				"new visitors",
-				"returning visitors",
-				"paid search traffic",
-				"non-paid search traffic",
-				"search traffic",
-				"referral traffic",
-				"visits with conversions",
-				"visits with transactions",
-				"mobile traffic",
-				"non-bounce visits",
-				"tablet visits"};
+		// temporary hardcoded data
+		String[] ts = {"all"};	
 		t.setTrafficSources(ts);
 		return t;
 		

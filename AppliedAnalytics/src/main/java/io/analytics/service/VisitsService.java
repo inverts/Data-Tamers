@@ -1,12 +1,16 @@
 package io.analytics.service;
+
 import io.analytics.domain.Visits;
-import io.analytics.repository.IVisitsRepository;
+import io.analytics.repository.VisitsRepository;
 
 public class VisitsService {
-	private IVisitsRepository visitsRepository;
-	
+	private final VisitsRepository REPOSITORY;
+
+	public VisitsService() {
+		this.REPOSITORY = new VisitsRepository();
+	}
 	public Visits getAllVisits() {
 		// may need business logic here at times
-		return visitsRepository.getAllVisitsCount();
+		return REPOSITORY.getAllVisitsCount();
 	}
 }
