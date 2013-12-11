@@ -104,7 +104,6 @@ function showSettingsPanel($settings, panelHeight, callback) {
 
 function hideSettingsPanel($settings) {
 	$settings.animate({width: 0}, 500, 'swing', function() {
-		$(this).hide();
 		$(window).off('click.settings');
 	});
 	

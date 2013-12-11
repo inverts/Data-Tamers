@@ -13,12 +13,12 @@
 <div class="widget_wrapper widgetView">
 	<form id="hypotheticalFutureSettings">
 		<div class="widget_header">			
-			<span class="widget_title">HYPOTHETICAL FUTURE</span>
+			<div class="widget_title">HYPOTHETICAL FUTURE</div>
 			<div class="widget_input">
-				<label>TRAFFIC SOURCE:</label> <select id="traffic_source"></select>
+				<label>Traffic Source:</label> <select id="traffic_source"></select>
 			</div>
 			<div class="widget_input">				
-				<label>CHANGE:</label> <select id="change_pct">
+				<label>Increase:</label> <select id="change_pct">
 					<c:forEach var="option" items="${changeOptions}">
 						<option value="${option.getKey()}" ${option.getValue()}>
 							${option.getKey()}%</option>

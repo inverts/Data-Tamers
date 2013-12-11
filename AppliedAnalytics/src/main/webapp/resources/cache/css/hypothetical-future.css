@@ -1,7 +1,8 @@
 @CHARSET "ISO-8859-1";
 
-.hf_visual {
-	background-color: #FFF;
-	/* temp */
-	height: 180px;
+.hypotheticalFutureGraph {
+	background-color: #333;
+	height:100%;
+	padding:5px;
+	clear:both;
 }

@@ -3,21 +3,12 @@
 
 <script src="<c:url value="cache/javascript/hypothetical-future.js" />"></script>
 
-<style>
-.dashboard-content {
-}
-
-.w_container {
-	height:200px;
-}
-</style>
-
 <div class="dashboard-content">
 	<h1>
 		Dashboard! 
 	</h1>
 	
-	<P>  The time on the server is ${model.serverTime}. </P>
+	<P>  The time on the server is ${serverTime}. </P>
 	
 	
 	

@@ -4,16 +4,31 @@
 .widget_wrapper {
 	max-width: 800px;
 	padding:15px;
-	background-color: #CCC;
+	background:url("../images/widget_bg.png") repeat;
+	clear:both;
+	
+	-webkit-border-top-left-radius: 20px;
+	-webkit-border-top-right-radius: 20px;
+	-webkit-border-bottom-left-radius: 20px;
+	-webkit-border-bottom-right-radius: 20px;
+	
+	-moz-border-radius-topleft: 20px;
+	-moz-border-radius-topright: 20px;
+	-moz-border-radius-bottomleft: 20px;
+	-moz-border-radius-bottomright: 20px;
 }
 
+
 .widget_header {
-	height:50px;
+	height: 80px;
+	width: 100%;
 }
 
 .widget_title {
-	font: 1.4em arial,sans-serif;
-	float: left;
+	font-size: 1.55em;
+	color: violet;
+	text-shadow: 0 0 3px #a967d5;
+	margin-bottom: 5px;
 }
 
 
@@ -21,14 +36,14 @@
 	visibility:'hidden';
 }
 
-.widget_input {
-	
-}
 
 .widget_input {
-	float: right;	
+	float: right;
+	margin-right:10px;
+	clear: left;	
 }
 
 .widget_input label {
-	font: 1.1em arial,sans-serif;
+	font: .9em arial,sans-serif;
+	color: white;
 }
