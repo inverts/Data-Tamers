@@ -52,28 +52,14 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
 	protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential)
 			throws ServletException, IOException {
 
-		if (credential == null) {
-			// TODO: Handle error.
-		}
-
 		HttpSession session = req.getSession();
-
-		try {
-			IManagementService management = new ManagementService(credential);
-			GoogleUserData userData = management.getGoogleUserData();
-			Accounts accounts = management.getAccounts();
-			if (accounts != null && accounts.getItems() != null) {
-				if (!accounts.getItems().isEmpty()) {
-					for (Account a : accounts.getItems())
-						System.out.println(a.getName());
-				}
-			}
-
-		} catch (CredentialException e) {
-			System.err.println("Invalid credentials.");
-		}
-		session.setAttribute("credentials", credential);
 		String contextPath = session.getServletContext().getContextPath();
+		if (credential == null) {
+			resp.sendRedirect(contextPath + "/login?error=no_credential");
+		}
+
+
+		session.setAttribute("credentials", credential);
 		resp.sendRedirect(contextPath + "/application");
 	}
 

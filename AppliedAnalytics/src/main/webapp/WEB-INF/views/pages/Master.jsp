@@ -10,6 +10,7 @@
 <link href="<c:url value="/cache/css/site.css" />" rel="stylesheet">
 <link href="<c:url value="/cache/css/sidepanel.css" />" rel="stylesheet">
 <link href="<c:url value="/cache/css/headerfooter.css" />" rel="stylesheet">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 
 <!-- JavaScript -->
 <script src="<c:url value="/cache/javascript/libs/jquery-1.10.2.min.js" />"></script>

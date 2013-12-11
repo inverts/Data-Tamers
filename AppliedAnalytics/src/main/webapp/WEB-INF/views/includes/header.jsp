@@ -1,6 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <header>
 	<div class="header">
+		<div class="filter">
+			<input type="text" id="start-date" value="${ filter.getActiveStartDate() }" />
+			<input type="text" id="end-date" value="${ filter.getActiveEndDate() }" /><br />
+			Active Metric: ${ filter.getActiveMetric() }
+		</div> 
 		<div class="avatar">
 			<c:choose>
 				<c:when test="${not empty settings.getGoogleUserData().getPicture()}" >
@@ -15,3 +20,9 @@
 			
 	</div>	
 </header>
+<script type="text/javascript">
+$(function() {
+	  $( "#start-date" ).datepicker();
+	  $( "#end-date" ).datepicker();
+});
+</script>

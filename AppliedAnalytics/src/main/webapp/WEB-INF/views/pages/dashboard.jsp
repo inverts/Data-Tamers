@@ -4,13 +4,6 @@
 <script src="<c:url value="cache/javascript/hypothetical-future.js" />"></script>
 
 <div class="dashboard-content">
-	<h1>
-		Dashboard! 
-	</h1>
-	
-	<P>  The time on the server is ${serverTime}. </P>
-	
-	
 	
 	<div id="testWidget" class="w_container"></div>
 	<br /><br />
