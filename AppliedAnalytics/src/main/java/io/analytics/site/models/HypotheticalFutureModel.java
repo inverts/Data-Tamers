@@ -1,11 +1,16 @@
 package io.analytics.site.models;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
 
+import org.json.*;
+
+
 public class HypotheticalFutureModel extends ForecastWidgetModel {
 	
+	private JSONObject data;
 	private Map<String, String> changePct;
 	private Map<String, String> trafficSrc;
 	
@@ -15,6 +20,9 @@ public class HypotheticalFutureModel extends ForecastWidgetModel {
 	//TODO: Require the CoreReportingService to create this
 	public HypotheticalFutureModel(String change, String source) {	
 		this.changePct = setDropDownOptions(change, adjustments);
+		
+		
+		this.data = new JSONObject();
 	}
 	
 	@Override
@@ -31,6 +39,33 @@ public class HypotheticalFutureModel extends ForecastWidgetModel {
 	public Map<String, String> getChangePercentOptions() {
 		return this.changePct;
 	}
+	
+	
+	
+	/* test method to pass data to javascript */
+	public JSONObject getVisualization() {
+		
+		float[] pts = new float[] { 88,135,111,131,104,139,138,106,102,85,137,139,132,109,114,92,90,149,138,134,108,106,95,97,132,112,104,76,96,91 };
+		
+		 try {
+			 
+			 /* Feel free to create categories of data like I did for points. */
+			 JSONObject points = new JSONObject();
+			 points.put("values", Arrays.toString(pts));
+			 
+			 /* this.data is the parent object that will contain ALL of
+			  * the data that will be processed by the visualization.
+			  */
+			 this.data.put("points", points);
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 return this.data;
+	}
+	
+	
 	
 	
 	// Helper method for establishing the dropdown options which uses a map to set a boolean
