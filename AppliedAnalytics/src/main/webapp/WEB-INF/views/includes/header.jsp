@@ -3,8 +3,8 @@
 	<div class="header">
 		<div class="avatar">
 			<c:choose>
-				<c:when test="${not empty model.picture}" >
-					<img class="profile-image" title="" src="${model.picture}?sz=50" /><br />
+				<c:when test="${not empty settings.getGoogleUserData().getPicture()}" >
+					<img class="profile-image" title="" src="${settings.getGoogleUserData().getPicture()}?sz=50" /><br />
 				</c:when>
 				<c:otherwise>
 					<img class="profile-image" src="<c:url value="/cache/images/default_user_50.png" />" /><br />

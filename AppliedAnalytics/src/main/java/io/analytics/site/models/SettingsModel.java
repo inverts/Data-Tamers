@@ -47,6 +47,12 @@ public class SettingsModel {
 		this.management = management;
 		currentAccounts = management.getAccounts();
 		googleUserData = management.getGoogleUserData();
+		//Select the first available account by default. 
+		if (currentAccounts != null && currentAccounts.getItems() != null && !currentAccounts.getItems().isEmpty() ) {
+			setAccountSelection(currentAccounts.getItems().get(0));
+		}
+		//If the above chain of selections resulted in a profile being selected, set it as the active one.
+		setActiveProfile(profileSelection);
 	}
 	
 	
@@ -128,7 +134,7 @@ public class SettingsModel {
 	}
 
 
-	public void setActiveProfile(Profile activeProfile) {
+	public boolean setActiveProfile(Profile activeProfile) {
 		if (activeProfile != null) {
 			this.activeProfile = activeProfile;
 			
@@ -139,11 +145,15 @@ public class SettingsModel {
 			accountSelection = findAccount(currentAccounts, activeProfile.getAccountId());
 			propertySelection = findWebproperty(currentWebproperties, activeProfile.getWebPropertyId());
 			profileSelection = activeProfile;
-		}
+			
+			return true;
+		} 
+		//Failure.
+		return false;
 	}
 	
-	public void setActiveProfile() {
-		setActiveProfile(this.profileSelection);
+	public boolean setActiveProfile() {
+		return setActiveProfile(this.profileSelection);
 	}
 
 
@@ -157,6 +167,7 @@ public class SettingsModel {
 			this.accountSelection = accountSelection;
 			currentWebproperties = management.getWebproperties(accountSelection);
 			currentProfiles = null;
+			//Select the first available property by default. 
 			if (currentWebproperties != null && currentWebproperties.getItems() != null && !currentWebproperties.getItems().isEmpty() ) {
 				setPropertySelection(currentWebproperties.getItems().get(0));
 			}
@@ -178,6 +189,7 @@ public class SettingsModel {
 		if (propertySelection != null) {
 			this.propertySelection = propertySelection;
 			currentProfiles = management.getProfiles(this.accountSelection, this.propertySelection);
+			//Select the first available profile by default. 
 			if (currentProfiles != null && currentProfiles.getItems() != null && !currentProfiles.getItems().isEmpty() ) {
 				setProfileSelection(currentProfiles.getItems().get(0));
 			}
@@ -186,7 +198,7 @@ public class SettingsModel {
 	
 	
 	
-public void setPropertySelection(String webpropertyId) {
+	public void setPropertySelection(String webpropertyId) {
 		setPropertySelection(findWebproperty(currentWebproperties, webpropertyId));
 	}
 

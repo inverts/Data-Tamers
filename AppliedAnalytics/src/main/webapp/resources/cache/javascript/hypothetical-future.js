@@ -32,11 +32,12 @@ function GetWidget(id, source, change) {
 
 				  processing.setup = function() {
 				    processing.size(640, 360, processing.P3D);
-				    tex = processing.loadImage("pjs.png");
+				    //This was pointing to an image that didn't exist and breaking our javascript.
+				    tex = processing.loadImage("https://raw.github.com/jeresig/processing-js/master/examples/js/pjs.png");
 				    processing.textureMode(processing.NORMALIZED);
 				    processing.fill(255);
 				    processing.stroke(processing.color(44,48,32));
-				    $('')
+				    //$('');
 				  };
 
 				  processing.draw = function() {
@@ -48,7 +49,7 @@ function GetWidget(id, source, change) {
 				    processing.rotateY(roty);
 				    processing.scale(90);
 				    texturedCube(tex);
-				  }
+				  };
 
 				  function texturedCube(tex) {
 				    processing.beginShape(processing.QUADS);

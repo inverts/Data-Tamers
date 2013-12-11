@@ -22,7 +22,10 @@
 <body>
 	<div class="wrapper">
 		<jsp:include page="${SIDEPANEL}"/>
+		
+		<div class="settings">
 		<jsp:include page="${SETTINGS}"/>
+		</div>
 		<jsp:include page="${HEADER}"/>
 		<div class="content">
 			<jsp:include page="${BODY}"/>

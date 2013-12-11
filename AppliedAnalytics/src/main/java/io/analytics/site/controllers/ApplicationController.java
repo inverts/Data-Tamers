@@ -3,6 +3,9 @@ package io.analytics.site.controllers;
 import io.analytics.aspect.HeaderFooter;
 import io.analytics.aspect.SidePanel;
 import io.analytics.domain.GoogleUserData;
+import io.analytics.repository.ManagementRepository.CredentialException;
+import io.analytics.service.ManagementService;
+import io.analytics.site.models.SettingsModel;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -52,12 +55,34 @@ public class ApplicationController {
 				}
 				return null;
 			}
+
+			//TODO: Reconsider the placement of the code below
+			SettingsModel settings = (SettingsModel) session.getAttribute("settings");
+			
+			if (settings == null) {
+				Credential credential = (Credential) session.getAttribute("credentials");
+				ManagementService management;
+				try {
+					management = new ManagementService(credential);
+				} catch (CredentialException e) {
+					//Invalid credentials
+					return new ModelAndView("unavailable");
+				}
+				settings = new SettingsModel(management);
+				session.setAttribute("settings", settings);
+			}
+			
+			model.addAttribute("settings", settings);
+			//END TODO :)
+			
+			/*
 			model.addAttribute("accessToken", credentials.getAccessToken());
 			model.addAttribute("refreshToken", credentials.getRefreshToken());
 			model.addAttribute("firstName", userData.getName());
 			model.addAttribute("fullName", userData.getName());
 			model.addAttribute("email", userData.getEmail());
 			model.addAttribute("picture", userData.getPicture());
+			*/
 			
 		} catch (ClassCastException e) {
 			logger.info("Corrupted session information. See below for more info.");

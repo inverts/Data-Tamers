@@ -1,5 +1,6 @@
 @CHARSET "ISO-8859-1";
 
+
 /******FONTS******/
 /* Museo Sans 500 Font */
 @font-face {
@@ -14,9 +15,9 @@
 }
 
 
+
 /******GENERAL******/
 /* Styling for basic site modules */
- 
 
 body, h1, h2, h3, h4, a, img {
 	padding:0 auto;
@@ -58,15 +59,22 @@ input {
 	font: inherit;
 }
 
+
+
 /******SETTINGS******/
 
 .settings {
 	width:0;
 	float:right;
-	background:#183190;
+	background:#eee;
 	position:absolute;
 	right: 0;
 	display:none;
+	border-left: 1px solid #ccc;
+}
+
+.settings-wrapper {
+	padding: 20px;
 }
 
 .settings-content {
@@ -79,15 +87,15 @@ input {
 }
 
 .settings-content  .profile-image-large {
-	border: 3px solid #1F5514;
+	border: 3px solid #237DCF;
 }
 
 .settings-content .left-pane {
 	width: 150px; 
 	height: 100%; 
 	float: left; 
-	margin-right: 20px; 
-	padding: 0px 10px;
+	margin: 0px 25px 20px 0px; 
+	
 }
 .settings tr {
 	height: 25px;

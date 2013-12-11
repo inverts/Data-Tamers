@@ -87,7 +87,7 @@ function showSettingsPanel($settings, panelHeight, callback) {
 		// set panel height to wrapper height
 		$settings.css('height', panelHeight).show();
 		
-		$settings.animate({width: "250px"}, 500, 'swing', function() {
+		$settings.animate({width: "550"}, 500, 'swing', function() {
 			$('.settings-content').show();
 			
 			$(window).on('click.settings', function() {
