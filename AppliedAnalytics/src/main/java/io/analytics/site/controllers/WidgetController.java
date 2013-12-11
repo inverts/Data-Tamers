@@ -33,6 +33,7 @@ public class WidgetController {
 		HypotheticalFutureModel hypotheticalFuture = new HypotheticalFutureModel(adjustBy, source);
 		
 		viewMap.addAttribute("hfModel", hypotheticalFuture);
+		viewMap.addAttribute("DATA", hypotheticalFuture.getVisualization());
 	
 		return new ModelAndView("HypotheticalFuture");
 

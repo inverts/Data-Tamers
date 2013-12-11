@@ -1,22 +1,10 @@
 /**
  * hypothetical-future.js
  */
-var points = {
-		
-		values : [88,135,111,131,104,139,138,106,102,85,137,139,132,109,114,92,90,149,138,134,108,106,95,97,132,112,104,76,96,91]	
-		
-};
-
 
 $(document).ready(function() {
 	
 	GetWidget('testWidget');
-	
-	//GetWidget('testWidget2');
-	
-	//GetWidget('testWidget3');
-	
-	//GetWidget('testWidget4');
 
 });
 
@@ -24,12 +12,14 @@ $(document).ready(function() {
 function GetWidget(id, source, change) {
 	
 	var $element = $('#' + id);
-	var canvas;
 	$.post("HypotheticalFuture", { source: source, change: change }, 
 		function(response) {
 			$element.empty().append(response);
+
+			var canvas = document.getElementById('hypotheticalFutureData');
 			
-			canvas = document.getElementById('hypotheticalFutureData');
+			
+			//points = HypotheticalFutureData.points;		
 			var p = new Processing(canvas, hypotheticalSketch);
 			
 			// Setup change event
@@ -39,8 +29,10 @@ function GetWidget(id, source, change) {
 	});		
 }
 
-var hypotheticalSketch = 
+// assume everything in points is a string!
+var hypotheticalSketch =
 	(function($p) {
+		var points = { values: JSON.parse(HypotheticalFutureData.points.values) };
 	    var Label = (function() {
 	        function Label() {
 	            var $this_1 = this;
@@ -145,6 +137,7 @@ var hypotheticalSketch =
 	        var x = 0,
 	            y = 0;
 	        
+	        // notice parseFloat method arround extraction of data
 	        for (var i = 0; i < points.values.length; i++) {
 	            x = $p.map(i, 0, points.values.length - 1, plotX1, plotX2);
 	            y = $p.map(points.values[i], 0, 200, $p.height - topMargin, $p.height - topMargin - plotHeight);

@@ -170,6 +170,12 @@
 					<artifactId>core</artifactId>
 					<version>1.47.1</version>
 				</dependency>
+				
+				<dependency>
+			        <groupId>org.json</groupId>
+			        <artifactId>json</artifactId>
+			        <version>20070829</version>
+      			</dependency>
               
         </dependencies>
     <build>
