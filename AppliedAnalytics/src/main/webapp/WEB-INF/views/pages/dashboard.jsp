@@ -3,6 +3,13 @@
 
 <script src="<c:url value="cache/javascript/hypothetical-future.js" />"></script>
 
+<style>
+.dashboard-content {
+		padding:10px;
+		float:left;
+}
+</style>
+
 <div class="dashboard-content">
 	
 	<div id="testWidget" class="w_container"></div>

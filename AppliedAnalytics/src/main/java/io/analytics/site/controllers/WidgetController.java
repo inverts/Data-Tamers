@@ -1,10 +1,13 @@
 package io.analytics.site.controllers;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import io.analytics.domain.CoreReportingData;
 import io.analytics.repository.ManagementRepository.CredentialException;
 import io.analytics.service.CoreReportingService;
 import io.analytics.service.ManagementService;
@@ -20,16 +23,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.services.analytics.model.GaData;
+import com.google.api.services.analytics.model.GaData.ColumnHeaders;
 
 @Controller
 public class WidgetController {
 	
-	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ModelAndView home(Locale locale, Model model) {
-		
-		return new ModelAndView("entry");
-	}
 	
 	@RequestMapping(value = "/HypotheticalFuture", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView hypotheticalFutureView(Model viewMap, HttpServletResponse response, HttpSession session,	
@@ -77,7 +76,13 @@ public class WidgetController {
 			hypotheticalFuture.setDimension(dimension);
 		
 		viewMap.addAttribute("hfModel", hypotheticalFuture);
-	
+		/*
+		HypotheticalFutureModel hypotheticalFuture = new HypotheticalFutureModel(adjustBy, source);
+		
+		viewMap.addAttribute("hfModel", hypotheticalFuture);
+		viewMap.addAttribute("changeOptions", hypotheticalFuture.getChangePercentOptions());
+		viewMap.addAttribute("DATA", hypotheticalFuture.getVisualization());
+		 */
 		return new ModelAndView("HypotheticalFuture");
 
 	}
@@ -96,19 +101,6 @@ public class WidgetController {
 			SessionService.redirectToLogin(session, response);
 			return new ModelAndView("unavailable");
 		}
-
-		/***** GWEN *****
-		 
-		//This is your Profile object
-		settings.getActiveProfile();
-		
-		//This is your Profile ID or "Table ID"
-		String profileId = settings.getActiveProfile().getId();
-		
-		//This is your Credential object
-		credential
-		
-		*/
 
 		//Only one change should be made/possible at a time.
 		if (!accountId.equals("none"))
@@ -129,5 +121,6 @@ public class WidgetController {
 		return new ModelAndView("settings");
 
 	}
+	
 
 }

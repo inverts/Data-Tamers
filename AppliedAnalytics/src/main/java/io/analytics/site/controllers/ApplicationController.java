@@ -6,6 +6,8 @@ import io.analytics.service.SessionService;
 import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SettingsModel;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,9 +36,10 @@ public class ApplicationController {
 	@RequestMapping(value = "/application", method = RequestMethod.GET)
 	public ModelAndView home(Locale locale, Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
 		boolean success = SessionService.checkAuthorization(session);
+		SettingsModel settings = null;
 		if (success) {
 			//If authorization succeeded, the following must succeed.
-			SettingsModel settings = (SettingsModel) session.getAttribute("settings");
+			settings = (SettingsModel) session.getAttribute("settings");
 			model.addAttribute("settings", settings);
 		} else if (SessionService.redirectToLogin(session, response)) {
 			return null;
@@ -58,8 +61,10 @@ public class ApplicationController {
 		}
 		
 		model.addAttribute("filter", filter);
-		
+
 		return new ModelAndView("dashboard");
 	}
+	
+
 	
 }

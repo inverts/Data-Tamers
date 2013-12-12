@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-	<div class="settings-wrapper">
-		<h2>Settings</h2>
+	<div class="settings">
 		<div class="settings-content">
+		<h2>Settings</h2>
 			<div class="left-pane">
 				<c:choose>
 					<c:when test="${not empty settings.getGoogleUserData().getPicture()}" >

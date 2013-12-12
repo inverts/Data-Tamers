@@ -28,7 +28,11 @@ public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
-	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ModelAndView home(Locale locale, Model model) {
+		
+		return new ModelAndView("entry");
+	}
 	
 	/**
 	 * This page is deprecated.
