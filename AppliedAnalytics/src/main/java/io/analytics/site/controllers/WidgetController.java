@@ -62,6 +62,19 @@ public class WidgetController {
 			return new ModelAndView("unavailable");
 		}
 
+		/***** GWEN *****
+		 
+		//This is your Profile object
+		settings.getActiveProfile();
+		
+		//This is your Profile ID or "Table ID"
+		String profileId = settings.getActiveProfile().getId();
+		
+		//This is your Credential object
+		credential
+		
+		*/
+
 		//Only one change should be made/possible at a time.
 		if (!accountId.equals("none"))
 			settings.setAccountSelection(accountId);

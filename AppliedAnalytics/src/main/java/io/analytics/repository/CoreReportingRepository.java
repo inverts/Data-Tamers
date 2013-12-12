@@ -1,5 +1,9 @@
 package io.analytics.repository;
+import io.analytics.domain.CoreReportingData;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -11,7 +15,7 @@ import com.google.api.services.analytics.Analytics;
 import com.google.api.services.analytics.Analytics.Data.Ga;
 import com.google.api.services.analytics.model.*;
 
-public class CoreReportingRepository {
+public class CoreReportingRepository implements ICoreReportingRepository {
 	/**
 	 * CoreReportingRepository class queries Google Analytics reports using 
 	 *   dimensions, metrics, start and end dates, and table id.
@@ -23,6 +27,7 @@ public class CoreReportingRepository {
 		private final String APPLICATION_NAME = "datatamers-appliedanalytics-0.1";
 		private final String ACCESS_TOKEN;
 		private final Credential CREDENTIAL;
+		private final String PROFILE_ID;
 		private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 		private static final JsonFactory JSON_FACTORY = new JacksonFactory();
 
@@ -43,11 +48,12 @@ public class CoreReportingRepository {
 			}
 		}
 
-		public CoreReportingRepository(Credential credential) throws CredentialException {
+		public CoreReportingRepository(Credential credential, String profileId) throws CredentialException {
 			if (credential == null)
 				throw new CredentialException("Null credential object passed.");
 			this.ACCESS_TOKEN = credential.getAccessToken();
 			this.CREDENTIAL = credential;
+			this.PROFILE_ID = profileId;
 			// TODO: Can we do this with only the access token?
 			this.CORE_REPORTING = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, CREDENTIAL)
 					.setApplicationName(APPLICATION_NAME).build().data().ga();
@@ -70,10 +76,10 @@ public class CoreReportingRepository {
 		 * 
 		 * @return
 		 */
-		public GaData getMetric2D(String metric, String startDate, String endDate, int maxResult, String tableId) throws IOException {
+		public CoreReportingData getMetric2D(String metric, String startDate, String endDate, int maxResult) throws IOException {
 			GaData data = null;
 			try {
-				data = CORE_REPORTING.get(tableId, // Table Id.
+				data = CORE_REPORTING.get(PROFILE_ID, // Table Id.
 						startDate, // Start date.
 						endDate, // End date.
 						"ga:"+metric) // Metrics.
@@ -87,7 +93,7 @@ public class CoreReportingRepository {
 				// Catch general parsing network errors.
 				e.printStackTrace();
 			}
-			return data;
+			return coreReportingMapper(data);
 		}
 
 		/**
@@ -95,10 +101,10 @@ public class CoreReportingRepository {
 		 * 
 		 * @return
 		 */
-		public GaData getTopTrafficSources(String metric, String startDate, String endDate, int n, String tableId) throws IOException{
+		public CoreReportingData getTopTrafficSources(String metric, String startDate, String endDate, int n) throws IOException{
 			GaData data = null;
 			try {
-				data = CORE_REPORTING.get(tableId, // Table Id.
+				data = CORE_REPORTING.get(PROFILE_ID, // Table Id.
 						startDate, // Start date.
 						endDate, // End date.
 						"ga:"+metric) // Metrics.
@@ -112,7 +118,7 @@ public class CoreReportingRepository {
 				// Catch general parsing network errors.
 				e.printStackTrace();
 			}
-			return data;
+			return coreReportingMapper(data);
 		}
 		
 		/**
@@ -120,10 +126,10 @@ public class CoreReportingRepository {
 		 * 
 		 * @return
 		 */
-		public GaData getWebsitePerfomanceData(String startDate, String endDate, String tableId) throws IOException{
+		public CoreReportingData getPagePeformance(String startDate, String endDate) throws IOException{
 			GaData data = null;
 			try {
-				data = CORE_REPORTING.get(tableId, // Table Id.
+				data = CORE_REPORTING.get(PROFILE_ID, // profile id (table id).
 						startDate, // Start date.
 						endDate, // End date.
 						"ga:entranceBounceRate,ga:visits,ga:exitRate") // Metrics.
@@ -137,11 +143,19 @@ public class CoreReportingRepository {
 				// Catch general parsing network errors.
 				e.printStackTrace();
 			}
-			return data;
+			return coreReportingMapper(data);
 		}		
 
+
+		
+		private CoreReportingData coreReportingMapper(GaData data){
+			CoreReportingData dataObject = new CoreReportingData(data);
+			return dataObject;
+		}
+		
+		
 		private void handleGoogleJsonResponseException(GoogleJsonResponseException e) {
-			System.err.println("There was a service error: " + e.getDetails().getCode() + " : "
+			System.err.println("There was a CoreReporting service error: " + e.getDetails().getCode() + " : "
 					+ e.getDetails().getMessage());
 		}
 }
