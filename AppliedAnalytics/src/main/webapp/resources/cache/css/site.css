@@ -74,7 +74,7 @@ input {
 	position:absolute;
 	right: 0;
 	display:none;
-	border-left: 1px solid #ccc;
+	border-left: 3px solid #ccc;
 }
 
 .settings-wrapper {

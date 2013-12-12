@@ -8,7 +8,7 @@
 <link href="<c:url value="/cache/css/hypothetical-future.css" />" rel="stylesheet">
   
 <script>
-var HypotheticalFutureData = JSON.parse('${DATA}');
+var historicalData = JSON.parse('${ hfModel.getDataPoints() }');
 </script>  
   
 <div class="widget_wrapper widgetView">

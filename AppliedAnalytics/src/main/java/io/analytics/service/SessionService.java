@@ -1,6 +1,7 @@
 package io.analytics.service;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import io.analytics.repository.ManagementRepository.CredentialException;
 import io.analytics.site.models.SettingsModel;
@@ -13,11 +14,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.api.client.auth.oauth2.Credential;
 
-public class SecurityService {
+public class SessionService {
 
-	private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
+	private static final Logger logger = LoggerFactory.getLogger(SessionService.class);
 	private static SettingsModel userSettings = null;
 	private static Credential credentials = null;
+	private static HashMap<String, Object> models = new HashMap<String, Object>();
 	
 	/**
 	 * Checks to see if the user's current session is authorized.
@@ -51,8 +53,8 @@ public class SecurityService {
 			}
 			settings = new SettingsModel(management);
 			session.setAttribute("settings", settings);
-			SecurityService.userSettings = settings;
-			SecurityService.credentials = credentials;
+			SessionService.userSettings = settings;
+			SessionService.credentials = credentials;
 		}
 		
 		return true;
@@ -65,6 +67,39 @@ public class SecurityService {
 
 	public static Credential getCredentials() {
 		return credentials;
+	}
+	
+	public static HashMap<String, Object> getModels(HttpSession session) {
+		HashMap<String, Object> models;
+		try {
+			models = (HashMap<String, Object>) session.getAttribute("models");
+			if (models == null) {
+				models = new HashMap<String, Object>();
+				session.setAttribute("models", models);
+			}
+		} catch (ClassCastException e) {
+			models = new HashMap<String, Object>();
+			session.setAttribute("models", models);
+		}
+		return models;
+	}
+	
+	/**
+	 * Safely gets a model from the session if it is available.
+	 * 
+	 * @param session
+	 * @param s
+	 * @param c
+	 * @return
+	 */
+	public static <T> T getModel(HttpSession session, String s, Class<T> c) {
+		T model;
+		try {
+			model = (T) getModels(session).get(s);
+		} catch (ClassCastException e) {
+			return null;
+		}
+		return model;
 	}
 	
 	public static boolean redirectToLogin(HttpSession session, HttpServletResponse response) {

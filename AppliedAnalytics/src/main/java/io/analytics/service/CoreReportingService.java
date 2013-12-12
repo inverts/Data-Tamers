@@ -1,6 +1,8 @@
 package io.analytics.service;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import com.google.api.client.auth.oauth2.Credential;
@@ -11,20 +13,22 @@ import io.analytics.repository.CoreReportingRepository.CredentialException;
 
 public class CoreReportingService implements ICoreReportingService {
 	private final CoreReportingRepository REPOSITORY;
-
-	public CoreReportingService(Credential credential, String profileId) throws CredentialException{
+	private final SimpleDateFormat dateFormat;
+	public CoreReportingService(Credential credential, String profileId) throws CredentialException {
 		this.REPOSITORY = new CoreReportingRepository(credential, profileId);
+		//The date format required for Analytics.Data.Ga.Get.get
+		dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	}
 	
-	public CoreReportingData getMetric2D(String metric, String startDate, String endDate, int maxResult ) throws IOException {
-		return REPOSITORY.getMetric2D(metric, startDate, endDate, maxResult);
+	public CoreReportingData getMetricByDay(String metric, Date startDate, Date endDate, int maxResult ) throws IOException {
+		return REPOSITORY.getMetricByDay(metric, dateFormat.format(startDate), dateFormat.format(endDate), maxResult);
 	}
 	
-	public CoreReportingData getTopTrafficSources(String metric, String startDate, String endDate, int maxResults) throws IOException {
-		return REPOSITORY.getTopTrafficSources(metric, startDate, endDate, maxResults);
+	public CoreReportingData getTopTrafficSources(String metric, Date startDate, Date endDate, int maxResults) throws IOException {
+		return REPOSITORY.getTopTrafficSources(metric, dateFormat.format(startDate), dateFormat.format(endDate), maxResults);
 	}
 	
-	public CoreReportingData getPagePerformance(String startDate, String endDate) throws IOException {
-		return REPOSITORY.getPagePeformance(startDate, endDate);
+	public CoreReportingData getPagePerformance(Date startDate, Date endDate) throws IOException {
+		return REPOSITORY.getPagePeformance(dateFormat.format(startDate), dateFormat.format(endDate));
 	}
 }

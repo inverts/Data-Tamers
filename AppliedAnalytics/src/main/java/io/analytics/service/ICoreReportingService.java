@@ -3,12 +3,13 @@ package io.analytics.service;
 import io.analytics.domain.CoreReportingData;
 
 import java.io.IOException;
+import java.util.Date;
 
 public interface ICoreReportingService {
-	public CoreReportingData getMetric2D(String metric, String startDate, String endDate, int maxResult ) throws IOException;
+	public CoreReportingData getMetricByDay(String metric, Date startDate, Date endDate, int maxResult ) throws IOException;
 	
-	public CoreReportingData getTopTrafficSources(String metric, String startDate, String endDate, int maxResults) throws IOException;
+	public CoreReportingData getTopTrafficSources(String metric, Date startDate, Date endDate, int maxResults) throws IOException;
 	
-	public CoreReportingData getPagePerformance(String startDate, String endDate)throws IOException;
+	public CoreReportingData getPagePerformance(Date startDate, Date endDate) throws IOException;
 
 }

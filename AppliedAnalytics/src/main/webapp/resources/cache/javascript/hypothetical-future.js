@@ -9,12 +9,12 @@ $(document).ready(function() {
 });
 
 
-function GetWidget(id, source, change) {
+function GetWidget(id, dimension, change) {
 	
 	var $element = $('#' + id);
-	$.post("HypotheticalFuture", { source: source, change: change }, 
+	$.post("HypotheticalFuture", { dimension: dimension, change: change }, 
 		function(response) {
-			$element.empty().append(response);
+			$element.html(response);
 
 			var canvas = document.getElementById('hypotheticalFutureData');
 			
@@ -32,7 +32,7 @@ function GetWidget(id, source, change) {
 // assume everything in points is a string!
 var hypotheticalSketch =
 	(function($p) {
-		var points = { values: JSON.parse(HypotheticalFutureData.points.values) };
+		var points = { values: JSON.parse(historicalData.points.values) };
 	    var Label = (function() {
 	        function Label() {
 	            var $this_1 = this;

@@ -43,7 +43,7 @@ body {
 }
 
 #page {
-	background: url('../images/bg.png') no-repeat #fff;
+	background: url('../images/bg.png') no-repeat #000;
 	background-position: center 85px;
 	height: 1068px;
 }
@@ -86,6 +86,7 @@ body {
 	position: relative;
 	margin: auto;
 	margin-top: 200px;
+	box-shadow: 0px 0px 25px -5px #fff;
 }
 
 #analyze-button {

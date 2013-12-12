@@ -176,6 +176,14 @@
 			        <artifactId>json</artifactId>
 			        <version>20070829</version>
       			</dependency>
+      			
+      			<!-- Apache Commons Math -->
+      			<dependency>
+					<groupId>org.apache.commons</groupId>
+					<artifactId>commons-math3</artifactId>
+					<version>3.2</version>
+				</dependency>
+            
               
         </dependencies>
     <build>

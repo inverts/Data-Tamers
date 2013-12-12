@@ -23,9 +23,9 @@ public abstract class LineGraphWidgetModel extends WidgetModel implements IMetri
 	// These may need to be further refined once we figure out more about the visualizations.
 	// Note: Future tests should ensure the # of X values is equal to the # of Y values.
 	//	Also check that the data labels is either null or long enough.
-	public abstract ArrayList<Integer> getXValues();
+	public abstract ArrayList<Double> getXValues();
 
-	public abstract ArrayList<Integer> getYValues();
+	public abstract ArrayList<Double> getYValues();
 	
 	/**
 	 * Retrieves a list of data labels aligned with the X and Y values lists

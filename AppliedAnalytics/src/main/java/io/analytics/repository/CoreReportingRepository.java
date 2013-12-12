@@ -33,6 +33,22 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 
 		private final Ga CORE_REPORTING;
 
+		//Some metrics and dimensions defined for convenience.
+		//TODO: Get an authoritative list of metrics and dimensions from the Metadata API.
+		public static final String VISITS_METRIC = "ga:visits";
+		public static final String BOUNCERATE_METRIC = "ga:visitBounceRate";
+		public static final String REVENUE_METRIC = "ga:transactionRevenue";
+		public static final String GOALS_METRIC = "ga:goalCompletionsAll";
+		public static final String PAGEVIEWS_METRIC = "ga:pageviewsPerVisit";
+
+		public static final String SOURCE_DIMENSION = "ga:source";
+		public static final String KEYWORD_DIMENSION = "ga:keyword";
+		public static final String VISITLENGTH_DIMENSION = "ga:visitLength";
+		public static final String DAYOFWEEK_DIMENSION = "ga:dayOfWeek";
+		public static final String DAYOFMONTH_DIMENSION = "ga:day";
+		public static final String MONTHOFYEAR_DIMENSION = "ga:month";
+		public static final String NDAY_DIMENSION = "ga:nthDay";
+		
 		public static class CredentialException extends Throwable {
 			/**
 			 * 
@@ -54,7 +70,6 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			this.ACCESS_TOKEN = credential.getAccessToken();
 			this.CREDENTIAL = credential;
 			this.PROFILE_ID = profileId;
-			// TODO: Can we do this with only the access token?
 			this.CORE_REPORTING = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, CREDENTIAL)
 					.setApplicationName(APPLICATION_NAME).build().data().ga();
 
@@ -76,15 +91,15 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 * 
 		 * @return
 		 */
-		public CoreReportingData getMetric2D(String metric, String startDate, String endDate, int maxResult) throws IOException {
+		public CoreReportingData getMetricByDay(String metric, String startDate, String endDate, int maxResult) throws IOException {
 			GaData data = null;
 			try {
 				data = CORE_REPORTING.get(PROFILE_ID, // Table Id.
 						startDate, // Start date.
 						endDate, // End date.
-						"ga:"+metric) // Metrics.
-						.setDimensions("ga:day")
-						.setSort("ga:day")
+						metric) // Metrics.
+						.setDimensions(NDAY_DIMENSION)
+						.setSort(NDAY_DIMENSION)
 						.setMaxResults(maxResult)
 						.execute();
 			} catch (GoogleJsonResponseException e) {
@@ -107,9 +122,9 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 				data = CORE_REPORTING.get(PROFILE_ID, // Table Id.
 						startDate, // Start date.
 						endDate, // End date.
-						"ga:"+metric) // Metrics.
-						.setDimensions("ga:sourceMedium")
-						.setSort("-ga:"+metric)
+						metric) // Metrics.
+						.setDimensions("ga:source")
+						.setSort("-" + metric)
 						.setMaxResults(n)
 						.execute();
 			} catch (GoogleJsonResponseException e) {
@@ -158,4 +173,5 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			System.err.println("There was a CoreReporting service error: " + e.getDetails().getCode() + " : "
 					+ e.getDetails().getMessage());
 		}
+		
 }

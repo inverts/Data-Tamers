@@ -2,7 +2,7 @@ package io.analytics.site.controllers;
 
 import io.analytics.aspect.HeaderFooter;
 import io.analytics.aspect.SidePanel;
-import io.analytics.service.SecurityService;
+import io.analytics.service.SessionService;
 import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SettingsModel;
 
@@ -33,12 +33,12 @@ public class ApplicationController {
 	@SidePanel(animate = true)
 	@RequestMapping(value = "/application", method = RequestMethod.GET)
 	public ModelAndView home(Locale locale, Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
-		boolean success = SecurityService.checkAuthorization(session);
+		boolean success = SessionService.checkAuthorization(session);
 		if (success) {
 			//If authorization succeeded, the following must succeed.
 			SettingsModel settings = (SettingsModel) session.getAttribute("settings");
 			model.addAttribute("settings", settings);
-		} else if (SecurityService.redirectToLogin(session, response)) {
+		} else if (SessionService.redirectToLogin(session, response)) {
 			return null;
 		} else {
 			return new ModelAndView("unavailable");

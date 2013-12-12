@@ -6,8 +6,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import io.analytics.repository.ManagementRepository.CredentialException;
+import io.analytics.service.CoreReportingService;
 import io.analytics.service.ManagementService;
-import io.analytics.service.SecurityService;
+import io.analytics.service.SessionService;
 import io.analytics.site.models.*;
 
 import org.springframework.stereotype.Controller;
@@ -31,17 +32,51 @@ public class WidgetController {
 	}
 	
 	@RequestMapping(value = "/HypotheticalFuture", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView hypotheticalFutureView(Model viewMap,	// note: in order for @RequestParam to work, you do need a default value
-												@RequestParam(value = "change", defaultValue = "05") String adjustBy,
-												@RequestParam(value = "source", defaultValue = "") String source) {
+	public ModelAndView hypotheticalFutureView(Model viewMap, HttpServletResponse response, HttpSession session,	
+												@RequestParam(value = "change", defaultValue = "none") String changePercentage,
+												@RequestParam(value = "dimension", defaultValue = "none") String dimension) {
 
 		
 		// The Model will map the data via the @ModelAttribute 
 		// annotation located on each getter method.
-		HypotheticalFutureModel hypotheticalFuture = new HypotheticalFutureModel(adjustBy, source);
+
+		Credential credential;
+		SettingsModel settings;
+		if (SessionService.checkAuthorization(session)) {
+			credential = SessionService.getCredentials();
+			settings = SessionService.getUserSettings();
+		} else {
+			SessionService.redirectToLogin(session, response);
+			return new ModelAndView("unavailable");
+		}
+		if (settings.getActiveProfile() == null) {
+			
+			//TODO: Make an informative view for when widgets don't have an active profile to get data from.
+			return new ModelAndView("unavailable");
+		}
+		
+		
+		CoreReportingService reportingService = null;
+		try {
+			reportingService = new CoreReportingService(credential, settings.getActiveProfile().getId());
+		} catch (io.analytics.repository.CoreReportingRepository.CredentialException e) {
+			e.printStackTrace();
+			SessionService.redirectToLogin(session, response);
+			return new ModelAndView("unavailable");
+		}
+		
+		HypotheticalFutureModel hypotheticalFuture = SessionService.getModel(session, "hypotheticalFuture", HypotheticalFutureModel.class);
+		
+		if (hypotheticalFuture == null)
+			hypotheticalFuture = new HypotheticalFutureModel(reportingService);
+		
+		//Execute API commands to change the model
+		if (!changePercentage.equals("none"))
+			hypotheticalFuture.setChangePercentage(changePercentage);
+		if (!dimension.equals("none"))
+			hypotheticalFuture.setDimension(dimension);
 		
 		viewMap.addAttribute("hfModel", hypotheticalFuture);
-		viewMap.addAttribute("DATA", hypotheticalFuture.getVisualization());
 	
 		return new ModelAndView("HypotheticalFuture");
 
@@ -55,10 +90,10 @@ public class WidgetController {
 			@RequestParam(value = "update", defaultValue = "") String update) {
 
 		SettingsModel settings;
-		if (SecurityService.checkAuthorization(session)) {
-			settings = SecurityService.getUserSettings();
+		if (SessionService.checkAuthorization(session)) {
+			settings = SessionService.getUserSettings();
 		} else {
-			SecurityService.redirectToLogin(session, response);
+			SessionService.redirectToLogin(session, response);
 			return new ModelAndView("unavailable");
 		}
 
