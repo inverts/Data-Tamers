@@ -60,7 +60,7 @@ public class WidgetController {
 		settings.getActiveProfile();
 		
 		//This is your Profile ID or "Table ID"
-		settings.getActiveProfile().getId();
+		String profileId = settings.getActiveProfile().getId();
 		
 		//This is your Credential object
 		credential
