@@ -6,6 +6,15 @@ import java.util.ArrayList;
 public class ForecastWidgetModel extends LineGraphWidgetModel {
 
 	Integer futureStartX;
+	SimpleEntry<Integer, Integer> xRange;
+	SimpleEntry<Integer, Integer> yRange;
+	ArrayList<Integer> xValues;
+	ArrayList<Integer> yValues;
+	String metric;
+	
+	public ForecastWidgetModel() {
+		
+	}
 	
 	public Integer getFutureStartX() {
 		return this.futureStartX;
@@ -13,32 +22,22 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 	
 	@Override
 	public SimpleEntry<Integer, Integer> getXRange() {
-		// TODO Auto-generated method stub
-		return null;
+		return xRange;
 	}
 
 	@Override
 	public SimpleEntry<Integer, Integer> getYRange() {
-		// TODO Auto-generated method stub
-		return null;
+		return yRange;
 	}
 
 	@Override
 	public ArrayList<Integer> getXValues() {
-		// TODO Auto-generated method stub
-		return null;
+		return xValues;
 	}
 
 	@Override
 	public ArrayList<Integer> getYValues() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getUpdateApiCall() {
-		// TODO Auto-generated method stub
-		return null;
+		return yValues;
 	}
 
 	@Override
@@ -50,6 +49,22 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 	public String getDescription() {
 		return "View a forecast for your data.";
 	}
-	
+
+	@Override
+	public void setMetric(String metric) {
+		this.metric = metric;
+	}
+
+	@Override
+	public String getMetric() {
+		return this.metric;
+	}
+
+	@Override
+	public String getUpdateApiCall() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

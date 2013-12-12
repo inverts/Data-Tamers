@@ -2,15 +2,10 @@ package io.analytics.site.controllers;
 
 import io.analytics.aspect.HeaderFooter;
 import io.analytics.aspect.SidePanel;
-import io.analytics.domain.GoogleUserData;
-import io.analytics.repository.ManagementRepository.CredentialException;
-import io.analytics.service.ManagementService;
 import io.analytics.service.SecurityService;
+import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SettingsModel;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.api.client.auth.oauth2.Credential;
 
 @Controller
 public class ApplicationController {
@@ -39,7 +33,6 @@ public class ApplicationController {
 	@SidePanel(animate = true)
 	@RequestMapping(value = "/application", method = RequestMethod.GET)
 	public ModelAndView home(Locale locale, Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
-		
 		boolean success = SecurityService.checkAuthorization(session);
 		if (success) {
 			//If authorization succeeded, the following must succeed.
@@ -50,6 +43,21 @@ public class ApplicationController {
 		} else {
 			return new ModelAndView("unavailable");
 		}
+		
+		FilterModel filter = null;
+		try {
+			filter = (FilterModel) session.getAttribute("filter");
+		} catch (ClassCastException e) {
+			logger.info("Corrupted session information. See below for more info.");
+			logger.info(e.getMessage());
+			return new ModelAndView("unavailable");
+		}
+		if (filter == null) {
+			filter = new FilterModel();
+			session.setAttribute("filter", filter);
+		}
+		
+		model.addAttribute("filter", filter);
 		
 		return new ModelAndView("dashboard");
 	}

@@ -6,10 +6,11 @@
 
 <link href="<c:url value="/cache/css/widget.css" />" rel="stylesheet">
 <link href="<c:url value="/cache/css/hypothetical-future.css" />" rel="stylesheet">
-
-
-			
-   
+  
+<script>
+var HypotheticalFutureData = JSON.parse('${DATA}');
+</script>  
+  
 <div class="widget_wrapper widgetView">
 	<form id="hypotheticalFutureSettings">
 		<div class="widget_header">			
@@ -28,7 +29,7 @@
 		</div>
 		<div id="hypotheticalFutureGraph" class="hf_visual">
 			<!-- add Visualization elements -->
-			<canvas id="hypotheticalFutureData" data-processing-sources="cache/pde/LineGraph.pde cache/pde/Grapher.pde"></canvas>
+			<canvas id="hypotheticalFutureData"></canvas>
 								
 		</div>
 	</form>
