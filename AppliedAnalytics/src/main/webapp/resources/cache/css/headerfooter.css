@@ -69,20 +69,33 @@
 
 
 
-.footer {
+#footer {
 	background:#000;
 	color:#ddd;
-	min-height:150px;
+	min-height:100px;
 	clear:both;
+	padding-top:20px;
+	position:relative;
+}
+
+.footer-nav, .footer-copyright {
+	margin:auto;
+	text-align:center;
+}
+
+
+.footer-nav {
+	display:none;
+	margin-top:30px;
 }
 
 
 .footer-copyright {
-	bottom: -150px;
-	left: 0;
-	right: 0;
 	height:inherit;
-	position: absolute;
-	text-align:center;
 	font: .85em Times New Roman;
+	margin-top: 30px;
+	bottom:5px;
+	left:0;
+	right:0;
+	position:absolute;
 }

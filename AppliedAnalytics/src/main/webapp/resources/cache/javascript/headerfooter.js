@@ -9,8 +9,13 @@ $(document).ready(function() {
 	
 	switch(headerAttributes.state) {
 	
-		case 'Application': $('#header-application').show(); break;
-		case 'Entry' : $('#header-entry').show(); break;
+		case 'Application': 
+			$('#header-application').show();
+			$('.footer-nav').show();
+			break;
+		case 'Entry' : 
+			$('#header-entry').show();
+			break;
 	
 	}
 	
