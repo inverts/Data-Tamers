@@ -31,7 +31,7 @@ public class ApplicationController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@HeaderFooter
+	@HeaderFooter(state = "Application")
 	@SidePanel(animate = true)
 	@RequestMapping(value = "/application", method = RequestMethod.GET)
 	public ModelAndView home(Locale locale, Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {

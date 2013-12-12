@@ -16,22 +16,30 @@
 <script src="<c:url value="/cache/javascript/libs/jquery-1.10.2.min.js" />"></script>
 <script src="<c:url value="/cache/javascript/libs/jquery-ui-1.10.3.custom.min.js" />"></script>
 <script src="<c:url value="/cache/javascript/libs/processing-1.4.1.min.js" />"></script>
+<script src="<c:url value="/cache/javascript/headerfooter.js" />"></script>
 <script src="<c:url value="/cache/javascript/site.js" />"></script>
+
 
 <title>${TITLE}</title>
 </head>
 <body>
 	<div class="wrapper">
+		<!-- Left side navigation panel -->
 		<jsp:include page="${SIDEPANEL}"/>
 		
-		<%--<div class="settings">--%>
+		<!-- Right side settings pane -->
 		<jsp:include page="${SETTINGS}"/>
-		<%--</div>--%>
-		<jsp:include page="${HEADER}"/>
+		
+		<!-- Site Header -->
+		<jsp:include page="${HEADER.path}"/>
+		
+		<!-- Site Content -->
 		<div class="content">
 			<jsp:include page="${BODY}"/>
 		</div>
-		<jsp:include page="${FOOTER}"/>
+		
+		<!--  Site Footer -->
+		<jsp:include page="${FOOTER.path}"/>
 	</div>
 </body>
 </html>

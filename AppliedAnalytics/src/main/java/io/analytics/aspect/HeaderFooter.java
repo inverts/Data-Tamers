@@ -11,5 +11,5 @@ import java.lang.annotation.Target;
 @Documented
 public @interface HeaderFooter {
 	
-	boolean showSettings() default true;
+	String state() default "Application";
 }

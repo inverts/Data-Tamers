@@ -48,33 +48,10 @@ body {
 	height: 1068px;
 }
 
-#header {
-	background: #454545;
-	box-shadow: 0px 0px 5px 3px;
-	height: 110px;
-	position: relative;
+.page-content {
+	position:relative;
 }
 
-.nav-item {
-	margin-left: 30px;
-	color: #ddd;
-	font-size: 20px;
-}
-.entry-wrapper {
-	width: 1080px;
-	height: 50px;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	margin: auto;
-}
-
-.right {
-	float: right;
-	margin-top: 10px;
-}
 
 #center-box {
 	height: 225px;
@@ -83,9 +60,13 @@ body {
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
 	background: url('../images/black-translucent.png') repeat;
-	position: relative;
-	margin: auto;
-	margin-top: 200px;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: 200px auto;
+	box-shadow: 0px 0px 25px -5px #fff;
 	box-shadow: 0px 0px 25px -5px #fff;
 }
 
