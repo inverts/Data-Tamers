@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-	<div class="settings">
 		<div class="settings-content">
 		<h2>Settings</h2>
 			<div class="left-pane">
@@ -95,7 +94,6 @@
 				</tbody>
 		</table>
 	</div>
-</div>
 <script type="text/javascript">
 $('#select-account').change( function () {
 	$.post( "<c:url value="/settings/" />", { account: $('#select-account option:selected').val() }, function( data ) {

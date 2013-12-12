@@ -36,9 +36,6 @@ public class WidgetController {
 												@RequestParam(value = "dimension", defaultValue = "none") String dimension) {
 
 		
-		// The Model will map the data via the @ModelAttribute 
-		// annotation located on each getter method.
-
 		Credential credential;
 		SettingsModel settings;
 		if (SessionService.checkAuthorization(session)) {

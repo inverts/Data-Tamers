@@ -20,13 +20,19 @@ public class CoreReportingService implements ICoreReportingService {
 		dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	}
 	
-	public CoreReportingData getMetricByDay(String metric, Date startDate, Date endDate, int maxResult ) throws IOException {
+	public CoreReportingData getMetricByDay(String metric, Date startDate, Date endDate, int maxResult )  {
 		return REPOSITORY.getMetricByDay(metric, dateFormat.format(startDate), dateFormat.format(endDate), maxResult);
 	}
+	
+	public CoreReportingData getMetricByDayOfWeek(String metric, Date startDate, Date endDate, int maxResults) {
+		return REPOSITORY.getMetricByDayOfWeek(metric, dateFormat.format(startDate), dateFormat.format(endDate), maxResults);
+	}
+	
 	
 	public CoreReportingData getTopTrafficSources(String metric, Date startDate, Date endDate, int maxResults) throws IOException {
 		return REPOSITORY.getTopTrafficSources(metric, dateFormat.format(startDate), dateFormat.format(endDate), maxResults);
 	}
+	
 	
 	public CoreReportingData getPagePerformance(Date startDate, Date endDate, int maxResults) throws IOException {
 		return REPOSITORY.getPagePerformance(dateFormat.format(startDate), dateFormat.format(endDate), maxResults);

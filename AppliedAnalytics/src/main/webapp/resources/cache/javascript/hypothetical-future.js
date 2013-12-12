@@ -113,6 +113,7 @@ var hypotheticalSketch =
 	        x1 = 300;
 	        x2 = 300;
 
+	        //This affects the width of the box, but not the data.
 	        w = 620;
 	        h = 380;
 
@@ -133,11 +134,13 @@ var hypotheticalSketch =
 	        $p.noFill();
 	        $p.stroke(255, 128, 0);
 	        $p.strokeWeight(3);
+	        
+	        //This is the general data line.
 	        $p.beginShape();
 	        var x = 0,
 	            y = 0;
 	        
-	        // notice parseFloat method arround extraction of data
+	        // notice parseFloat method around extraction of data
 	        for (var i = 0; i < points.values.length; i++) {
 	            x = $p.map(i, 0, points.values.length - 1, plotX1, plotX2);
 	            y = $p.map(points.values[i], 0, 200, $p.height - topMargin, $p.height - topMargin - plotHeight);
@@ -149,6 +152,8 @@ var hypotheticalSketch =
 	        $p.noFill();
 	        $p.stroke(255, 0, 0);
 	        $p.strokeWeight(3);
+	        
+	        //This is the hypothetical data line.
 	        $p.beginShape();
 	        var xv = 301;
 	        var xamt = 9;
@@ -173,7 +178,11 @@ var hypotheticalSketch =
 
 	        $p.stroke(104, 104, 104);
 	        $p.strokeWeight(4);
+	        
+	        //This is the past-to-future seperation line.
 	        $p.line(x1, y1, x2, y2);
+	        
+	        //This outlines the graph.
 	        $p.rect(rx, ry, w, h);
 	        drawLineLabels();
 
