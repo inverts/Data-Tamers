@@ -28,7 +28,7 @@ public class CoreReportingService implements ICoreReportingService {
 		return REPOSITORY.getTopTrafficSources(metric, dateFormat.format(startDate), dateFormat.format(endDate), maxResults);
 	}
 	
-	public CoreReportingData getPagePerformance(Date startDate, Date endDate) throws IOException {
-		return REPOSITORY.getPagePeformance(dateFormat.format(startDate), dateFormat.format(endDate));
+	public CoreReportingData getPagePerformance(Date startDate, Date endDate, int maxResults) throws IOException {
+		return REPOSITORY.getPagePerformance(dateFormat.format(startDate), dateFormat.format(endDate), maxResults);
 	}
 }

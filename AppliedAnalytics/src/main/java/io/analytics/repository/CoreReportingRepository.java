@@ -141,7 +141,9 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 * 
 		 * @return
 		 */
-		public CoreReportingData getPagePeformance(String startDate, String endDate) throws IOException{
+
+		@Override
+		public CoreReportingData getPagePerformance(String startDate, String endDate, int maxResults) throws IOException {
 			GaData data = null;
 			try {
 				data = CORE_REPORTING.get(PROFILE_ID, // profile id (table id).
@@ -173,5 +175,6 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			System.err.println("There was a CoreReporting service error: " + e.getDetails().getCode() + " : "
 					+ e.getDetails().getMessage());
 		}
+
 		
 }

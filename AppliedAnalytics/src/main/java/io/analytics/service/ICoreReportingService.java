@@ -10,6 +10,6 @@ public interface ICoreReportingService {
 	
 	public CoreReportingData getTopTrafficSources(String metric, Date startDate, Date endDate, int maxResults) throws IOException;
 	
-	public CoreReportingData getPagePerformance(Date startDate, Date endDate) throws IOException;
+	public CoreReportingData getPagePerformance(Date startDate, Date endDate, int maxResults) throws IOException;
 
 }
