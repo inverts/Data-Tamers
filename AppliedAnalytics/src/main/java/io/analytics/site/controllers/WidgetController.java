@@ -1,11 +1,15 @@
 package io.analytics.site.controllers;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import io.analytics.domain.CoreReportingData;
 import io.analytics.repository.ManagementRepository.CredentialException;
+import io.analytics.service.CoreReportingService;
 import io.analytics.service.ManagementService;
 import io.analytics.service.SecurityService;
 import io.analytics.site.models.*;
@@ -19,6 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.services.analytics.model.GaData;
+import com.google.api.services.analytics.model.GaData.ColumnHeaders;
 
 @Controller
 public class WidgetController {
@@ -62,19 +68,6 @@ public class WidgetController {
 			return new ModelAndView("unavailable");
 		}
 
-		/***** GWEN *****
-		 
-		//This is your Profile object
-		settings.getActiveProfile();
-		
-		//This is your Profile ID or "Table ID"
-		String profileId = settings.getActiveProfile().getId();
-		
-		//This is your Credential object
-		credential
-		
-		*/
-
 		//Only one change should be made/possible at a time.
 		if (!accountId.equals("none"))
 			settings.setAccountSelection(accountId);
@@ -94,5 +87,6 @@ public class WidgetController {
 		return new ModelAndView("settings");
 
 	}
+	
 
 }

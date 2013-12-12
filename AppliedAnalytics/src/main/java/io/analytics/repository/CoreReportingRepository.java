@@ -76,16 +76,17 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 * 
 		 * @return
 		 */
-		public CoreReportingData getMetric2D(String metric, String startDate, String endDate, int maxResult) throws IOException {
+		public CoreReportingData getMetric2D(String metric, String startDate, String endDate, int maxResults) throws IOException {
 			GaData data = null;
+			System.out.println("profile id = "+PROFILE_ID);
 			try {
-				data = CORE_REPORTING.get(PROFILE_ID, // Table Id.
+				data = CORE_REPORTING.get("ga:"+PROFILE_ID, // Table Id.
 						startDate, // Start date.
 						endDate, // End date.
 						"ga:"+metric) // Metrics.
 						.setDimensions("ga:day")
 						.setSort("ga:day")
-						.setMaxResults(maxResult)
+						.setMaxResults(maxResults)
 						.execute();
 			} catch (GoogleJsonResponseException e) {
 				handleGoogleJsonResponseException(e);
@@ -101,16 +102,16 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 * 
 		 * @return
 		 */
-		public CoreReportingData getTopTrafficSources(String metric, String startDate, String endDate, int n) throws IOException{
+		public CoreReportingData getTopTrafficSources(String metric, String startDate, String endDate, int maxResults) throws IOException{
 			GaData data = null;
 			try {
-				data = CORE_REPORTING.get(PROFILE_ID, // Table Id.
+				data = CORE_REPORTING.get("ga:"+PROFILE_ID, // Table Id.
 						startDate, // Start date.
 						endDate, // End date.
 						"ga:"+metric) // Metrics.
 						.setDimensions("ga:sourceMedium")
 						.setSort("-ga:"+metric)
-						.setMaxResults(n)
+						.setMaxResults(maxResults)
 						.execute();
 			} catch (GoogleJsonResponseException e) {
 				handleGoogleJsonResponseException(e);
@@ -126,16 +127,16 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 * 
 		 * @return
 		 */
-		public CoreReportingData getPagePeformance(String startDate, String endDate) throws IOException{
+		public CoreReportingData getPagePerformance(String startDate, String endDate, int maxResults) throws IOException{
 			GaData data = null;
 			try {
-				data = CORE_REPORTING.get(PROFILE_ID, // profile id (table id).
+				data = CORE_REPORTING.get("ga:"+PROFILE_ID, // profile id (table id).
 						startDate, // Start date.
 						endDate, // End date.
-						"ga:entranceBounceRate,ga:visits,ga:exitRate") // Metrics.
+						"ga:visitBounceRate,ga:visits,ga:exitRate") // Metrics.
 						.setDimensions("ga:pagePath")
 						.setSort("-ga:visits")
-						.setMaxResults(100)
+						.setMaxResults(maxResults)
 						.execute();
 			} catch (GoogleJsonResponseException e) {
 				handleGoogleJsonResponseException(e);

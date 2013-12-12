@@ -2,10 +2,14 @@ package io.analytics.site.controllers;
 
 import io.analytics.aspect.HeaderFooter;
 import io.analytics.aspect.SidePanel;
+import io.analytics.domain.CoreReportingData;
+import io.analytics.service.CoreReportingService;
 import io.analytics.service.SecurityService;
 import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SettingsModel;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +23,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.services.analytics.model.GaData;
+import com.google.api.services.analytics.model.GaData.ColumnHeaders;
 
 
 @Controller
@@ -34,9 +42,10 @@ public class ApplicationController {
 	@RequestMapping(value = "/application", method = RequestMethod.GET)
 	public ModelAndView home(Locale locale, Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
 		boolean success = SecurityService.checkAuthorization(session);
+		SettingsModel settings = null;
 		if (success) {
 			//If authorization succeeded, the following must succeed.
-			SettingsModel settings = (SettingsModel) session.getAttribute("settings");
+			settings = (SettingsModel) session.getAttribute("settings");
 			model.addAttribute("settings", settings);
 		} else if (SecurityService.redirectToLogin(session, response)) {
 			return null;
@@ -58,8 +67,10 @@ public class ApplicationController {
 		}
 		
 		model.addAttribute("filter", filter);
-		
+
 		return new ModelAndView("dashboard");
 	}
+	
+
 	
 }

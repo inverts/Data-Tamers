@@ -16,15 +16,15 @@ public class CoreReportingService implements ICoreReportingService {
 		this.REPOSITORY = new CoreReportingRepository(credential, profileId);
 	}
 	
-	public CoreReportingData getMetric2D(String metric, String startDate, String endDate, int maxResult ) throws IOException {
-		return REPOSITORY.getMetric2D(metric, startDate, endDate, maxResult);
+	public CoreReportingData getMetric2D(String metric, String startDate, String endDate, int maxResults ) throws IOException {
+		return REPOSITORY.getMetric2D(metric, startDate, endDate, maxResults);
 	}
 	
 	public CoreReportingData getTopTrafficSources(String metric, String startDate, String endDate, int maxResults) throws IOException {
 		return REPOSITORY.getTopTrafficSources(metric, startDate, endDate, maxResults);
 	}
 	
-	public CoreReportingData getPagePerformance(String startDate, String endDate) throws IOException {
-		return REPOSITORY.getPagePeformance(startDate, endDate);
+	public CoreReportingData getPagePerformance(String startDate, String endDate, int maxResults) throws IOException {
+		return REPOSITORY.getPagePerformance(startDate, endDate, maxResults);
 	}
 }
