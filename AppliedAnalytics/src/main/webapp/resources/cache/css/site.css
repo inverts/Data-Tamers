@@ -34,9 +34,7 @@ body, h1, h2, h3, h4, a, img {
 
 .content {
 	visibility: hidden;
-	padding:10px;
-	min-height:600px;	
-	float:left;
+	min-height:600px;
 }
 
 .profile-info {
@@ -66,19 +64,16 @@ input {
 
 /******SETTINGS******/
 
+
 .settings {
-	width:0;
-	float:right;
+	width: 0;
+	float: right;
 	background: #444;
 	color: #fff;
 	position:absolute;
 	right: 0;
 	display:none;
 	border-left: 1px solid #ccc;
-}
-
-.settings-wrapper {
-	padding: 20px;
 }
 
 .settings-content {
