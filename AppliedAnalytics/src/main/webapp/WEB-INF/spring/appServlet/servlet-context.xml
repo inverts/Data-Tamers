@@ -19,10 +19,16 @@
 	<resources mapping="/cache/**" location="/resources/cache/" />
 	<resources mapping="/images/**" location="/resources/images/" />
 		
+	<!-- XMLViewResolver for Non-application pages--> 
+	<beans:bean class="org.springframework.web.servlet.view.XmlViewResolver">
+	   <beans:property name="location" value="/WEB-INF/views/site.xml" />
+	   <beans:property name="order" value="0" />
+	</beans:bean>
+	
 		<!-- XMLViewResolver for widgets.xml --> 
 	<beans:bean class="org.springframework.web.servlet.view.XmlViewResolver">
 	   <beans:property name="location" value="/WEB-INF/views/widgets/widgets.xml" />
-	   <beans:property name="order" value="0" />
+	   <beans:property name="order" value="1" />
 	</beans:bean>
 	
 		<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
@@ -30,7 +36,7 @@
 		<beans:property name="viewClass" value="io.analytics.site.PageRenderer" />
 		<beans:property name="prefix" value="/WEB-INF/views/pages/" />
 		<beans:property name="suffix" value=".jsp" />
-		<beans:property name="order" value="1" />
+		<beans:property name="order" value="2" />
 	</beans:bean>
 	
 	<context:component-scan base-package="io.analytics.site" />

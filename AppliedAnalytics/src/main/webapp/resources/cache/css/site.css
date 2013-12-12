@@ -44,7 +44,7 @@ body, h1, h2, h3, h4, a, img {
 	height: 250px;
 	margin: 10px;
 	padding: 10px;
-	border: 1px solid #aaa;
+	border: 3px solid #aaa;
 }
 
 .profile-image {
@@ -59,6 +59,9 @@ input {
 	font: inherit;
 }
 
+#ui-datepicker-div {
+	font-size: 15px;
+}
 
 
 /******SETTINGS******/
@@ -66,7 +69,8 @@ input {
 .settings {
 	width:0;
 	float:right;
-	background:#eee;
+	background: #444;
+	color: #fff;
 	position:absolute;
 	right: 0;
 	display:none;
@@ -87,7 +91,7 @@ input {
 }
 
 .settings-content  .profile-image-large {
-	border: 3px solid #237DCF;
+	border: 3px solid #96AFC5;
 }
 
 .settings-content .left-pane {

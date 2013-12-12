@@ -1,5 +1,7 @@
 package io.analytics.site.controllers;
 
+import java.util.Locale;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -21,7 +23,13 @@ import com.google.api.client.auth.oauth2.Credential;
 @Controller
 public class WidgetController {
 	
-
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ModelAndView home(Locale locale, Model model) {
+		
+		return new ModelAndView("entry");
+	}
+	
 	@RequestMapping(value = "/HypotheticalFuture", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView hypotheticalFutureView(Model viewMap,	// note: in order for @RequestParam to work, you do need a default value
 												@RequestParam(value = "change", defaultValue = "05") String adjustBy,
