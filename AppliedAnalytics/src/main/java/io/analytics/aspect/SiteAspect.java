@@ -1,5 +1,8 @@
 package io.analytics.aspect;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -18,11 +21,21 @@ public class SiteAspect {
 	{
 		Model model = this.getModel(joinPoint.getArgs());
 		
-		model.addAttribute("HEADER", "/WEB-INF/views/includes/header.jsp");
+		/* A map to store various information pertaining to the header */
+		Map<String, Object> Header = new HashMap<String, Object>();
+		/* A map to store various information pertaining to the footer */
+		Map<String, Object> Footer = new HashMap<String, Object>();
 		
-		model.addAttribute("SETTINGS", headerfooter.showSettings() ? "/WEB-INF/views/includes/settings.jsp" : "");
+		Header.put("path", "/WEB-INF/views/includes/header.jsp");
+		Header.put("state", headerfooter.state());
 		
-		model.addAttribute("FOOTER", "/WEB-INF/views/includes/footer.jsp");
+		model.addAttribute("SETTINGS", headerfooter.state().equals("Application") ? "/WEB-INF/views/includes/settings.jsp" : "");
+		
+		Footer.put("path", "/WEB-INF/views/includes/footer.jsp");
+		Footer.put("state", headerfooter.state());
+		
+		model.addAttribute("HEADER", Header);
+		model.addAttribute("FOOTER", Footer);
 		
 		return joinPoint.proceed();
 	}

@@ -27,8 +27,9 @@ import com.google.api.client.auth.oauth2.Credential;
 public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@HeaderFooter(state = "Entry")
 	public ModelAndView home(Locale locale, Model model) {
 		
 		return new ModelAndView("entry");
