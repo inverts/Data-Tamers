@@ -60,7 +60,7 @@ body {
 	color: #ddd;
 	font-size: 20px;
 }
-.wrapper {
+.entry-wrapper {
 	width: 1080px;
 	height: 50px;
 	position: absolute;
@@ -73,7 +73,7 @@ body {
 
 .right {
 	float: right;
-	margin-top: 10px;
+	margin-top: -20px;
 }
 
 #center-box {

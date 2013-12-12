@@ -24,23 +24,17 @@ import com.google.api.client.auth.oauth2.Credential;
 public class WidgetController {
 	
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ModelAndView home(Locale locale, Model model) {
-		
-		return new ModelAndView("entry");
-	}
-	
 	@RequestMapping(value = "/HypotheticalFuture", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView hypotheticalFutureView(Model viewMap,	// note: in order for @RequestParam to work, you do need a default value
 												@RequestParam(value = "change", defaultValue = "05") String adjustBy,
 												@RequestParam(value = "source", defaultValue = "") String source) {
 
 		
-		// The Model will map the data via the @ModelAttribute 
-		// annotation located on each getter method.
+		
 		HypotheticalFutureModel hypotheticalFuture = new HypotheticalFutureModel(adjustBy, source);
 		
 		viewMap.addAttribute("hfModel", hypotheticalFuture);
+		viewMap.addAttribute("changeOptions", hypotheticalFuture.getChangePercentOptions());
 		viewMap.addAttribute("DATA", hypotheticalFuture.getVisualization());
 	
 		return new ModelAndView("HypotheticalFuture");
