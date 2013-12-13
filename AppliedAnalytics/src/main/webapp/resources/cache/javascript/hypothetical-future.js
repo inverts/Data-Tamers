@@ -160,6 +160,7 @@ var hypotheticalSketch =
 	        $p.strokeWeight(3);
 	        
 	        //This is the hypothetical data line.
+	        /*
 	        $p.beginShape();
 	        var xv = 301;
 	        var xamt = 9;
@@ -181,6 +182,7 @@ var hypotheticalSketch =
 	            $p.vertex(xh[i], yh[i]);
 	        }
 	        $p.endShape();
+	        */
 
 	        $p.stroke(104, 104, 104);
 	        $p.strokeWeight(4);
@@ -208,7 +210,8 @@ var hypotheticalSketch =
 	                hoverSet = 1;
 	            }
 	        }
-	        highlightHypo(amount, xhval, yhval);
+	        /* don't need yet */
+	        //highlightHypo(amount, xhval, yhval);
 	    }
 	    $p.draw = draw;
 
@@ -284,32 +287,38 @@ var hypotheticalSketch =
 	        var xaxis = x1 - 270;
 	        var y_1 = y1 - 5;
 	        var y_2 = y1 + 5;
+	        var init = 60;
+	        var dist = 90;
+	        var amt = 20;
+	        var d = 20;
+	        var init2 = 65;
+	        
 
 	        $p.textFont(helvetica, 10);
 	        $p.fill(0);
 	        $p.text("", x1 - 15, y1 + 20);
-	        $p.text("SUNDAY", x1 - 270, yaxis);
-	        $p.text("SUNDAY", xaxis + 90, yaxis);
-	        $p.text("SUNDAY", xaxis + 180, yaxis);
-	        $p.text("SUNDAY", xaxis + 330, yaxis);
-	        $p.text("SUNDAY", xaxis + 420, yaxis);
-	        $p.text("SUNDAY", xaxis + 510, yaxis);
+	        $p.text("SUNDAY", rx+init-amt, yaxis);
+	        $p.text("SUNDAY", rx+init+dist-amt, yaxis);
+	        $p.text("SUNDAY", rx+init+2*dist-amt, yaxis);
+	        $p.text("SUNDAY", rx+init+3*dist-amt, yaxis);
+	        $p.text("SUNDAY", rx+init+4*dist-amt, yaxis);
+	        $p.text("SUNDAY", rx+init+5*dist-amt, yaxis);
 
 	        $p.stroke(104, 104, 104);
 	        $p.strokeWeight(3);
-	        $p.line(xaxis-120, y_1, xaxis-120, y_2);
-	        $p.line(xaxis + 107, y_1, xaxis + 107, y_2);
-	        $p.line(xaxis + 197, y_1, xaxis + 197, y_2);
-	        $p.line(xaxis + 347, y_1, xaxis + 347, y_2);
-	        $p.line(xaxis + 437, y_1, xaxis + 437, y_2);
-	        $p.line(xaxis + 527, y_1, xaxis + 527, y_2);
+	        $p.line(rx+init, y_1, rx+init, y_2);
+	        $p.line(rx+init+dist, y_1, rx+init+dist, y_2);
+	        $p.line(rx+init+2*dist, y_1, rx+init+2*dist, y_2);
+	        $p.line(rx+init+3*dist, y_1, rx+init+3*dist, y_2);
+	        $p.line(rx+init+4*dist, y_1, rx+init+4*dist, y_2);
+	        $p.line(rx+init+5*dist, y_1, rx+init+5*dist, y_2);
 
-	        $p.text("9/29", x1 - 270 + 10, yaxis + 15);
-	        $p.text("10/6", xaxis + 90 + 10, yaxis + 15);
-	        $p.text("10/13", xaxis + 180 + 7, yaxis + 15);
-	        $p.text("10/20", xaxis + 330 + 5, yaxis + 15);
-	        $p.text("10/27", xaxis + 420 + 5, yaxis + 15);
-	        $p.text("11/3", xaxis + 510 + 8, yaxis + 15);
+	        $p.text("9/29", rx+init2-d, yaxis + 15);
+	        $p.text("10/6", rx+init2+dist-d, yaxis + 15);
+	        $p.text("10/13", rx+init2+2*dist-d, yaxis + 15);
+	        $p.text("10/20", rx+init2+3*dist-d, yaxis + 15);
+	        $p.text("10/27", rx+init2+4*dist-d, yaxis + 15);
+	        $p.text("11/3", rx+init2+5*dist-d, yaxis + 15);
 	    }
 	    $p.drawTickMarks = drawTickMarks;
 
