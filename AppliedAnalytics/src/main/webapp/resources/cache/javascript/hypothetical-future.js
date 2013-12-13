@@ -279,7 +279,7 @@ var hypotheticalSketch =
 
 	        $p.textFont(helvetica, 10);
 	        $p.fill(0);
-	        $p.text("TODAY", x1 - 15, y1 + 20);
+	        $p.text("", x1 - 15, y1 + 20);
 	        $p.text("SUNDAY", x1 - 270, yaxis);
 	        $p.text("SUNDAY", xaxis + 90, yaxis);
 	        $p.text("SUNDAY", xaxis + 180, yaxis);
