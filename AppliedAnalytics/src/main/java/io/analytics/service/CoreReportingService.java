@@ -8,6 +8,7 @@ import java.util.Date;
 import com.google.api.client.auth.oauth2.Credential;
 
 import io.analytics.domain.CoreReportingData;
+import io.analytics.domain.CoreReportingTypedData;
 import io.analytics.repository.CoreReportingRepository;
 import io.analytics.repository.CoreReportingRepository.CredentialException;
 
@@ -33,14 +34,12 @@ public class CoreReportingService implements ICoreReportingService {
 	public CoreReportingData getMetricByDayOfWeek(String metric, Date startDate, Date endDate, int maxResults) {
 		return REPOSITORY.getMetricByDayOfWeek(metric, dateFormat.format(startDate), dateFormat.format(endDate), maxResults);
 	}
-	
-	
-	public CoreReportingData getTopTrafficSources(String metric, Date startDate, Date endDate, int maxResults) throws IOException {
+
+	public CoreReportingTypedData getTopTrafficSources(String metric, Date startDate, Date endDate, int maxResults) throws IOException {
 		return REPOSITORY.getTopTrafficSources(metric, dateFormat.format(startDate), dateFormat.format(endDate), maxResults);
 	}
 	
-	
-	public CoreReportingData getPagePerformance(Date startDate, Date endDate, int maxResults) throws IOException {
+	public CoreReportingTypedData getPagePerformance(Date startDate, Date endDate, int maxResults) throws IOException {
 		return REPOSITORY.getPagePerformance(dateFormat.format(startDate), dateFormat.format(endDate), maxResults);
 	}
 }

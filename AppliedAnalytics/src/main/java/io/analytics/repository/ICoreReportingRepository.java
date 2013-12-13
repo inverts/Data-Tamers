@@ -1,5 +1,6 @@
 package io.analytics.repository;
 import io.analytics.domain.CoreReportingData;
+import io.analytics.domain.CoreReportingTypedData;
 
 import java.io.IOException;
 
@@ -9,8 +10,9 @@ public interface ICoreReportingRepository {
 	
 	public CoreReportingData getMetricByDayOfWeek(String metric, String startDate, String endDate, int maxResults);
 
-	public CoreReportingData getTopTrafficSources(String metric, String startDate, String endDate, int maxResults) throws IOException;
+	public CoreReportingTypedData getTopTrafficSources(String metric, String startDate, String endDate, int maxResults) throws IOException;
 
-	public CoreReportingData getPagePerformance(String startDate, String endDate, int maxResults) throws IOException;
+	public CoreReportingTypedData getPagePerformance(String startDate, String endDate, int maxResults) throws IOException;
 
 	}
+
