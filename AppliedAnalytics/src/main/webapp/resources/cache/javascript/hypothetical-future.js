@@ -232,7 +232,8 @@ var hypotheticalSketch =
 	                hoverSet = 1;
 	            }
 	        }
-	        highlightHypo(amount, xhval, yhval);
+	        /* don't need yet */
+	        //highlightHypo(amount, xhval, yhval);
 	    }
 	    $p.draw = draw;
 

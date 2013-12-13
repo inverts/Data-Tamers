@@ -27,6 +27,14 @@ body, h1, h2, h3, h4, a, img {
 	font-family: 'museo-sans-500', 'Trebuchet MS', 'Helvetica', sans-serif;
 }
 
+a:visited {
+	color: inherit;
+}
+
+a {
+	color: inherit;
+}
+
 .wrapper {
 	margin-left: 310px;
 	overflow:hidden;

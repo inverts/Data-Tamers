@@ -4,12 +4,6 @@ import io.analytics.service.CoreReportingService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.TreeMap;
-
-
-
-
 
 import org.json.*;
 
@@ -21,7 +15,6 @@ public class HypotheticalFutureModel extends ForecastWidgetModel {
 	private String dimension;
 	private ArrayList<Integer> changePercentageOptions; //Using ArrayList for future flexibility if necessary.
 	private String activeProfile;
-	
 	
 	
 	/*
