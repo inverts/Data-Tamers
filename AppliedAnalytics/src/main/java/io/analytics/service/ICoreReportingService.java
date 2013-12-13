@@ -6,9 +6,6 @@ import java.io.IOException;
 import java.util.Date;
 
 public interface ICoreReportingService {
-	
-	public String getProfile();
-	
 	public CoreReportingData getMetricByDay(String metric, Date startDate, Date endDate, int maxResult);
 	
 	public CoreReportingData getMetricByDayOfWeek(String metric, Date startDate, Date endDate, int maxResults) ;
