@@ -13,7 +13,7 @@ var transitionOptions = {
 var panelHeight = 0;
 
 $(document).ready(function() {
-	
+	$('html').fadeIn("slow");
 	//What is this, "PHPScript"? :)
 	var $header = $('.header');
 	var $footer = $('.footer');

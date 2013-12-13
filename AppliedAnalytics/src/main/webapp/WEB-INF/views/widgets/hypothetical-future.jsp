@@ -9,6 +9,8 @@
   
 <script>
 var historicalData = JSON.parse('${ hfModel.getDataPoints() }');
+var forecastData = JSON.parse('${ hfModel.getYValuesForecast() }');
+var historicalLength = ${ hfModel.getYValues().size() };
 var Y_MIN = ${ hfModel.getYRange().getKey() - hfModel.getYRangePadding() };
 var Y_MAX = ${ hfModel.getYRange().getValue() + hfModel.getYRangePadding() };
 </script>  

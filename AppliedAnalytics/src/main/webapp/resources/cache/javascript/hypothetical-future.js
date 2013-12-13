@@ -147,7 +147,10 @@ var hypotheticalSketch =
 	        for (var i = 0; i < points.values.length; i++) {
 	            x = $p.map(i, 0, points.values.length - 1, plotX1, plotX2);
 	            y = $p.map(points.values[i], Y_MIN, Y_MAX, $p.height - topMargin, $p.height - topMargin - plotHeight);
-	           
+	            if (i == historicalLength) {
+		        	   x1 = x;
+		        	   x2 = x;
+		           }
 	            $p.vertex(x, y);
 	        }
 	        $p.endShape();
@@ -182,7 +185,7 @@ var hypotheticalSketch =
 	        $p.stroke(104, 104, 104);
 	        $p.strokeWeight(4);
 	        
-	        //This is the past-to-future seperation line.
+	        //This is the past-to-future separation line.
 	        $p.line(x1, y1, x2, y2);
 	        
 	        //This outlines the graph.
