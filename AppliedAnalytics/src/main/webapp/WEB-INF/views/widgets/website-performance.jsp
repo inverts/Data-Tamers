@@ -5,7 +5,6 @@
 
 
 <link href="<c:url value="/cache/css/widget.css" />" rel="stylesheet">  
-<link href="<c:url value="/cache/css/website-performance.css" />" rel="stylesheet">
 
 <script>
 //var WebsitePerformanceData = JSON.parse('${DATA}');

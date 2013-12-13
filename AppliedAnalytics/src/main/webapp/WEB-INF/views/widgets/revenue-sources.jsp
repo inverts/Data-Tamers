@@ -5,7 +5,6 @@
 
 
 <link href="<c:url value="/cache/css/widget.css" />" rel="stylesheet">
-<link href="<c:url value="/cache/css/revenue-sources.css" />" rel="stylesheet">
   
 <script>
 //var RevenueSourceData = JSON.parse('${DATA}');
