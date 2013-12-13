@@ -1,9 +1,9 @@
+
 package io.analytics.service;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import com.google.api.client.auth.oauth2.Credential;
 

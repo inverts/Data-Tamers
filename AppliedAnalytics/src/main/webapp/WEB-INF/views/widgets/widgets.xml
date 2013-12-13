@@ -16,4 +16,9 @@
 	<property name="url" value="/WEB-INF/views/includes/settings.jsp" />
 </bean>
 
+<!-- Revenue Sources -->
+<bean id="RevenueSources" class="org.springframework.web.servlet.view.JstlView">
+	<property name="url" value = "/WEB-INF/views/widgets/revenue-future.jsp"/>
+</bean>
+
 </beans>
