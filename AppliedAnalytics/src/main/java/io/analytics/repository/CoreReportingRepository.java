@@ -51,6 +51,9 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		public static final String DAYOFMONTH_DIMENSION = "ga:day";
 		public static final String MONTHOFYEAR_DIMENSION = "ga:month";
 		public static final String NDAY_DIMENSION = "ga:nthDay";
+
+		public static final boolean SORT_ASCENDING = true;
+		public static final boolean SORT_DESCENDING = false;
 		
 		public static class CredentialException extends Throwable {
 			/**
@@ -89,21 +92,44 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			}
 		}
 
+		
 		/**
 		 * Get metric data vs. days (2 dimensional data) 
 		 * 
 		 * @return
 		 */
-		public CoreReportingData getMetricByDay(String metric, String startDate, String endDate, int maxResult) throws IOException {
+		public CoreReportingData getMetricByDay(String metric, String startDate, String endDate, int maxResults) {
+			return getMetricForSingleDimension(metric, NDAY_DIMENSION, startDate, endDate, maxResults);
+		}
+		
+		
+		/**
+		 * Get metric data by day of week
+		 * 
+		 * @return
+		 */
+		public CoreReportingData getMetricByDayOfWeek(String metric, String startDate, String endDate, int maxResults) {
+			return getMetricForSingleDimension(metric, DAYOFWEEK_DIMENSION, startDate, endDate, maxResults);
+		}
+		
+		
+		/**
+		 * Obtains data for a metric over a single dimension.
+		 * 
+		 * @param metric
+		 * @param dimension
+		 * @param startDate
+		 * @param endDate
+		 * @param maxResults
+		 * @return
+		 */
+		public CoreReportingData getMetricForSingleDimension(String metric, String dimension, String startDate, String endDate, int maxResults) {
 			GaData data = null;
 			try {
-				data = CORE_REPORTING.get(PROFILE_ID, // Table Id.
-						startDate, // Start date.
-						endDate, // End date.
-						metric) // Metrics.
-						.setDimensions(NDAY_DIMENSION)
-						.setSort(NDAY_DIMENSION)
-						.setMaxResults(maxResult)
+				data = CORE_REPORTING.get("ga:" + PROFILE_ID, startDate, endDate, metric) // Metrics.
+						.setDimensions(dimension)
+						.setSort(dimension)
+						.setMaxResults(maxResults)
 						.execute();
 			} catch (GoogleJsonResponseException e) {
 				handleGoogleJsonResponseException(e);
@@ -111,9 +137,11 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 				// Catch general parsing network errors.
 				e.printStackTrace();
 			}
+			
 			return coreReportingMapper(data);
 		}
-
+		
+		
 		/**
 		 * Get top n traffic sources relative to the passed metric
 		 * 
@@ -169,6 +197,8 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		}		
 		
 		private CoreReportingData coreReportingMapper(GaData data){
+			if (data == null)
+				return null;
 			CoreReportingData dataObject = new CoreReportingData(data);
 			return dataObject;
 		}

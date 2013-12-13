@@ -2,6 +2,9 @@
 <%@ page session="false" %>
 
 <script src="<c:url value="cache/javascript/hypothetical-future.js" />"></script>
+<script src="<c:url value="cache/javascript/revenue-sources.js" />"></script>
+
+
 
 <style>
 .dashboard-content {

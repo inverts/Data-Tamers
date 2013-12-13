@@ -1,3 +1,4 @@
+
 package io.analytics.service;
 
 import java.io.IOException;
@@ -19,11 +20,16 @@ public class CoreReportingService implements ICoreReportingService {
 		//The date format required for Analytics.Data.Ga.Get.get
 		dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	}
+
 	
-	public CoreReportingData getMetricByDay(String metric, Date startDate, Date endDate, int maxResult ) throws IOException {
+	public CoreReportingData getMetricByDay(String metric, Date startDate, Date endDate, int maxResult )  {
 		return REPOSITORY.getMetricByDay(metric, dateFormat.format(startDate), dateFormat.format(endDate), maxResult);
 	}
 	
+	public CoreReportingData getMetricByDayOfWeek(String metric, Date startDate, Date endDate, int maxResults) {
+		return REPOSITORY.getMetricByDayOfWeek(metric, dateFormat.format(startDate), dateFormat.format(endDate), maxResults);
+	}
+
 	public CoreReportingTypedData getTopTrafficSources(String metric, Date startDate, Date endDate, int maxResults) throws IOException {
 		return REPOSITORY.getTopTrafficSources(metric, dateFormat.format(startDate), dateFormat.format(endDate), maxResults);
 	}

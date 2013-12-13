@@ -10,6 +10,7 @@ import java.util.TreeMap;
 
 
 
+
 import org.json.*;
 
 
@@ -81,14 +82,24 @@ public class HypotheticalFutureModel extends ForecastWidgetModel {
 	
 	/* test method to pass data to javascript */
 	public JSONObject getDataPoints() {
-		
-		float[] pts = new float[] { 88,135,111,131,104,139,138,106,102,85,137,139,132,109,114,92,90,149,138,134,108,106,95,97,132,112,104,76,96,91 };
+		//This does not work for some reason
+		//Double[] data =  (Double[]) this.getYValues().toArray();
+		Double[] data = new Double[this.getYValues().size() + this.getYValuesForecast().size()];
+		int i;
+		for (i=0; i<this.getYValues().size(); i++) {
+			data[i] = this.getYValues().get(i);
+		}
+		int k = i;
+		for (i=0; i<this.getYValuesForecast().size(); i++) {
+			data[i + k] = this.getYValuesForecast().get(i);
+		}
+		//float[] pts = new float[] { 88,135,111,131,104,139,138,106,102,85,137,139,132,109,114,92,90,149,138,134,108,106,95,97,132,112,104,76,96,91 };
 		
 		 try {
 			 
 			 /* Feel free to create categories of data like I did for points. */
 			 JSONObject points = new JSONObject();
-			 points.put("values", Arrays.toString(pts));
+			 points.put("values", Arrays.toString(data));
 			 
 			 /* this.data is the parent object that will contain ALL of
 			  * the data that will be processed by the visualization.

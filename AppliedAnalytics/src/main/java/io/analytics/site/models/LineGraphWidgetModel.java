@@ -16,9 +16,9 @@ public abstract class LineGraphWidgetModel extends WidgetModel implements IMetri
 		return 4;
 	}
 
-	public abstract SimpleEntry<Integer, Integer> getXRange();
+	public abstract SimpleEntry<Double, Double> getXRange();
 	
-	public abstract SimpleEntry<Integer, Integer> getYRange();
+	public abstract SimpleEntry<Double, Double> getYRange();
 
 	// These may need to be further refined once we figure out more about the visualizations.
 	// Note: Future tests should ensure the # of X values is equal to the # of Y values.

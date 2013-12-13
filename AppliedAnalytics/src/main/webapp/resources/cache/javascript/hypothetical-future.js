@@ -4,27 +4,30 @@
 
 $(document).ready(function() {
 	
-	GetWidget('testWidget');
+	updateHypotheticalWidget('hypotheticalWidget');
 
 });
 
 
-function GetWidget(id, dimension, change) {
+function updateHypotheticalWidget(id, dimension, change) {
 	
 	var $element = $('#' + id);
 	$.post("HypotheticalFuture", { dimension: dimension, change: change }, 
 		function(response) {
-			$element.html(response);
+			$element.fadeOut("fast", function() {
+				$element.html(response);
+				var canvas = document.getElementById('hypotheticalFutureData');
+				
+				
+				//points = HypotheticalFutureData.points;		
+				var p = new Processing(canvas, hypotheticalSketch);
+				
+				// Setup change event
+				$('#hypotheticalWidget select').on('change', function() {
+					updateHypotheticalWidget(id, $('#traffic_source').val(), $('#change_pct').val());
+				});
+				$element.fadeIn("fast");
 
-			var canvas = document.getElementById('hypotheticalFutureData');
-			
-			
-			//points = HypotheticalFutureData.points;		
-			var p = new Processing(canvas, hypotheticalSketch);
-			
-			// Setup change event
-			$('select').on('change', function() {
-				GetWidget(id, $('#traffic_source').val(), $('#change_pct').val());
 			});
 	});		
 }
@@ -113,6 +116,7 @@ var hypotheticalSketch =
 	        x1 = 300;
 	        x2 = 300;
 
+	        //This affects the width of the box, but not the data.
 	        w = 620;
 	        h = 380;
 
@@ -133,14 +137,16 @@ var hypotheticalSketch =
 	        $p.noFill();
 	        $p.stroke(255, 128, 0);
 	        $p.strokeWeight(3);
+	        
+	        //This is the general data line.
 	        $p.beginShape();
 	        var x = 0,
 	            y = 0;
 	        
-	        // notice parseFloat method arround extraction of data
+	        // notice parseFloat method around extraction of data
 	        for (var i = 0; i < points.values.length; i++) {
 	            x = $p.map(i, 0, points.values.length - 1, plotX1, plotX2);
-	            y = $p.map(points.values[i], 0, 200, $p.height - topMargin, $p.height - topMargin - plotHeight);
+	            y = $p.map(points.values[i], Y_MIN, Y_MAX, $p.height - topMargin, $p.height - topMargin - plotHeight);
 	           
 	            $p.vertex(x, y);
 	        }
@@ -149,6 +155,8 @@ var hypotheticalSketch =
 	        $p.noFill();
 	        $p.stroke(255, 0, 0);
 	        $p.strokeWeight(3);
+	        
+	        //This is the hypothetical data line.
 	        $p.beginShape();
 	        var xv = 301;
 	        var xamt = 9;
@@ -173,22 +181,28 @@ var hypotheticalSketch =
 
 	        $p.stroke(104, 104, 104);
 	        $p.strokeWeight(4);
+	        
+	        //This is the past-to-future seperation line.
 	        $p.line(x1, y1, x2, y2);
+	        
+	        //This outlines the graph.
 	        $p.rect(rx, ry, w, h);
 	        drawLineLabels();
-
+	        var hoverSet = 0;
 	        for (var i = 0; i < points.values.length; i++) {
 	            x = $p.map(i, 0, points.values.length - 1, plotX1, plotX2);
-	            y = $p.map(points.values[i], 0, 200, $p.height - topMargin, $p.height - topMargin - plotHeight);
+	            y = $p.map(points.values[i], Y_MIN, Y_MAX, $p.height - topMargin, $p.height - topMargin - plotHeight);
 
 	            var delta = $p.abs($p.mouseX - x);
-	            if ((delta < 15) && (y > plotY1) && (y < plotY2)) {
+	            if (hoverSet == 0 && (delta < 10) && (y > plotY1) && (y < plotY2)) {
 	                $p.stroke(255);
 	                $p.fill(0);
 	                $p.ellipse(x, y, 8, 8);
 
 	                var labelVal = $p.round(points.values[i]);
 	                var label = new Label("" + labelVal, x, y);
+	                
+	                hoverSet = 1;
 	            }
 	        }
 	        highlightHypo(amount, xhval, yhval);
@@ -270,7 +284,7 @@ var hypotheticalSketch =
 
 	        $p.textFont(helvetica, 10);
 	        $p.fill(0);
-	        $p.text("TODAY", x1 - 15, y1 + 20);
+	        $p.text("", x1 - 15, y1 + 20);
 	        $p.text("SUNDAY", x1 - 270, yaxis);
 	        $p.text("SUNDAY", xaxis + 90, yaxis);
 	        $p.text("SUNDAY", xaxis + 180, yaxis);

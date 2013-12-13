@@ -13,7 +13,7 @@ public class PageRenderer extends InternalResourceView {
 	@Override
     protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String dispatcherPath = prepareForRendering(request, response);
-        //model.put("pageTitle", "Applied Analytics");
+
         request.setAttribute("TITLE", "Applied Analytics");
         
        

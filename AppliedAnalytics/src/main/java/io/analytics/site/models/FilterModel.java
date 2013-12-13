@@ -7,16 +7,22 @@ import java.util.Date;
 public class FilterModel {
 
 	private String activeMetric;
-	private String activeStartDate;
-	private String activeEndDate;
+	private Date activeStartDate;
+	private Date activeEndDate;
+
+	//Milliseconds in a day
+	private static final long MS_IN_DAY = 86400000;
 	
-	DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+	DateFormat presentationFormat = new SimpleDateFormat("MM/dd/yyyy");
 	
 	public FilterModel() {
 		activeMetric = "ga:visits";
 		Date now = new Date();
-		activeStartDate = dateFormat.format(now);
-		activeEndDate = dateFormat.format(now);
+		activeEndDate = now;
+		activeStartDate = new Date(now.getTime() - (MS_IN_DAY * 30L));
+		
+		//activeStartDate = dateFormat.format(now);
+		//activeEndDate = dateFormat.format(now);
 	}
 
 	public String getActiveMetric() {
@@ -27,19 +33,27 @@ public class FilterModel {
 		this.activeMetric = activeMetric;
 	}
 
-	public String getActiveStartDate() {
+	public Date getActiveStartDate() {
 		return activeStartDate;
 	}
+	
+	public String getActiveStartDateString() {
+		return presentationFormat.format(activeStartDate);
+	}
 
-	public void setActiveStartDate(String activeStartDate) {
+	public void setActiveStartDate(Date activeStartDate) {
 		this.activeStartDate = activeStartDate;
 	}
 
-	public String getActiveEndDate() {
+	public Date getActiveEndDate() {
 		return activeEndDate;
 	}
+	
+	public String getActiveEndDateString() {
+		return presentationFormat.format(activeEndDate);
+	}
 
-	public void setActiveEndDate(String activeEndDate) {
+	public void setActiveEndDate(Date activeEndDate) {
 		this.activeEndDate = activeEndDate;
 	}
 	

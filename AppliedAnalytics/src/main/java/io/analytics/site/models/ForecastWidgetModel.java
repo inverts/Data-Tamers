@@ -18,8 +18,8 @@ import com.google.api.services.analytics.model.GaData;
 public class ForecastWidgetModel extends LineGraphWidgetModel {
 
 	private Integer futureStartX;
-	private SimpleEntry<Integer, Integer> xRange;
-	private SimpleEntry<Integer, Integer> yRange;
+	private SimpleEntry<Double, Double> xRange;
+	private SimpleEntry<Double, Double> yRange;
 	private ArrayList<Double> xValues;
 	private ArrayList<Double> yValues;
 	private ArrayList<Double> xValuesForecast;
@@ -43,11 +43,18 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 	
 	public ForecastWidgetModel(CoreReportingService reportingService) {
 		this.reportingService = reportingService;
+		//Defaults:
 		
+		metric = CoreReportingRepository.VISITS_METRIC;
+		endDate = new Date();
+		startDate = new Date(endDate.getTime() - (MS_IN_DAY * 30L)); //30 days advance
+		updateFutureEndDate();
+		boolean success = updateData();
 	}
 	
 	/**
-	 * TODO: REFACTOR!!!
+	 * TODO: REFACTOR!!! This is a huge mess.
+	 * TODO: Replace Date with Calendar
 	 * 
 	 * @return
 	 */
@@ -56,18 +63,20 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 		//I've done the math, even a 1000-year timespan is acceptable.
 		int days = (int) (timeSpan / MS_IN_DAY) + 1;
 		CoreReportingData data = null;
-		try {
-			data = reportingService.getMetricByDay(metric, startDate, futureEndDate, days);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		data = reportingService.getMetricByDay(metric, startDate, futureEndDate, days);
+		if (data == null)
 			return false;
-		}
 		List<GaData.ColumnHeaders> columns = data.getData().getColumnHeaders();
+		List<String> stringColumns = new ArrayList<String>();
+		for (GaData.ColumnHeaders columnHeader : columns) {
+			stringColumns.add(columnHeader.getName());
+		}
 		//The data MUST be sorted by day!
 		List<List<String>> dataRows = data.getData().getRows();
-		int metricColumn = columns.indexOf(metric);
-		int dayColumn = columns.indexOf(CoreReportingRepository.NDAY_DIMENSION);
+		if (dataRows.isEmpty())
+			return false;
+		int metricColumn = stringColumns.indexOf(metric);
+		int dayColumn = stringColumns.indexOf(CoreReportingRepository.NDAY_DIMENSION);
 		List<GaData.ColumnHeaders> columnHeaders = data.getData().getColumnHeaders();
 		//We can use the below to check metric types. But it still isn't very helpful.
 		//columnHeaders.get(metricColumn).getDataType()
@@ -76,36 +85,93 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 
 		//This is going to do the least-squares calculations for us later.
 		SimpleRegression regressionModel = new SimpleRegression();
+		Double xMin = Double.parseDouble(dataRows.get(0).get(dayColumn));
+		Double xMax = Double.parseDouble(dataRows.get(0).get(dayColumn));
+		Double yMin = Double.parseDouble(dataRows.get(0).get(metricColumn));
+		Double yMax = Double.parseDouble(dataRows.get(0).get(metricColumn));
 		
 		try {
-		for(List<String> row : dataRows) {
-			Double x = Double.parseDouble(row.get(dayColumn));
-			Double y = Double.parseDouble(row.get(metricColumn));
-			xValues.add(x);
-			yValues.add(y);
-
-			//Add the data to our model.
-			regressionModel.addData(x, y);
-		}
+			for(List<String> row : dataRows) {
+				Double x = Double.parseDouble(row.get(dayColumn));
+				Double y = Double.parseDouble(row.get(metricColumn));
+				xValues.add(x);
+				yValues.add(y);
+				if (y == null)
+					break;
+				if (x > xMax)
+					xMax = x;
+				else if (x < xMin)
+					xMin = x;
+				if (y > yMax)
+					yMax = y;
+				else if (y < yMin)
+					yMin = y;
+	
+				//Add the data to our model.
+				regressionModel.addData(x, y);
+			}
 		} catch (NumberFormatException e) {
 			//The metric we are retrieving is not numeric.
 			return false;
 		}
+		
+		// Update graph ranges.
+		xRange = new SimpleEntry<Double, Double>(xMin, xMax);
+		yRange = new SimpleEntry<Double, Double>(yMin, yMax);
+		
 		/**
-		 * Part 2: 
-		 * 1. We need to get a sum of day-of-week visits for a similar date range.
-		 * 2. We find the average of these sums, and then calculate 7 percentage scales from the average. (one per day)
+		 * Get data about the day of week for time series prediction.
 		 */
-		Double startOfFuture = xValues.get(xValues.size()-1);
+
+		//Go back in time to get 2x the amount of data.
+		Date backInTime = new Date(startDate.getTime() - (endDate.getTime() - startDate.getTime()));
+		
+		data = reportingService.getMetricByDayOfWeek(metric, backInTime, endDate, days * 2);
+		if (data == null)
+			return false;
+		List<GaData.ColumnHeaders> columns2 = data.getData().getColumnHeaders();
+		List<String> stringColumns2 = new ArrayList<String>();
+		for (GaData.ColumnHeaders columnHeader : columns2) {
+			stringColumns2.add(columnHeader.getName());
+		}
+		List<List<String>> dataRows2 = data.getData().getRows();
+		int metricColumn2 = stringColumns2.indexOf(metric);
+		int dayColumn2 = stringColumns2.indexOf(CoreReportingRepository.DAYOFWEEK_DIMENSION);
+		
+		Double[] adjuster = new Double[7];
+		
+		//TODO: Remove these asserts later and replace with better code.
+		assert(dataRows2.size() == 7);
+		Double sum = 0.0;
+		for (int i=0; i < 7; i++) {
+			assert(Integer.parseInt(dataRows2.get(i).get(dayColumn2)) == i);
+			adjuster[i] = Double.parseDouble(dataRows2.get(i).get(metricColumn2));
+			sum += adjuster[i];
+		}
+		Double average = sum / 7.0;
+
+		//Calculate percentage of average.
+		for (int i=0; i < 7; i++) {
+			adjuster[i] = adjuster[i] / average;
+		}
+		
+
+		/**
+		 * Generate future data via a weighted regression line in one swoop.
+		 */
+		
+		Double startOfFuture = xValues.get(xValues.size()-1) + 1;
+
+		xValuesForecast = new ArrayList<Double>();
+		yValuesForecast = new ArrayList<Double>();
 		//How many days are we looking into the future?
 		long daysToPredict = ((futureEndDate.getTime() - endDate.getTime()) / MS_IN_DAY) + 1;
-
+		Double forecastedMetric;
 		for(int i=0; i<daysToPredict; i++) {
-			//xValuesForecast.add(x);
-			//TODO: In progress
+			xValuesForecast.add(startOfFuture + i);
 			// Y = (Current Nth Day * Slope + Intercept) * Adjuster Percentage
-			// Y = ((i+startOfFuture) * regressionModel.getSlope + regressionModel.getIntercept) * adjuster[(i+endDate.dayOfWeek) % 7]
-			//yValuesForecast.add(Y);
+			forecastedMetric = ((i+startOfFuture) * regressionModel.getSlope() + regressionModel.getIntercept()) * adjuster[(i+endDate.getDay()) % 7];
+			yValuesForecast.add(forecastedMetric);
 		}
 		
 		
@@ -143,21 +209,21 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 		return this.futureStartX;
 	}
 	
-	public ArrayList<Double> getxValuesForecast() {
+	public ArrayList<Double> getXValuesForecast() {
 		return xValuesForecast;
 	}
 	
-	public ArrayList<Double> getyValuesForecast() {
+	public ArrayList<Double> getYValuesForecast() {
 		return yValuesForecast;
 	}
 
 	@Override
-	public SimpleEntry<Integer, Integer> getXRange() {
+	public SimpleEntry<Double, Double> getXRange() {
 		return xRange;
 	}
 
 	@Override
-	public SimpleEntry<Integer, Integer> getYRange() {
+	public SimpleEntry<Double, Double> getYRange() {
 		return yRange;
 	}
 
