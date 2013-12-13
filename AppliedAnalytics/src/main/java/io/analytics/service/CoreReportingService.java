@@ -3,11 +3,11 @@ package io.analytics.service;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import com.google.api.client.auth.oauth2.Credential;
 
 import io.analytics.domain.CoreReportingData;
+import io.analytics.domain.CoreReportingTypedData;
 import io.analytics.repository.CoreReportingRepository;
 import io.analytics.repository.CoreReportingRepository.CredentialException;
 
@@ -24,11 +24,11 @@ public class CoreReportingService implements ICoreReportingService {
 		return REPOSITORY.getMetricByDay(metric, dateFormat.format(startDate), dateFormat.format(endDate), maxResult);
 	}
 	
-	public CoreReportingData getTopTrafficSources(String metric, Date startDate, Date endDate, int maxResults) throws IOException {
+	public CoreReportingTypedData getTopTrafficSources(String metric, Date startDate, Date endDate, int maxResults) throws IOException {
 		return REPOSITORY.getTopTrafficSources(metric, dateFormat.format(startDate), dateFormat.format(endDate), maxResults);
 	}
 	
-	public CoreReportingData getPagePerformance(Date startDate, Date endDate, int maxResults) throws IOException {
+	public CoreReportingTypedData getPagePerformance(Date startDate, Date endDate, int maxResults) throws IOException {
 		return REPOSITORY.getPagePerformance(dateFormat.format(startDate), dateFormat.format(endDate), maxResults);
 	}
 }

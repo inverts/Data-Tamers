@@ -2,12 +2,21 @@ package io.analytics.site.controllers;
 
 import io.analytics.aspect.HeaderFooter;
 import io.analytics.aspect.SidePanel;
+import io.analytics.domain.CoreReportingTypedData;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import io.analytics.service.CoreReportingService;
 import io.analytics.service.SessionService;
 import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SettingsModel;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,12 +31,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.api.client.auth.oauth2.Credential;
+
 
 @Controller
 public class ApplicationController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ApplicationController.class);
-
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -61,6 +71,7 @@ public class ApplicationController {
 		}
 		
 		model.addAttribute("filter", filter);
+
 
 		return new ModelAndView("dashboard");
 	}
