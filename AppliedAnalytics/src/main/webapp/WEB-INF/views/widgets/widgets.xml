@@ -21,4 +21,10 @@
 	<property name="url" value = "/WEB-INF/views/widgets/revenue-sources.jsp"/>
 </bean>
 
+<!-- Website Performance -->
+<bean id="WebsitePerformance" class="org.springframework.web.servlet.view.JstlView">
+	<property name="url" value = "/WEB-INF/views/widgets/website-performance.jsp"/>
+</bean>
+
+
 </beans>   

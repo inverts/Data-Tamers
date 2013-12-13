@@ -3,6 +3,8 @@
 
 <script src="<c:url value="cache/javascript/hypothetical-future.js" />"></script>
 <script src="<c:url value="cache/javascript/revenue-sources.js" />"></script>
+<script src="<c:url value="cache/javascript/website-performance.js" />"></script>
+
 
 <style>
 .dashboard-content {
@@ -22,10 +24,9 @@
 <div class="dashboard-content">
 	<div>
 		<div id="hypotheticalWidget" class="w_container"></div>
-		<div id="testWidget2" class="w_container"></div>
+		<div id="revenueSources" class="w_container"></div>		
+		<div id="websitePerformance" class="w_container"></div>
 	</div>
-	<br /><br />
-	<div id="testWidget3" class="w_container"></div>
 	<br /><br />
 	<div id="testWidget4" class="w_container"></div>
 

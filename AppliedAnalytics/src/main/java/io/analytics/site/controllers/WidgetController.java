@@ -124,6 +124,30 @@ public class WidgetController {
 	}
 	
 	
+	@RequestMapping(value = "/WebsitePerformance", method = {RequestMethod.POST, RequestMethod.GET})
+	public ModelAndView websitePerformanceView(Model viewMap, HttpServletResponse response, HttpSession session) {
+		
+		Credential credential;
+		SettingsModel settings;
+		FilterModel filter;
+		if (SessionService.checkAuthorization(session)) {
+			credential = SessionService.getCredentials();
+			filter = SessionService.getFilter();
+			settings = SessionService.getUserSettings();
+		} else {
+			SessionService.redirectToLogin(session, response);
+			return new ModelAndView("unavailable");
+		}
+		
+		if (settings.getActiveProfile() == null) {
+			//TODO: Make an informative view for when widgets don't have an active profile to get data from.
+			return new ModelAndView ("unavailable");
+		}
+		
+		return new ModelAndView("WebsitePerformance");
+	}
+	
+	
 	
 	
 	@RequestMapping(value = "/settings", method = {RequestMethod.POST, RequestMethod.GET})
