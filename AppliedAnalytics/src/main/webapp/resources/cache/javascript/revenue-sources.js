@@ -42,6 +42,14 @@ var revenueSketch =
 	        $p.smooth();
 	        font = $p.createFont("Helvetica-Bold", 14);
 	        $p.textFont(font);
+	        sources = $p.createJavaArray('String', [5]);
+	        values = $p.createJavaArray('float', [5]);
+
+	        sources[0] = "Google";
+	        sources[1] = "Bing";
+	        sources[2] = "Facebook";
+	        sources[3] = "Yelp";
+	        sources[4] = "Twitter";
 	    }
 	    $p.setup = setup;
 
@@ -84,48 +92,41 @@ var revenueSketch =
 	    function drawAmounts() {
 	        var w = $p.width / 2 - 40;
 	        var h = $p.height / 2;
-	        var count = 0;
 	        $p.fill(255);
-	        $p.text(values[0], w + 50, h - 20);
-	        count++;
-	        $p.text(values[1], w - 75, h + 25);
-	        count++;
-	        $p.text(values[2], w + 10, h + 65);
-	        count++;
-	        $p.text(values[3], w + 15, h - 55);
-	        count++;
-	        $p.text(values[4], w - 60, h - 40);
-	        count++;
+	        $p.text("12.1%", w + 50, h - 20);
+	        $p.text("11.6", w - 75, h + 25);
+	        $p.text("44.5", w + 10, h + 65);
+	        $p.text("9.4", w + 15, h - 55);
+	        $p.text("22.6", w - 60, h - 40);
 	    }
 	    $p.drawAmounts = drawAmounts;
 
 	    function drawLegend() {
-	        var count = 0;
 	        $p.textFont(font, 10);
 	        $p.fill(51, 51, 255);
 	        $p.rect(235, 50, 10, 10);
 	        $p.fill(0);
-	        $p.text(sources[count], 250, 60);
-	        count++;
+	        $p.text("Google", 250, 60);
+
 	        $p.fill(255, 0, 0);
 	        $p.rect(235, 65, 10, 10);
 	        $p.fill(0);
-	        $p.text(sources[count], 250, 75);
-	        count++;
+	        $p.text("Bing", 250, 75);
+
 	        $p.fill(255, 128, 0);
 	        $p.rect(235, 80, 10, 10);
 	        $p.fill(0);
-	        $p.text(sources[count], 250, 90);
-	        count++;
+	        $p.text("Facebook", 250, 90);
+
 	        $p.fill(0, 153, 0);
 	        $p.rect(235, 95, 10, 10);
 	        $p.fill(0);
-	        $p.text(sources[count], 250, 105);
-	        count++;
+	        $p.text("Yelp", 250, 105);
+
 	        $p.fill(153, 0, 153);
 	        $p.rect(235, 110, 10, 10);
 	        $p.fill(0);
-	        $p.text(sources[count], 250, 120);
+	        $p.text("Twitter", 250, 120);
 	    }
 	    $p.drawLegend = drawLegend;
 	})
