@@ -147,7 +147,10 @@ var hypotheticalSketch =
 	        for (var i = 0; i < points.values.length; i++) {
 	            x = $p.map(i, 0, points.values.length - 1, plotX1, plotX2);
 	            y = $p.map(points.values[i], Y_MIN, Y_MAX, $p.height - topMargin, $p.height - topMargin - plotHeight);
-	           
+	            if (i == historicalDataSize) {
+	            	x1 = x;
+	            	x2 = x;
+	            }
 	            $p.vertex(x, y);
 	        }
 	        $p.endShape();
