@@ -2,6 +2,9 @@
 <%@ page session="false" %>
 
 <script src="<c:url value="cache/javascript/hypothetical-future.js" />"></script>
+<script src="<c:url value="cache/javascript/revenue-sources.js" />"></script>
+
+
 
 <style>
 .dashboard-content {
@@ -12,12 +15,11 @@
 
 <div class="dashboard-content">
 	
-	<div id="hypotheticalWidget" class="w_container"></div>
+	<div id="testWidget" class="w_container"></div>
 	<br /><br />
 	<div id="testWidget2" class="w_container"></div>
 	<br /><br />
 	<div id="testWidget3" class="w_container"></div>
 	<br /><br />
 	<div id="testWidget4" class="w_container"></div>
-
 </div>

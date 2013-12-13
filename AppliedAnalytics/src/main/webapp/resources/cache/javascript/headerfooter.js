@@ -24,6 +24,4 @@ $(document).ready(function() {
 $(function() {
 	  $( "#start-date" ).datepicker();
 	  $( "#end-date" ).datepicker();
-	  $("#start-date").change(updateDates);
-	  $("#end-date").change(updateDates);
 });

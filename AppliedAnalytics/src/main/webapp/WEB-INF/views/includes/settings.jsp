@@ -81,7 +81,7 @@
 					
 					<c:choose>
 						<c:when test="${not empty settings.getCurrentProfiles()}" >
-							<tr><td class="rowlabel" style="color: #FFDD00;">
+							<tr><td class="rowlabel">
 							<c:choose>
 								<c:when test="${not empty update }" >
 									${ update }
@@ -113,9 +113,6 @@ $('#select-profile').change( function () {
 $('#update-button').click( function () {
 	$.post( "<c:url value="/settings/" />", { update: 1 }, function( data ) {
 		  $( ".settings" ).html( data );
-
-			updateHypotheticalWidget('hypotheticalWidget');
 		});
-
 })
 </script>

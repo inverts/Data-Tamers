@@ -13,8 +13,8 @@ var headerAttributes = {
 		<!-- Header for Application Pages -->
 		<div id="header-application">
 			<div class="filter">
-				<input type="text" id="start-date" readonly value="${ filter.getActiveStartDateString() }" />
-				<input type="text" id="end-date" readonly value="${ filter.getActiveEndDateString() }" /><br />
+				<input type="text" id="start-date" value="${ filter.getActiveStartDate() }" />
+				<input type="text" id="end-date" value="${ filter.getActiveEndDate() }" /><br />
 				Active Metric: ${ filter.getActiveMetric() }
 			</div> 
 			<div class="avatar">
@@ -40,13 +40,7 @@ var headerAttributes = {
 				</div>
 			</div>
 		</div>
+		
+		
 	</div>	
-	<script type="text/javascript">
-	function updateDates() {
-		$.post( "<c:url value="/filter/" />", { startDate: $("#start-date").val(), endDate: $("#end-date").val() }, function( data ) {
-				//Maybe we will want to do something with the resulting data later. For now, just update the model.
-			});
-		updateHypotheticalWidget('hypotheticalWidget');
-	}
-	</script>
 </header>

@@ -27,7 +27,7 @@
 .widget_title {
 	font-size: 1.55em;
 	color: violet;
-	text-shadow: 0 0 3px rgb(0, 173, 255);
+	text-shadow: 0 0 3px #a967d5;
 	margin-bottom: 5px;
 }
 

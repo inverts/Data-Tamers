@@ -20,8 +20,7 @@ public class HypotheticalFutureModel extends ForecastWidgetModel {
 	private Integer changePercentage;
 	private String dimension;
 	private ArrayList<Integer> changePercentageOptions; //Using ArrayList for future flexibility if necessary.
-	private String activeProfile;
-	
+
 	/*
 	 * For use in JSP file:
 	 * 
@@ -32,18 +31,13 @@ public class HypotheticalFutureModel extends ForecastWidgetModel {
 	 */
 	public HypotheticalFutureModel(CoreReportingService reportingService) {	
 		super(reportingService);
-		this.activeProfile = reportingService.getProfile();
+		
 		this.changePercentage = 10;
 		this.dataPoints = new JSONObject();
 		Integer[] percentageOptions = { 5, 10, 15, 20, 25, 30 };
 		changePercentageOptions = new ArrayList<Integer>(Arrays.asList(percentageOptions));
 	}
 
-	public String getActiveProfile() {
-		return this.activeProfile;
-	}
-	
-	
 	public ArrayList<Integer> getChangePercentageOptions() {
 		return changePercentageOptions;
 	}
