@@ -87,6 +87,7 @@ public class WidgetController {
 		hypotheticalFuture.updateData();
 		SessionService.saveModel(session, "hypotheticalFuture", hypotheticalFuture);
 		viewMap.addAttribute("hfModel", hypotheticalFuture);
+		viewMap.addAttribute("filterModel", filter);
 		/*
 		HypotheticalFutureModel hypotheticalFuture = new HypotheticalFutureModel(adjustBy, source);
 		

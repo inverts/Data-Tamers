@@ -10,9 +10,12 @@
 <script>
 var historicalData = JSON.parse('${ hfModel.getDataPoints() }');
 var futureData = JSON.parse('${ hfModel.getYValuesForecast() }');
-var historicalDataSize = JSON.parse('${ hfModel.getYValues().size() }');
+var historicalDataSize = ${ hfModel.getYValues().size() };
 var Y_MIN = ${ hfModel.getYRange().getKey() - hfModel.getYRangePadding() };
 var Y_MAX = ${ hfModel.getYRange().getValue() + hfModel.getYRangePadding() };
+var startDate = '${ filterModel.getActiveStartDateString() }';
+var endDate = '${ filterModel.getActiveEndDateString() }';
+var futureEndDate = '${ hfModel.getFutureEndDate() }';
 </script>  
   
 <div class="widget_wrapper widgetView">

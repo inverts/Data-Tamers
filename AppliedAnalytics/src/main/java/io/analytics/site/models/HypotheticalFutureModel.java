@@ -22,6 +22,8 @@ public class HypotheticalFutureModel extends ForecastWidgetModel {
 	private ArrayList<Integer> changePercentageOptions; //Using ArrayList for future flexibility if necessary.
 	private String activeProfile;
 	
+	
+	
 	/*
 	 * For use in JSP file:
 	 * 

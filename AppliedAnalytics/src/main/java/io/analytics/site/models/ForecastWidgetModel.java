@@ -5,6 +5,8 @@ import io.analytics.repository.CoreReportingRepository;
 import io.analytics.service.CoreReportingService;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,6 +35,8 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 	
 	private String metric;
 	private CoreReportingService reportingService;
+
+	DateFormat presentationFormat = new SimpleDateFormat("MM/dd/yyyy");
 	
 	//Milliseconds in a day
 	private static final int MS_IN_DAY = 86400000;
@@ -145,6 +149,7 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 		 * from a Sunday will give us double the visits (or other metric) for Saturday, and 
 		 * Saturday will therefore be weighted higher than all the other days.
 		 * 
+		 * 
 		 */
 		Double[] adjuster = new Double[7];
 		
@@ -208,6 +213,9 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 		updateFutureEndDate();
 	}
 
+	public String getFutureEndDate() {
+		return presentationFormat.format(this.futureEndDate);
+	}
 	private void updateFutureEndDate() {
 		timeSpan = endDate.getTime()-startDate.getTime();
 		futureEndDate = new Date(endDate.getTime() + (timeSpan / 3));

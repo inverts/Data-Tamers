@@ -28,13 +28,15 @@ body, h1, h2, h3, h4, a, img {
 }
 
 .wrapper {
-	width: 100%;
+	margin-left: 310px;
 	overflow:hidden;
 }
 
 .content {
 	visibility: hidden;
 	min-height:600px;
+	margin-top: 60px;
+	padding: 15px;
 }
 
 .profile-info {
@@ -67,10 +69,12 @@ input {
 
 .settings {
 	width: 0;
+	height: 100%;
 	float: right;
 	background: #444;
 	color: #fff;
-	position:absolute;
+	position: fixed;
+	z-index: 10;
 	right: 0;
 	display:none;
 	border-left: 3px solid #ccc;

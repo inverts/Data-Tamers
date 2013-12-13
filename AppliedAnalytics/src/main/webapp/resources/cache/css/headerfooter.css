@@ -8,6 +8,9 @@
 #header {
 	width:inherit;
 	box-shadow: 0px 0px 5px -1px;
+	position: fixed;
+	right: 0;
+	left: 310px;
 }
 
 #header-application, #header-entry {

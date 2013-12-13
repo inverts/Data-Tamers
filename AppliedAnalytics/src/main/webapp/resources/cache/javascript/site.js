@@ -37,8 +37,6 @@ $(document).ready(function() {
 function displaySidePanel($sidePanel, panelHeight, callback) {
 	
 	if ($sidePanel.length) {
-		// set panel height to content + header
-		$sidePanel.css('height', panelHeight);
 		if ($sidePanel.data('animate')) {
 			$sidePanel.animate({width: "310px"}, 500, 'swing', function() {
 				$('.sidepanel-content').show();
@@ -85,7 +83,7 @@ function showSettingsPanel($settings, panelHeight, callback) {
 	
 	if ($settings.length) {
 		// set panel height to wrapper height
-		$settings.css('height', panelHeight).show();
+		$settings.show();
 		
 		$settings.animate({width: "550"}, 500, 'swing', function() {
 			$('.settings-content').show();

@@ -8,7 +8,18 @@ $(document).ready(function() {
 
 });
 
-
+/*
+ * External vars that this file relies on:
+ * 
+ * historicalData
+ * futureData
+ * historicalDataSize
+ * Y_MIN
+ * Y_MAX
+ * startDate
+ * endDate
+ * 
+ */
 function updateHypotheticalWidget(id, dimension, change) {
 	
 	var $element = $('#' + id);
@@ -113,8 +124,7 @@ var hypotheticalSketch =
 
 	        y1 = 378;
 	        y2 = 100;
-	        x1 = 300;
-	        x2 = 300;
+	        todayLineLoc = 0;
 
 	        //This affects the width of the box, but not the data.
 	        w = 620;
@@ -148,15 +158,29 @@ var hypotheticalSketch =
 	            x = $p.map(i, 0, points.values.length - 1, plotX1, plotX2);
 	            y = $p.map(points.values[i], Y_MIN, Y_MAX, $p.height - topMargin, $p.height - topMargin - plotHeight);
 	            if (i == historicalDataSize) {
-	            	x1 = x;
-	            	x2 = x;
+	            	todayLineLoc = x
 	            }
 	            $p.vertex(x, y);
 	        }
 	        $p.endShape();
 
 	        $p.noFill();
-	        $p.stroke(255, 0, 0);
+	        $p.stroke(0, 143, 255);
+	        $p.strokeWeight(3);
+
+	        $p.beginShape();
+	        var x = 0,
+	            y = 0;
+	        for (i in futureData) {
+	            x = $p.map(i, 0, futureData.length - 1, todayLineLoc, plotX2);
+	            y = $p.map(futureData[i], Y_MIN, Y_MAX, $p.height - topMargin, $p.height - topMargin - plotHeight);
+	            $p.vertex(x, y);
+	        }
+	        $p.endShape();
+
+
+	        $p.noFill();
+	        $p.stroke(0, 255, 0);
 	        $p.strokeWeight(3);
 	        
 	        //This is the hypothetical data line.
@@ -186,7 +210,7 @@ var hypotheticalSketch =
 	        $p.strokeWeight(4);
 	        
 	        //This is the past-to-future seperation line.
-	        $p.line(x1, y1, x2, y2);
+	        $p.line(todayLineLoc, y1, todayLineLoc, y2);
 	        
 	        //This outlines the graph.
 	        $p.rect(rx, ry, w, h);
@@ -281,6 +305,30 @@ var hypotheticalSketch =
 
 	    function drawTickMarks() {
 	        var yaxis = y1 + 20;
+	        var startLoc = plotX1;
+	        var endLoc = todayLineLoc - ($p.textWidth(endDate)/2);
+	        var futureEndLoc = plotX2 - $p.textWidth(futureEndDate);
+	        
+	        //Draw date labels
+	        $p.textFont(helvetica, 12);
+	        $p.fill(0);
+	        $p.text(startDate, startLoc, yaxis);
+	        $p.text(endDate, endLoc, yaxis);
+	        $p.text(futureEndDate, futureEndLoc, yaxis);
+	        
+	        var tickSize = 10;
+	        var tickUpper = y1 + (tickSize/2);
+	        var tickLower = y1 - (tickSize/2);
+	        
+	        //Draw date tick marks
+	        $p.stroke(104, 104, 104);
+	        $p.strokeWeight(3);
+	        $p.line(plotX1, tickUpper, plotX1, tickLower);
+	        $p.line(todayLineLoc, tickUpper, todayLineLoc, tickLower);
+	        $p.line(plotX2, tickUpper, plotX2, tickLower);
+	        
+	    	/*
+	        var yaxis = y1 + 20;
 	        var xaxis = x1 - 270;
 	        var y_1 = y1 - 5;
 	        var y_2 = y1 + 5;
@@ -310,6 +358,7 @@ var hypotheticalSketch =
 	        $p.text("10/20", xaxis + 330 + 5, yaxis + 15);
 	        $p.text("10/27", xaxis + 420 + 5, yaxis + 15);
 	        $p.text("11/3", xaxis + 510 + 8, yaxis + 15);
+	        */
 	    }
 	    $p.drawTickMarks = drawTickMarks;
 
