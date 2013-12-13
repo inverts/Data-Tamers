@@ -1,5 +1,6 @@
 package io.analytics.site.models;
 
+import io.analytics.domain.CoreReportingTypedData;
 import io.analytics.service.CoreReportingService;
 
 import java.util.ArrayList;

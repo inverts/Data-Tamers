@@ -14,6 +14,7 @@ public class PageRenderer extends InternalResourceView {
     protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String dispatcherPath = prepareForRendering(request, response);
 
+        	
         request.setAttribute("TITLE", "Applied Analytics");
         
        
@@ -34,6 +35,7 @@ public class PageRenderer extends InternalResourceView {
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/pages/Master.jsp");
         
         rd.include(request, response);
+        
 	 }
 
 }

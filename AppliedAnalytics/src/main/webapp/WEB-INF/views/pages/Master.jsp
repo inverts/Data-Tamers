@@ -23,10 +23,8 @@
 <title>${TITLE}</title>
 </head>
 <body>
-
 	<!-- Left side navigation panel -->
 	<jsp:include page="${SIDEPANEL}"/>
-	
 	<div class="wrapper">
 		
 		<!-- Right side settings pane -->
@@ -43,7 +41,6 @@
 		</div>
 		
 	</div>
-	
 	<!--  Site Footer -->
 	<jsp:include page="${FOOTER.path}"/>
 </body>

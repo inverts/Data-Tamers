@@ -29,9 +29,9 @@ public class HomeController {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	@HeaderFooter(state = "Entry")
 	public ModelAndView home(Locale locale, Model model) {
 		
+		model.addAttribute("isEntry", "something");
 		return new ModelAndView("entry");
 	}
 	
