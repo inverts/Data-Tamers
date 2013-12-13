@@ -12,7 +12,7 @@
 
 <div class="dashboard-content">
 	
-	<div id="testWidget" class="w_container"></div>
+	<div id="hypotheticalWidget" class="w_container"></div>
 	<br /><br />
 	<div id="testWidget2" class="w_container"></div>
 	<br /><br />

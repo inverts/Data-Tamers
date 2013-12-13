@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import io.analytics.repository.ManagementRepository.CredentialException;
+import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SettingsModel;
 
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ public class SessionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(SessionService.class);
 	private static SettingsModel userSettings = null;
+	private static FilterModel filter = null;
 	private static Credential credentials = null;
 	private static HashMap<String, Object> models = new HashMap<String, Object>();
 	
@@ -56,6 +58,20 @@ public class SessionService {
 			SessionService.userSettings = settings;
 			SessionService.credentials = credentials;
 		}
+
+		//Try get filter.
+		FilterModel filter = null;
+		try {
+			 filter = (FilterModel) session.getAttribute("filter");
+			if (filter == null) {
+				filter = new FilterModel();
+				session.setAttribute("filter", filter);
+			}
+		} catch (ClassCastException e) {
+			filter = new FilterModel();
+			session.setAttribute("filter", filter);
+		}
+		SessionService.filter = filter;
 		
 		return true;
 		
@@ -63,6 +79,18 @@ public class SessionService {
 
 	public static SettingsModel getUserSettings() {
 		return userSettings;
+	}
+	
+	public static void saveUserSettings(HttpSession session, SettingsModel settings) {
+		session.setAttribute("settings", settings);
+	}
+
+	public static FilterModel getFilter() {
+		return filter;
+	}
+	
+	public static void saveFilter(HttpSession session, FilterModel filter) {
+		session.setAttribute("filter", filter);
 	}
 
 	public static Credential getCredentials() {
@@ -100,6 +128,16 @@ public class SessionService {
 			return null;
 		}
 		return model;
+	}
+	
+	public static void saveModel(HttpSession session, String s, Object model) {
+		HashMap<String, Object> models = getModels(session);
+		models.put(s, model);
+		saveModels(session, models);
+	}
+	
+	private static void saveModels(HttpSession session, HashMap<String, Object> models) {
+		session.setAttribute("models", models);
 	}
 	
 	public static boolean redirectToLogin(HttpSession session, HttpServletResponse response) {

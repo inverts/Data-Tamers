@@ -138,6 +138,14 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 		int metricColumn2 = stringColumns2.indexOf(metric);
 		int dayColumn2 = stringColumns2.indexOf(CoreReportingRepository.DAYOFWEEK_DIMENSION);
 		
+		/*
+		 * TODO: IMPORTANT! This algorithm is erroneous.
+		 * Querying a past set of data needs to be checked to make sure we get an equal
+		 * amount of data for each day of the week. For example, querying 8 days in the past
+		 * from a Sunday will give us double the visits (or other metric) for Saturday, and 
+		 * Saturday will therefore be weighted higher than all the other days.
+		 * 
+		 */
 		Double[] adjuster = new Double[7];
 		
 		//TODO: Remove these asserts later and replace with better code.
@@ -227,6 +235,13 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 		return yRange;
 	}
 
+	/**
+	 * Gives a 10% padding on the range.
+	 * @return
+	 */
+	public Double getYRangePadding() {
+		return (yRange.getValue() - yRange.getKey()) / 10.0;
+	}
 	@Override
 	public ArrayList<Double> getXValues() {
 		return xValues;

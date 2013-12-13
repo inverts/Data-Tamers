@@ -14,10 +14,16 @@ import io.analytics.repository.CoreReportingRepository.CredentialException;
 public class CoreReportingService implements ICoreReportingService {
 	private final CoreReportingRepository REPOSITORY;
 	private final SimpleDateFormat dateFormat;
+	private final String profile;
 	public CoreReportingService(Credential credential, String profileId) throws CredentialException {
 		this.REPOSITORY = new CoreReportingRepository(credential, profileId);
 		//The date format required for Analytics.Data.Ga.Get.get
 		dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		this.profile = profileId;
+	}
+	
+	public String getProfile() {
+		return this.profile;
 	}
 	
 	public CoreReportingData getMetricByDay(String metric, Date startDate, Date endDate, int maxResult )  {
