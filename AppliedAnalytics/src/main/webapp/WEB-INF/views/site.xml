@@ -8,12 +8,8 @@
 	 note that the id is the name of the view you will be calling in the controller. -->
 
 <!-- Entry page -->
-<bean id="home" class="org.springframework.web.servlet.view.JstlView">
+<bean id="entry" class="org.springframework.web.servlet.view.JstlView">
 	<property name="url" value="/WEB-INF/views/pages/entry.jsp" />
-</bean>
-
-<bean id="settings" class="org.springframework.web.servlet.view.JstlView">
-	<property name="url" value="/WEB-INF/views/includes/settings.jsp" />
 </bean>
 
 </beans>

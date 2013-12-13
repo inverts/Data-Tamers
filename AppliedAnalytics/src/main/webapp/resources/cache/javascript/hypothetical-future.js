@@ -8,7 +8,18 @@ $(document).ready(function() {
 
 });
 
-
+/*
+ * External vars that this file relies on:
+ * 
+ * historicalData
+ * futureData
+ * historicalDataSize
+ * Y_MIN
+ * Y_MAX
+ * startDate
+ * endDate
+ * 
+ */
 function updateHypotheticalWidget(id, dimension, change) {
 	
 	var $element = $('#' + id);
@@ -113,8 +124,7 @@ var hypotheticalSketch =
 
 	        y1 = 378;
 	        y2 = 100;
-	        x1 = 300;
-	        x2 = 300;
+	        todayLineLoc = 0;
 
 	        //This affects the width of the box, but not the data.
 	        w = 620;
@@ -148,19 +158,32 @@ var hypotheticalSketch =
 	            x = $p.map(i, 0, points.values.length - 1, plotX1, plotX2);
 	            y = $p.map(points.values[i], Y_MIN, Y_MAX, $p.height - topMargin, $p.height - topMargin - plotHeight);
 	            if (i == historicalDataSize) {
-	            	x1 = x;
-	            	x2 = x;
+	            	todayLineLoc = x
 	            }
 	            $p.vertex(x, y);
 	        }
 	        $p.endShape();
 
 	        $p.noFill();
-	        $p.stroke(255, 0, 0);
+	        $p.stroke(0, 143, 255);
+	        $p.strokeWeight(3);
+
+	        $p.beginShape();
+	        var x = 0,
+	            y = 0;
+	        for (i in futureData) {
+	            x = $p.map(i, 0, futureData.length - 1, todayLineLoc, plotX2);
+	            y = $p.map(futureData[i], Y_MIN, Y_MAX, $p.height - topMargin, $p.height - topMargin - plotHeight);
+	            $p.vertex(x, y);
+	        }
+	        $p.endShape();
+
+
+	        $p.noFill();
+	        $p.stroke(0, 255, 0);
 	        $p.strokeWeight(3);
 	        
 	        //This is the hypothetical data line.
-	        /*
 	        $p.beginShape();
 	        var xv = 301;
 	        var xamt = 9;
@@ -182,13 +205,12 @@ var hypotheticalSketch =
 	            $p.vertex(xh[i], yh[i]);
 	        }
 	        $p.endShape();
-	        */
 
 	        $p.stroke(104, 104, 104);
 	        $p.strokeWeight(4);
 	        
 	        //This is the past-to-future seperation line.
-	        $p.line(x1, y1, x2, y2);
+	        $p.line(todayLineLoc, y1, todayLineLoc, y2);
 	        
 	        //This outlines the graph.
 	        $p.rect(rx, ry, w, h);
@@ -284,41 +306,60 @@ var hypotheticalSketch =
 
 	    function drawTickMarks() {
 	        var yaxis = y1 + 20;
+	        var startLoc = plotX1;
+	        var endLoc = todayLineLoc - ($p.textWidth(endDate)/2);
+	        var futureEndLoc = plotX2 - $p.textWidth(futureEndDate);
+	        
+	        //Draw date labels
+	        $p.textFont(helvetica, 12);
+	        $p.fill(0);
+	        $p.text(startDate, startLoc, yaxis);
+	        $p.text(endDate, endLoc, yaxis);
+	        $p.text(futureEndDate, futureEndLoc, yaxis);
+	        
+	        var tickSize = 10;
+	        var tickUpper = y1 + (tickSize/2);
+	        var tickLower = y1 - (tickSize/2);
+	        
+	        //Draw date tick marks
+	        $p.stroke(104, 104, 104);
+	        $p.strokeWeight(3);
+	        $p.line(plotX1, tickUpper, plotX1, tickLower);
+	        $p.line(todayLineLoc, tickUpper, todayLineLoc, tickLower);
+	        $p.line(plotX2, tickUpper, plotX2, tickLower);
+	        
+	    	/*
+	        var yaxis = y1 + 20;
 	        var xaxis = x1 - 270;
 	        var y_1 = y1 - 5;
 	        var y_2 = y1 + 5;
-	        var init = 60;
-	        var dist = 90;
-	        var amt = 20;
-	        var d = 20;
-	        var init2 = 65;
-	        
 
 	        $p.textFont(helvetica, 10);
 	        $p.fill(0);
 	        $p.text("", x1 - 15, y1 + 20);
-	        $p.text("SUNDAY", rx+init-amt, yaxis);
-	        $p.text("SUNDAY", rx+init+dist-amt, yaxis);
-	        $p.text("SUNDAY", rx+init+2*dist-amt, yaxis);
-	        $p.text("SUNDAY", rx+init+3*dist-amt, yaxis);
-	        $p.text("SUNDAY", rx+init+4*dist-amt, yaxis);
-	        $p.text("SUNDAY", rx+init+5*dist-amt, yaxis);
+	        $p.text("SUNDAY", x1 - 270, yaxis);
+	        $p.text("SUNDAY", xaxis + 90, yaxis);
+	        $p.text("SUNDAY", xaxis + 180, yaxis);
+	        $p.text("SUNDAY", xaxis + 330, yaxis);
+	        $p.text("SUNDAY", xaxis + 420, yaxis);
+	        $p.text("SUNDAY", xaxis + 510, yaxis);
 
 	        $p.stroke(104, 104, 104);
 	        $p.strokeWeight(3);
-	        $p.line(rx+init, y_1, rx+init, y_2);
-	        $p.line(rx+init+dist, y_1, rx+init+dist, y_2);
-	        $p.line(rx+init+2*dist, y_1, rx+init+2*dist, y_2);
-	        $p.line(rx+init+3*dist, y_1, rx+init+3*dist, y_2);
-	        $p.line(rx+init+4*dist, y_1, rx+init+4*dist, y_2);
-	        $p.line(rx+init+5*dist, y_1, rx+init+5*dist, y_2);
+	        $p.line(xaxis + 17, y_1, xaxis + 17, y_2);
+	        $p.line(xaxis + 107, y_1, xaxis + 107, y_2);
+	        $p.line(xaxis + 197, y_1, xaxis + 197, y_2);
+	        $p.line(xaxis + 347, y_1, xaxis + 347, y_2);
+	        $p.line(xaxis + 437, y_1, xaxis + 437, y_2);
+	        $p.line(xaxis + 527, y_1, xaxis + 527, y_2);
 
-	        $p.text("9/29", rx+init2-d, yaxis + 15);
-	        $p.text("10/6", rx+init2+dist-d, yaxis + 15);
-	        $p.text("10/13", rx+init2+2*dist-d, yaxis + 15);
-	        $p.text("10/20", rx+init2+3*dist-d, yaxis + 15);
-	        $p.text("10/27", rx+init2+4*dist-d, yaxis + 15);
-	        $p.text("11/3", rx+init2+5*dist-d, yaxis + 15);
+	        $p.text("9/29", x1 - 270 + 10, yaxis + 15);
+	        $p.text("10/6", xaxis + 90 + 10, yaxis + 15);
+	        $p.text("10/13", xaxis + 180 + 7, yaxis + 15);
+	        $p.text("10/20", xaxis + 330 + 5, yaxis + 15);
+	        $p.text("10/27", xaxis + 420 + 5, yaxis + 15);
+	        $p.text("11/3", xaxis + 510 + 8, yaxis + 15);
+	        */
 	    }
 	    $p.drawTickMarks = drawTickMarks;
 

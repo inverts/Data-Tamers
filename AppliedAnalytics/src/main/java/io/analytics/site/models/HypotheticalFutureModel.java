@@ -3,18 +3,8 @@ package io.analytics.site.models;
 import io.analytics.domain.CoreReportingTypedData;
 import io.analytics.service.CoreReportingService;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.TreeMap;
-
-
-
-
-
-
-
 
 import org.json.*;
 
@@ -26,9 +16,8 @@ public class HypotheticalFutureModel extends ForecastWidgetModel {
 	private String dimension;
 	private ArrayList<Integer> changePercentageOptions; //Using ArrayList for future flexibility if necessary.
 	private String activeProfile;
-	private ArrayList<String> sources;
-	private ArrayList<Integer> metrics;
-	private CoreReportingService coreReportingService;
+	
+	
 	/*
 	 * For use in JSP file:
 	 * 
@@ -39,13 +28,11 @@ public class HypotheticalFutureModel extends ForecastWidgetModel {
 	 */
 	public HypotheticalFutureModel(CoreReportingService reportingService) {	
 		super(reportingService);
-		this.coreReportingService = reportingService;
 		this.activeProfile = reportingService.getProfile();
 		this.changePercentage = 10;
 		this.dataPoints = new JSONObject();
 		Integer[] percentageOptions = { 5, 10, 15, 20, 25, 30 };
 		changePercentageOptions = new ArrayList<Integer>(Arrays.asList(percentageOptions));
-	    
 	}
 
 	public String getActiveProfile() {
@@ -84,32 +71,6 @@ public class HypotheticalFutureModel extends ForecastWidgetModel {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public String[] getTrafficSources(){
-		CoreReportingTypedData sourceData = null;
-	    try {
-			sourceData = coreReportingService.getTopTrafficSources(getMetric(), getStartDate(), getEndDate(), 8);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    
-	    ArrayList<Object> data = sourceData.getData();
-	    // REVISIT add array name and type check of lists in data.
-	    sources = (ArrayList<String>)data.get(1);
-	    metrics = (ArrayList<Integer>)data.get(2);
-	    for (String s : sources){
-	    	if (s.length()>25) {
-	    		int index = sources.indexOf(s);
-	    		sources.remove(index);
-	    		metrics.remove(index);
-	    	}
-	    }
-	    String[] results = {"dummy"};
-	    results = sources.toArray(results);
-	    return results;
-	}
-	
 	public String getDimension() {
 		//TODO: Add a check for valid dimensions.
 		return this.dimension;
@@ -118,6 +79,7 @@ public class HypotheticalFutureModel extends ForecastWidgetModel {
 	public void setDimension(String dimension) {
 		this.dimension = dimension;
 	}
+	
 	
 	
 	/* test method to pass data to javascript */

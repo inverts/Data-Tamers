@@ -87,7 +87,7 @@ public class WidgetController {
 		hypotheticalFuture.updateData();
 		SessionService.saveModel(session, "hypotheticalFuture", hypotheticalFuture);
 		viewMap.addAttribute("hfModel", hypotheticalFuture);
-		
+		viewMap.addAttribute("filterModel", filter);
 		/*
 		HypotheticalFutureModel hypotheticalFuture = new HypotheticalFutureModel(adjustBy, source);
 		
@@ -124,7 +124,7 @@ public class WidgetController {
 		return new ModelAndView("RevenueSources");
 	}
 	
-	
+
 	@RequestMapping(value = "/WebsitePerformance", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView websitePerformanceView(Model viewMap, HttpServletResponse response, HttpSession session) {
 		
@@ -147,7 +147,6 @@ public class WidgetController {
 		
 		return new ModelAndView("WebsitePerformance");
 	}
-	
 	
 	
 	
