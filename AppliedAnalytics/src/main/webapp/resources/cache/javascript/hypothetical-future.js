@@ -297,7 +297,7 @@ var hypotheticalSketch =
 
 	        $p.stroke(104, 104, 104);
 	        $p.strokeWeight(3);
-	        $p.line(xaxis + 17, y_1, xaxis + 17, y_2);
+	        $p.line(xaxis-120, y_1, xaxis-120, y_2);
 	        $p.line(xaxis + 107, y_1, xaxis + 107, y_2);
 	        $p.line(xaxis + 197, y_1, xaxis + 197, y_2);
 	        $p.line(xaxis + 347, y_1, xaxis + 347, y_2);

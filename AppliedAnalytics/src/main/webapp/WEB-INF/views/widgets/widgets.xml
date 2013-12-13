@@ -21,4 +21,4 @@
 	<property name="url" value = "/WEB-INF/views/widgets/revenue-sources.jsp"/>
 </bean>
 
-</beans>
+</beans>   
