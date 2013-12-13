@@ -4,12 +4,12 @@
 
 $(document).ready(function() {
 	
-	GetWebsitePerformance('websitePerformance');
+	GetWebsitePerformanceWidget('websitePerformance');
 
 });
 
 
-function GetWebsitePerformance(id, source, change) {
+function GetWebsitePerformanceWidget(id) {
 	
 	var $element = $('#' + id);
 	$.post("WebsitePerformance", null, 

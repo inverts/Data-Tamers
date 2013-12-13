@@ -4,12 +4,12 @@
 
 $(document).ready(function() {
 	
-	GetWidget('revenueSources');
+	GetRevenueSourcesWidget('revenueSources');
 
 });
 
 
-function GetWidget(id, source, change) {
+function GetRevenueSourcesWidget(id) {
 	
 	var $element = $('#' + id);
 	$.post("RevenueSources", null, 
