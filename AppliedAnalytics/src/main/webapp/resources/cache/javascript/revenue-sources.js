@@ -94,10 +94,10 @@ var revenueSketch =
 	        var h = $p.height / 2;
 	        $p.fill(255);
 	        $p.text("12.1%", w + 50, h - 20);
-	        $p.text("11.6", w - 75, h + 25);
-	        $p.text("44.5", w + 10, h + 65);
-	        $p.text("9.4", w + 15, h - 55);
-	        $p.text("22.6", w - 60, h - 40);
+	        $p.text("11.6%", w - 75, h + 25);
+	        $p.text("44.5%", w + 10, h + 65);
+	        $p.text("9.4%", w + 15, h - 55);
+	        $p.text("22.6%", w - 60, h - 40);
 	    }
 	    $p.drawAmounts = drawAmounts;
 
