@@ -38,7 +38,9 @@ function updateHypotheticalWidget(id, dimension, change) {
 					updateHypotheticalWidget(id, $('#traffic_source').val(), $('#change_pct').val());
 				});
 				$element.fadeIn("fast");
-
+				window.onresize = function(event) {
+					var p = new Processing(canvas, hypotheticalSketch);
+				}
 			});
 	});		
 }
@@ -89,9 +91,15 @@ var hypotheticalSketch =
 	        plotX2 = 0,
 	        plotY1 = 0,
 	        plotY2 = 0;
-	    var leftMargin = 20;
-	    var topMargin = 100;
-	    var plotHeight = 250;
+	    var canvasHeight = 415;
+	    // TODO: Change 420 so it's not a constant!
+	    var canvasWidth = window.innerWidth - 420;
+	    var leftMargin = 10;
+	    var topMargin = 40;
+	    var plotHeight = canvasHeight-(2*topMargin);
+	    var plotWidth = canvasWidth-(2*leftMargin);
+	    var plotBottom = plotHeight + topMargin;
+	    var tickRadius = 5;
 	    var timer = 0.0;
 	    var helvetica = null;
 	    var x1 = 0,
@@ -107,9 +115,8 @@ var hypotheticalSketch =
 	    var xhval = $p.createJavaArray('float', [amount]);
 	    var yhval = $p.createJavaArray('float', [amount]);
 	    var count = 301;
-
 	    function setup() {
-	        $p.size(640, 480);
+	        $p.size(canvasWidth, canvasHeight);
 
 	        $p.smooth();
 	        helvetica = $p.createFont("Helvetica-Bold", 14);
@@ -184,6 +191,7 @@ var hypotheticalSketch =
 	        $p.strokeWeight(3);
 	        
 	        //This is the hypothetical data line.
+	        /*
 	        $p.beginShape();
 	        var xv = 301;
 	        var xamt = 9;
@@ -205,15 +213,16 @@ var hypotheticalSketch =
 	            $p.vertex(xh[i], yh[i]);
 	        }
 	        $p.endShape();
-
+	         */
 	        $p.stroke(104, 104, 104);
 	        $p.strokeWeight(4);
-	        
+
 	        //This is the past-to-future seperation line.
-	        $p.line(todayLineLoc, y1, todayLineLoc, y2);
+	        $p.line(todayLineLoc, topMargin, todayLineLoc, plotHeight+topMargin);
 	        
 	        //This outlines the graph.
-	        $p.rect(rx, ry, w, h);
+	        $p.rect(leftMargin, topMargin, plotWidth+leftMargin, plotHeight+topMargin);
+	        
 	        drawLineLabels();
 	        var hoverSet = 0;
 	        for (var i = 0; i < points.values.length; i++) {
@@ -221,13 +230,20 @@ var hypotheticalSketch =
 	            y = $p.map(points.values[i], Y_MIN, Y_MAX, $p.height - topMargin, $p.height - topMargin - plotHeight);
 
 	            var delta = $p.abs($p.mouseX - x);
+	            if (i < historicalDataSize)
+	            	$p.stroke(255, 128, 0);
+	            else
+	    	        $p.stroke(0, 143, 255);
+	            	
+                $p.fill(255);
+                $p.ellipse(x, y, 8, 8);
 	            if (hoverSet == 0 && (delta < 10) && (y > plotY1) && (y < plotY2)) {
-	                $p.stroke(255);
-	                $p.fill(0);
+	                $p.stroke(60);
+	                $p.fill(255, 200, 255);
 	                $p.ellipse(x, y, 8, 8);
 
 	                var labelVal = $p.round(points.values[i]);
-	                var label = new Label("" + labelVal, x, y);
+	                var label = new Label(labelVal + " Visits", x, y);
 	                
 	                hoverSet = 1;
 	            }
@@ -254,16 +270,28 @@ var hypotheticalSketch =
 
 
 	    function drawLineLabels() {
-	        $p.textFont(helvetica, 10);
+			var labelX = leftMargin;
+			var labelY = topMargin - 15;
+			var labelPadding = 30;
+			var label1 = "HISTORICAL";
+			var label2 = "FUTURE";
+			var lineLength = 35;
+			var lineLabelPadding = 5;
+			var fontSize = 10;
+			var lineY = labelY - (fontSize / 2);
+			
+			label1Start = labelX
+			label2Start = label1Start + lineLength + lineLabelPadding + $p.textWidth(label1) + labelPadding;
+			
+	        $p.textFont(helvetica, fontSize);
 	        $p.fill(64, 64, 64);
-	        $p.text("UNCHANGED", 60, 85);
-	        $p.text("HYPOTHETICAL", 220, 85);
+	        $p.strokeWeight(3);
 	        $p.stroke(255, 128, 0);
-	        $p.strokeWeight(2);
-	        $p.line(20, 80, 55, 80);
-	        $p.stroke(255, 0, 127);
-	        $p.strokeWeight(2);
-	        $p.line(180, 80, 215, 80);
+	        $p.line(label1Start, lineY, label1Start + lineLength, lineY);
+	        $p.stroke(0, 143, 255);
+	        $p.line(label2Start, lineY, label2Start + lineLength, lineY);
+	        $p.text("HISTORICAL", label1Start + lineLength + lineLabelPadding, labelY);
+	        $p.text("FUTURE", label2Start + lineLength + lineLabelPadding, labelY);
 	    }
 	    $p.drawLineLabels = drawLineLabels;
 
@@ -304,22 +332,22 @@ var hypotheticalSketch =
 	    }
 	    $p.highlightHypo = highlightHypo;
 
+
 	    function drawTickMarks() {
-	        var yaxis = y1 + 20;
+	        $p.textFont(helvetica, fontSize);
+	        $p.fill(0);
 	        var startLoc = plotX1;
 	        var endLoc = todayLineLoc - ($p.textWidth(endDate)/2);
-	        var futureEndLoc = plotX2 - $p.textWidth(futureEndDate);
-	        
+	        var futureEndLoc = leftMargin + plotWidth - $p.textWidth(futureEndDate);
+	        var fontSize = 15;
+	        var labelYLoc = plotBottom + (fontSize + tickRadius + 5);
 	        //Draw date labels
-	        $p.textFont(helvetica, 12);
-	        $p.fill(0);
-	        $p.text(startDate, startLoc, yaxis);
-	        $p.text(endDate, endLoc, yaxis);
-	        $p.text(futureEndDate, futureEndLoc, yaxis);
+	        $p.text(startDate, startLoc, labelYLoc);
+	        $p.text(endDate, endLoc, labelYLoc);
+	        $p.text(futureEndDate, futureEndLoc, labelYLoc);
 	        
-	        var tickSize = 10;
-	        var tickUpper = y1 + (tickSize/2);
-	        var tickLower = y1 - (tickSize/2);
+	        var tickUpper = y1 + (tickRadius);
+	        var tickLower = y1 - (tickRadius);
 	        
 	        //Draw date tick marks
 	        $p.stroke(104, 104, 104);
@@ -328,38 +356,6 @@ var hypotheticalSketch =
 	        $p.line(todayLineLoc, tickUpper, todayLineLoc, tickLower);
 	        $p.line(plotX2, tickUpper, plotX2, tickLower);
 	        
-	    	/*
-	        var yaxis = y1 + 20;
-	        var xaxis = x1 - 270;
-	        var y_1 = y1 - 5;
-	        var y_2 = y1 + 5;
-
-	        $p.textFont(helvetica, 10);
-	        $p.fill(0);
-	        $p.text("", x1 - 15, y1 + 20);
-	        $p.text("SUNDAY", x1 - 270, yaxis);
-	        $p.text("SUNDAY", xaxis + 90, yaxis);
-	        $p.text("SUNDAY", xaxis + 180, yaxis);
-	        $p.text("SUNDAY", xaxis + 330, yaxis);
-	        $p.text("SUNDAY", xaxis + 420, yaxis);
-	        $p.text("SUNDAY", xaxis + 510, yaxis);
-
-	        $p.stroke(104, 104, 104);
-	        $p.strokeWeight(3);
-	        $p.line(xaxis + 17, y_1, xaxis + 17, y_2);
-	        $p.line(xaxis + 107, y_1, xaxis + 107, y_2);
-	        $p.line(xaxis + 197, y_1, xaxis + 197, y_2);
-	        $p.line(xaxis + 347, y_1, xaxis + 347, y_2);
-	        $p.line(xaxis + 437, y_1, xaxis + 437, y_2);
-	        $p.line(xaxis + 527, y_1, xaxis + 527, y_2);
-
-	        $p.text("9/29", x1 - 270 + 10, yaxis + 15);
-	        $p.text("10/6", xaxis + 90 + 10, yaxis + 15);
-	        $p.text("10/13", xaxis + 180 + 7, yaxis + 15);
-	        $p.text("10/20", xaxis + 330 + 5, yaxis + 15);
-	        $p.text("10/27", xaxis + 420 + 5, yaxis + 15);
-	        $p.text("11/3", xaxis + 510 + 8, yaxis + 15);
-	        */
 	    }
 	    $p.drawTickMarks = drawTickMarks;
 

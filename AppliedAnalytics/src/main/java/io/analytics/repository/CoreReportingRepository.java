@@ -150,7 +150,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		public CoreReportingTypedData getTopTrafficSources(String metric, String startDate, String endDate, int n) throws IOException{
 			GaData data = null;
 			try {
-				data = CORE_REPORTING.get("ga:"+PROFILE_ID, // Table Id.
+				data = CORE_REPORTING.get("ga:"+ PROFILE_ID, // Table Id.
 						startDate, // Start date.
 						endDate, // End date.
 						metric) // Metrics.
@@ -174,7 +174,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 */
 
 		@Override
-		public CoreReportingTypedData getPagePerformance(String startDate, String endDate, int maxResults) throws IOException {
+		public CoreReportingTypedData getPagePerformance(String startDate, String endDate, int maxResults) {
 			GaData gaData = null;
 			System.out.println("start date = "+startDate+", "+"end date = "+endDate);
 		

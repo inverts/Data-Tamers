@@ -12,7 +12,7 @@ public interface ICoreReportingRepository {
 
 	public CoreReportingTypedData getTopTrafficSources(String metric, String startDate, String endDate, int maxResults) throws IOException;
 
-	public CoreReportingTypedData getPagePerformance(String startDate, String endDate, int maxResults) throws IOException;
+	public CoreReportingTypedData getPagePerformance(String startDate, String endDate, int maxResults) ;
 
 	}
 

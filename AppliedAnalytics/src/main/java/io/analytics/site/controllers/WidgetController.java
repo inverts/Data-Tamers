@@ -145,6 +145,46 @@ public class WidgetController {
 			return new ModelAndView ("unavailable");
 		}
 		
+		
+		/*
+		 * Setting up the model.
+		 */
+		
+		WebsitePerformanceModel webPerform = SessionService.getModel(session, "webPerform", WebsitePerformanceModel.class);
+		
+		//If there is no model available, or if the active profile changed, create a new model.
+		if ((webPerform == null) || !(settings.getActiveProfile().equals(webPerform.getActiveProfile()))) {
+			CoreReportingService reportingService = null;
+			try {
+				//Get the current active profile from the settings.
+				reportingService = new CoreReportingService(credential, settings.getActiveProfile().getId());
+			} catch (io.analytics.repository.CoreReportingRepository.CredentialException e) {
+				e.printStackTrace();
+				SessionService.redirectToLogin(session, response);
+				return new ModelAndView("unavailable");
+			}
+			webPerform = new WebsitePerformanceModel(reportingService);
+		}
+		
+		if (filter != null) {
+			webPerform.setStartDate(filter.getActiveStartDate());
+			webPerform.setEndDate(filter.getActiveEndDate());
+		}
+		
+		/*
+		 * Here's where we start making queries.
+		 */
+		
+		
+		
+		/*
+		 * Save the updated model to the session and send it to the view.
+		 */
+		
+		SessionService.saveModel(session, "webPerform", webPerform);
+		viewMap.addAttribute("webPerform", webPerform);
+		viewMap.addAttribute("filterModel", filter); //Maybe we can eliminate this in the future.
+		
 		return new ModelAndView("WebsitePerformance");
 	}
 	

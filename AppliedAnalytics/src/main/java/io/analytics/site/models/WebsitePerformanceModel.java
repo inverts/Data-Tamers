@@ -1,20 +1,25 @@
 package io.analytics.site.models;
 
 import java.util.Arrays;
+import java.util.Date;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import io.analytics.domain.CoreReportingTypedData;
 import io.analytics.service.CoreReportingService;
 
 public class WebsitePerformanceModel {
 	
 		private JSONObject dataPoints;
+		private CoreReportingService reportingService;
+		private Date startDate;
+		private Date endDate;
+		private String activeProfile;
 		
-		
-		public WebsitePerformanceModel() {	
+		public WebsitePerformanceModel(CoreReportingService reportingService) {	
 			super();
-			
+			this.reportingService = reportingService;
 			this.dataPoints = new JSONObject();			
 		}
 		
@@ -25,7 +30,34 @@ public class WebsitePerformanceModel {
 		public String getDescription() {
 			return "View the website performance statistics for a business";
 		}
-						
+
+		public String getActiveProfile() {
+			return this.activeProfile;
+		}
+				
+		public Date getStartDate() {
+			return startDate;
+		}
+
+		public void setStartDate(Date startDate) {
+			this.startDate = startDate;
+		}
+
+		public Date getEndDate() {
+			return endDate;
+		}
+
+		public void setEndDate(Date endDate) {
+			this.endDate = endDate;
+		}
+		
+		/**
+		 * TODO: Have this automatically occur when dependencies are updated.
+		 */
+		public void updateData() {
+			CoreReportingTypedData data = reportingService.getPagePerformance(startDate, endDate, 5);
+			data.getData();
+		}
 		
 		/* test method to pass data to javascript */
 		

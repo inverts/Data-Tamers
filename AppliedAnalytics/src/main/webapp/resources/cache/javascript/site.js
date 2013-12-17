@@ -64,7 +64,6 @@ function displayWidgets() {
 		display: 'block',
 		visibility: 'visible'
 	}).animate({
-		marginRight: 0,
 		marginLeft: 0,
 		opacity: 1
 	}, transitionOptions.floatIn, transitionOptions.ease);

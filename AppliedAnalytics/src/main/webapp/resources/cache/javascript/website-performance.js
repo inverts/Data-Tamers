@@ -38,9 +38,12 @@ var performanceSketch =
 	        plotX2 = 0,
 	        plotY1 = 0,
 	        plotY2 = 0;
+		var canvasHeight = 580;
+		var canvasWidth = 640;
 	    var leftMargin = 20;
 	    var topMargin = 100;
 	    var plotHeight = 250;
+	    var plotWidth = canvasWidth - (leftMargin * 2);
 	    var timer = 0.0;
 	    var helvetica = null;
 	    var x1 = 0,
@@ -153,6 +156,7 @@ var performanceSketch =
 	    }
 	    $p.drawTitles = drawTitles;
 
+	    
 	    function drawData() {
 	        var x = $p.mouseX;
 	        var y = $p.mouseY;
@@ -173,12 +177,12 @@ var performanceSketch =
 
 	    function drawLabels() {
 	        var size = 0;
-	        var dist = $p.width / 6;
+	        var dist = plotWidth / 6;
 	        $p.textFont(font, 10);
 
 	        $p.stroke(104, 104, 104);
 	        $p.strokeWeight(4);
-	        $p.line(plotX1 + dist - 10, plotY1 + 275, plotX1 + dist - 10, plotY1 + 285);
+	        $p.line(plotX1 + dist, plotY1 + 275, plotX1 + dist, plotY1 + 285);
 	        $p.line(plotX1 + 2 * dist, plotY1 + 275, plotX1 + 2 * dist, plotY1 + 285);
 	        $p.line(plotX1 + 3 * dist, plotY1 + 275, plotX1 + 3 * dist, plotY1 + 285);
 	        $p.line(plotX1 + 4 * dist, plotY1 + 275, plotX1 + 4 * dist, plotY1 + 285);
@@ -203,25 +207,25 @@ var performanceSketch =
 	        pageNames[4] = "Supplies/Audio-Books/";
 
 	        exitRates = $p.createJavaArray('float', [5]);
-	        exitRates[0] = 10;
+	        exitRates[0] = 70;
 	        exitRates[1] = 21;
 	        exitRates[2] = 5;
-	        exitRates[3] = 15;
+	        exitRates[3] = 45;
 	        exitRates[4] = 12;
 
 	        visits = $p.createJavaArray('float', [5]);
 	        visits[0] = 13;
-	        visits[1] = 17;
+	        visits[1] = 46;
 	        visits[2] = 5;
 	        visits[3] = 25;
 	        visits[4] = 36;
 
 	        bounceRates = $p.createJavaArray('float', [5]);
 	        bounceRates[0] = 12;
-	        bounceRates[1] = 27;
+	        bounceRates[1] = 38;
 	        bounceRates[2] = 13;
-	        bounceRates[3] = 20;
-	        bounceRates[4] = 6;
+	        bounceRates[3] = 25;
+	        bounceRates[4] = 90;
 	    }
 	    $p.initData = initData;
 
@@ -238,54 +242,32 @@ var performanceSketch =
 	            x2 = 0,
 	            y1 = 0,
 	            y2 = 0;
-	        var c1 = $p.color(0, 0, 51);
+	        var c1 = $p.color(120, 45, 45);
 	        var c2 = $p.color(102, 102, 255);
 	        var c3 = $p.color(51, 153, 255);
-	        var b1p0 = exitRates[0];
-	        var b2p0 = visits[0];
-	        var b3p0 = bounceRates[0];
-	        x1 = plotX1 + 75;
-	        y1 = 115;
-	        h1 = $p.map(b1p0, 0, 200, plotY2 - topMargin, plotY2 - topMargin - plotHeight);
-	        $p.fill(c1);
-	        $p.strokeWeight(0.5);
-	        $p.stroke(c1);
-	        $p.rect(x1, 111, w, h1);
-	        x1 = x1 + w;
-	        h2 = $p.map(b2p0, 0, 200, plotY2 - topMargin, plotY2 - topMargin - plotHeight);
-	        $p.fill(c2);
-	        $p.strokeWeight(0.5);
-	        $p.stroke(c2);
-	        $p.rect(x1, 115, w, h2);
-	        x1 = x1 + w;
-	        h3 = $p.map(b3p0, 0, 200, plotY2 - topMargin, plotY2 - topMargin - plotHeight);
-	        $p.fill(c3);
-	        $p.strokeWeight(0.5);
-	        $p.stroke(c3);
-	        $p.rect(x1, 114, w, h3);
-
-	        var b1p1 = exitRates[1];
-	        var b2p1 = visits[1];
-	        var b3p1 = bounceRates[1];
-	        x1 = plotX1 + 75 + 115;
-	        y1 = 115;
-	        h11 = $p.map(b1p1, 0, 200, plotY2 - topMargin, plotY2 - topMargin - plotHeight);
-	        $p.fill(c1);
-	        $p.strokeWeight(0.5);
-	        $p.stroke(c1);
-	        $p.rect(x1, 125, w, h11);
-	        x1 = x1 + w;
-	        h21 = $p.map(b2p1, 0, 200, plotY2 - topMargin, plotY2 - topMargin - plotHeight);
-	        $p.fill(c2);
-	        $p.strokeWeight(0.5);
-	        $p.stroke(c2);
-	        $p.rect(x1, 120, w, h21);
-	        x1 = x1 + w;
-	        h31 = $p.map(b3p1, 0, 200, plotY2 - topMargin, plotY2 - topMargin - plotHeight);
-	        $p.fill(c3);
-	        $p.strokeWeight(0.5);
-	        $p.stroke(c3);
-	        $p.rect(x1, 133, w, h31);
+			var bottom = topMargin+plotHeight+30;
+	        var dist = plotWidth / 6;
+			x1 = plotX1 + dist - (1.5*w);
+			
+			for (i = 0; i < 5; i++) {
+				h1 = $p.map(exitRates[i], 0, 200, plotY2 - topMargin, plotY2 - topMargin - plotHeight);
+				$p.fill(c1);
+				$p.strokeWeight(0.5);
+				$p.stroke(c1);
+				$p.rect(x1,  bottom, w, -h1);
+				x1 = x1 + w;
+				h2 = $p.map(visits[i], 0, 200, plotY2 - topMargin, plotY2 - topMargin - plotHeight);
+				$p.fill(c2);
+				$p.stroke(c2);
+				$p.rect(x1, bottom, w, -h2);
+				x1 = x1 + w;
+				h3 = $p.map(bounceRates[i], 0, 200, plotY2 - topMargin, plotY2 - topMargin - plotHeight);
+				$p.fill(c3);
+				$p.stroke(c3);
+				$p.rect(x1, bottom, w, -h3);
+				x1 = x1 + w;
+				x1 += dist - (3*w);
+			}
 	    }
 	    $p.drawBars = drawBars;
 

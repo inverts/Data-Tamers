@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * The first element in the aggregate list should be a list identifying
  * each remaining list.
  */
-public class CoreReportingTypedData implements Serializable{
+public class CoreReportingTypedData implements Serializable {
    
 	/**
 	 * 
