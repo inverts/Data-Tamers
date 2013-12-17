@@ -15,7 +15,7 @@ var headerAttributes = {
 			<div class="filter">
 				<input type="text" id="start-date" readonly value="${ filter.getActiveStartDateString() }" />
 				<input type="text" id="end-date" readonly value="${ filter.getActiveEndDateString() }" /><br />
-				Active Metric: ${filter.getActiveMetric().toUpperCase().substring(0,4).concat(filter.getActiveMetric().substring(4)).substring(3) }
+				Active Metric: ${filter.getActiveMetric().toUpperCase().substring(3,4).concat(filter.getActiveMetric().toLowerCase().substring(4)) }
 			</div> 
 			<div class="avatar">
 				<c:choose>
