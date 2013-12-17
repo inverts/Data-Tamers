@@ -230,13 +230,20 @@ var hypotheticalSketch =
 	            y = $p.map(points.values[i], Y_MIN, Y_MAX, $p.height - topMargin, $p.height - topMargin - plotHeight);
 
 	            var delta = $p.abs($p.mouseX - x);
+	            if (i < historicalDataSize)
+	            	$p.stroke(255, 128, 0);
+	            else
+	    	        $p.stroke(0, 143, 255);
+	            	
+                $p.fill(255);
+                $p.ellipse(x, y, 8, 8);
 	            if (hoverSet == 0 && (delta < 10) && (y > plotY1) && (y < plotY2)) {
-	                $p.stroke(255);
-	                $p.fill(0);
+	                $p.stroke(60);
+	                $p.fill(255, 200, 255);
 	                $p.ellipse(x, y, 8, 8);
 
 	                var labelVal = $p.round(points.values[i]);
-	                var label = new Label("" + labelVal, x, y);
+	                var label = new Label(labelVal + " Visits", x, y);
 	                
 	                hoverSet = 1;
 	            }

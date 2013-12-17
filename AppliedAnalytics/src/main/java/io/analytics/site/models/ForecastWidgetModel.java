@@ -163,9 +163,11 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 		Double average = sum / 7.0;
 
 		//Calculate percentage of average.
-		for (int i=0; i < 7; i++) {
-			adjuster[i] = adjuster[i] / average;
-		}
+		if (average != 0) {
+			for (int i=0; i < 7; i++) {
+				adjuster[i] = adjuster[i] / average;
+			}
+		} //Default will be all 0 array
 		
 
 		/**
