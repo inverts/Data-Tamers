@@ -2,54 +2,78 @@
  * site.js
  */
 
-var transitionOptions = {
-		ease: 'swing',
-		fadeOut: 100,
-		floatIn: 500,
-		offsetLeft: "20px",
-		offsetRight: "20px"
-};
+var transitionOptions = { ease: 'swing', fadeOut: 100, floatIn: 500, offsetLeft: "20px", offsetRight: "20px" };
 
-var panelHeight = 0;
 
 $(document).ready(function() {
-	$('html').fadeIn("slow");
 	
-	var $header = $('.header');
-	var $footer = $('.footer');
-	var $sidePanel = $('#sidepanel');
-	var $settings = $('.settings');
-	panelHeight = $('.wrapper').height();
-	/* Do appropriate animations */
-	if ($sidePanel.length)
-		displaySidePanel($sidePanel, panelHeight, displayContent);
+	// $header is obtained through header.js
+	var $footer = $('#footer');
+	var $sidepanel = { bg: $('.sidepanel-background'), content: $('.sidepanel-content') };
+	var $settings = { bg: $('.settings-background'), outer: $('.settings-outer') };
+	
+	/* Correct content margins based off dynamic headers */
+	$('.wrapper').css('margin-top', -$header.height());
+	$('.content').css('margin-top', $header.height()); // margin-top should match the height of the header
+	
+	
+	/* Sidepanel */
+	if ($sidepanel.bg.length) {
+		$('.content').css('margin-left', 340); // if sidepanel is present we need a margin on the content!
+		$sidepanel.bg.css('bottom', $footer.height()); // ensure bottom matches height of the footer
+		displaySidePanel($sidepanel, displayContent);
+	}
 	else
 		displayContent();
 
-	$('.profile-image').click(function() {
-		showSettingsPanel($settings, panelHeight);
-	});
+	/* Settings */
+	if ($settings.bg.length) {	
+		$settings.bg.css({'bottom': $footer.height(), 'right': -$settings.bg.width()});
+		$('.profile-image').click(function() {
+			showSettingsPanel(-$settings.bg.width());
+		});
+
+		$('#select-account').change( function () {
+			$.post( "<c:url value="/settings/" />", { account: $('#select-account option:selected').val() }, function( data ) {
+				  $( ".settings" ).html( data );
+				});
+		});
+		$('#select-property').change( function () {
+			$.post( "<c:url value="/settings/" />", { property: $('#select-property option:selected').val() }, function( data ) {
+				  $( ".settings" ).html( data );
+				});
+		});
+		$('#select-profile').change( function () {
+			$.post( "<c:url value="/settings/" />", { profile: $('#select-profile option:selected').val() }, function( data ) {
+				  $( ".settings" ).html( data );
+				});
+		});
+		$('#update-button').click( function () {
+			$.post( "<c:url value="/settings/" />", { update: 1 }, function( data ) {
+				  $( ".settings" ).html( data );
+					updateHypotheticalWidget('hypotheticalWidget');
+				});
+	
+		});
+	}
 	
 });
 
 
 /* Animates the side panel (if toggled) */
-function displaySidePanel($sidePanel, panelHeight, callback) {
+function displaySidePanel($sidepanel, callback) {
 	
-	if ($sidePanel.length) {
-		if ($sidePanel.data('animate')) {
-			$sidePanel.animate({width: "310px"}, 500, 'swing', function() {
-				$('.sidepanel-content').show();
-				if (typeof(callback != 'undefined'))
-					callback();
-				displayWidgets();
-			});
-		}
-		else {
-			$sidePanel.css('width', 310);
-			$('.sidepanel-content').show();
+	if ($sidepanel.bg.data('animate')) {
+		
+		$sidepanel.bg.animate({ left: 0 }, 1000, 'swing', function() {
+			$('#sidepanel').fadeIn('slow');
 			callback();
-		}
+		});
+		
+	}
+	else {
+		$('#sidepanel').show();
+		callback();
 	}
 }
 
@@ -73,36 +97,38 @@ function displayWidgets() {
 
 
 function displayContent() {
-	
 	$('.content').css('visibility', 'visible');
-	
 }
 
-function showSettingsPanel($settings, panelHeight, callback) {
-	
-	if ($settings.length) {
-		// set panel height to wrapper height
-		$settings.show();
-		
-		$settings.animate({width: "550"}, 500, 'swing', function() {
-			$('.settings-content').show();
-			
+function showSettingsPanel(width) {
+	$('.settings-background').show().animate({
+		right: 0
+	}, 300, 'swing');
+
+	$('.settings-outer').show().animate({
+		left: width
+	}, 300, 'swing', 
+		function() {
 			$(window).on('click.settings', function() {
-				hideSettingsPanel($settings);
+				hideSettingsPanel(width);
 			});
-					
-			if (callback)
-				callback();
-			
-		}).click(function(e){ e.stopPropagation(); });
-
-	}
+		
+	}).click(function(e){ e.stopPropagation(); });
 }
 
-function hideSettingsPanel($settings) {
-	$settings.animate({width: 0}, 500, 'swing', function() {
-		$(window).off('click.settings');
-	});
+
+function hideSettingsPanel(width) {
+	$('.settings-background').animate({
+		right: width
+	}, 300, 'swing', 
+		function() { $(this).hide(); });
 	
+	$('.settings-outer').animate({
+		left: 0
+	}, 300, 'swing', 
+		function() {
+			$(this).hide();
+			$(window).off('click.settings');
+	});
 }
 

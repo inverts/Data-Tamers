@@ -6,8 +6,9 @@
 
 <script src="<c:url value="cache/javascript/sidepanel.js" />"></script>
 
-<div id="sidepanel" class="sidepanel" data-animate="${SIDEPANEL_animate}">
-	<div class="sidepanel-content">
+<div class="sidepanel-background" data-animate="${SIDEPANEL.animate}"></div>
+<nav id="sidepanel" class="sidepanel">
+	<div class="sidepanel-content" >
 		<div class="sidepanel-header">
 			<img src="<c:url value="cache/images/logo-280.png" />" />
 		</div>
@@ -31,4 +32,4 @@
 			</div>
 		</div>	
 	</div>
-</div>
+</nav>

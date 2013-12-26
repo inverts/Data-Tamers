@@ -18,12 +18,6 @@
 
 	<resources mapping="/cache/**" location="/resources/cache/" />
 	<resources mapping="/images/**" location="/resources/images/" />
-		
-	<!-- XMLViewResolver for Non-application pages--> 
-	<beans:bean class="org.springframework.web.servlet.view.XmlViewResolver">
-	   <beans:property name="location" value="/WEB-INF/views/site.xml" />
-	   <beans:property name="order" value="1" />
-	</beans:bean>
 	
 		<!-- XMLViewResolver for widgets.xml --> 
 	<beans:bean class="org.springframework.web.servlet.view.XmlViewResolver">

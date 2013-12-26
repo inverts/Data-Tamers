@@ -19,95 +19,87 @@
 /******GENERAL******/
 /* Styling for basic site modules */
 
-body, h1, h2, h3, h4, a, img {
-	padding:0 auto;
-	margin:0 auto;
-	outline: none;
-	border: none;
-	font-family: 'museo-sans-500', 'Trebuchet MS', 'Helvetica', sans-serif;
-}
+body, h1, h2, h3, h4, a, img { padding:0 auto; margin:0 auto; outline: none; border: none; font-family: 'museo-sans-500', 'Trebuchet MS', 'Helvetica', sans-serif; }
+a:visited { color: inherit; }
+a { color: inherit; }
 
-a:visited {
-	color: inherit;
-}
+.page { margin:0 auto; position:relative; }
+.page .wrapper { float:left; width:100%; }
+.page .content { min-height:900px; visibility:hidden; }
 
-a {
-	color: inherit;
-}
+.profile-info { width: 250px; height: 250px; margin: 10px; padding: 10px; border: 3px solid #aaa; }
+.profile-image { cursor: pointer; }
 
-.wrapper {
-	margin-left: 310px;
-	overflow:hidden;
-}
+select { font: inherit; }
+input { font: inherit; }
 
-.content {
-	visibility: hidden;
-	min-height:600px;
-	margin-top: 60px;
-	padding: 15px;
-}
+#ui-datepicker-div { font-size: 15px; }
 
-.profile-info {
-	width: 250px;
-	height: 250px;
-	margin: 10px;
-	padding: 10px;
-	border: 3px solid #aaa;
-}
 
-.profile-image {
-	cursor: pointer;
-}
 
-select {
-	font: inherit;
-}
+/******HEADER/FOOTER******/
+.page #header { width:inherit; z-index:3; }
+.page #footer { background:#222; clear:left; height:120px; position:relative; }
 
-input {
-	font: inherit;
-}
+#header-application, #header-entry { display:none; }
 
-#ui-datepicker-div {
-	font-size: 15px;
-}
+/* header application */
+#header-application { height:60px; margin-left:340px; background:#eee; box-shadow:0px 0px 5px -1px; position:relative; }
+#header-application .filter { float: left; padding: 10px 0px 0px 20px; }
+#header-application .avatar, .messages { height:50px; width:50px; float:right; margin:5px 20px 5px 0; }
+#header-application .messages { background-color:#239371; }
+
+/* header entry */
+#header-entry { height:110px; background:#454545; box-shadow:0px 0px 5px 3px; position:relative; }
+#header-entry .nav-item { margin-left:30px; color: #ddd; font-size:20px; }
+#header-entry .entry-wrapper { width:1080px; height:50px; position:absolute; top:0; bottom:0; left:0; right:0; margin:auto; }
+#header-entry .right { float: right; margin-top:25px; }
+#header-entry a { color:#ccc; text-decoration:none; }
+#header-entry a:hover { color: #fff; }
+
+/* footer */
+#footer { clear: both; position:relative; }
+.footer-nav, .footer-copyright { margin:auto; text-align:center; }
+#footer .footer-content { padding:20px; color:#ddd; }
+#footer .footer-nav { display:none; margin-top:30px; }
+#footer .footer-copyright { height:inherit; font: .85em Times New Roman; margin-top: 30px; left:0; right:0; position:absolute; }
+
+
+
+/******ENTRY******/
+#logo { float:left; }
+.entry-content { background:url('../images/bg.png') no-repeat #000; background-position: center 85px; height:1068px; clear:both; }
+#center-box { height: 225px; width: 550px; border-radius: 6px; -moz-border-radius: 6px; -webkit-border-radius: 6px; 
+			  background: url('../images/black-translucent.png') repeat; position: absolute; left:0; right:0; margin:0 auto;
+        	  top:300px; box-shadow: 0px 0px 25px -5px #fff; }
+#analyze-button { background:url('../images/start-analyzing.png') no-repeat; background-position:0px 0px; margin:auto;
+        		  position:absolute; width: 300px; height:94px; top:0; bottom:0; left:0; right:0; cursor:pointer; }
+#analyze-button:hover { background-position: 0px -94px; }
+
+
+/******SIDEPANEL******/
+.page .sidepanel-background { left:-500px; background:#444; position:absolute; top:0; z-index:4; box-shadow:0 1px 5px #000; width:310px; }
+.page #sidepanel { display:none; float:left; }
+.sidepanel .sidepanel-content { padding:15px; width:310px; position:relative; z-index:4;}
+.sidepanel .sidepanel-header { height:110px; padding:20px 10px; }
+.sidepanel .sidepanel-nav { padding:10px; }
+.sidepanel .sidepanel-nav .nav-cell { height:20px; margin:20px 0; padding:20px; background:inherit; }
+.sidepanel .sidepanel-nav .nav-cell:hover { cursor:pointer; }
+.sidepanel .sidepanel-nav .nav-txt { font-size: 20px; color:#fff; line-height:15px; margin-left:10px; }
+
+.nav-icon { width:30px; height:30px; float:left; margin-top:-8px; background:url(../images/navicons.png) no-repeat; }
+.dashlist { width:100%; height:200px; display:none; }
+
 
 
 /******SETTINGS******/
+.page .settings-background { background:#444; position:absolute; right:0; top:0; z-index:4; border-left:3px solid #ccc; }
+.page .settings { float:right; width:0; position:relative; z-index:4; border-left:3px solid #ccc; }
+.page .settings-outer { overflow:hidden; position:relative; }
+.page .settings-background, .page .settings-outer { width:550px; display:none; }
+.page .settings-content { background:#444; left:0; color:#fff; padding:20px; }
+.page .settings-content .rowlabel { width: 85px; font-weight: bold; }
+.page .settings-content  .profile-image-large { border: 3px solid #96AFC5; }
 
-
-.settings {
-	width: 0;
-	height: 100%;
-	float: right;
-	background: #444;
-	color: #fff;
-	position: fixed;
-	z-index: 10;
-	right: 0;
-	display:none;
-	border-left: 3px solid #ccc;
-}
-
-.settings-content {
-	margin-top: 20px;
-	padding:20px;
-}
-.settings-content .rowlabel {
-	width: 85px;
-	font-weight: bold;
-}
-
-.settings-content  .profile-image-large {
-	border: 3px solid #96AFC5;
-}
-
-.settings-content .left-pane {
-	width: 150px; 
-	height: 100%; 
-	float: left; 
-	margin: 0px 25px 20px 0px; 
-	
-}
-.settings tr {
-	height: 25px;
-}
+.page .settings-content .left-pane { width: 150px; height: 100%; float: left; margin: 0px 25px 20px 0px; }
+.settings tr { height: 25px; }
