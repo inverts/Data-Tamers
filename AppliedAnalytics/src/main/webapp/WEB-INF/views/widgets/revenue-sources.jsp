@@ -2,9 +2,6 @@
     pageEncoding="ISO-8859-1"%>
     
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
-
-<link href="<c:url value="/cache/css/widget.css" />" rel="stylesheet">
   
 <script>
 //var RevenueSourceData = JSON.parse('${DATA}');

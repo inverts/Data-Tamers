@@ -8,6 +8,7 @@
 
 <!-- CSS -->
 <link href="<c:url value="/cache/css/site.css" />" rel="stylesheet">
+<link href="<c:url value="/cache/css/widget.css" />" rel="stylesheet">
 <link href="<c:url value="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />">
 
 <!-- JavaScript -->

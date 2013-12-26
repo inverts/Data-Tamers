@@ -3,9 +3,6 @@
     
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-
-<link href="<c:url value="/cache/css/widget.css" />" rel="stylesheet">  
-
 <script>
 //var WebsitePerformanceData = JSON.parse('${DATA}');
 </script>  
