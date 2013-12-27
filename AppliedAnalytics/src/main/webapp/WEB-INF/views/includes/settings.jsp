@@ -1,9 +1,11 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <div class="settings-background"></div>
 <aside class="settings">
 	<div class="settings-outer">
 		<div class="settings-content">
-			<h2>Settings</h2>
+			<h2><fmt:message key="settings.title" /></h2>
 				<div class="left-pane">
 					<c:choose>
 						<c:when test="${not empty settings.getGoogleUserData().getPicture()}" >
@@ -16,14 +18,14 @@
 				</div>
 				<table>
 					<tbody>
-						<tr><td class="rowlabel">Name</td><td>${ settings.getGoogleUserData().getName() }</td></tr>
-						<tr><td class="rowlabel">Email</td><td>${ settings.getGoogleUserData().getEmail() }</td></tr>
+						<tr><td class="rowlabel"><fmt:message key="settings.name" /></td><td>${ settings.getGoogleUserData().getName() }</td></tr>
+						<tr><td class="rowlabel"><fmt:message key="settings.email" /></td><td>${ settings.getGoogleUserData().getEmail() }</td></tr>
 						<c:choose>
 							<c:when test="${not empty settings.getActiveProfile() }" >
-								<tr><td class="rowlabel">Active Profile</td><td>${ settings.getActiveProfile().getName() }</td></tr>
+								<tr><td class="rowlabel"><fmt:message key="settings.active" /></td><td>${ settings.getActiveProfile().getName() }</td></tr>
 							</c:when>
 						</c:choose>
-						<tr><td class="rowlabel">Account</td><td>
+						<tr><td class="rowlabel"><fmt:message key="settings.account" /></td><td>
 						<c:choose>
 							<c:when test="${not empty settings.getCurrentAccounts() && not empty settings.getCurrentAccounts().getItems()}" >
 								<select id="select-account">
@@ -42,7 +44,7 @@
 						
 						<c:choose>
 							<c:when test="${not empty settings.getCurrentWebproperties()}" >
-								<tr><td class="rowlabel">Property</td><td>
+								<tr><td class="rowlabel"><fmt:message key="settings.property" /></td><td>
 								<c:choose>
 									<c:when test="${not empty settings.getCurrentWebproperties().getItems()}" >
 										<select id="select-property">
@@ -63,7 +65,7 @@
 						
 						<c:choose>
 							<c:when test="${not empty settings.getCurrentProfiles()}" >
-								<tr><td class="rowlabel">Profile</td><td>
+								<tr><td class="rowlabel"><fmt:message key="settings.profile" /></td><td>
 								<c:choose>
 									<c:when test="${not empty settings.getCurrentProfiles().getItems()}" >
 										<select id="select-profile">

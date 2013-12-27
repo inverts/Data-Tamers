@@ -1,4 +1,5 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <script>
 var headerAttributes = { 
@@ -15,7 +16,7 @@ var headerAttributes = {
 		<div class="filter">
 			<input type="text" id="start-date" readonly value="${ filter.getActiveStartDateString() }" />
 			<input type="text" id="end-date" readonly value="${ filter.getActiveEndDateString() }" /><br />
-			Active Metric: ${filter.getActiveMetric().toUpperCase().substring(0,4).concat(filter.getActiveMetric().substring(4)).substring(3) }
+			<fmt:message key="filter.activemetric" /> ${filter.getActiveMetric().toUpperCase().substring(0,4).concat(filter.getActiveMetric().substring(4)).substring(3) }
 		</div> 
 		<div class="avatar">
 			<c:choose>
@@ -35,8 +36,8 @@ var headerAttributes = {
 		<div class="entry-wrapper">
 			<img src="<c:url value="/cache/images/logo-280.png" />" />
 			<div class="right">
-				<span class="nav-item"><a href="#">About</a></span>
-				<span class="nav-item"><a href="<c:url value="/application" />">Login</a></span>
+				<span class="nav-item"><a href="#"><fmt:message key="header.about" /></a></span>
+				<span class="nav-item"><a href="<c:url value="/application" />"><fmt:message key="header.login" /></a></span>
 			</div>
 		</div>
 	</div>

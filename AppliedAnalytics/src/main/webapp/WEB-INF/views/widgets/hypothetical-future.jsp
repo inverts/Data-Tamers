@@ -1,7 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-    
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
  
 <script>
 var historicalData = JSON.parse('${ hfModel.getDataPoints() }');
@@ -17,7 +15,7 @@ var futureEndDate = '${ hfModel.getFutureEndDate() }';
 <div class="widget_wrapper widgetView">
 	<form id="hypotheticalFutureSettings">
 		<div class="widget_header">			
-			<div class="widget_title">DATA FORECAST</div>
+			<div class="widget_title"><fmt:message key="dataforecast.title" /></div>
 			<!-- Temporarily hidden until implemented. -->
 			<div style="display:none;">
 				<div class="widget_input">
