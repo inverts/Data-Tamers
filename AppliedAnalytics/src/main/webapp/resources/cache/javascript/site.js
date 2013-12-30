@@ -72,6 +72,7 @@ function displaySidePanel($sidepanel, callback) {
 		
 	}
 	else {
+		$sidepanel.bg.css('left', 0);
 		$('#sidepanel').show();
 		callback();
 	}

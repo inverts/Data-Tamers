@@ -2,10 +2,8 @@
  * hypothetical-future.js
  */
 
-$(document).ready(function() {
-	
+$(function() {
 	updateHypotheticalWidget('hypotheticalWidget');
-
 });
 
 /*
@@ -20,10 +18,10 @@ $(document).ready(function() {
  * endDate
  * 
  */
-function updateHypotheticalWidget(id, dimension, change) {
+function updateHypotheticalWidget(id) {
 	
 	var $element = $('#' + id);
-	$.post("HypotheticalFuture", { dimension: dimension, change: change }, 
+	$.post("HypotheticalFuture", null, 
 		function(response) {
 			$element.fadeOut("fast", function() {
 				$element.html(response);
@@ -33,10 +31,6 @@ function updateHypotheticalWidget(id, dimension, change) {
 				//points = HypotheticalFutureData.points;		
 				var p = new Processing(canvas, hypotheticalSketch);
 				
-				// Setup change event
-				$('#hypotheticalWidget select').on('change', function() {
-					updateHypotheticalWidget(id, $('#traffic_source').val(), $('#change_pct').val());
-				});
 				$element.fadeIn("fast");
 				window.onresize = function(event) {
 					var p = new Processing(canvas, hypotheticalSketch);

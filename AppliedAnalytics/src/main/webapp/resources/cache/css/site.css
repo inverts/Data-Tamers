@@ -77,9 +77,11 @@ input { font: inherit; }
 #analyze-button:hover { background-position: 0px -94px; }
 
 
+
 /******SIDEPANEL******/
 .page .sidepanel-background { left:-500px; background:#444; position:absolute; top:0; z-index:4; box-shadow:0 1px 5px #000; width:310px; }
 .page #sidepanel { display:none; float:left; }
+.page #sidepanel a { text-decoration:none; }
 .sidepanel .sidepanel-content { padding:15px; width:310px; position:relative; z-index:4;}
 .sidepanel .sidepanel-header { height:110px; padding:20px 10px; }
 .sidepanel .sidepanel-nav { padding:10px; }

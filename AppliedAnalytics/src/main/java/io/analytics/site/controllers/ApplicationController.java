@@ -65,6 +65,25 @@ public class ApplicationController {
 		return new ModelAndView("dashboard");
 	}
 	
+	@HeaderFooter(state = "Application")
+	@SidePanel(animate = false)
+	@RequestMapping(value = "/application/trends", method = RequestMethod.GET)
+	public ModelAndView trends(Model model) {
+		return new ModelAndView("trends");
+	}
 
+	@HeaderFooter(state = "Application")
+	@SidePanel(animate = false)
+	@RequestMapping(value = "/application/forecast", method = RequestMethod.GET)
+	public ModelAndView forecast(Model model) {
+		return new ModelAndView("forecast");
+	}
+	
+	@HeaderFooter(state = "Application")
+	@SidePanel(animate = false)
+	@RequestMapping(value = "/application/suggestions", method = RequestMethod.GET)
+	public ModelAndView suggestions(Model model) {
+		return new ModelAndView("suggestions");
+	}
 	
 }

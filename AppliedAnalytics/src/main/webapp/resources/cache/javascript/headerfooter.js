@@ -5,6 +5,7 @@
 var $header = $('#header');
 var $footer = $('#footer');
 
+/* Determines what action to take with the header depending on what state its in */
 $(function() {
 	switch(headerAttributes.state) {
 	
