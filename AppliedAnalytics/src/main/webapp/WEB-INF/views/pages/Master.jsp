@@ -10,7 +10,7 @@
 <!-- CSS -->
 <link href="<c:url value="/cache/css/site.css" />" rel="stylesheet">
 <link href="<c:url value="/cache/css/widget.css" />" rel="stylesheet">
-<link href="<c:url value="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />">
+<link href="<c:url value="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />" rel="stylesheet">
 
 <!-- JavaScript -->
 <script src="<c:url value="/cache/javascript/libs/jquery-1.10.2.min.js" />"></script>

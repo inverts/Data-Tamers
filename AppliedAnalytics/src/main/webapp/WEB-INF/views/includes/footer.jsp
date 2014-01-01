@@ -4,7 +4,7 @@
 	<div class="footer-content">
 		<div class="footer-nav"> <a href="#">
 			<fmt:message key="dashboard" /></a> | 
-			<a href="#"><fmt:message key="trends" /></a> | 
+			<a href="/"><fmt:message key="trends" /></a> | 
 			<a href="#"><fmt:message key="forecast" /></a> | 
 			<a href="#"><fmt:message key="suggestions" /></a> | 
 			<a href="/appliedanalytics"><fmt:message key="signout" /></a> 

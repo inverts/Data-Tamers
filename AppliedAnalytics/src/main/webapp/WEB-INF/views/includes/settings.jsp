@@ -86,13 +86,10 @@
 						
 						<c:choose>
 							<c:when test="${not empty settings.getCurrentProfiles()}" >
-								<tr><td class="rowlabel" style="color: #FFDD00;">
-								<c:choose>
-									<c:when test="${not empty update }" >
-										${ update }
-									</c:when>
-								</c:choose>
-								</td><td><input id="update-button" type="button" value="Update" /></td></tr>
+								<tr>
+									<td id="settings-update" class="rowlabel" style="color: #FFDD00;"></td>
+									<td><input id="update-button" type="button" value="Update" /></td>
+								</tr>
 							</c:when>
 						</c:choose>
 						

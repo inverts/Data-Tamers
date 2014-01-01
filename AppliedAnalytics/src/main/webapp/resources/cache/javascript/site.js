@@ -34,23 +34,26 @@ $(document).ready(function() {
 		});
 
 		$('#select-account').change( function () {
-			$.post( "<c:url value="/settings/" />", { account: $('#select-account option:selected').val() }, function( data ) {
-				  $( ".settings" ).html( data );
+			$.post("settings", { account: $('#select-account option:selected').val() }, function( data ) {
+				  //$(".settings").html( data );
 				});
 		});
 		$('#select-property').change( function () {
-			$.post( "<c:url value="/settings/" />", { property: $('#select-property option:selected').val() }, function( data ) {
-				  $( ".settings" ).html( data );
+			$.post("settings", { property: $('#select-property option:selected').val() }, function( data ) {
+				  //$(".settings").html( data );
 				});
 		});
 		$('#select-profile').change( function () {
-			$.post( "<c:url value="/settings/" />", { profile: $('#select-profile option:selected').val() }, function( data ) {
-				  $( ".settings" ).html( data );
+			$.post("settings", { profile: $('#select-profile option:selected').val() }, function( data ) {
+				  //$(".settings").html( data );
 				});
 		});
+		
+		//TODO: we need to find a better way of updating widgets rather than
+		// calling the update function of each and every widget.
 		$('#update-button').click( function () {
-			$.post( "<c:url value="/settings/" />", { update: 1 }, function( data ) {
-				  $( ".settings" ).html( data );
+			$.post("settings", { update: 1 }, function( data ) {
+				  $("#settings-update").html( data );
 					updateHypotheticalWidget('hypotheticalWidget');
 				});
 	
@@ -130,6 +133,7 @@ function hideSettingsPanel(width) {
 		function() {
 			$(this).hide();
 			$(window).off('click.settings');
+			$("#settings-update").empty();
 	});
 }
 

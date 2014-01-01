@@ -29,7 +29,7 @@ $(function() {
 
 
 function updateDates() {
-	$.post( "<c:url value="/filter/" />", { startDate: $("#start-date").val(), endDate: $("#end-date").val() }, function( data ) {
+	$.post( "filter", { startDate: $("#start-date").val(), endDate: $("#end-date").val() }, function( data ) {
 			//Maybe we will want to do something with the resulting data later. For now, just update the model.
 		});
 	updateHypotheticalWidget('hypotheticalWidget');
