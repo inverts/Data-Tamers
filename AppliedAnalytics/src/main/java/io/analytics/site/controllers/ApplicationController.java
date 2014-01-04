@@ -93,7 +93,7 @@ public class ApplicationController {
 	
 	
 	@RequestMapping(value = "/settings", method = {RequestMethod.POST, RequestMethod.GET})
-	public void settingsView(Model viewMap,  HttpServletResponse response, HttpSession session, 
+	public ModelAndView settingsView(Model viewMap,  HttpServletResponse response, HttpSession session, 
 			@RequestParam(value = "account", defaultValue = "none") String accountId,
 			@RequestParam(value = "property", defaultValue = "none") String propertyId,
 			@RequestParam(value = "profile", defaultValue = "none") String profileId,
@@ -132,8 +132,9 @@ public class ApplicationController {
 		catch(Exception e) {
 			logger.info(e.getMessage());
 			SessionService.redirectToLogin(session, response);
-			response.sendRedirect("unavailable");
+			return new ModelAndView("unavailable");
 		}
+		return new ModelAndView("settings");
 
 	}
 

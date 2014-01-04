@@ -95,13 +95,41 @@ input { font: inherit; }
 
 
 /******SETTINGS******/
-.page .settings-background { background:#444; position:absolute; right:0; top:0; z-index:4; border-left:3px solid #ccc; }
-.page .settings { float:right; width:0; position:relative; z-index:4; border-left:3px solid #ccc; }
-.page .settings-outer { overflow:hidden; position:relative; }
-.page .settings-background, .page .settings-outer { width:550px; display:none; }
-.page .settings-content { background:#444; left:0; color:#fff; padding:20px; }
-.page .settings-content .rowlabel { width: 85px; font-weight: bold; }
-.page .settings-content  .profile-image-large { border: 3px solid #96AFC5; }
 
-.page .settings-content .left-pane { width: 150px; height: 100%; float: left; margin: 0px 25px 20px 0px; }
-.settings tr { height: 25px; }
+
+.settings {
+        width: 0;
+        height: 100%;
+        float: right;
+        background: #444;
+        color: #fff;
+        position: fixed;
+        z-index: 10;
+        right: 0;
+        display:none;
+        border-left: 3px solid #ccc;
+}
+
+.settings-content {
+        margin-top: 20px;
+        padding:20px;
+}
+.settings-content .rowlabel {
+        width: 85px;
+        font-weight: bold;
+}
+
+.settings-content  .profile-image-large {
+        border: 3px solid #96AFC5;
+}
+
+.settings-content .left-pane {
+        width: 150px; 
+        height: 100%; 
+        float: left; 
+        margin: 0px 25px 20px 0px; 
+        
+}
+.settings tr {
+        height: 25px;
+}

@@ -12,6 +12,10 @@
 <link href="<c:url value="/cache/css/widget.css" />" rel="stylesheet">
 <link href="<c:url value="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />" rel="stylesheet">
 
+<script type="text/javascript">
+	/* Set the application root directory for the javascript files. */
+	applicationRoot = "<c:url value="/" />";
+</script>
 <!-- JavaScript -->
 <script src="<c:url value="/cache/javascript/libs/jquery-1.10.2.min.js" />"></script>
 <script src="<c:url value="/cache/javascript/libs/jquery-ui-1.10.3.custom.min.js" />"></script>
@@ -35,7 +39,10 @@
 			<jsp:include page="${SIDEPANEL.path}"/>
 			
 			<!--  Right side settings pane -->
+			
+            <div class="settings">
 			<jsp:include page="${SETTINGS}"/>
+			</div>
 			
 			<!-- Site Content -->
 			<div class="content">
