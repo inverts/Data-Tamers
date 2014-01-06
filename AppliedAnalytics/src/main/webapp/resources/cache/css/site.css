@@ -24,8 +24,8 @@ a:visited { color: inherit; }
 a { color: inherit; }
 
 .page { margin:0 auto; position:relative; }
-.page .wrapper { float:left; width:100%; }
-.page .content { min-height:900px; visibility:hidden; }
+.page .wrapper { float:left; width:100%; position:relative; }
+.page .content { min-height: 900px; margin: 60px 0px 0px 340px; }
 
 .profile-info { width: 250px; height: 250px; margin: 10px; padding: 10px; border: 3px solid #aaa; }
 .profile-image { cursor: pointer; }
@@ -44,7 +44,7 @@ input { font: inherit; }
 #header-application, #header-entry { display:none; }
 
 /* header application */
-#header-application { height:60px; margin-left:340px; background:#eee; box-shadow:0px 0px 5px -1px; position:relative; }
+#header-application { height:60px; padding-left:340px; background:#eee; box-shadow:0px 0px 5px -1px; position: absolute; left: 0px; right: 0px;}
 #header-application .filter { float: left; padding: 10px 0px 0px 20px; }
 #header-application .avatar, .messages { height:50px; width:50px; float:right; margin:5px 20px 5px 0; }
 #header-application .messages { background-color:#239371; }
@@ -80,7 +80,7 @@ input { font: inherit; }
 
 /******SIDEPANEL******/
 .page .sidepanel-background { left:-500px; background:#444; position:absolute; top:0; z-index:4; box-shadow:0 1px 5px #000; width:310px; }
-.page #sidepanel { display:none; float:left; }
+.page #sidepanel { display:none; float:left; left:-500px; background:#444; position:absolute; top:0; z-index:4; box-shadow:0 1px 5px #000; height: 100%; }
 .page #sidepanel a { text-decoration:none; }
 .sidepanel .sidepanel-content { padding:15px; width:310px; position:relative; z-index:4;}
 .sidepanel .sidepanel-header { height:110px; padding:20px 10px; }
@@ -100,10 +100,10 @@ input { font: inherit; }
 .settings {
         width: 0;
         height: 100%;
+        position: absolute;
         float: right;
         background: #444;
         color: #fff;
-        position: fixed;
         z-index: 10;
         right: 0;
         display:none;

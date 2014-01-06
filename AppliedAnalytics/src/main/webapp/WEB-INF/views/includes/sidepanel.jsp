@@ -3,8 +3,8 @@
 
 <script src="<c:url value="/cache/javascript/sidepanel.js" />"></script>
 
-<div class="sidepanel-background" data-animate="${SIDEPANEL.animate}"></div>
-<nav id="sidepanel" class="sidepanel">
+<!-- <div class="sidepanel-background" data-animate="${SIDEPANEL.animate}"></div>  -->
+<nav id="sidepanel" class="sidepanel" data-animate="${SIDEPANEL.animate}">
 	<div class="sidepanel-content" >
 		<div class="sidepanel-header">
 			<img src="<c:url value="/cache/images/logo-280.png" />" />

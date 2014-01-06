@@ -11,7 +11,7 @@ var headerAttributes = {
 
 <header id="header">
 
-	<!-- Header for Application -->
+	<!-- Header for Application
 	<div id="header-application">
 		<div class="filter">
 			<input type="text" id="start-date" readonly value="${ filter.getActiveStartDateString() }" />
@@ -30,7 +30,7 @@ var headerAttributes = {
 		</div>
 		<div class="messages"></div>		
 	</div>
-	
+	 -->
 	<!-- Header for Entry Page -->
 	<div id="header-entry">
 		<div class="entry-wrapper">

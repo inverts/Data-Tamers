@@ -120,10 +120,10 @@ public class ApplicationController {
 			else if (!profileId.equals("none"))
 				settings.setProfileSelection(profileId);
 			else if (!update.equals("")) 
-				if (settings.setActiveProfile()) 
-					out.println("Success!");
+				if (settings.setActiveProfile())
+					viewMap.addAttribute("update", "Success!"); 
 				else
-					out.println("Failed to update.");
+					viewMap.addAttribute("update", "Failed to update."); 
 			
 			//TODO: Change the above to be an update state within the model instead.
 			SessionService.saveUserSettings(session, settings);
