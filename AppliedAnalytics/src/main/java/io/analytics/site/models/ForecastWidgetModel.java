@@ -121,13 +121,13 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 		// Update graph ranges.
 		xRange = new SimpleEntry<Double, Double>(xMin, xMax);
 		yRange = new SimpleEntry<Double, Double>(yMin, yMax);
-		
-		/**
-		 * Get data about the day of week for time series prediction.
-		 */
 
-		//Go back in time to get 2x the amount of data.
-		Date backInTime = new Date(startDate.getTime() - (endDate.getTime() - startDate.getTime()));
+		/* Go back in time to get day of week data, and adjust to make sure 
+		 * we get an equal sampling of each day.
+		 */
+		long pastTimeframe = (endDate.getTime() - startDate.getTime()) / MS_IN_DAY;
+		pastTimeframe = pastTimeframe + (7 - (pastTimeframe % 7)); 
+		Date backInTime = new Date(startDate.getTime() - pastTimeframe * MS_IN_DAY);
 		
 		data = reportingService.getMetricByDayOfWeek(metric, backInTime, endDate, days * 2);
 		if (data == null)
@@ -180,12 +180,38 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 		yValuesForecast = new ArrayList<Double>();
 		//How many days are we looking into the future?
 		long daysToPredict = ((futureEndDate.getTime() - endDate.getTime()) / MS_IN_DAY) + 1;
-		Double forecastedMetric;
+		double square = 0.0;
+		int historicalLength = yValues.size();
+		Double forecastedMetric = yValues.get(historicalLength-1);
+		double slope;
+		double ysum = 0, xysum = 0, n = 0, xsum = 0, xsqsum = 0;
 		for(int i=0; i<daysToPredict; i++) {
+			ysum += yValues.get(historicalLength - i - 1) / adjuster[(i+endDate.getDay()) % 7];
+			xysum += xValues.get(historicalLength - i - 1) * yValues.get(historicalLength - i - 1) * (1.0 / adjuster[(i+endDate.getDay()) % 7]);
+			n += 1;
+			xsum += xValues.get(historicalLength - i - 1);
+			xsqsum += xValues.get(historicalLength - i - 1) * xValues.get(historicalLength - i - 1);
+			if (i==0)
+				continue;
+			
+			/**
+			 * (Dave)
+			 * This algorithm & equation for iteratively updating the slope of a linear regression is 
+			 * derived by breaking down the ordinary least squares method of linear regression
+			 * and turning the matrix operations into scalar operations, then simplifying.
+			 * The algorithm aims to base future predictions on an increasing proportion of the
+			 * corpus of the historical data, given an increasingly distant future.
+			 * An improvement to this algorithm would be to ignore outliers. It also appears to be
+			 * overly sensitive to the first 1-3 historical data points.
+			 */
+			slope = (ysum * -xsum + xysum * n) / (n * xsqsum - xsum * xsum);
 			xValuesForecast.add(startOfFuture + i);
 			// Y = (Current Nth Day * Slope + Intercept) * Adjuster Percentage
-			forecastedMetric = ((i+startOfFuture) * regressionModel.getSlope() + regressionModel.getIntercept()) * adjuster[(i+endDate.getDay()) % 7];
-			yValuesForecast.add(forecastedMetric);
+			//forecastedMetric = ((i+startOfFuture) * regressionModel.getSlope() + regressionModel.getIntercept()) * adjuster[(i+endDate.getDay()) % 7];
+			
+			forecastedMetric = forecastedMetric + slope; //Assumes x step size is 1
+			System.out.println("slope: " + slope);
+			yValuesForecast.add(forecastedMetric * adjuster[(i+endDate.getDay()) % 7]);
 		}
 		
 		
