@@ -2,10 +2,8 @@
  * revenue-sources.js
  */
 
-$(document).ready(function() {
-	
+$(function() {	
 	GetRevenueSourcesWidget('revenueSources');
-
 });
 
 

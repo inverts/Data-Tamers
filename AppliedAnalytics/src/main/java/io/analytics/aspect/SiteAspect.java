@@ -47,8 +47,12 @@ public class SiteAspect {
 	{
 		Model model = this.getModel(joinPoint.getArgs());
 		
-		model.addAttribute("SIDEPANEL", "/WEB-INF/views/includes/sidepanel.jsp");
-		model.addAttribute("SIDEPANEL_animate", sidepanel.animate());
+		Map<String, Object> Sidepanel = new HashMap<String, Object>();
+		
+		Sidepanel.put("path", "/WEB-INF/views/includes/sidepanel.jsp");
+		Sidepanel.put("animate", sidepanel.animate());
+		
+		model.addAttribute("SIDEPANEL", Sidepanel);
 		
 		return joinPoint.proceed();
 	}

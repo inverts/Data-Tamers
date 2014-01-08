@@ -3,8 +3,9 @@
  */
 
 
-
-$(document).ready(function() {
+$(function() {
+	
+	$('.sidepanel-background').css('width', $('.sidepanel').width());
 	
 	/* Navigation hover effect */
 	$('.nav-cell').hover(function(){
@@ -17,6 +18,5 @@ $(document).ready(function() {
 	$('#dashboard').click(function() {
 		$('#dashlist').slideToggle();
 	});
-	
-	
+
 });

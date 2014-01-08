@@ -8,20 +8,15 @@
 
 <style>
 .dashboard-content {
-	padding:10px;
 } 
 
 .dashboard-content, .w_container {
-	float:left;
 }
 
 .w_container {
 	float:left;
 }
 
-#websitePerformance {
-	margin-left:10px;
-}
 </style>
 
 <div class="dashboard-content">
