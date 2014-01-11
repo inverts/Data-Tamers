@@ -12,12 +12,16 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 import com.google.api.client.auth.oauth2.Credential;
 
-public class SessionService {
+@Service
+public class SessionService implements ISessionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(SessionService.class);
+	
 	private static SettingsModel userSettings = null;
 	private static FilterModel filter = null;
 	private static Credential credentials = null;
@@ -31,7 +35,7 @@ public class SessionService {
 	 * @param session
 	 * @return
 	 */
-	public static boolean checkAuthorization(HttpSession session) {
+	public boolean checkAuthorization(HttpSession session) {
 		Credential credentials = null;
 		SettingsModel settings = null;
 		try {
@@ -55,8 +59,8 @@ public class SessionService {
 			}
 			settings = new SettingsModel(management);
 			session.setAttribute("settings", settings);
-			SessionService.userSettings = settings;
-			SessionService.credentials = credentials;
+			this.userSettings = settings;
+			this.credentials = credentials;
 		}
 
 		//Try get filter.
@@ -71,33 +75,33 @@ public class SessionService {
 			filter = new FilterModel();
 			session.setAttribute("filter", filter);
 		}
-		SessionService.filter = filter;
+		this.filter = filter;
 		
 		return true;
 		
 	}
 
-	public static SettingsModel getUserSettings() {
+	public SettingsModel getUserSettings() {
 		return userSettings;
 	}
 	
-	public static void saveUserSettings(HttpSession session, SettingsModel settings) {
+	public void saveUserSettings(HttpSession session, SettingsModel settings) {
 		session.setAttribute("settings", settings);
 	}
 
-	public static FilterModel getFilter() {
+	public FilterModel getFilter() {
 		return filter;
 	}
 	
-	public static void saveFilter(HttpSession session, FilterModel filter) {
+	public void saveFilter(HttpSession session, FilterModel filter) {
 		session.setAttribute("filter", filter);
 	}
 
-	public static Credential getCredentials() {
+	public Credential getCredentials() {
 		return credentials;
 	}
 	
-	public static HashMap<String, Object> getModels(HttpSession session) {
+	public HashMap<String, Object> getModels(HttpSession session) {
 		HashMap<String, Object> models;
 		try {
 			models = (HashMap<String, Object>) session.getAttribute("models");
@@ -120,7 +124,7 @@ public class SessionService {
 	 * @param c
 	 * @return
 	 */
-	public static <T> T getModel(HttpSession session, String s, Class<T> c) {
+	public <T> T getModel(HttpSession session, String s, Class<T> c) {
 		T model;
 		try {
 			model = (T) getModels(session).get(s);
@@ -130,7 +134,7 @@ public class SessionService {
 		return model;
 	}
 	
-	public static void saveModel(HttpSession session, String s, Object model) {
+	public void saveModel(HttpSession session, String s, Object model) {
 		HashMap<String, Object> models = getModels(session);
 		models.put(s, model);
 		saveModels(session, models);
@@ -140,7 +144,7 @@ public class SessionService {
 		session.setAttribute("models", models);
 	}
 	
-	public static boolean redirectToLogin(HttpSession session, HttpServletResponse response) {
+	public boolean redirectToLogin(HttpSession session, HttpServletResponse response) {
 		String contextPath = session.getServletContext().getContextPath();
 		try {
 			response.sendRedirect(contextPath + "/login");
