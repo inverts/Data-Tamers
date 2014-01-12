@@ -1,44 +1,37 @@
 package io.analytics.site.controllers;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import io.analytics.domain.CoreReportingData;
-import io.analytics.repository.ManagementRepository.CredentialException;
 import io.analytics.service.CoreReportingService;
-import io.analytics.service.ManagementService;
+import io.analytics.service.ICoreReportingService;
+import io.analytics.service.ISessionService;
 import io.analytics.service.SessionService;
 import io.analytics.site.models.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.services.analytics.model.GaData;
-import com.google.api.services.analytics.model.GaData.ColumnHeaders;
 
 @Controller
 public class WidgetController {
 	
+	//@Autowired private ICoreReportingService CoreReportingService;
+	@Autowired private ISessionService SessionService;
 	
 	@RequestMapping(value = "/HypotheticalFuture", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView hypotheticalFutureView(Model viewMap, HttpServletResponse response, HttpSession session,	
 												@RequestParam(value = "change", defaultValue = "none") String changePercentage,
 												@RequestParam(value = "dimension", defaultValue = "none") String dimension) {
 
-		
 		Credential credential;
 		SettingsModel settings;
 		FilterModel filter;
@@ -64,6 +57,7 @@ public class WidgetController {
 		if ((hypotheticalFuture == null) || !(settings.getActiveProfile().equals(hypotheticalFuture.getActiveProfile()))) {
 			CoreReportingService reportingService = null;
 			try {
+				// this is naughty. We need to be using the interface
 				reportingService = new CoreReportingService(credential, settings.getActiveProfile().getId());
 			} catch (io.analytics.repository.CoreReportingRepository.CredentialException e) {
 				e.printStackTrace();
