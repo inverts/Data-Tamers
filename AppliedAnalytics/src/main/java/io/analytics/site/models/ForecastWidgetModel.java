@@ -129,6 +129,7 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 		pastTimeframe = pastTimeframe + (7 - (pastTimeframe % 7)); 
 		Date backInTime = new Date(startDate.getTime() - pastTimeframe * MS_IN_DAY);
 		
+		//Days of the week start with Sunday = 0, and end with Saturday = 6.
 		data = reportingService.getMetricByDayOfWeek(metric, backInTime, endDate, days * 2);
 		if (data == null)
 			return false;
@@ -141,15 +142,6 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 		int metricColumn2 = stringColumns2.indexOf(metric);
 		int dayColumn2 = stringColumns2.indexOf(CoreReportingRepository.DAYOFWEEK_DIMENSION);
 		
-		/*
-		 * TODO: IMPORTANT! This algorithm is erroneous.
-		 * Querying a past set of data needs to be checked to make sure we get an equal
-		 * amount of data for each day of the week. For example, querying 8 days in the past
-		 * from a Sunday will give us double the visits (or other metric) for Saturday, and 
-		 * Saturday will therefore be weighted higher than all the other days.
-		 * 
-		 * 
-		 */
 		Double[] adjuster = new Double[7];
 		
 		//TODO: Remove these asserts later and replace with better code.
@@ -166,6 +158,7 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 		if (average != 0) {
 			for (int i=0; i < 7; i++) {
 				adjuster[i] = adjuster[i] / average;
+				System.out.println(adjuster[i]);
 			}
 		} //Default will be all 0 array
 		
@@ -176,18 +169,23 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 		
 		Double startOfFuture = xValues.get(xValues.size()-1) + 1;
 
+		int historicalLength = yValues.size();
 		xValuesForecast = new ArrayList<Double>();
 		yValuesForecast = new ArrayList<Double>();
+		ArrayList<Double> yNormalizedValues = new ArrayList<Double>();
+		
+		for (int i=0; i < historicalLength; i++) {
+			yNormalizedValues.add(yValues.get(i) / adjuster[(startDate.getDay() + i) % 7]);
+		}
 		//How many days are we looking into the future?
 		long daysToPredict = ((futureEndDate.getTime() - endDate.getTime()) / MS_IN_DAY) + 1;
 		double square = 0.0;
-		int historicalLength = yValues.size();
 		Double forecastedMetric = yValues.get(historicalLength-1);
 		double slope;
 		double ysum = 0, xysum = 0, n = 0, xsum = 0, xsqsum = 0;
 		for(int i=0; i<daysToPredict; i++) {
-			ysum += yValues.get(historicalLength - i - 1) / adjuster[(i+endDate.getDay()) % 7];
-			xysum += xValues.get(historicalLength - i - 1) * yValues.get(historicalLength - i - 1) * (1.0 / adjuster[(i+endDate.getDay()) % 7]);
+			ysum += yNormalizedValues.get(historicalLength - i - 1);
+			xysum += xValues.get(historicalLength - i - 1) * yNormalizedValues.get(historicalLength - i - 1);
 			n += 1;
 			xsum += xValues.get(historicalLength - i - 1);
 			xsqsum += xValues.get(historicalLength - i - 1) * xValues.get(historicalLength - i - 1);
@@ -214,7 +212,7 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 			yValuesForecast.add(forecastedMetric * adjuster[(i+endDate.getDay()) % 7]);
 		}
 		
-		
+		//yValues = yNormalizedValues;
 		/**
 		 * At the end of this function, we should have updated the x and y values with appropriate historical and future data.
 		 */
