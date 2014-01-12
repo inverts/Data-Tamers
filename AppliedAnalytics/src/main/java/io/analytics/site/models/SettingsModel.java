@@ -1,12 +1,15 @@
 package io.analytics.site.models;
 
-import java.util.List;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import com.google.api.services.analytics.model.*;
 
 import io.analytics.domain.GoogleUserData;
 import io.analytics.service.ManagementService;
 
+@Component
+@Scope("session")
 public class SettingsModel {
 
 	/*

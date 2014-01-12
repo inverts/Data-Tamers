@@ -43,7 +43,9 @@
 	</beans:bean>
 	
 	<context:component-scan base-package="io.analytics.site" />
-	
+	<context:component-scan base-package="io.analytics.service" />
+	<context:component-scan base-package="io.analytics.repository" />
+	<context:component-scan base-package="io.analytics.site.models" />
 	
 	
 </beans:beans>
