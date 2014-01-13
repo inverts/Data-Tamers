@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@Scope("session")
 public class SettingsController {
 
 	private static final Logger logger = LoggerFactory.getLogger(SettingsController.class);
@@ -83,36 +82,36 @@ public class SettingsController {
 	 * FilterView 
 	 */
 	@RequestMapping(value = "/filter", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView filterView(Model viewMap,  HttpServletResponse response, HttpSession session, 
-			@RequestParam(value = "startDate", defaultValue = "none") String startDate,
-			@RequestParam(value = "endDate", defaultValue = "none") String endDate) {
+	public void filterView(Model viewMap,  HttpServletResponse response, HttpSession session, 
+			@RequestParam(value = "startDate") String startDate,
+			@RequestParam(value = "endDate") String endDate) {
 
-		FilterModel filter;
+		FilterModel filter = null;
 		if (SessionService.checkAuthorization(session)) {
 			filter = SessionService.getFilter();
 		} else {
 			SessionService.redirectToLogin(session, response);
-			return new ModelAndView("unavailable");
+			//return new ModelAndView("unavailable");
 		}
 		
 		//If a request for updating dates was made, update the dates in the FilterModel.
-		if (startDate != "none" && endDate != "none") {
+		if (startDate != null && endDate != null) {
 			//Make a formatter to translate the date strings in the view to Date objects.
 			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-			Date start;
-			Date end;
+			Date start = null;
+			Date end = null;
 			try {
 				start = formatter.parse(startDate);
 				end = formatter.parse(endDate);
 			} catch (ParseException e) {
 				e.printStackTrace();
-				return new ModelAndView("unavailable"); // Do nothing if you can't parse.
+				//return new ModelAndView("unavailable"); // Do nothing if you can't parse.
 			}
 			filter.setActiveStartDate(start);
 			filter.setActiveEndDate(end);
 		}
 		SessionService.saveFilter(session, filter);
-		return new ModelAndView("unavailable");
+		//return new ModelAndView("unavailable");
 	}
 	
 }

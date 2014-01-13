@@ -19,10 +19,34 @@ $(document).ready(function() {
 	displaySidePanel();
 	/* Settings Event Handlers */
 		$('.profile-image').click(function() {
+			$('.right-pane')
+				.addClass('settings')
+				.on( "change", "#select-account", function() {
+					$.post(applicationRoot + "settings", { account: $('#select-account option:selected').val() }, function( data ) {
+						  $(".settings").html( data );
+					});
+				})
+				.on( "change", "#select-property", function() {
+					$.post(applicationRoot + "settings", { property: $('#select-property option:selected').val() }, function( data ) {
+						  $(".settings").html( data );
+					});
+				})
+				.on( "change", "#select-profile", function() {
+					$.post(applicationRoot + "settings", { profile: $('#select-profile option:selected').val() }, function( data ) {
+						  $(".settings").html( data );
+					});
+				})
+				.on( "click", "#update-button", function() {
+					$.post(applicationRoot + "settings", { update: 1 }, function( data ) {
+						  $(".settings").html( data );
+							updateHypotheticalWidget('hypotheticalWidget');
+					});
+				});
+				
 			showSettingsPanel(550);
 		});
 
-		$( ".settings" ).on( "change", "#select-account", function() {
+		/*$( ".settings" ).on( "change", "#select-account", function() {
 			$.post(applicationRoot + "settings", { account: $('#select-account option:selected').val() }, function( data ) {
 				  $(".settings").html( data );
 				});
@@ -42,12 +66,12 @@ $(document).ready(function() {
 		// calling the update function of each and every widget.
 		
 		// The solution is to have event listeners on the widgets.
-		$( ".settings" ).on( "click", "#update-button", function() {
+		$( "#update-button" ).on( "click", "#update-button", function() {
 			$.post(applicationRoot + "settings", { update: 1 }, function( data ) {
 				  $(".settings").html( data );
 					updateHypotheticalWidget('hypotheticalWidget');
 				});
-			});
+			});*/
 		
 	
 });
@@ -101,8 +125,9 @@ function displayWidgets() {
 
 function showSettingsPanel(width) {        
         if ($(".settings").length) {
-        	$(".settings").show();                
-        	$(".settings").animate({width: width}, 500, 'swing', function() {
+        	$(".settings")
+        		.show()
+        		.animate({width: width}, 500, 'swing', function() {
                         $('.settings-content').show();                        
                         $(window).on('click.settings', function() {
                                 hideSettingsPanel();
@@ -113,7 +138,9 @@ function showSettingsPanel(width) {
 
 function hideSettingsPanel() {
 		$(".settings").animate({width: 0}, 500, 'swing', function() {
-				$('.settings').hide();
+				$('.right-pane')
+					.removeClass('settings')
+					.hide();
                 $(window).off('click.settings');
         });
 }

@@ -35,7 +35,8 @@ input { font: inherit; }
 
 #ui-datepicker-div { font-size: 15px; }
 
-
+/******RIGHT PANE******/
+.page .right-pane { width:0; height:100%; position:absolute; float:right; background:#444; color:#fff; z-index:10; right: 0; display:none; border-left: 3px solid #ccc; }
 
 /******HEADER/FOOTER******/
 .page #header { width:inherit; z-index:3; }
@@ -95,41 +96,9 @@ input { font: inherit; }
 
 
 /******SETTINGS******/
+.settings-content { margin-top:20px; padding:20px; }
+.settings-content .rowlabel { width:85px; font-weight:bold; }
+.settings-content  .profile-image-large { border:3px solid #96AFC5; }
+.settings-content .left-pane { width:150px; height:100%; float:left; margin:0px 25px 20px 0px; }
+.settings tr { height: 25px; }
 
-
-.settings {
-        width: 0;
-        height: 100%;
-        position: absolute;
-        float: right;
-        background: #444;
-        color: #fff;
-        z-index: 10;
-        right: 0;
-        display:none;
-        border-left: 3px solid #ccc;
-}
-
-.settings-content {
-        margin-top: 20px;
-        padding:20px;
-}
-.settings-content .rowlabel {
-        width: 85px;
-        font-weight: bold;
-}
-
-.settings-content  .profile-image-large {
-        border: 3px solid #96AFC5;
-}
-
-.settings-content .left-pane {
-        width: 150px; 
-        height: 100%; 
-        float: left; 
-        margin: 0px 25px 20px 0px; 
-        
-}
-.settings tr {
-        height: 25px;
-}

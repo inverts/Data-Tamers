@@ -37,7 +37,7 @@ var headerAttributes = {
 			<img src="<c:url value="/cache/images/logo-280.png" />" />
 			<div class="right">
 				<span class="nav-item"><a href="#"><fmt:message key="header.about" /></a></span>
-				<span class="nav-item"><a href="<c:url value="/application" />"><fmt:message key="header.login" /></a></span>
+				<span class="nav-item"><a href="<c:url value="/login" />"><fmt:message key="header.login" /></a></span>
 			</div>
 		</div>
 	</div>
