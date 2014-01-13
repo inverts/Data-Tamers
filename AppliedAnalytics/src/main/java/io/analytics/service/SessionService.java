@@ -147,7 +147,7 @@ public class SessionService implements ISessionService {
 	public boolean redirectToLogin(HttpSession session, HttpServletResponse response) {
 		String contextPath = session.getServletContext().getContextPath();
 		try {
-			response.sendRedirect(contextPath + "/login");
+			response.sendRedirect(contextPath + "/galogin");
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;

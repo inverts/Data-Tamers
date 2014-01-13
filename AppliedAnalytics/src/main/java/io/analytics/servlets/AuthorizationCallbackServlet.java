@@ -55,7 +55,7 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
 		HttpSession session = req.getSession();
 		String contextPath = session.getServletContext().getContextPath();
 		if (credential == null) {
-			resp.sendRedirect(contextPath + "/login?error=no_credential");
+			resp.sendRedirect(contextPath + "/galogin?error=no_credential");
 		}
 
 
