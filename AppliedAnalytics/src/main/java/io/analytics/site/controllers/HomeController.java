@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.api.client.auth.oauth2.Credential;
@@ -31,9 +32,9 @@ public class HomeController {
 	@HeaderFooter(state = "Entry")
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView home(Locale locale, Model model) {
-		
+		String state = "Entry";
 		model.addAttribute("isEntry", "something");
-		return new ModelAndView("entry");
+		return new ModelAndView("home/home");
 	}
 	
 	/**

@@ -30,13 +30,11 @@
 <body>
 
 	<div class="page">
-	
-		<!-- Site Header -->
-		<jsp:include page="${HEADER.path}"/>
-		
 		<div class="wrapper">		
-		
-			<!-- Application Header Panel -->
+			<!-- Site Header -->
+			<jsp:include page="${HEADER.path}"/>
+			
+			<!-- Application Header Panel
 			<div id="header-application">
 				<div class="filter">
 					<input type="text" id="start-date" readonly value="${ filter.getActiveStartDateString() }" />
@@ -54,16 +52,16 @@
 					</c:choose>
 				</div>
 				<div class="messages"></div>		
-			</div>
+			</div> -->
 	
 			<!-- Left side navigation panel -->
 			<jsp:include page="${SIDEPANEL.path}"/>
 			
 			<!--  Right side settings pane -->
 			
-            <div class="settings">
+            <%--<div class="settings">--%>
 			<jsp:include page="${SETTINGS}"/>
-			</div>
+			<%--</div>--%>
 			
 			<!-- Site Content -->
 			<div class="content">

@@ -15,20 +15,6 @@ $(document).ready(function() {
 	// $header is obtained through header.js
 	var $footer = $('#footer');
 	var $sidepanel = { bg: $('.sidepanel-background'), content: $('.sidepanel-content') };
-	
-	/* Correct content margins based off dynamic headers */
-	/*
-	$('.wrapper').css('margin-top', -$header.height());
-	$('.content').css('margin-top', $header.height()); // margin-top should match the height of the header
-	*/
-	
-	/* Sidepanel 
-	if ($sidepanel.bg.length) {
-		$('.content').css('margin-left', 340); // if sidepanel is present we need a margin on the content!
-	}
-	else
-		displayContent();
-	 */
 
 	displaySidePanel();
 	/* Settings Event Handlers */
@@ -127,6 +113,7 @@ function showSettingsPanel(width) {
 
 function hideSettingsPanel() {
 		$(".settings").animate({width: 0}, 500, 'swing', function() {
+				$('.settings').hide();
                 $(window).off('click.settings');
         });
 }
