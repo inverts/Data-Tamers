@@ -69,28 +69,28 @@ public class ApplicationController {
 		
 		model.addAttribute("filter", filter);
 
-		return new ModelAndView("dashboard");
+		return new ModelAndView("application/dashboard");
 	}
 	
 	@HeaderFooter(state = "Application")
 	@SidePanel(animate = false)
 	@RequestMapping(value = "/application/trends", method = RequestMethod.GET)
 	public ModelAndView trends(Model model) {
-		return new ModelAndView("trends");
+		return new ModelAndView("application/trends");
 	}
 
 	@HeaderFooter(state = "Application")
 	@SidePanel(animate = false)
 	@RequestMapping(value = "/application/forecast", method = RequestMethod.GET)
 	public ModelAndView forecast(Model model) {
-		return new ModelAndView("forecast");
+		return new ModelAndView("application/forecast");
 	}
 	
 	@HeaderFooter(state = "Application")
 	@SidePanel(animate = false)
 	@RequestMapping(value = "/application/suggestions", method = RequestMethod.GET)
 	public ModelAndView suggestions(Model model) {
-		return new ModelAndView("suggestions");
+		return new ModelAndView("application/suggestions");
 	}
 
 	
