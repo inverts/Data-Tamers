@@ -42,8 +42,12 @@ $(document).ready(function() {
 							updateHypotheticalWidget('hypotheticalWidget');
 					});
 				});
-				
+
+			$.post(applicationRoot + "settings", {}, function( data ) {
+				  $(".settings").html( data );
+			});
 			showSettingsPanel(550);
+			
 		});
 
 		/*$( ".settings" ).on( "change", "#select-account", function() {
