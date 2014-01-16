@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 @Aspect
 public class SiteAspect {
 	
+
 	@Pointcut("execution(public * *(..))")
     public void publicMethod() {}
 	
@@ -27,12 +28,12 @@ public class SiteAspect {
 		Map<String, Object> Footer = new HashMap<String, Object>();
 		
 		Header.put("path", "/WEB-INF/views/includes/header.jsp");
-		Header.put("state", headerfooter.state());
+		Header.put("type", headerfooter.value());
 		
-		model.addAttribute("SETTINGS", headerfooter.state().equals("Application") ? "/WEB-INF/views/includes/settings.jsp" : "");
+		model.addAttribute("SETTINGS", headerfooter.value().equals("Application") ? "/WEB-INF/views/includes/settings.jsp" : "");
 		
 		Footer.put("path", "/WEB-INF/views/includes/footer.jsp");
-		Footer.put("state", headerfooter.state());
+		Footer.put("type", headerfooter.value());
 		
 		model.addAttribute("HEADER", Header);
 		model.addAttribute("FOOTER", Footer);

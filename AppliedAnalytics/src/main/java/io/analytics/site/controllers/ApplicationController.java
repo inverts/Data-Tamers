@@ -2,8 +2,8 @@ package io.analytics.site.controllers;
 
 import io.analytics.aspect.HeaderFooter;
 import io.analytics.aspect.SidePanel;
+import io.analytics.enums.HeaderType;
 import io.analytics.service.ISessionService;
-import io.analytics.service.SessionService;
 import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SettingsModel;
 
@@ -16,13 +16,10 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -36,7 +33,7 @@ public class ApplicationController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@HeaderFooter(state = "Application")
+	@HeaderFooter(HeaderType.APPLICATION)
 	@SidePanel(animate = true)
 	@RequestMapping(value = "/application", method = RequestMethod.GET)
 	public ModelAndView home(Locale locale, Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
@@ -72,21 +69,21 @@ public class ApplicationController {
 		return new ModelAndView("application/dashboard");
 	}
 	
-	@HeaderFooter(state = "Application")
+	@HeaderFooter(HeaderType.APPLICATION)
 	@SidePanel(animate = false)
 	@RequestMapping(value = "/application/trends", method = RequestMethod.GET)
 	public ModelAndView trends(Model model) {
 		return new ModelAndView("application/trends");
 	}
 
-	@HeaderFooter(state = "Application")
+	@HeaderFooter(HeaderType.APPLICATION)
 	@SidePanel(animate = false)
 	@RequestMapping(value = "/application/forecast", method = RequestMethod.GET)
 	public ModelAndView forecast(Model model) {
 		return new ModelAndView("application/forecast");
 	}
 	
-	@HeaderFooter(state = "Application")
+	@HeaderFooter(HeaderType.APPLICATION)
 	@SidePanel(animate = false)
 	@RequestMapping(value = "/application/suggestions", method = RequestMethod.GET)
 	public ModelAndView suggestions(Model model) {

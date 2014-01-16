@@ -3,6 +3,8 @@ package io.analytics.site.models;
 import io.analytics.domain.CoreReportingData;
 import io.analytics.repository.CoreReportingRepository;
 import io.analytics.service.CoreReportingService;
+import io.analytics.service.ICoreReportingService;
+import io.analytics.service.ISessionService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -56,16 +58,19 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 	private long timeSpan; //Time between startDate and endDate in milliseconds
 	
 	private String metric;
-	private CoreReportingService reportingService;
+	private ISessionService sessionService;
+	private ICoreReportingService reportingService;
 
 	DateFormat presentationFormat = new SimpleDateFormat("MM/dd/yyyy");
 	
 	private static final int MS_IN_DAY = 86400000;
 	
-	public ForecastWidgetModel(CoreReportingService reportingService) {
+	public ForecastWidgetModel(ISessionService sessionService, ICoreReportingService reportingService) {
+		this.sessionService = sessionService;
 		this.reportingService = reportingService;
 		//Defaults:
 		
+		//TODO: Create an ENUM with metrics.
 		metric = CoreReportingRepository.VISITS_METRIC;
 		endDate = new Date();
 		startDate = new Date(endDate.getTime() - (MS_IN_DAY * 30L)); //30 days advance
@@ -99,7 +104,7 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 		
 		/* Getting data from Google Analytics */
 		CoreReportingData data = null;
-		data = reportingService.getMetricByDay(metric, adjustedStartDate, futureEndDate, (int) (days + excessDaysNeeded));
+		data = reportingService.getMetricByDay(sessionService.getCredentials(), sessionService.getUserSettings().getActiveProfile().getId(), metric, adjustedStartDate, futureEndDate, (int) (days + excessDaysNeeded));
 		if (data == null)
 			return false;
 		

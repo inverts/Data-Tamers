@@ -6,17 +6,19 @@ import io.analytics.domain.CoreReportingTypedData;
 import java.io.IOException;
 import java.util.Date;
 
+import com.google.api.client.auth.oauth2.Credential;
+
 public interface ICoreReportingService {
 	
 	public String getProfile();
 	
-	public CoreReportingData getMetricByDay(String metric, Date startDate, Date endDate, int maxResult);
+	public CoreReportingData getMetricByDay(Credential credential, String profileID, String metric, Date startDate, Date endDate, int maxResult);
 	
-	public CoreReportingData getMetricByDayOfWeek(String metric, Date startDate, Date endDate, int maxResults) ;
+	public CoreReportingData getMetricByDayOfWeek(Credential credential, String profileID, String metric, Date startDate, Date endDate, int maxResults) ;
 	
-	public CoreReportingTypedData getTopTrafficSources(String metric, Date startDate, Date endDate, int maxResults) throws IOException;
+	public CoreReportingTypedData getTopTrafficSources(Credential credential, String profileID, String metric, Date startDate, Date endDate, int maxResults) throws IOException;
 	
-	public CoreReportingTypedData getPagePerformance(Date startDate, Date endDate, int maxResults) ;
+	public CoreReportingTypedData getPagePerformance(Credential credential, String profileID, Date startDate, Date endDate, int maxResults) ;
 
 }
 

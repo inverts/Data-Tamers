@@ -1,10 +1,16 @@
 package io.analytics.repository;
 import io.analytics.domain.CoreReportingData;
 import io.analytics.domain.CoreReportingTypedData;
+import io.analytics.service.ISessionService;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Repository;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -18,6 +24,7 @@ import com.google.api.services.analytics.model.*;
 import com.google.api.services.analytics.model.GaData.ColumnHeaders;
 import com.google.api.services.analytics.model.GaData.Query;
 
+@Repository
 public class CoreReportingRepository implements ICoreReportingRepository {
 	/**
 	 * CoreReportingRepository class queries Google Analytics reports using 
@@ -28,13 +35,15 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 	 * @author Gwen Knight
 	 */
 		private final String APPLICATION_NAME = "datatamers-appliedanalytics-0.1";
-		private final String ACCESS_TOKEN;
-		private final Credential CREDENTIAL;
-		private final String PROFILE_ID;
+		//private final String ACCESS_TOKEN;
+		//private Credential CREDENTIAL;
+		//private String profileID;
 		private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 		private static final JsonFactory JSON_FACTORY = new JacksonFactory();
+		
+		private ISessionService _sessionService;
 
-		private final Ga CORE_REPORTING;
+		private Ga CORE_REPORTING;
 
 		//Some metrics and dimensions defined for convenience.
 		//TODO: Get an authoritative list of metrics and dimensions from the Metadata API.
@@ -70,7 +79,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			}
 		}
 
-		public CoreReportingRepository(Credential credential, String profileId) throws CredentialException {
+		/*public CoreReportingRepository(Credential credential, String profileId) throws CredentialException {
 			if (credential == null)
 				throw new CredentialException("Null credential object passed.");
 			this.ACCESS_TOKEN = credential.getAccessToken();
@@ -90,16 +99,16 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 				if (!success)
 					throw new CredentialException("Token refresh failed. There may not be a refresh token.");
 			}
-		}
+		}*/
 
-		
+				
 		/**
 		 * Get metric data vs. days (2 dimensional data) 
 		 * 
 		 * @return
 		 */
-		public CoreReportingData getMetricByDay(String metric, String startDate, String endDate, int maxResults) {
-			return getMetricForSingleDimension(metric, NDAY_DIMENSION, startDate, endDate, maxResults);
+		public CoreReportingData getMetricByDay(Credential credential, String profileID, String metric, String startDate, String endDate, int maxResults) {
+			return getMetricForSingleDimension(credential, profileID, metric, NDAY_DIMENSION, startDate, endDate, maxResults);
 		}
 		
 		
@@ -108,8 +117,8 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 * 
 		 * @return
 		 */
-		public CoreReportingData getMetricByDayOfWeek(String metric, String startDate, String endDate, int maxResults) {
-			return getMetricForSingleDimension(metric, DAYOFWEEK_DIMENSION, startDate, endDate, maxResults);
+		public CoreReportingData getMetricByDayOfWeek(Credential credential, String profileID, String metric, String startDate, String endDate, int maxResults) {
+			return getMetricForSingleDimension(credential, profileID, metric, DAYOFWEEK_DIMENSION, startDate, endDate, maxResults);
 		}
 		
 		
@@ -123,10 +132,14 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 * @param maxResults
 		 * @return
 		 */
-		public CoreReportingData getMetricForSingleDimension(String metric, String dimension, String startDate, String endDate, int maxResults) {
+		public CoreReportingData getMetricForSingleDimension(Credential credential, String profileID, String metric, String dimension, String startDate, String endDate, int maxResults) {
 			GaData data = null;
 			try {
-				data = CORE_REPORTING.get("ga:" + PROFILE_ID, startDate, endDate, metric) // Metrics.
+				
+				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build().data().ga();
+				
+				data = reporting.get("ga:" + profileID, startDate, endDate, metric) // Metrics.
 						.setDimensions(dimension)
 						.setSort(dimension)
 						.setMaxResults(maxResults)
@@ -147,10 +160,12 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 * 
 		 * @return
 		 */
-		public CoreReportingTypedData getTopTrafficSources(String metric, String startDate, String endDate, int n) throws IOException{
+		public CoreReportingTypedData getTopTrafficSources(Credential credential, String profileID, String metric, String startDate, String endDate, int n) throws IOException{
 			GaData data = null;
 			try {
-				data = CORE_REPORTING.get("ga:"+ PROFILE_ID, // Table Id.
+				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build().data().ga();
+				data = reporting.get("ga:"+ profileID, // Table Id.
 						startDate, // Start date.
 						endDate, // End date.
 						metric) // Metrics.
@@ -174,12 +189,16 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 */
 
 		@Override
-		public CoreReportingTypedData getPagePerformance(String startDate, String endDate, int maxResults) {
+		public CoreReportingTypedData getPagePerformance(Credential credential, String profileID, String startDate, String endDate, int maxResults) {
 			GaData gaData = null;
 			System.out.println("start date = "+startDate+", "+"end date = "+endDate);
 		
 			try {
-				gaData = CORE_REPORTING.get("ga:"+PROFILE_ID, // profile id (table id).
+				
+				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build().data().ga();
+				
+				gaData = reporting.get("ga:"+ profileID, // profile id (table id).
 						startDate, // Start date.
 						endDate, // End date.
 						"ga:entranceBounceRate,ga:visits,ga:exitRate") // Metrics.

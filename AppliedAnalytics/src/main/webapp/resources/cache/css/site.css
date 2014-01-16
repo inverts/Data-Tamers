@@ -18,12 +18,12 @@
 
 /******GENERAL******/
 /* Styling for basic site modules */
-
+html{ background:#222; }
 body, h1, h2, h3, h4, a, img { padding:0 auto; margin:0 auto; outline: none; border: none; font-family: 'museo-sans-500', 'Trebuchet MS', 'Helvetica', sans-serif; }
 a:visited { color: inherit; }
 a { color: inherit; }
 
-.page { margin:0 auto; position:relative; }
+.page { margin:0 auto; position:relative; background:#fff; }
 .page .wrapper { float:left; width:100%; position:relative; }
 .page .content { min-height: 900px; margin: 60px 0px 0px 340px; }
 
@@ -35,6 +35,9 @@ input { font: inherit; }
 
 #ui-datepicker-div { font-size: 15px; }
 
+/* Error Message */
+.page .error { font:inherit; font-size:1em; color:red; margin-bottom:5px; }
+
 /******RIGHT PANE******/
 .page .right-pane { width:0; height:100%; position:absolute; float:right; background:#444; color:#fff; z-index:10; right: 0; display:none; border-left: 3px solid #ccc; }
 
@@ -45,31 +48,34 @@ input { font: inherit; }
 #header-application, #header-entry { display:none; }
 
 /* header application */
-#header-application { height:60px; padding-left:340px; background:#eee; box-shadow:0px 0px 5px -1px; position: absolute; left: 0px; right: 0px;}
-#header-application .filter { float: left; padding: 10px 0px 0px 20px; }
-#header-application .avatar, .messages { height:50px; width:50px; float:right; margin:5px 20px 5px 0; }
-#header-application .messages { background-color:#239371; }
+.header-application { height:60px; padding-left:340px; background:#eee; box-shadow:0px 0px 5px -1px; position:absolute; left:0px; right:0px;}
+.header-application .filter { float: left; padding: 10px 0px 0px 20px; }
+.header-application .avatar, .messages { height:50px; width:50px; float:right; margin:5px 20px 5px 0; }
+.header-application .messages { background-color:#239371; }
 
-/* header entry */
-#header-entry { height:110px; background:#454545; box-shadow:0px 0px 5px 3px; position:relative; }
-#header-entry .nav-item { margin-left:30px; color: #ddd; font-size:20px; }
-#header-entry .entry-wrapper { width:1080px; height:50px; position:absolute; top:0; bottom:0; left:0; right:0; margin:auto; }
-#header-entry .right { float: right; margin-top:25px; }
-#header-entry a { color:#ccc; text-decoration:none; }
-#header-entry a:hover { color: #fff; }
+/* header home */
+.header-home { height:110px; z-index:2; background:#454545; box-shadow:0px 0px 5px 3px; position:relative; }
+.header-home .nav-item { margin-left:30px; color:#ddd; font-size:20px; box-shadow:none; }
+.header-home .entry-wrapper { height:50px; position:absolute; top:0; bottom:0; left:0; right:0; margin:30px auto 0 auto; }
+.header-home .right { float:right; margin:25px 200px 0 0; }
+.header-home a { color:#ccc; text-decoration:none; }
+.header-home a:hover { color:#fff; }
+.header-home a:visited { border:none; }
+.header-home .logo { float:left; margin-left:340px; height:50px;}
+
 
 /* footer */
-#footer { clear: both; position:relative; }
+#footer { clear: both; z-index:2; position:relative; border-top:#000 solid 1px; }
 .footer-nav, .footer-copyright { margin:auto; text-align:center; }
 #footer .footer-content { padding:20px; color:#ddd; }
-#footer .footer-nav { display:none; margin-top:30px; }
+#footer .footer-nav { margin-top:30px; }
 #footer .footer-copyright { height:inherit; font: .85em Times New Roman; margin-top: 30px; left:0; right:0; position:absolute; }
 
 
 
 /******ENTRY******/
 #logo { float:left; }
-.entry-content { background:url('../images/bg.png') no-repeat #000; background-position: center 85px; height:1068px; clear:both; }
+.entry-content { background:url('../images/bg.png') no-repeat center #000; height:960px; clear:both; }
 #center-box { height: 225px; width: 550px; border-radius: 6px; -moz-border-radius: 6px; -webkit-border-radius: 6px; 
 			  background: url('../images/black-translucent.png') repeat; position: absolute; left:0; right:0; margin:0 auto;
         	  top:300px; box-shadow: 0px 0px 25px -5px #fff; }
@@ -101,4 +107,19 @@ input { font: inherit; }
 .settings-content  .profile-image-large { border:3px solid #96AFC5; }
 .settings-content .left-pane { width:150px; height:100%; float:left; margin:0px 25px 20px 0px; }
 .settings tr { height: 25px; }
+
+
+/******LOGIN*******/
+.page .login { min-height:600px; margin-left:340px; padding-top:30px; }
+.login td { width:320px; }
+.login .input-text { width:96%; height:35px; border-radius:5px; padding:5px; margin-bottom:20px;}
+.login .input-check, .login .remember { vertical-align:middle; }
+.login .input-check, .login .input-submit { border-radius:5px; }
+.login .input-check { width:18px; height:18px;}
+.login .input-submit { float:right; background-color:#96AFC5; color:#fff; height:30px; width:80px; }
+.login .input-submit:hover { cursor:pointer; }
+.login .remember { display:inline; }
+.login .register-div { height:60px; padding-top:50px; vertical-align:middle; }
+
+
 

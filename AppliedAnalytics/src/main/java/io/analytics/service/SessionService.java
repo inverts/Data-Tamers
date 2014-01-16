@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.api.client.auth.oauth2.Credential;
 
-@Service
+@Service("sessionService")
 public class SessionService implements ISessionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(SessionService.class);

@@ -8,17 +8,21 @@ import org.json.JSONObject;
 
 import io.analytics.domain.CoreReportingTypedData;
 import io.analytics.service.CoreReportingService;
+import io.analytics.service.ICoreReportingService;
+import io.analytics.service.ISessionService;
 
 public class WebsitePerformanceModel {
 	
 		private JSONObject dataPoints;
-		private CoreReportingService reportingService;
+		private ICoreReportingService reportingService;
+		private ISessionService sessionService;
 		private Date startDate;
 		private Date endDate;
 		private String activeProfile;
 		
-		public WebsitePerformanceModel(CoreReportingService reportingService) {	
+		public WebsitePerformanceModel(ISessionService sessionService, ICoreReportingService reportingService) {	
 			super();
+			this.sessionService = sessionService;
 			this.reportingService = reportingService;
 			this.dataPoints = new JSONObject();			
 		}
@@ -55,7 +59,7 @@ public class WebsitePerformanceModel {
 		 * TODO: Have this automatically occur when dependencies are updated.
 		 */
 		public void updateData() {
-			CoreReportingTypedData data = reportingService.getPagePerformance(startDate, endDate, 5);
+			CoreReportingTypedData data = reportingService.getPagePerformance(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), startDate, endDate, 5);
 			data.getData();
 		}
 		

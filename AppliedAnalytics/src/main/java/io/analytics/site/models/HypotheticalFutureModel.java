@@ -2,6 +2,8 @@ package io.analytics.site.models;
 
 import io.analytics.domain.CoreReportingTypedData;
 import io.analytics.service.CoreReportingService;
+import io.analytics.service.ICoreReportingService;
+import io.analytics.service.ISessionService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,8 +28,8 @@ public class HypotheticalFutureModel extends ForecastWidgetModel {
 	 * var hypotheticalData = JSON.parse('${ hfModel.???????? }');
 	 * 
 	 */
-	public HypotheticalFutureModel(CoreReportingService reportingService) {	
-		super(reportingService);
+	public HypotheticalFutureModel(ISessionService sessionService, ICoreReportingService reportingService) {	
+		super(sessionService, reportingService);
 		this.activeProfile = reportingService.getProfile();
 		this.changePercentage = 10;
 		this.dataPoints = new JSONObject();

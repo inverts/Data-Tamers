@@ -45,8 +45,9 @@ public class PageRenderer extends InternalResourceView {
 	
 	private String getMasterPage(String page)
 	{
-		return (page.equals("application")) ? "/WEB-INF/views/pages/application/application-master.jsp" 
-											: "/WEB-INF/views/pages/home/home-master.jsp";
+		return (page.equals("application")) ? "/WEB-INF/views/pages/application/application-master.jsp" : 
+			   (page.equals("home")) ? "/WEB-INF/views/pages/home/home-master.jsp"
+				   					 : "/WEB-INF/views/pages/default-master.jsp";
 	}
 
 }

@@ -24,7 +24,7 @@ import com.google.api.client.auth.oauth2.Credential;
 @Controller
 public class WidgetController {
 	
-	//@Autowired private ICoreReportingService CoreReportingService;
+	@Autowired private ICoreReportingService CoreReportingService;
 	@Autowired private ISessionService SessionService;
 	
 	@RequestMapping(value = "/HypotheticalFuture", method = {RequestMethod.POST, RequestMethod.GET})
@@ -55,16 +55,17 @@ public class WidgetController {
 		
 		//If there is no model available, or if the active profile changed, create a new model.
 		if ((hypotheticalFuture == null) || !(settings.getActiveProfile().equals(hypotheticalFuture.getActiveProfile()))) {
-			CoreReportingService reportingService = null;
-			try {
+			//CoreReportingService reportingService = null;
+			/*try {
 				// this is naughty. We need to be using the interface
-				reportingService = new CoreReportingService(credential, settings.getActiveProfile().getId());
+				//reportingService = new CoreReportingService(credential, settings.getActiveProfile().getId());
 			} catch (io.analytics.repository.CoreReportingRepository.CredentialException e) {
 				e.printStackTrace();
 				SessionService.redirectToLogin(session, response);
 				return new ModelAndView("unavailable");
-			}
-			hypotheticalFuture = new HypotheticalFutureModel(reportingService);
+			}*/
+			//hypotheticalFuture = new HypotheticalFutureModel(reportingService);
+			hypotheticalFuture = new HypotheticalFutureModel(this.SessionService, this.CoreReportingService);
 		}
 		
 		if (filter != null) {
@@ -148,7 +149,7 @@ public class WidgetController {
 		
 		//If there is no model available, or if the active profile changed, create a new model.
 		if ((webPerform == null) || !(settings.getActiveProfile().equals(webPerform.getActiveProfile()))) {
-			CoreReportingService reportingService = null;
+			/*CoreReportingService reportingService = null;
 			try {
 				//Get the current active profile from the settings.
 				reportingService = new CoreReportingService(credential, settings.getActiveProfile().getId());
@@ -156,8 +157,9 @@ public class WidgetController {
 				e.printStackTrace();
 				SessionService.redirectToLogin(session, response);
 				return new ModelAndView("unavailable");
-			}
-			webPerform = new WebsitePerformanceModel(reportingService);
+			}*/
+			//webPerform = new WebsitePerformanceModel(reportingService);
+			webPerform = new WebsitePerformanceModel(this.SessionService, this.CoreReportingService);
 		}
 		
 		if (filter != null) {

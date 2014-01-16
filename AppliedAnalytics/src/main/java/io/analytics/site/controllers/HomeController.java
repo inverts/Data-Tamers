@@ -1,11 +1,9 @@
 package io.analytics.site.controllers;
 
 import io.analytics.aspect.HeaderFooter;
-import io.analytics.aspect.SidePanel;
 import io.analytics.domain.GoogleUserData;
+import io.analytics.enums.HeaderType;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 import javax.servlet.http.HttpSession;
@@ -16,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.api.client.auth.oauth2.Credential;
@@ -29,14 +26,14 @@ public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
-	@HeaderFooter(state = "Entry")
+	@HeaderFooter(HeaderType.HOME)
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView home(Locale locale, Model model) {
-		String state = "Entry";
 		model.addAttribute("isEntry", "something");
 		return new ModelAndView("home/home");
 	}
 	
+
 	/**
 	 * This page is deprecated.
 	 * 
