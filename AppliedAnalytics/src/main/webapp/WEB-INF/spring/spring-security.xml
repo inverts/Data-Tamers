@@ -16,7 +16,7 @@
  <http auto-config="true"> 
   <intercept-url pattern="/**" access="ROLE_USER" />
   <form-login login-page='/login' authentication-failure-url='/login?invalid_login=1'
-  			  default-target-url="/application.jsp"/>
+  			  default-target-url="/application"/>
   <logout logout-success-url="/" />
  </http>  
   
