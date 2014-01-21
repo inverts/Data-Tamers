@@ -28,6 +28,7 @@ public class AuthorizationEntryServlet extends AbstractAuthorizationCodeServlet 
 	protected String getRedirectUri(HttpServletRequest req) throws ServletException, IOException {
 		GenericUrl url = new GenericUrl(req.getRequestURL().toString());
 		String contextPath = req.getSession().getServletContext().getContextPath();
+		req.getSession().setAttribute("destinationURL", req.getParameter("destinationURL"));
 		url.setRawPath(contextPath + "/oauth2callback");
 		return url.build();
 	}

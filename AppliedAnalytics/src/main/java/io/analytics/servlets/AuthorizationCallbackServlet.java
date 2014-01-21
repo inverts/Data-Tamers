@@ -54,11 +54,10 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
 
 		HttpSession session = req.getSession();
 		String contextPath = session.getServletContext().getContextPath();
-		if (credential == null) {
+		if (credential == null) 
 			resp.sendRedirect(contextPath + "/galogin?error=no_credential");
-		}
-
-
+		String destination = (String) req.getSession().getAttribute("destinationURL");
+		System.out.println("Destination: \"" + destination + "\"");
 		session.setAttribute("credentials", credential);
 		resp.sendRedirect(contextPath + "/application");
 	}
