@@ -1,5 +1,5 @@
 /**
- * site.js
+ * application.js
  */
 
 var transitionOptions = { ease: 'swing', fadeOut: 100, floatIn: 500, offsetLeft: "20px", offsetRight: "20px" };
@@ -133,4 +133,3 @@ function hideSettingsPanel() {
                 $(window).off('click.settings');
         });
 }
-

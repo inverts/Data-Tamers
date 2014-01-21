@@ -24,19 +24,28 @@ a:visited { color: inherit; }
 a { color: inherit; }
 
 .page { margin:0 auto; position:relative; background:#fff; }
-.page .wrapper { float:left; width:100%; position:relative; }
+.page .wrapper { float:left; width:100%; position:relative; min-height:800px;}
 .page .content { min-height: 900px; margin: 60px 0px 0px 340px; }
 
-.profile-info { width: 250px; height: 250px; margin: 10px; padding: 10px; border: 3px solid #aaa; }
-.profile-image { cursor: pointer; }
+
 
 select { font: inherit; }
 input { font: inherit; }
 
+/*****GLOBAL STANDARDS CLASSES****/
+.checkbox, .button, .textbox { border-radius:5px; }
+.textbox { height:35px; padding:5px; width:320px; }
+.button { background-color:#96AFC5; color:#fff; height:30px; width:80px; outline:none; }
+.button:hover { cursor:pointer;}
+.checkbox { width:18px; height:18px; vertical-align:middle; }
+
 #ui-datepicker-div { font-size: 15px; }
 
+/* Standard page size and position */
+.login, .start, .terms, .google-info, .personal-info, .main-goal { margin-left:340px; padding-top:30px;}
+
 /* Error Message */
-.page .error { font:inherit; font-size:1em; color:red; margin-bottom:5px; }
+.page .error { font:inherit; font-size:1em; color:red; margin-bottom:5px; padding:5px; }
 
 /******RIGHT PANE******/
 .page .right-pane { width:0; height:100%; position:absolute; float:right; background:#444; color:#fff; z-index:10; right: 0; display:none; border-left: 3px solid #ccc; }
@@ -52,6 +61,9 @@ input { font: inherit; }
 .header-application .filter { float: left; padding: 10px 0px 0px 20px; }
 .header-application .avatar, .messages { height:50px; width:50px; float:right; margin:5px 20px 5px 0; }
 .header-application .messages { background-color:#239371; }
+
+#header .profile-info { width: 250px; height: 250px; margin: 10px; padding: 10px; border: 3px solid #aaa; }
+#header .profile-image { cursor: pointer; }
 
 /* header home */
 .header-home { height:110px; z-index:2; background:#454545; box-shadow:0px 0px 5px 3px; position:relative; }
@@ -110,16 +122,28 @@ input { font: inherit; }
 
 
 /******LOGIN*******/
-.page .login { min-height:600px; margin-left:340px; padding-top:30px; }
-.login td { width:320px; }
-.login .input-text { width:96%; height:35px; border-radius:5px; padding:5px; margin-bottom:20px;}
-.login .input-check, .login .remember { vertical-align:middle; }
-.login .input-check, .login .input-submit { border-radius:5px; }
-.login .input-check { width:18px; height:18px;}
-.login .input-submit { float:right; background-color:#96AFC5; color:#fff; height:30px; width:80px; }
-.login .input-submit:hover { cursor:pointer; }
-.login .remember { display:inline; }
-.login .register-div { height:60px; padding-top:50px; vertical-align:middle; }
+.login td { width:320px; padding: 5px 0;}
+.login a, .login a:visited { text-decoration:none; }
+.login .input-text { width:96%; border-radius:5px; margin-top:15px;}
+.login .input-submit { float:right; }
+.login .remember { display:inline; height:50px; vertical-align:middle; }
+.login .submit { padding-top:15px; }
+.login .register-div { height:40px; padding-top:50px; vertical-align:middle; }
 
+
+/*****ACCOUNTS*****/
+
+/* Terms */
+.terms .terms-wrapper { width: 900px; }
+.terms .termstext { border:solid 1px #000; overflow:auto; height:400px; margin:10px 0 0 5px; padding:10px; font-family:"Times New Roman", Serif; }
+.terms .accept-div, .terms .continue { float:right; clear:right; margin-top:10px; }
+.terms .button { float:right; }
+.terms .continue { width:150px; margin-bottom:20px; }
+.terms .continue a { line-height:30px; }
+
+/* Personal */
+.personal-info td { min-width:200px; }
+.personal-info tr > td { padding-bottom:1em; }
+.personal-info .button { float:right; }
 
 

@@ -4,13 +4,18 @@
  xsi:schemaLocation="http://www.springframework.org/schema/beans  
            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
            http://www.springframework.org/schema/security  
-           http://www.springframework.org/schema/security/spring-security.xsd">  
+           http://www.springframework.org/schema/security/spring-security.xsd">
+           
+ <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder">
+ 	<beans:constructor-arg value="256"/>
+ </beans:bean>
  
  <!-- Exempted pages --> 
  <http pattern="/cache/**" security="none"/> 
  <http pattern="/" security="none"/>
  <http pattern="/login*" security="none"/>
  <http pattern="/signout" security="none"/>
+ <http pattern="/accounts/**" security="none"/>
 
 <!-- Intercepts the URL and performs an access check -->
  <http auto-config="true"> 
@@ -21,7 +26,10 @@
  </http>  
   
  <authentication-manager>  
-  <authentication-provider>  
+  <authentication-provider>
+  <password-encoder hash="sha-256"> 
+  	<salt-source user-property="username" />
+  </password-encoder> 
    <user-service>  
     <user name="user" password="123456" authorities="ROLE_USER" />  
    </user-service>  

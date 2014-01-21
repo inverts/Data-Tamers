@@ -12,6 +12,11 @@
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
+	<context:component-scan base-package="io.analytics.site" />
+	<context:component-scan base-package="io.analytics.service" />
+	<context:component-scan base-package="io.analytics.repository" />
+	<context:component-scan base-package="io.analytics.site.models" />
+	<context:component-scan base-package="io.analytics.forms" />
 	<annotation-driven />
 
 	<!-- Handles HTTP GET requests for /cache/** by efficiently serving up static resources in the ${webappRoot}/WEB-INF/cache/ directory -->
@@ -42,10 +47,7 @@
 		<beans:property name="order" value="2" />
 	</beans:bean>
 	
-	<context:component-scan base-package="io.analytics.site" />
-	<context:component-scan base-package="io.analytics.service" />
-	<context:component-scan base-package="io.analytics.repository" />
-	<context:component-scan base-package="io.analytics.site.models" />
+	
 	
 	
 </beans:beans>
