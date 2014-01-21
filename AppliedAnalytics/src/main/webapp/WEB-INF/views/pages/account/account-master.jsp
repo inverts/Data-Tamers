@@ -6,10 +6,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-
+<!--  ACCOUNT MASTER -->
 <!-- CSS -->
 <link href="<c:url value="/cache/css/site.css" />" rel="stylesheet">
-<link href="<c:url value="/cache/css/widget.css" />" rel="stylesheet">
 <link href="<c:url value="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />" rel="stylesheet">
 
 <script type="text/javascript">
@@ -21,7 +20,7 @@
 <script src="<c:url value="/cache/javascript/libs/jquery-ui-1.10.3.custom.min.js" />"></script>
 <script src="<c:url value="/cache/javascript/libs/processing-1.4.1.min.js" />"></script>
 <script src="<c:url value="/cache/javascript/headerfooter.js" />"></script>
-<script src="<c:url value="/cache/javascript/application.js" />"></script>
+<script src="<c:url value="/cache/javascript/account.js" />"></script>
 
 
 <title>${TITLE}</title>
@@ -30,23 +29,12 @@
 <body>
 
 	<div class="page">
+	
+		<!-- Site Header -->
+		<jsp:include page="${HEADER.path}"/>
+		
 		<div class="wrapper">		
-			<!-- Site Header -->
-			<jsp:include page="${HEADER.path}"/>
-			
-			<!-- Left side navigation panel -->
-			<jsp:include page="${SIDEPANEL.path}"/>
-			
-			<!--  Right side settings pane -->
-			
-            <div class="right-pane">
-				<jsp:include page="${SETTINGS}"/>
-			</div>
-			
-			<!-- Site Content -->
-			<div class="content">
-				<jsp:include page="${BODY}"/>
-			</div>
+			<jsp:include page="${BODY}"/>
 		</div>
 		
 		<!--  Site Footer -->

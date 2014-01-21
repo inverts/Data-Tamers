@@ -27,12 +27,16 @@ public class PageRenderer extends InternalResourceView {
         request.setAttribute("SETTINGS", model.get("SETTINGS"));
         request.setAttribute("FOOTER", model.get("FOOTER"));
         
+        // Gather any forms for needed.
+        request.setAttribute("personalForm", model.get("personalForm"));
+        
         request.setAttribute("model", model);
         
         String uri = dispatcherPath.substring(0, dispatcherPath.lastIndexOf("/"));
         String page = uri.substring(uri.lastIndexOf("/") + 1);
 
     	// set the content
+        //TODO: Set body as url beyond /pages/
         request.setAttribute("BODY", dispatcherPath.substring(dispatcherPath.lastIndexOf("/") + 1));
 
         // route to page-template
@@ -46,7 +50,8 @@ public class PageRenderer extends InternalResourceView {
 	private String getMasterPage(String page)
 	{
 		return (page.equals("application")) ? "/WEB-INF/views/pages/application/application-master.jsp" : 
-			   (page.equals("home")) ? "/WEB-INF/views/pages/home/home-master.jsp"
+			   (page.equals("home")) ? "/WEB-INF/views/pages/home/home-master.jsp" :
+			   (page.equals("account")) ? "/WEB-INF/views/pages/account/account-master.jsp"
 				   					 : "/WEB-INF/views/pages/default-master.jsp";
 	}
 
