@@ -1,6 +1,7 @@
 package io.analytics.site.controllers;
 
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -28,7 +29,7 @@ public class WidgetController {
 	@Autowired private ISessionService SessionService;
 	
 	@RequestMapping(value = "/HypotheticalFuture", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView hypotheticalFutureView(Model viewMap, HttpServletResponse response, HttpSession session,	
+	public ModelAndView hypotheticalFutureView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,	
 												@RequestParam(value = "change", defaultValue = "none") String changePercentage,
 												@RequestParam(value = "dimension", defaultValue = "none") String dimension) {
 
@@ -40,7 +41,7 @@ public class WidgetController {
 			filter = SessionService.getFilter();
 			settings = SessionService.getUserSettings();
 		} else {
-			SessionService.redirectToLogin(session, response);
+			SessionService.redirectToLogin(session, request, response);
 			return new ModelAndView("unavailable");
 		}
 		if (settings.getActiveProfile() == null) {
@@ -97,7 +98,7 @@ public class WidgetController {
 	
 	
 	@RequestMapping(value = "/RevenueSources", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView revenueSourcesView(Model viewMap, HttpServletResponse response, HttpSession session) {
+	public ModelAndView revenueSourcesView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		
 		Credential credential;
 		SettingsModel settings;
@@ -107,7 +108,7 @@ public class WidgetController {
 			filter = SessionService.getFilter();
 			settings = SessionService.getUserSettings();
 		} else {
-			SessionService.redirectToLogin(session, response);
+			SessionService.redirectToLogin(session, request, response);
 			return new ModelAndView("unavailable");
 		}
 		
@@ -121,7 +122,7 @@ public class WidgetController {
 	
 
 	@RequestMapping(value = "/WebsitePerformance", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView websitePerformanceView(Model viewMap, HttpServletResponse response, HttpSession session) {
+	public ModelAndView websitePerformanceView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		
 		Credential credential;
 		SettingsModel settings;
@@ -131,7 +132,7 @@ public class WidgetController {
 			filter = SessionService.getFilter();
 			settings = SessionService.getUserSettings();
 		} else {
-			SessionService.redirectToLogin(session, response);
+			SessionService.redirectToLogin(session, request, response);
 			return new ModelAndView("unavailable");
 		}
 		

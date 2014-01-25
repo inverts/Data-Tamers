@@ -6,6 +6,7 @@ import io.analytics.site.models.SettingsModel;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -31,6 +32,6 @@ public interface ISessionService extends Serializable {
 	
 	void saveModel(HttpSession session, String s, Object model);
 	
-	boolean redirectToLogin(HttpSession session, HttpServletResponse response);
+	boolean redirectToLogin(HttpSession session, HttpServletRequest request, HttpServletResponse response);
 
 }

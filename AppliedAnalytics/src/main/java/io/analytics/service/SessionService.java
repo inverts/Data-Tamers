@@ -7,6 +7,7 @@ import io.analytics.repository.ManagementRepository.CredentialException;
 import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SettingsModel;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -144,10 +145,16 @@ public class SessionService implements ISessionService {
 		session.setAttribute("models", models);
 	}
 	
-	public boolean redirectToLogin(HttpSession session, HttpServletResponse response) {
+	/**
+	 * This will redirect the user to the login page, keeping track of the URL the user
+	 * attempted to access, as indicated in the HttpServletRequest. WARNING: This will not,
+	 * however, keep track of any query parameters in that URL.
+	 * 
+	 */
+	public boolean redirectToLogin(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
 		String contextPath = session.getServletContext().getContextPath();
 		try {
-			response.sendRedirect(contextPath + "/galogin");
+			response.sendRedirect(contextPath + "/galogin" + "?destinationURL=" + request.getRequestURL());
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;

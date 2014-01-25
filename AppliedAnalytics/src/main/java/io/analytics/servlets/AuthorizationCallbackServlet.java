@@ -59,7 +59,8 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
 		String destination = (String) req.getSession().getAttribute("destinationURL");
 		System.out.println("Destination: \"" + destination + "\"");
 		session.setAttribute("credentials", credential);
-		resp.sendRedirect(contextPath + "/application");
+		resp.sendRedirect(destination);
+		//resp.sendRedirect(contextPath + "/application");
 	}
 
 	@Override

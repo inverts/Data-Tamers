@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -35,7 +36,7 @@ public class SettingsController {
 	 * SettingsView
 	 */
 	@RequestMapping(value = "/settings", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView settingsView(Model viewMap,  HttpServletResponse response, HttpSession session, 
+	public ModelAndView settingsView(Model viewMap,  HttpServletRequest request, HttpServletResponse response, HttpSession session, 
 			@RequestParam(value = "account", defaultValue = "none") String accountId,
 			@RequestParam(value = "property", defaultValue = "none") String propertyId,
 			@RequestParam(value = "profile", defaultValue = "none") String profileId,
@@ -71,7 +72,7 @@ public class SettingsController {
 		}
 		catch(Exception e) {
 			logger.info(e.getMessage());
-			SessionService.redirectToLogin(session, response);
+			SessionService.redirectToLogin(session, request, response);
 			return new ModelAndView("unavailable");
 		}
 		return new ModelAndView("settings");
@@ -82,7 +83,7 @@ public class SettingsController {
 	 * FilterView 
 	 */
 	@RequestMapping(value = "/filter", method = {RequestMethod.POST, RequestMethod.GET})
-	public void filterView(Model viewMap,  HttpServletResponse response, HttpSession session, 
+	public void filterView(Model viewMap, HttpServletRequest request,  HttpServletResponse response, HttpSession session, 
 			@RequestParam(value = "startDate") String startDate,
 			@RequestParam(value = "endDate") String endDate) {
 
@@ -90,7 +91,7 @@ public class SettingsController {
 		if (SessionService.checkAuthorization(session)) {
 			filter = SessionService.getFilter();
 		} else {
-			SessionService.redirectToLogin(session, response);
+			SessionService.redirectToLogin(session, request, response);
 			//return new ModelAndView("unavailable");
 		}
 		

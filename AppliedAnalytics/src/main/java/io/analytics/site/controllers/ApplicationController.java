@@ -43,7 +43,7 @@ public class ApplicationController {
 			//If authorization succeeded, the following must succeed.
 			settings = (SettingsModel) session.getAttribute("settings");
 			model.addAttribute("settings", settings);
-		} else if (SessionService.redirectToLogin(session, response)) {
+		} else if (SessionService.redirectToLogin(session, request, response)) {
 			return null;
 		} else {
 			return new ModelAndView("unavailable");

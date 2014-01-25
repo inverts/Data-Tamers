@@ -21,15 +21,12 @@
  <http auto-config="true"> 
   <intercept-url pattern="/**" access="ROLE_USER" />
   <form-login login-page='/login' authentication-failure-url='/login?invalid_login=1'
-  			  default-target-url="/application"/>
+  			  default-target-url="/application/HypotheticalFuture/"/>
   <logout logout-success-url="/" />
  </http>  
   
  <authentication-manager>  
   <authentication-provider>
-  <password-encoder hash="sha-256"> 
-  	<salt-source user-property="username" />
-  </password-encoder> 
    <user-service>  
     <user name="user" password="123456" authorities="ROLE_USER" />  
    </user-service>  
