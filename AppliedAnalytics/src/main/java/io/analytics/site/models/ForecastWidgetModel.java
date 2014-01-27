@@ -81,6 +81,15 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 		updateData();
 	}
 	
+	public static long getExcessDataPointsNeeded(long daysRequested) {
+		final int NUM_WEEKS_DESIRED = 16;
+		return Math.max((NUM_WEEKS_DESIRED * 7) - (int) daysRequested, 7 - ((int)daysRequested % 7));
+	}
+	
+	public long getDataPointsRequested() {
+		return (timeSpan / MS_IN_DAY) + 1;
+	}
+	
 	/**
 	 * TODO: REFACTOR!!! This is a huge mess.
 	 * TODO: Replace Date with Calendar
@@ -90,14 +99,13 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 	public boolean updateData() {
 		
 		
-		long days = (timeSpan / MS_IN_DAY) + 1;
+		long days = getDataPointsRequested();
 		// 5.8+ million year timespan necessary. Who knows, maybe some people want to know how their website performed when dinosaurs used it.
 		if (days > Integer.MAX_VALUE)
 			days = Integer.MAX_VALUE;
 		
-		final int NUM_WEEKS_DESIRED = 16;
 		//Get at least the sample size, and ensure an equal weighting of days
-		long excessDaysNeeded = Math.max((NUM_WEEKS_DESIRED * 7) - (int) days, 7 - ((int)days % 7));
+		long excessDaysNeeded = getExcessDataPointsNeeded(days);
 		Date adjustedStartDate = new Date(startDate.getTime() - excessDaysNeeded * MS_IN_DAY);
 		Calendar adjustedStartDateC = Calendar.getInstance();
 		adjustedStartDateC.setTime(adjustedStartDate);
@@ -259,8 +267,8 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 		yRange = new SimpleEntry<Double, Double>(Math.min(yMin, forecastMin), Math.max(yMax, forecastMax));
 		
 
-		yValues = yValuesNormalized;
-		yValuesForecast = yValuesForecastNormalized;
+		//yValues = yValuesNormalized;
+		//yValuesForecast = yValuesForecastNormalized;
 		
 		return true;
 	}

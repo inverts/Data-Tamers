@@ -11,14 +11,19 @@ public class TestOf_GoogleAuthorizationService {
 
 	@Test
 	/**
-	 * This test may break if the static refresh token string here expires somehow.
+	 * This test may break if the static refresh token string here expires.
+	 * According to Google, this should only happen if application access is 
+	 * revoked from the account owner.
 	 */
 	public void testGetAccountCredentials() {
-		GoogleAuthorizationService service = new GoogleAuthorizationService();
-		Credential credential = service.getAccountCredentials("1/Suscp1dN0GT0_xSoEID5Jsgp9LG7GWKK4GpiEFbCp1I");
-		System.out.println("Access token: " + credential.getAccessToken());
 		
+		final String REFRESH_TOKEN = "1/Suscp1dN0GT0_xSoEID5Jsgp9LG7GWKK4GpiEFbCp1I";
+		
+		GoogleAuthorizationService service = new GoogleAuthorizationService();
+		Credential credential = service.getAccountCredentials(REFRESH_TOKEN);
 		
 		assertTrue(credential.getAccessToken() != null);
+		
+		System.out.println("Access token: " + credential.getAccessToken());
 	}
 }

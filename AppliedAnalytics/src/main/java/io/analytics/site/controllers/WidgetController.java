@@ -80,17 +80,13 @@ public class WidgetController {
 			hypotheticalFuture.setChangePercentage(changePercentage);
 		if (!dimension.equals("none"))
 			hypotheticalFuture.setDimension(dimension);
+		
 		hypotheticalFuture.updateData();
+		
+		//Save the model to the session.
 		SessionService.saveModel(session, "hypotheticalFuture", hypotheticalFuture);
 		viewMap.addAttribute("hfModel", hypotheticalFuture);
 		viewMap.addAttribute("filterModel", filter);
-		/*
-		HypotheticalFutureModel hypotheticalFuture = new HypotheticalFutureModel(adjustBy, source);
-		
-		viewMap.addAttribute("hfModel", hypotheticalFuture);
-		viewMap.addAttribute("changeOptions", hypotheticalFuture.getChangePercentOptions());
-		viewMap.addAttribute("DATA", hypotheticalFuture.getVisualization());
-		 */
 		return new ModelAndView("HypotheticalFuture");
 
 	}

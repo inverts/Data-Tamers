@@ -43,6 +43,7 @@ public class SessionService implements ISessionService {
 			 credentials = (Credential) session.getAttribute("credentials");
 			 settings = (SettingsModel) session.getAttribute("settings");
 		} catch (ClassCastException e) {
+			//These attributes weren't null, but they could not be cast to their appropriate types.
 			logger.info("Corrupted session information. See below for more info.");
 			logger.info(e.getMessage());
 			return false;
@@ -88,6 +89,7 @@ public class SessionService implements ISessionService {
 	
 	public void saveUserSettings(HttpSession session, SettingsModel settings) {
 		session.setAttribute("settings", settings);
+		this.userSettings = settings;
 	}
 
 	public FilterModel getFilter() {
@@ -96,6 +98,7 @@ public class SessionService implements ISessionService {
 	
 	public void saveFilter(HttpSession session, FilterModel filter) {
 		session.setAttribute("filter", filter);
+		this.filter = filter;
 	}
 
 	public Credential getCredentials() {
