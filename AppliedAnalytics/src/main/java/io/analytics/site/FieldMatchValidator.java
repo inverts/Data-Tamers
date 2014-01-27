@@ -12,12 +12,13 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
 
 	private String field1;
 	private String field2;
+	private String message;
 	
 	@Override
 	public void initialize(final FieldMatch constraints) {
 		this.field1 = constraints.first();
 		this.field2 = constraints.second();
-		
+		this.message = constraints.message();
 	}
 
 	@Override
@@ -26,8 +27,13 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
 		try {
 			final Object firstObj = BeanUtils.getProperty(value, this.field1);
 			final Object secondObj = BeanUtils.getProperty(value, this.field2);
-			
-			return firstObj == null && secondObj == null || firstObj != null && firstObj.equals(secondObj);
+
+			if (firstObj == null && secondObj == null || firstObj != null && firstObj.equals(secondObj))
+				return true;
+			else {
+				context.buildConstraintViolationWithTemplate(this.message).addPropertyNode(this.field1).addConstraintViolation();
+				return false;
+			}
 		}
 		catch(Exception e)
 		{

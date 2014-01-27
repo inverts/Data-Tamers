@@ -14,7 +14,9 @@ import io.analytics.domain.CoreReportingData;
 import io.analytics.domain.CoreReportingTypedData;
 import io.analytics.repository.CoreReportingRepository;
 import io.analytics.repository.CoreReportingRepository.CredentialException;
-import io.analytics.repository.ICoreReportingRepository;
+import io.analytics.repository.interfaces.ICoreReportingRepository;
+import io.analytics.service.interfaces.ICoreReportingService;
+import io.analytics.service.interfaces.ISessionService;
 
 @Service
 public class CoreReportingService implements ICoreReportingService {

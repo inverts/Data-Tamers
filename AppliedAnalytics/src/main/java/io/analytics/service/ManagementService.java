@@ -6,6 +6,7 @@ import com.google.api.services.analytics.model.*;
 import io.analytics.domain.GoogleUserData;
 import io.analytics.repository.ManagementRepository;
 import io.analytics.repository.ManagementRepository.CredentialException;
+import io.analytics.service.interfaces.IManagementService;
 
 /**
  * A service for accessing the following: - Google Analytics Management API -

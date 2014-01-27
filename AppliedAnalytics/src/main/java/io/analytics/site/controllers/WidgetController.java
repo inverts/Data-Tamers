@@ -5,10 +5,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import io.analytics.service.CoreReportingService;
-import io.analytics.service.ICoreReportingService;
-import io.analytics.service.ISessionService;
-import io.analytics.service.SessionService;
+import io.analytics.service.interfaces.ICoreReportingService;
+import io.analytics.service.interfaces.ISessionService;
 import io.analytics.site.models.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,13 +78,17 @@ public class WidgetController {
 			hypotheticalFuture.setChangePercentage(changePercentage);
 		if (!dimension.equals("none"))
 			hypotheticalFuture.setDimension(dimension);
-		
 		hypotheticalFuture.updateData();
-		
-		//Save the model to the session.
 		SessionService.saveModel(session, "hypotheticalFuture", hypotheticalFuture);
 		viewMap.addAttribute("hfModel", hypotheticalFuture);
 		viewMap.addAttribute("filterModel", filter);
+		/*
+		HypotheticalFutureModel hypotheticalFuture = new HypotheticalFutureModel(adjustBy, source);
+		
+		viewMap.addAttribute("hfModel", hypotheticalFuture);
+		viewMap.addAttribute("changeOptions", hypotheticalFuture.getChangePercentOptions());
+		viewMap.addAttribute("DATA", hypotheticalFuture.getVisualization());
+		 */
 		return new ModelAndView("HypotheticalFuture");
 
 	}

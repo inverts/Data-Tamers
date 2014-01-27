@@ -1,7 +1,7 @@
 package io.analytics.site.controllers;
 
-import io.analytics.service.ISessionService;
 import io.analytics.service.SessionService;
+import io.analytics.service.interfaces.ISessionService;
 import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SettingsModel;
 

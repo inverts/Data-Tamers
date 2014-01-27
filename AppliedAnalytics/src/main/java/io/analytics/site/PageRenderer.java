@@ -18,8 +18,7 @@ public class PageRenderer extends InternalResourceView {
 
         // TODO Title logic	
         request.setAttribute("TITLE", "Applied Analytics");
-        
-        
+
         request.setAttribute("SIDEPANEL", model.get("SIDEPANEL"));
         
         // Set the header and footer if applicable
@@ -27,10 +26,16 @@ public class PageRenderer extends InternalResourceView {
         request.setAttribute("SETTINGS", model.get("SETTINGS"));
         request.setAttribute("FOOTER", model.get("FOOTER"));
         
-        // Gather any forms for needed.
-        request.setAttribute("personalForm", model.get("personalForm"));
+        // Gather any forms and form results
+        if (model.containsKey("loginForm"))
+        	request.setAttribute("loginForm", model.get("loginForm"));
+        
+        if (model.containsKey("personalForm"))
+        	request.setAttribute("personalForm", model.get("personalForm"));
+        //request.setAttribute("VALIDATION", model.get("VALIDATION"));
         
         request.setAttribute("model", model);
+        
         
         String uri = dispatcherPath.substring(0, dispatcherPath.lastIndexOf("/"));
         String page = uri.substring(uri.lastIndexOf("/") + 1);

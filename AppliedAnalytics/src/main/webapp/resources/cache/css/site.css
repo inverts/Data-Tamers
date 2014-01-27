@@ -125,9 +125,8 @@ input { font: inherit; }
 .login td { width:320px; padding: 5px 0;}
 .login a, .login a:visited { text-decoration:none; }
 .login .input-text { width:96%; border-radius:5px; margin-top:15px;}
-.login .input-submit { float:right; }
 .login .remember { display:inline; height:50px; vertical-align:middle; }
-.login .submit { padding-top:15px; }
+.login .button { float:right; }
 .login .register-div { height:40px; padding-top:50px; vertical-align:middle; }
 
 

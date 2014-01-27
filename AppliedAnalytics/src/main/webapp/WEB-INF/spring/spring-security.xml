@@ -4,7 +4,7 @@
  xsi:schemaLocation="http://www.springframework.org/schema/beans  
            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
            http://www.springframework.org/schema/security  
-           http://www.springframework.org/schema/security/spring-security.xsd">
+           http://www.springframework.org/schema/security/spring-security-3.1.xsd">
            
  <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder">
  	<beans:constructor-arg value="256"/>
@@ -18,19 +18,17 @@
  <http pattern="/accounts/**" security="none"/>
 
 <!-- Intercepts the URL and performs an access check -->
- <http auto-config="true"> 
-  <intercept-url pattern="/**" access="ROLE_USER" />
-  <form-login login-page='/login' authentication-failure-url='/login?invalid_login=1'
+ <http auto-config="true" use-expressions="true">
+  <intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
+  <form-login login-page="/login"
+  			  authentication-failure-url='/login?errors=1' 
   			  default-target-url="/application/HypotheticalFuture/"/>
   <logout logout-success-url="/" />
  </http>  
-  
- <authentication-manager>  
-  <authentication-provider>
-   <user-service>  
-    <user name="user" password="123456" authorities="ROLE_USER" />  
-   </user-service>  
-  </authentication-provider>  
- </authentication-manager>  
+ 
+ <!-- Custom Authentication Bean that gets ran upon validation from login --> 
+ <authentication-manager alias="authenticationManager">
+   <authentication-provider user-service-ref="customAuthentication" />
+ </authentication-manager>
   
 </beans:beans>  

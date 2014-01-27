@@ -1,4 +1,4 @@
-package io.analytics.service;
+package io.analytics.service.interfaces;
 
 import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SettingsModel;
@@ -14,7 +14,7 @@ import com.google.api.client.auth.oauth2.Credential;
 
 public interface ISessionService extends Serializable {
 	
-	boolean checkAuthorization(HttpSession session);
+boolean checkAuthorization(HttpSession session);
 	
 	void saveUserSettings(HttpSession session, SettingsModel settings);
 	

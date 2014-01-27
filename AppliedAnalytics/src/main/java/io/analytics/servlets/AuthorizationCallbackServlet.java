@@ -2,8 +2,7 @@ package io.analytics.servlets;
 
 import io.analytics.domain.GoogleUserData;
 import io.analytics.repository.ManagementRepository.CredentialException;
-import io.analytics.service.IManagementService;
-import io.analytics.service.ManagementService;
+import io.analytics.service.interfaces.IManagementService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -51,7 +50,7 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
 	@Override
 	protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential)
 			throws ServletException, IOException {
-
+		
 		HttpSession session = req.getSession();
 		String contextPath = session.getServletContext().getContextPath();
 		if (credential == null) 

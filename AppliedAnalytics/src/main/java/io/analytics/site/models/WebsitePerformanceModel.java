@@ -8,8 +8,8 @@ import org.json.JSONObject;
 
 import io.analytics.domain.CoreReportingTypedData;
 import io.analytics.service.CoreReportingService;
-import io.analytics.service.ICoreReportingService;
-import io.analytics.service.ISessionService;
+import io.analytics.service.interfaces.ICoreReportingService;
+import io.analytics.service.interfaces.ISessionService;
 
 public class WebsitePerformanceModel {
 	

@@ -17,6 +17,7 @@ import com.google.api.services.analytics.model.*;
 import com.google.gson.Gson;
 
 import io.analytics.domain.GoogleUserData;
+import io.analytics.repository.interfaces.IManagementRepository;
 
 /**
  * 

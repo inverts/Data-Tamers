@@ -1,7 +1,8 @@
 package io.analytics.repository;
 import io.analytics.domain.CoreReportingData;
 import io.analytics.domain.CoreReportingTypedData;
-import io.analytics.service.ISessionService;
+import io.analytics.repository.interfaces.ICoreReportingRepository;
+import io.analytics.service.interfaces.ISessionService;
 
 import java.io.IOException;
 import java.util.ArrayList;

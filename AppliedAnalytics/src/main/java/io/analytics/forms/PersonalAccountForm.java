@@ -1,37 +1,40 @@
 package io.analytics.forms;
 
+
 import io.analytics.aspect.FieldMatch;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
-/*@FieldMatch.List({
+@FieldMatch.List({
 	@FieldMatch(first = "password", second = "confirmPassword", message = "personal.invalid.password.nomatch"),
 	@FieldMatch(first = "email", second = "confirmEmail", message = "personal.invalid.email.nomatch")
-})*/
-public class PersonalAccountInfo {
+})
+public class PersonalAccountForm {
 	
-	@NotEmpty
+	@NotEmpty(message = "personal.invalid.firstname.empty")
 	private String firstname;
 	
-	@NotEmpty(message = "last name is empty")
+	@NotEmpty(message = "personal.invalid.lastname.empty")
 	private String lastname;
 	
-	@NotEmpty @Email
+	@NotEmpty(message = "personal.invalid.email.empty") 
+	@Email(message = "personal.invalid.email.bad")
 	private String email;
 	
-	@NotEmpty @Email
+	@NotEmpty(message = "personal.invalid.email.confirmed.empty") 
+	@Email(message = "personal.invalid.email.bad")
 	private String confirmEmail;
 	
-	@NotEmpty
+	@NotEmpty(message = "personal.invalid.username.empty")
 	private String username;
 	
-	@NotEmpty
+	@NotEmpty(message = "personal.invalid.password.empty")
 	private String password;
 	
-	@NotEmpty
+	@NotEmpty(message = "personal.invalid.password.confirmed.empty")
 	private String confirmPassword;
-	
+
 	
 	public void setFirstname(String firstname) {
 		this.firstname = firstname;

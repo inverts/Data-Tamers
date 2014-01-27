@@ -1,4 +1,4 @@
-package io.analytics.repository;
+package io.analytics.repository.interfaces;
 import io.analytics.domain.CoreReportingData;
 import io.analytics.domain.CoreReportingTypedData;
 

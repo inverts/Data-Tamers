@@ -1,9 +1,7 @@
 package io.analytics.site.models;
 
-import io.analytics.domain.CoreReportingTypedData;
-import io.analytics.service.CoreReportingService;
-import io.analytics.service.ICoreReportingService;
-import io.analytics.service.ISessionService;
+import io.analytics.service.interfaces.ICoreReportingService;
+import io.analytics.service.interfaces.ISessionService;
 
 import java.util.ArrayList;
 import java.util.Arrays;

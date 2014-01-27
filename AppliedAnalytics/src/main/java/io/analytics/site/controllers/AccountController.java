@@ -2,14 +2,15 @@ package io.analytics.site.controllers;
 
 import java.io.IOException;
 
+
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import io.analytics.aspect.HeaderFooter;
 import io.analytics.enums.HeaderType;
-import io.analytics.forms.PersonalAccountInfo;
-import io.analytics.service.ISessionService;
+import io.analytics.forms.PersonalAccountForm;
+import io.analytics.service.interfaces.ISessionService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,7 +29,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@SessionAttributes({"personalForm"})
+@SessionAttributes({"personalForm", "validation"})
 public class AccountController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
@@ -96,6 +99,7 @@ public class AccountController {
 			@RequestParam(value = "personal", defaultValue = "0") boolean personalPage,
 			@RequestParam(value = "maingoal", defaultValue = "0") boolean maingoalPage)
 	{
+
 		if (googlePage){
 			return new ModelAndView("account/google-info");
 		}
@@ -115,6 +119,7 @@ public class AccountController {
 	 * @param response
 	 * @param session
 	 */
+	
 	@RequestMapping(value = "/accounts/processgoogleinfo", method = RequestMethod.POST)
 	public void processGooglePage(Model model, HttpServletResponse response, HttpSession session)
 	{
@@ -136,29 +141,22 @@ public class AccountController {
 	 * @param session
 	 */
 	@RequestMapping(value = "/accounts/processpersonalinfo", method = RequestMethod.POST)
-	public void processPersonalPage(@ModelAttribute("personalForm") @Valid PersonalAccountInfo accountInfo, BindingResult result, Model model, HttpServletResponse response) 
+	public ModelAndView processPersonalForm(@Valid @ModelAttribute("personalForm") PersonalAccountForm form, BindingResult result, Model model) 
 	{
-
-		model.addAttribute("personalForm", accountInfo); //store the old form.
-		
-		try {
-			//TODO: validate data. If valid, put in session.
-			if (result.hasErrors())
-				response.sendRedirect("/appliedanalytics/accounts/newaccount?personal=1");
-			else
-				response.sendRedirect("/appliedanalytics/accounts/newaccount?maingoal=1");
-			
+		if (result.hasErrors()) {
+			form.setPassword("");
+			form.setConfirmPassword("");
+			model.addAttribute("validation", result);
+			return new ModelAndView("redirect:/accounts/newaccount?personal=1");
 		}
-		catch(IOException e) {
-			logger.info(e.getMessage());
-			e.printStackTrace();
-		}	
+		else
+			return new ModelAndView("redirect:/accounts/newaccount?maingoal=1");
 	}
 	
 	
 	@ModelAttribute("personalForm")
-	public PersonalAccountInfo getPersonalForm() {
-		return new PersonalAccountInfo();
+	public PersonalAccountForm getPersonalForm() {
+		return new PersonalAccountForm();
 	}
 	
 	/**

@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc 
+ 		http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
-		
-</beans>
+	
+	<mvc:annotation-driven />
+	
+	<beans:bean id="customAuthentication" class="io.analytics.service.UserService" />
+
+	<context:component-scan base-package="io.analytics.site" />
+	<context:component-scan base-package="io.analytics.service" />
+	<context:component-scan base-package="io.analytics.service.interfaces" />
+	<context:component-scan base-package="io.analytics.repository" />
+	<context:component-scan base-package="io.analytics.repository.interfaces" />
+	<context:component-scan base-package="io.analytics.site.models" />
+	<context:component-scan base-package="io.analytics.forms" />
+	<context:component-scan base-package="io.analytics.security" />
+	
+</beans:beans>

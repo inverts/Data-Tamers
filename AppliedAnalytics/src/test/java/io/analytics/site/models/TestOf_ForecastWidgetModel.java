@@ -11,8 +11,8 @@ import java.util.Random;
 
 
 import io.analytics.domain.CoreReportingData;
-import io.analytics.service.ICoreReportingService;
-import io.analytics.service.ISessionService;
+import io.analytics.service.interfaces.ICoreReportingService;
+import io.analytics.service.interfaces.ISessionService;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

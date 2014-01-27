@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import io.analytics.repository.ManagementRepository.CredentialException;
+import io.analytics.service.interfaces.ISessionService;
 import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SettingsModel;
 
@@ -154,9 +155,11 @@ public class SessionService implements ISessionService {
 	 * however, keep track of any query parameters in that URL.
 	 * 
 	 */
+
 	public boolean redirectToLogin(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
 		String contextPath = session.getServletContext().getContextPath();
 		try {
+			String test = request.getRequestURL().toString();
 			response.sendRedirect(contextPath + "/galogin" + "?destinationURL=" + request.getRequestURL());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -164,5 +167,6 @@ public class SessionService implements ISessionService {
 		}
 		return true;
 	}
+
 
 }

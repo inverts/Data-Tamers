@@ -2,9 +2,8 @@ package io.analytics.site.models;
 
 import io.analytics.domain.CoreReportingData;
 import io.analytics.repository.CoreReportingRepository;
-import io.analytics.service.CoreReportingService;
-import io.analytics.service.ICoreReportingService;
-import io.analytics.service.ISessionService;
+import io.analytics.service.interfaces.ICoreReportingService;
+import io.analytics.service.interfaces.ISessionService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
