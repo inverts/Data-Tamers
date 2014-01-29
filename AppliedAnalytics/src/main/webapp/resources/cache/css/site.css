@@ -22,6 +22,7 @@ html{ background:#222; }
 body, h1, h2, h3, h4, a, img { padding:0 auto; margin:0 auto; outline: none; border: none; font-family: 'museo-sans-500', 'Trebuchet MS', 'Helvetica', sans-serif; }
 a:visited { color: inherit; }
 a { color: inherit; }
+a:hover { cursor:pointer }
 
 .page { margin:0 auto; position:relative; background:#fff; }
 .page .wrapper { float:left; width:100%; position:relative; min-height:800px;}
@@ -35,14 +36,15 @@ input { font: inherit; }
 /*****GLOBAL STANDARDS CLASSES****/
 .checkbox, .button, .textbox { border-radius:5px; }
 .textbox { height:35px; padding:5px; width:320px; }
-.button { background-color:#96AFC5; color:#fff; height:30px; width:80px; outline:none; }
-.button:hover { cursor:pointer;}
+.button { background-color:#00aeef; color:#fff; height:30px; width:80px; outline:none; }
+.disabled { opacity:0.5; }
+.button:hover { cursor:pointer; }
 .checkbox { width:18px; height:18px; vertical-align:middle; }
 
 #ui-datepicker-div { font-size: 15px; }
 
 /* Standard page size and position */
-.login, .start, .terms, .google-info, .personal-info, .main-goal { margin-left:340px; padding-top:30px;}
+.login, .start, .terms, .personal-info, .main-goal { margin-left:340px; padding-top:30px;}
 
 /* Error Message */
 .page .error { font:inherit; font-size:1em; color:red; margin-bottom:5px; padding:5px; }
@@ -127,10 +129,20 @@ input { font: inherit; }
 .login .input-text { width:96%; border-radius:5px; margin-top:15px;}
 .login .remember { display:inline; height:50px; vertical-align:middle; }
 .login .button { float:right; }
+.login .submit { padding-top:15px; }
 .login .register-div { height:40px; padding-top:50px; vertical-align:middle; }
+.login .register-div a { text-decoration:underline; }
 
 
 /*****ACCOUNTS*****/
+
+/* Start */
+.start .nav-btns { width: 900px; font:inherit; padding:0;}
+.start .nav-btns li { list-style:none; }
+.start .nav-btns a { text-decoration:none; }
+.start .nav-btns a:hover { color:#00aeef }
+.start .nav-btns .previous { float:left; }
+.start .nav-btns .next { float:right; }
 
 /* Terms */
 .terms .terms-wrapper { width: 900px; }
@@ -144,5 +156,9 @@ input { font: inherit; }
 .personal-info td { min-width:200px; }
 .personal-info tr > td { padding-bottom:1em; }
 .personal-info .button { float:right; }
+.personal-info .googleAuth { width:600px; padding:10px 0; }
+.personal-info .googleAuth a{ float:right; margin-right:150px; }
+.personal-info .googleAuth .success { margin-left:200px; color:#00aeef; }
+.personal-info .googleAuth a:hover { cursor:pointer; color:#00aeef; }
 
 

@@ -7,32 +7,32 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @FieldMatch.List({
-	@FieldMatch(first = "password", second = "confirmPassword", message = "personal.invalid.password.nomatch"),
-	@FieldMatch(first = "email", second = "confirmEmail", message = "personal.invalid.email.nomatch")
+	@FieldMatch(first = "password", second = "confirmPassword", message = "account.invalid.password.nomatch"),
+	@FieldMatch(first = "email", second = "confirmEmail", message = "account.invalid.email.nomatch")
 })
-public class PersonalAccountForm {
+public class NewAccountForm {
 	
-	@NotEmpty(message = "personal.invalid.firstname.empty")
+	@NotEmpty(message = "account.invalid.firstname.empty")
 	private String firstname;
 	
-	@NotEmpty(message = "personal.invalid.lastname.empty")
+	@NotEmpty(message = "account.invalid.lastname.empty")
 	private String lastname;
 	
-	@NotEmpty(message = "personal.invalid.email.empty") 
-	@Email(message = "personal.invalid.email.bad")
+	@NotEmpty(message = "account.invalid.email.empty") 
+	@Email(message = "account.invalid.email.bad")
 	private String email;
 	
-	@NotEmpty(message = "personal.invalid.email.confirmed.empty") 
-	@Email(message = "personal.invalid.email.bad")
+	@NotEmpty(message = "account.invalid.email.confirmed.empty") 
+	@Email(message = "account.invalid.email.bad")
 	private String confirmEmail;
 	
-	@NotEmpty(message = "personal.invalid.username.empty")
+	@NotEmpty(message = "account.invalid.username.empty")
 	private String username;
 	
-	@NotEmpty(message = "personal.invalid.password.empty")
+	@NotEmpty(message = "account.invalid.password.empty")
 	private String password;
 	
-	@NotEmpty(message = "personal.invalid.password.confirmed.empty")
+	@NotEmpty(message = "account.invalid.password.confirmed.empty")
 	private String confirmPassword;
 
 	

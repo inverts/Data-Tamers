@@ -10,15 +10,15 @@
  	<beans:constructor-arg value="256"/>
  </beans:bean>
  
- <!-- Exempted pages --> 
- <http pattern="/cache/**" security="none"/> 
- <http pattern="/" security="none"/>
- <http pattern="/login*" security="none"/>
- <http pattern="/signout" security="none"/>
- <http pattern="/accounts/**" security="none"/>
-
-<!-- Intercepts the URL and performs an access check -->
+<!-- Intercepts the URL checks authorization -->
  <http auto-config="true" use-expressions="true">
+  <intercept-url pattern="/" access="permitAll" />
+  <intercept-url pattern="/cache/**" access="permitAll" />
+  <intercept-url pattern="/accounts/**" access="permitAll" />
+  <intercept-url pattern="/galogin/**" access="permitAll" />
+  <intercept-url pattern="/login*" access="permitAll" />
+  <intercept-url pattern="/signout" access="permitAll" />
+  <intercept-url pattern="/oauth2callback*" access="permitAll" />
   <intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
   <form-login login-page="/login"
   			  authentication-failure-url='/login?errors=1' 

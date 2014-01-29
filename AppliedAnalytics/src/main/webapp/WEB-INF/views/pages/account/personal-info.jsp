@@ -4,12 +4,29 @@
 
 
 <div class="personal-info">
-	<h1>New Account</h1>
-	<br/><br/>
-	<form:form action="processpersonalinfo" modelAttribute="personalForm" method="POST">
+	<h1><fmt:message key="account.new.title" /></h1>
+	<br/>
+	<c:set var="showGoogleLogin" value="${model.googleLogin == false}" />
+	<c:choose>
+		<c:when test="${model.googleLogin}">
+			<div class="googleAuth">
+				<span class="success"><fmt:message key="account.new.google.success" /></span>
+			</div>
+		</c:when>
+		<c:otherwise>
+			<form id="googleAuth" method="GET" action="GoogleAuthenticateHandler">
+				<input type="hidden" name="login" value="1" />
+				<div class="googleAuth">
+					<h4><a onclick="$('#googleAuth').submit(); return false;"><fmt:message key="account.new.google" /></a></h4>
+				</div>
+			</form>
+		</c:otherwise>
+	</c:choose>
+	<br/>
+	<form:form action="ProcessNewAccountInfo" modelAttribute="accountForm" method="POST">
 		<table>
 			<tr>
-				<td><form:label path="firstname"><fmt:message key="personal.name.first" /></form:label></td>
+				<td><form:label path="firstname"><fmt:message key="account.name.first" /></form:label></td>
 				<td><form:input class="textbox" path="firstname"/></td>
 				<td class="error">
 					<c:if test='${not empty model.validation && not empty model.validation.getFieldError("firstname")}'>
@@ -18,7 +35,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td><form:label path="lastname"><fmt:message key="personal.name.last" /></form:label></td>
+				<td><form:label path="lastname"><fmt:message key="account.name.last" /></form:label></td>
 				<td><form:input class="textbox" path="lastname"/></td>
 				<td class="error">
 					<c:if test='${not empty model.validation && not empty model.validation.getFieldError("lastname")}'>
@@ -27,7 +44,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td><label><fmt:message key="personal.email" /></label></td>
+				<td><label><fmt:message key="account.email" /></label></td>
 				<td><form:input class="textbox" path="email"/></td>
 				<td class="error">
 					<c:if test='${not empty model.validation && not empty model.validation.getFieldError("email")}'>
@@ -36,7 +53,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td><label><fmt:message key="personal.email.confirm" /></label></td>
+				<td><label><fmt:message key="account.email.confirm" /></label></td>
 				<td><form:input class="textbox" path="confirmEmail"/></td>
 				<td class="error">
 					<c:if test='${not empty model.validation && not empty model.validation.getFieldError("confirmEmail")}'>
@@ -45,7 +62,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td><label><fmt:message key="personal.name.user" /></label></td>
+				<td><label><fmt:message key="account.name.user" /></label></td>
 				<td><form:input class="textbox" path="username"/></td>
 				<td class="error">
 					<c:if test='${not empty model.validation && not empty model.validation.getFieldError("username")}'>
@@ -54,7 +71,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td><label><fmt:message key="personal.password" /></label></td>
+				<td><label><fmt:message key="account.password" /></label></td>
 				<td><form:input type="password" class="textbox" path="password"/></td>
 				<td class="error">
 					<c:if test='${not empty model.validation && not empty model.validation.getFieldError("password")}'>
@@ -63,7 +80,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td><label><fmt:message key="personal.password.confirm" /></label></td>
+				<td><label><fmt:message key="account.password.confirm" /></label></td>
 				<td><form:input type="password" class="textbox" path="confirmPassword"/></td>
 				<td class="error">
 					<c:if test='${not empty model.validation && not empty model.validation.getFieldError("confirmPassword")}'>
@@ -73,7 +90,14 @@
 			</tr>
 			<tr>
 				<td></td>
-				<td><input type="submit" class="button" /></td>
+				<c:choose>
+					<c:when test="${model.googleLogin}">
+						<td><input type="submit" class="button" id="account-submit" /></td>
+					</c:when>
+					<c:otherwise>
+						<td><input type="button" class="button disabled" id="account-submit" value="<fmt:message key="submit" />" /></td>
+					</c:otherwise>
+				</c:choose>
 				<td></td>
 			</tr>
 		</table>
