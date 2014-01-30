@@ -2,26 +2,35 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
-
+<c:if test="${model.googleFail}">
+	<div class="new-account alert alert-danger"><fmt:message key="account.alert.google.fail" /></div>
+</c:if>
+<c:if test="${model.googleSuccess}">
+	<div class="new-account alert alert-success">
+		<fmt:message key="account.alert.google.success.1" />
+		<span class="googleName"><c:out value="${model.googleAccountName}" /></span>
+		<fmt:message key="account.alert.google.success.2" />
+	</div>
+</c:if>
 <div class="personal-info">
 	<h1><fmt:message key="account.new.title" /></h1>
 	<br/>
-	<c:set var="showGoogleLogin" value="${model.googleLogin == false}" />
-	<c:choose>
-		<c:when test="${model.googleLogin}">
+	
+		<form id="googleAuth" method="GET" action="GoogleAuthenticateHandler">
+			<input type="hidden" name="login" value="1" />
 			<div class="googleAuth">
-				<span class="success"><fmt:message key="account.new.google.success" /></span>
+				<h4><a onclick="$('#googleAuth').submit(); return false;">
+				<c:choose>
+					<c:when test="${model.googleSuccess}">
+						<fmt:message key="account.new.google.change" />
+					</c:when>
+					<c:otherwise>
+						<fmt:message key="account.new.google" />
+					</c:otherwise>
+				</c:choose>
+				</a></h4>
 			</div>
-		</c:when>
-		<c:otherwise>
-			<form id="googleAuth" method="GET" action="GoogleAuthenticateHandler">
-				<input type="hidden" name="login" value="1" />
-				<div class="googleAuth">
-					<h4><a onclick="$('#googleAuth').submit(); return false;"><fmt:message key="account.new.google" /></a></h4>
-				</div>
-			</form>
-		</c:otherwise>
-	</c:choose>
+		</form>
 	<br/>
 	<form:form action="ProcessNewAccountInfo" modelAttribute="accountForm" method="POST">
 		<table>
@@ -91,11 +100,11 @@
 			<tr>
 				<td></td>
 				<c:choose>
-					<c:when test="${model.googleLogin}">
-						<td><input type="submit" class="button" id="account-submit" /></td>
+					<c:when test="${model.googleSuccess}">
+						<td><input type="submit" class="btn btn-primary active" id="account-submit" /></td>
 					</c:when>
 					<c:otherwise>
-						<td><input type="button" class="button disabled" id="account-submit" value="<fmt:message key="submit" />" /></td>
+						<td><input type="button" class="btn btn-primary active disabled" id="account-submit" value="<fmt:message key="submit" />" /></td>
 					</c:otherwise>
 				</c:choose>
 				<td></td>

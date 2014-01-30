@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@SessionAttributes({"personalForm", "validation"})
+@SessionAttributes({"personalForm", "validation", "googleAuthorization"})
 public class AccountController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
@@ -100,40 +100,40 @@ public class AccountController {
 	 */
 	@HeaderFooter(HeaderType.SIMPLE)
 	@RequestMapping(value = "/accounts/newaccount", method = RequestMethod.GET)
-	public ModelAndView newAccountPage(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session,
-			@RequestParam(value = "googleauth", defaultValue = "0") boolean googleAuthorization)
+	public ModelAndView newAccountPage(@ModelAttribute("googleAuthorization") String googleAuthorization, Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session)
 	{
-
+		ModelAndView page = new ModelAndView("account/personal-info");
 		// Flag indicating that user has selected to sign up using google.
-		if (googleAuthorization) {
+		if (googleAuthorization.equals("success") && SessionService.checkAuthorization(session)) {
 			
-			boolean success = SessionService.checkAuthorization(session);
 			SettingsModel settings = null;
+
+			settings = (SettingsModel) session.getAttribute("settings");
+			model.addAttribute("settings", settings);
+			GoogleUserData googleData = SessionService.getUserSettings().getGoogleUserData();
+			NewAccountForm accountForm = new NewAccountForm();
 			
-			// On successful authenticate, populate the form fields with as much google data
-			// as possible. User still has the right to change things.
-			if (success) {
-				settings = (SettingsModel) session.getAttribute("settings");
-				model.addAttribute("settings", settings);
-				GoogleUserData googleData = SessionService.getUserSettings().getGoogleUserData();
-				NewAccountForm accountForm = new NewAccountForm();
-				
-				// Only pre-populate fields that the user has no input in.
-				if (accountForm.getFirstname() == null)
-					accountForm.setFirstname(googleData.getName());
-				if (accountForm.getLastname() == null)
-					accountForm.setLastname(googleData.getGiven_name());
-				if (accountForm.getEmail() == null) {
-					accountForm.setEmail(googleData.getEmail());
-					accountForm.setConfirmEmail(googleData.getEmail());
-				}
-				
-				model.addAttribute("accountForm", accountForm);
+			// Only pre-populate fields that the user has no input in.
+			if (accountForm.getFirstname() == null)
+				accountForm.setFirstname(googleData.getName());
+			if (accountForm.getLastname() == null)
+				accountForm.setLastname(googleData.getGiven_name());
+			if (accountForm.getEmail() == null) {
+				accountForm.setEmail(googleData.getEmail());
+				accountForm.setConfirmEmail(googleData.getEmail());
 			}
-				
-		} 
+			
+			model.addAttribute("accountForm", accountForm);
+			//String googleEmail = googleData.getEmail();
+			page.addObject("googleAccountName", googleData.getEmail());
+			
+			// let the page know google authenticated successfully.
+			page.addObject("googleSuccess", true);
+		}
+		else if (googleAuthorization.equals("fail"))
+				page.addObject("googleFail", true);	
 		
-		return new ModelAndView("account/personal-info", "googleLogin", googleAuthorization);	
+		return page;	
 
 	}
 	
@@ -153,7 +153,7 @@ public class AccountController {
 		if (gaLogin && SessionService.redirectToLogin(session, request, response))
 			return null;
 		
-		return "redirect:/accounts/newaccount?googleauth=1";
+		return "redirect:/accounts/newaccount";
 	}
 	
 	/**
@@ -171,7 +171,7 @@ public class AccountController {
 			String test = passwordEncoder.encode(form.getPassword());
 			form.setConfirmPassword("");
 			model.addAttribute("validation", result);
-			return new ModelAndView("redirect:/accounts/newaccount?googleauth=1");
+			return new ModelAndView("redirect:/accounts/newaccount");
 		}
 		else {
 			// TODO: Send form data to service for upload
@@ -184,6 +184,11 @@ public class AccountController {
 	@ModelAttribute("accountForm")
 	public NewAccountForm getPersonalForm() {
 		return new NewAccountForm();
+	}
+	
+	@ModelAttribute("googleAuthorization")
+	public String defaultAuthorization() {
+		return "none";
 	}
 	
 

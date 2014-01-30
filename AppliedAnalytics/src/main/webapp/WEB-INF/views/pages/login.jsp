@@ -32,11 +32,9 @@
 			</tr>
 			<tr>
 				<td class="submit">
-					<span class="remember">
-						<input type="checkbox" class="checkbox" name="remember" />
-						<fmt:message key="login.remember" />
-					</span>
-					<input type="submit" class="button" name="submit" value="<fmt:message key="login.signin" />" />
+					<input type="checkbox" class="checkbox" name="remember" />
+					<span class="remember"><fmt:message key="login.remember" /></span>
+					<input type="submit" class="btn btn-primary active" name="submit" value="<fmt:message key="login.signin" />" />
 				</td>
 			</tr>
 		</table>

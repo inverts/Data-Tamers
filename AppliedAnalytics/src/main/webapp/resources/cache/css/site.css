@@ -20,9 +20,11 @@
 /* Styling for basic site modules */
 html{ background:#222; }
 body, h1, h2, h3, h4, a, img { padding:0 auto; margin:0 auto; outline: none; border: none; font-family: 'museo-sans-500', 'Trebuchet MS', 'Helvetica', sans-serif; }
+h1, h2 { font-weight:600; }
 a:visited { color: inherit; }
 a { color: inherit; }
 a:hover { cursor:pointer }
+input[type="checkbox"] { margin:0; }
 
 .page { margin:0 auto; position:relative; background:#fff; }
 .page .wrapper { float:left; width:100%; position:relative; min-height:800px;}
@@ -35,11 +37,9 @@ input { font: inherit; }
 
 /*****GLOBAL STANDARDS CLASSES****/
 .checkbox, .button, .textbox { border-radius:5px; }
-.textbox { height:35px; padding:5px; width:320px; }
-.button { background-color:#00aeef; color:#fff; height:30px; width:80px; outline:none; }
+.textbox { height:45px; padding:5px; width:320px; }
 .disabled { opacity:0.5; }
-.button:hover { cursor:pointer; }
-.checkbox { width:18px; height:18px; vertical-align:middle; }
+.checkbox { width:18px; height:18px; vertical-align:middle; display:inline; min-height:auto; margin-top:0;}
 
 #ui-datepicker-div { font-size: 15px; }
 
@@ -126,39 +126,37 @@ input { font: inherit; }
 /******LOGIN*******/
 .login td { width:320px; padding: 5px 0;}
 .login a, .login a:visited { text-decoration:none; }
-.login .input-text { width:96%; border-radius:5px; margin-top:15px;}
-.login .remember { display:inline; height:50px; vertical-align:middle; }
-.login .button { float:right; }
+.login .input-text { width:100%; border-radius:5px; margin-top:15px;}
+.login .remember { line-height:1.0em; }
+.login .checkbox { display:inline; }
+.login .btn { float:right; }
 .login .submit { padding-top:15px; }
-.login .register-div { height:40px; padding-top:50px; vertical-align:middle; }
+.login .register-div { height:40px; padding-top:10px; vertical-align:middle; }
 .login .register-div a { text-decoration:underline; }
 
 
 /*****ACCOUNTS*****/
 
 /* Start */
-.start .nav-btns { width: 900px; font:inherit; padding:0;}
-.start .nav-btns li { list-style:none; }
-.start .nav-btns a { text-decoration:none; }
-.start .nav-btns a:hover { color:#00aeef }
-.start .nav-btns .previous { float:left; }
-.start .nav-btns .next { float:right; }
+.start .pager { width: 900px; font:inherit; padding:0;}
+.start .start-content { margin-top:10px; width:900px; line-height:35px; }
+
 
 /* Terms */
 .terms .terms-wrapper { width: 900px; }
 .terms .termstext { border:solid 1px #000; overflow:auto; height:400px; margin:10px 0 0 5px; padding:10px; font-family:"Times New Roman", Serif; }
 .terms .accept-div, .terms .continue { float:right; clear:right; margin-top:10px; }
-.terms .button { float:right; }
-.terms .continue { width:150px; margin-bottom:20px; }
-.terms .continue a { line-height:30px; }
+.terms .accept-div { width:382px; }
+.terms .continue { width:165px; margin-bottom:20px; }
 
 /* Personal */
 .personal-info td { min-width:200px; }
 .personal-info tr > td { padding-bottom:1em; }
-.personal-info .button { float:right; }
+.personal-info .btn { float:right; }
 .personal-info .googleAuth { width:600px; padding:10px 0; }
 .personal-info .googleAuth a{ float:right; margin-right:150px; }
-.personal-info .googleAuth .success { margin-left:200px; color:#00aeef; }
+.new-account.alert { width:100%; padding-left:340px; border-radius:0;  }
+.googleName { color:#00aeef; }
 .personal-info .googleAuth a:hover { cursor:pointer; color:#00aeef; }
 
 

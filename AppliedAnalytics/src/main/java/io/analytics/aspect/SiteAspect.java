@@ -3,6 +3,8 @@ package io.analytics.aspect;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -57,6 +59,18 @@ public class SiteAspect {
 		
 		return joinPoint.proceed();
 	}
+	
+	
+	@Around("publicMethod() && @annotation(reset)")
+	public Object ResetAdvice(ProceedingJoinPoint joinPoint, Reset reset) throws Throwable
+	{
+		HttpSession session = this.getSession(joinPoint.getArgs());
+		
+		session.removeAttribute("loginForm");
+		session.removeAttribute("accountForm");
+		
+		return joinPoint.proceed();
+	}
 
 	
 	
@@ -74,6 +88,23 @@ public class SiteAspect {
 		}
 		
 		throw new Exception("No Model parameter");
+		
+	}
+	
+	/**
+	 * Returns the Model object from a list of parameters.
+	 * @param args
+	 * @return The Model.
+	 * @throws Exception if there is no Model.
+	 */
+	private HttpSession getSession(Object[] args) throws Exception {
+		
+		for(Object arg : args) {
+			if (arg instanceof HttpSession)
+				return (HttpSession)arg;
+		}
+		
+		throw new Exception("No HttpSession parameter");
 		
 	}
 

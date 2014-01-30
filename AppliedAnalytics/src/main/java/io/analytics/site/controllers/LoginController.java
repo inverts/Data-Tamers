@@ -75,6 +75,6 @@ public class LoginController {
 			
 		session.invalidate(); // kill the session.
 		
-		return "redirect:/";
+		return "forward:j_spring_security_logout";
 	}
 }

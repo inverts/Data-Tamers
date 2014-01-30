@@ -3,7 +3,7 @@
 
 <div class="terms">
 	<div class="terms-wrapper">
-		<h1><fmt:message key="account.terms.header" /></h1>
+		<h2><fmt:message key="account.terms.header" /></h2>
 		<form action="<c:url value="/accounts/acceptterms" />" method="POST">
 			<div class="termstext">
 				<fmt:message key="account.terms.text.1" /><br/><br/>
@@ -17,8 +17,8 @@
 				<fmt:message key="account.terms.accept" />
 			</div>
 			<div class="continue">
-				<a href="<c:url value="/appliedanalytics/" />"><fmt:message key="account.terms.cancel" /></a>
-				<input type="submit" class="button disabled" id="terms-submit" value="<fmt:message key="account.terms.continue" />" disabled />
+				<input type="button" class="btn btn-default active" id="terms-cancel" value="<fmt:message key="account.terms.cancel" />" />
+				<input type="submit" class="btn btn-primary active" id="terms-submit" value="<fmt:message key="account.terms.continue" />" disabled />
 			</div>
 		</form>
 	</div>

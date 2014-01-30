@@ -20,14 +20,22 @@
 </style>
 
 <div class="dashboard-content">
-	<div>
-		<div id="hypotheticalWidget" class="w_container"></div>
-		<div id="websitePerformance" class="w_container"></div>
-	</div>
-	<div>
-		<div id="revenueSources" class="w_container"></div>
-		<div id="testWidget4" class="w_container"></div>		
-	</div>
-	
-
+	<div id="hypotheticalWidget" class="w_container" draggable="true"></div>
+	<div id="websitePerformance" class="w_container" draggable="true"></div>
+	<div id="revenueSources" class="w_container" draggable="true"></div>
+	<div id="testWidget4" class="w_container" draggable="true"></div>		
 </div>
+
+<script>
+
+$(function() {
+	$('.w_container').on("drag", function(e){ 
+		$(e.target.id).before($(this));
+ 	}).on("drop", function(e) {
+ 		alert('e.target.id');
+ 	});
+	
+});
+	
+	
+</script>
