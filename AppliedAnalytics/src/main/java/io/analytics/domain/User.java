@@ -1,5 +1,7 @@
 package io.analytics.domain;
 
+import io.analytics.security.PasswordUtils;
+
 import java.util.Calendar;
 import java.util.Collection;
 
@@ -10,8 +12,7 @@ public class User implements UserDetails {
 
 	private Collection<? extends GrantedAuthority> roles;
 	private String username;
-	private String passwordTemp;
-	private String password;
+	private String passwordHash;
 	private String email;
 	private String profileImageUrl;
 	private Calendar joinDate;
@@ -27,31 +28,36 @@ public class User implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return this.roles;
 	}
-
-	public void setPassword(String password) {
-		this.passwordTemp = password;
-	}
 	
 	/**
-	 * This isn't going to fly. There will be no raw passwords stored anywhere.
+	 * Obtains the password hash of this user.
 	 */
 	@Override
 	public String getPassword() {
-		return this.passwordTemp;
+		return this.passwordHash;
 	}
 	
-	public void changePassword(String newPassword) {
-		//Check password for quality guidelines.
-		
-		//Create a new password salt.
-		
-		//Hash the password with the salt.
+	/**
+	 * Generates a password hash for a new password and updates the hash and salt
+	 * in the User object.
+	 * 
+	 * @param newPassword
+	 * @return
+	 */
+	public boolean setPassword(String newPassword) {
+		if (PasswordUtils.passwordMeetsGuidelines(newPassword)) {
+			String salt = PasswordUtils.generateSalt();
+			String hash = PasswordUtils.createPasswordHash(newPassword, salt);
+			
+			if (hash == null) //This can occur if we obtain a DataAccessException.
+				return false;
+			
+			this.passwordHash = hash;
+			this.passwordSalt = salt;
+		} 
+		return false;
 	}
 	
-	public String getPasswordHash() {
-		return this.password;
-	}
-
 	public String getPasswordSalt() {
 		return passwordSalt;
 	}

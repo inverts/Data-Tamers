@@ -7,7 +7,7 @@
            http://www.springframework.org/schema/security/spring-security-3.1.xsd">
            
  <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder">
- 	<beans:constructor-arg value="256"/>
+ 	<beans:constructor-arg value="512"/>
  </beans:bean>
  
 <!-- Intercepts the URL checks authorization -->
