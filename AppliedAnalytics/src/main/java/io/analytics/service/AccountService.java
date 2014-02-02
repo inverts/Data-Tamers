@@ -2,8 +2,11 @@ package io.analytics.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import io.analytics.domain.Account;
 
+@Repository
 public class AccountService {
 
 	/**
