@@ -2,19 +2,21 @@ package io.analytics.service;
 import io.analytics.domain.PagePerformanceData;
 import io.analytics.repository.interfaces.ICoreReportingRepository;
 import io.analytics.repository.CoreReportingRepository;
+import io.analytics.service.interfaces.IPagePerfomanceService;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.analytics.model.GaData;
 import com.google.api.services.analytics.model.GaData.ColumnHeaders;
 
-
-public class PagePerformanceService {
+@Service
+public class PagePerformanceService implements IPagePerfomanceService{
 	
 	/*
 	 *  Class: PagePerformanceService 
