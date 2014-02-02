@@ -27,7 +27,7 @@ public class AccountService {
 	}
 	
 	/**
-	 * Gets a list of accounts thst
+	 * Gets a list of accounts 
 	 * @param userId
 	 * @return
 	 */

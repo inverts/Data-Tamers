@@ -15,7 +15,8 @@ public class Account {
 	private int defaultFilterId;
 	private Calendar creationDate;
 	
-	public Account() {
+	public Account(int id) {
+		this.id = id;
 	}
 	public int getId() {
 		return id;

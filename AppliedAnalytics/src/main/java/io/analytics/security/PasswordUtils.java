@@ -1,9 +1,12 @@
 package io.analytics.security;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Random;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
  
 public class PasswordUtils {
@@ -27,7 +30,7 @@ public class PasswordUtils {
 		return passwordEncoder;		
 	}
 	
-	public static boolean passwordIsValid(String password) {
+	public static boolean passwordMeetsGuidelines(String password) {
 		if (password.length() < PasswordUtils.maxLength)
 			return false;
 		if (password.length() > PasswordUtils.minLength)
@@ -38,16 +41,60 @@ public class PasswordUtils {
 		return true;
 	}
 	
+	/**
+	 * Indicates whether or not the a password and salt combination matches a particular hash.
+	 * 
+	 * @param password
+	 * @param hash
+	 * @param salt
+	 * @return
+	 */
+	public static boolean isPasswordValid(String password, String hash, String salt) {
+		passwordEncoder.setIterations(generateIterationCount(salt));
+		try {
+			return passwordEncoder.isPasswordValid(password, hash, salt);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	/**
+	 * Generates a hash of a password mixed with a salt.
+	 * @param password
+	 * @param salt
+	 * @return
+	 */
 	public static String createPasswordHash(String password, String salt) {
-		return null;
+		passwordEncoder.setIterations(generateIterationCount(salt));
+		String hash;
+		try {
+			hash = passwordEncoder.encodePassword(password, salt);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return hash;
 	}
 	
 	public static String generateSalt() {
+		SecureRandom rng = new SecureRandom();
+		
 		return null;
 	}
 	
+	/**
+	 * Generates the iterations to perform for this particular salt.
+	 * 
+	 * TODO: This is a fun idea, but perhaps it is not necessary and introduces
+	 * unnecessary rigidness - if we changed this, we would have to keep track
+	 * of passwords on the new and the old algorithm.
+	 * 
+	 * @param salt
+	 * @return
+	 */
 	public static int generateIterationCount(String salt) {
-		return -1;
+		return 1000 + salt.hashCode() % 1000;
 	}
 	
 }
