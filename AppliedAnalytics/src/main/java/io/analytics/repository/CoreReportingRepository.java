@@ -5,7 +5,9 @@ import io.analytics.repository.interfaces.ICoreReportingRepository;
 import io.analytics.service.interfaces.ISessionService;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +43,9 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		//private String profileID;
 		private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 		private static final JsonFactory JSON_FACTORY = new JacksonFactory();
-		
+	
+		private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");;
 		private ISessionService _sessionService;
-
 		private Ga CORE_REPORTING;
 
 		//Some metrics and dimensions defined for convenience.
@@ -161,12 +163,12 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 * 
 		 * @return
 		 */
-		public CoreReportingTypedData getTopTrafficSources(Credential credential, String profileID, String metric, String startDate, String endDate, int n) throws IOException{
-			GaData data = null;
+		public CoreReportingData getTopTrafficSources(Credential credential, String profileID, String metric, String startDate, String endDate, int n) {
+			GaData gaData = null;
 			try {
 				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build().data().ga();
-				data = reporting.get("ga:"+ profileID, // Table Id.
+				gaData = reporting.get("ga:"+ profileID, // Table Id.
 						startDate, // Start date.
 						endDate, // End date.
 						metric) // Metrics.
@@ -180,7 +182,9 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 				// Catch general parsing network errors.
 				e.printStackTrace();
 			}
-			return topTrafficSourcesMapper(data);
+			return coreReportingMapper(gaData);
+			//return topTrafficSourcesMapper(data);
+			//return gaData;
 		}
 		
 		/**
@@ -189,9 +193,11 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 * @return
 		 */
 
-		@Override
-		public CoreReportingTypedData getPagePerformance(Credential credential, String profileID, String startDate, String endDate, int maxResults) {
+		public GaData getPagePerformance(Credential credential, String profileID, Date sDate, Date eDate, int maxResults) {
 			GaData gaData = null;
+			String startDate = dateFormat.format(sDate);
+			String endDate = dateFormat.format(eDate);
+			
 			System.out.println("start date = "+startDate+", "+"end date = "+endDate);
 		
 			try {
@@ -202,7 +208,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 				gaData = reporting.get("ga:"+ profileID, // profile id (table id).
 						startDate, // Start date.
 						endDate, // End date.
-						"ga:entranceBounceRate,ga:visits,ga:exitRate") // Metrics.
+						"ga:visitsBounceRate,ga:visits,ga:exitRate") // Metrics.
 						.setDimensions("ga:pagePath")
 						.setSort("-ga:visits")
 						.setMaxResults(maxResults)
@@ -213,8 +219,43 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 				// Catch general parsing network errors.
 				e.printStackTrace();
 			}
-			return pagePerformanceMapper(gaData);
-		}		
+			//return pagePerformanceMapper(gaData);
+			return gaData;
+		}	
+		
+		/**
+		 *  Get the total metric for the website, e.g. visits, a single integer.
+		 *  
+		 *  Inputs: 
+		 *  	metric <String> must be in the GA command form 
+		 */
+		
+		public GaData getTotalMetric(Credential credential, String profileID, String metric, Date sDate, Date eDate){
+			GaData gaData = null;
+			String startDate = dateFormat.format(sDate);
+			String endDate = dateFormat.format(eDate);
+			
+			System.out.println("start date = "+startDate+", "+"end date = "+endDate);
+
+			try {
+				
+				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build().data().ga();
+				
+				gaData = reporting.get("ga:"+ profileID, // profile id (table id).
+						startDate, // Start date.
+						endDate, // End date.
+						metric)  // Metric
+						.execute();
+			} catch (GoogleJsonResponseException e) {
+				handleGoogleJsonResponseException(e);
+			} catch (IOException e) {
+				// Catch general parsing network errors.
+				e.printStackTrace();
+			}
+			//return pagePerformanceMapper(gaData);
+			return gaData;
+		}
 		
 		private CoreReportingData coreReportingMapper(GaData data){
 			if (data == null)
@@ -289,6 +330,8 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			CoreReportingTypedData dataObject = new CoreReportingTypedData(list);
 			return dataObject;
 		}
+		
+		
 		
 		/*
 		 *  CoreReportingTypedData: Contains an aggregate array list of array lists 
