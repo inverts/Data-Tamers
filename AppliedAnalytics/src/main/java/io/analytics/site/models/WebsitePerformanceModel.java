@@ -68,7 +68,7 @@ public class WebsitePerformanceModel {
 		 * TODO: Have this automatically occur when dependencies are updated.
 		 */
 		public void updateData() {
-			/*
+		
 			PagePerformanceData dataObject = this.pagePerformanceService.getPagePerformanceData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate, 500);
 			this.pagePath = dataObject.getPagePathData();
 			this.visits = dataObject.getVisitsData();
@@ -108,7 +108,7 @@ public class WebsitePerformanceModel {
 				System.out.println(pagePath.get(worstI[i]) + ", " + (visits.get(worstI[i]*100)/visitsTotal + ", " + 
 						exitRate.get(worstI[i]) + ", " + visitsBounceRate.get(worstI[i])));
 			}
-			*/
+			
 			
 		}
 		
