@@ -101,5 +101,5 @@ public class PasswordUtils {
 	public static int generateIterationCount(String salt) {
 		return 1000 + salt.hashCode() % 1000;
 	}
-	
+
 }

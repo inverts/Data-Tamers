@@ -159,4 +159,77 @@ input { font: inherit; }
 .googleName { color:#00aeef; }
 .personal-info .googleAuth a:hover { cursor:pointer; color:#00aeef; }
 
+/*****CSS for HYPOTHETICAL FUTURE WIDGET*****/
+line:hover {
+	opacity: 0.5;
+}
 
+#backrect {
+	width: 600px;
+	height: 350px;
+	background-color: #CCC;
+}
+
+#chart {
+	font-size: 12px;
+}
+
+#chart line.data {
+	stroke: grey;
+	stroke-width: 5px;
+}
+
+#chart .xaxis {
+	stroke: grey;
+	stroke-width: 5px;
+}
+
+#chart path {
+	fill: none;
+}
+
+#draggableLine {
+	cursor: pointer;
+}
+
+body {
+	font: 12px Helvetica;
+}
+
+.axisLine {
+	fill: none;
+	stroke-width: 1, stroke: grey;
+}
+
+;
+.axis hypoPath,.axis trendPath,.axis axisLine        
+        
+                
+        path:hover {
+	opacity: 0.5;
+}
+
+#line_o path {
+	stroke: black;
+	fill: none;
+}
+
+#line_o path.overlay {
+	stroke: white;
+	stroke-opacity: 0;
+	stroke-width: 10;
+	fill: none;
+}
+
+#tangent {
+	stroke: black;
+	stroke-width: 2;
+	fill: none;
+}
+
+#tangent2 {
+	stroke: black;
+	stroke-width: 2;
+	fill: none;
+	opacity: 0.5;
+}
