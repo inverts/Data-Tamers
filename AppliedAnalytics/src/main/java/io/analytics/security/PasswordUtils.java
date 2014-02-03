@@ -1,10 +1,9 @@
 package io.analytics.security;
 
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Random;
+import org.springframework.security.crypto.keygen.KeyGenerators;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
@@ -50,6 +49,8 @@ public class PasswordUtils {
 	 * @return
 	 */
 	public static boolean isPasswordValid(String password, String hash, String salt) {
+		if (password == null || hash == null || salt == null)
+			return false;
 		passwordEncoder.setIterations(generateIterationCount(salt));
 		try {
 			return passwordEncoder.isPasswordValid(password, hash, salt);
@@ -66,6 +67,8 @@ public class PasswordUtils {
 	 * @return
 	 */
 	public static String createPasswordHash(String password, String salt) {
+		if (password == null || salt == null)
+			return null;
 		passwordEncoder.setIterations(generateIterationCount(salt));
 		String hash;
 		try {
@@ -77,10 +80,12 @@ public class PasswordUtils {
 		return hash;
 	}
 	
+	/**
+	 * Generates a random 8 character String for salting passwords.
+	 * @return
+	 */
 	public static String generateSalt() {
-		SecureRandom rng = new SecureRandom();
-		
-		return null;
+		return KeyGenerators.string().generateKey();
 	}
 	
 	/**
@@ -96,5 +101,5 @@ public class PasswordUtils {
 	public static int generateIterationCount(String salt) {
 		return 1000 + salt.hashCode() % 1000;
 	}
-	
+
 }

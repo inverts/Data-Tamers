@@ -173,6 +173,12 @@
                  		<version>1.9.5</version>
                  		<scope>test</scope>
                  </dependency>
+                 <dependency>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-test</artifactId>
+					<version>2.5</version>
+				</dependency>
+				            
 		 
                 <!-- OAuth2 Libraries -->
                 
@@ -239,6 +245,13 @@
 					<groupId>org.apache.commons</groupId>
 					<artifactId>commons-math3</artifactId>
 					<version>3.2</version>
+				</dependency>
+            
+            	<!-- Database Dependencies-->
+            	<dependency>
+					<groupId>mysql</groupId>
+					<artifactId>mysql-connector-java</artifactId>
+					<version>5.1.28</version>
 				</dependency>
             
               
