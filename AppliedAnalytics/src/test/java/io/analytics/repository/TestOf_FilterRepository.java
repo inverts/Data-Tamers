@@ -12,10 +12,8 @@ import org.springframework.test.context.ContextConfiguration;
 import io.analytics.domain.Filter;
 import io.analytics.repository.interfaces.IFilterRepository;
 
-@ContextConfiguration
 public class TestOf_FilterRepository {
 	
-	@Autowired
 	private IFilterRepository FilterRepository;
 	
 	@Test

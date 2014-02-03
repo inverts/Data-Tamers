@@ -23,7 +23,6 @@ public class FilterRepository implements IFilterRepository {
 
 	private DataSource dataSource;
  
-	@Autowired
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
@@ -70,7 +69,7 @@ public class FilterRepository implements IFilterRepository {
 	private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 	
 	public boolean addNewFilter(Filter f) {
-		JdbcTemplate jdbc = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbc = new JdbcTemplate(DATASOURCE);
 		String preStatement;
 		Object[] args;
 		int[] argTypes;
