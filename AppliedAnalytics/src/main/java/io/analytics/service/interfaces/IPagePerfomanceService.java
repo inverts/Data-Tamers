@@ -14,6 +14,4 @@ import com.google.api.client.auth.oauth2.Credential;
  */
 public interface IPagePerfomanceService {
 	public PagePerformanceData getPagePerformanceData(Credential credential, String profileID, Date startDate, Date endDate, int maxResults);
-
-	public String getProfile();
 }

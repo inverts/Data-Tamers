@@ -3,7 +3,6 @@ import io.analytics.domain.PagePerformanceData;
 import io.analytics.repository.interfaces.ICoreReportingRepository;
 import io.analytics.repository.CoreReportingRepository;
 import io.analytics.service.interfaces.IPagePerfomanceService;
-import io.analytics.service.interfaces.ISessionService;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,12 +33,6 @@ public class PagePerformanceService implements IPagePerfomanceService{
 	 */
 	
 	@Autowired private ICoreReportingRepository REPOSITORY;
-	@Autowired private ISessionService sessionService;
-	
-	public String getProfile() {
-		//return this.profile;
-		return sessionService.getUserSettings().getActiveProfile().getId();
-	}
 	
 	public PagePerformanceData getPagePerformanceData(Credential credential, String profileID, Date startDate, Date endDate, int maxResults){
 		
@@ -63,7 +56,7 @@ public class PagePerformanceService implements IPagePerfomanceService{
 				pagePathColumn = column;
 		    if (name.equals("ga:visits"))
 				visitsColumn = column;
-			if (name.equals("ga:visitBounceRate"))
+			if (name.equals("ga:visitsBounceRate"))
 				visitsBounceRateColumn = column;
 			if (name.equals("ga:exitRate"))
 				exitRateColumn = column;
@@ -134,6 +127,7 @@ public class PagePerformanceService implements IPagePerfomanceService{
 		}
 		
 		// domain dataObject, add visits total
+		dataObject = new PagePerformanceData();
 		dataObject.setVisitsTotal(datum);
 		return dataObject;
 	}		
