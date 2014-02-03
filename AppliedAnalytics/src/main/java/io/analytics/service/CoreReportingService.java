@@ -1,7 +1,5 @@
-
 package io.analytics.service;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -11,9 +9,6 @@ import org.springframework.stereotype.Service;
 import com.google.api.client.auth.oauth2.Credential;
 
 import io.analytics.domain.CoreReportingData;
-import io.analytics.domain.CoreReportingTypedData;
-import io.analytics.repository.CoreReportingRepository;
-import io.analytics.repository.CoreReportingRepository.CredentialException;
 import io.analytics.repository.interfaces.ICoreReportingRepository;
 import io.analytics.service.interfaces.ICoreReportingService;
 import io.analytics.service.interfaces.ISessionService;
@@ -35,7 +30,6 @@ public class CoreReportingService implements ICoreReportingService {
 		this.profile = profileId;
 	}*/
 	
-	
 	public String getProfile() {
 		//return this.profile;
 		return sessionService.getUserSettings().getActiveProfile().getId();
@@ -48,12 +42,12 @@ public class CoreReportingService implements ICoreReportingService {
 	public CoreReportingData getMetricByDayOfWeek(Credential credential, String profileID, String metric, Date startDate, Date endDate, int maxResults) {
 		return REPOSITORY.getMetricByDayOfWeek(credential, profileID, metric, dateFormat.format(startDate), dateFormat.format(endDate), maxResults);
 	}
-
-	public CoreReportingTypedData getTopTrafficSources(Credential credential, String profileID, String metric, Date startDate, Date endDate, int maxResults) throws IOException {
+	
+	public CoreReportingData getTopTrafficSources(Credential credential, String profileID, String metric, Date startDate, Date endDate, int maxResults)  {
 		return REPOSITORY.getTopTrafficSources(credential, profileID, metric, dateFormat.format(startDate), dateFormat.format(endDate), maxResults);
 	}
 	
-	public CoreReportingTypedData getPagePerformance(Credential credential, String profileID, Date startDate, Date endDate, int maxResults) {
-		return REPOSITORY.getPagePerformance(credential, profileID, dateFormat.format(startDate), dateFormat.format(endDate), maxResults);
-	}
+
+	
+
 }

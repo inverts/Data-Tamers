@@ -1,11 +1,17 @@
 package io.analytics.site.controllers;
 
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import io.analytics.service.PagePerformanceService;
 import io.analytics.service.interfaces.ICoreReportingService;
+import io.analytics.service.interfaces.IPagePerfomanceService;
 import io.analytics.service.interfaces.ISessionService;
 import io.analytics.site.models.*;
 
@@ -19,12 +25,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.gdata.util.ParseException;
 
 @Controller
 public class WidgetController {
 	
 	@Autowired private ICoreReportingService CoreReportingService;
 	@Autowired private ISessionService SessionService;
+	@Autowired private IPagePerfomanceService PagePerformanceService;
 	
 	@RequestMapping(value = "/HypotheticalFuture", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView hypotheticalFutureView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,	
@@ -140,9 +148,9 @@ public class WidgetController {
 		}
 		
 		
-		/*
-		 * Setting up the model.
-		 */
+		//
+		// Setting up the model.
+		//
 		
 		WebsitePerformanceModel webPerform = SessionService.getModel(session, "webPerform", WebsitePerformanceModel.class);
 		
@@ -158,9 +166,42 @@ public class WidgetController {
 				return new ModelAndView("unavailable");
 			}*/
 			//webPerform = new WebsitePerformanceModel(reportingService);
-			webPerform = new WebsitePerformanceModel(this.SessionService, this.CoreReportingService);
+			webPerform = new WebsitePerformanceModel(this.SessionService, this.PagePerformanceService);
 		}
 		
+	//***** GWEN's Test *****
+		
+/*	
+		Date startDate=null;
+	
+			try {
+				startDate = new SimpleDateFormat("MM/dd/yyyy").parse("06/01/2013");
+			} catch (java.text.ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		Date endDate=null;;
+		
+			try {
+				endDate = new SimpleDateFormat("MM/dd/yyyy").parse("1/01/2014");
+			} catch (java.text.ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		System.out.println("start Date = "+format.format(startDate));
+		System.out.println("end Date = "+format.format(endDate));
+		
+			webPerform.setStartDate(startDate);
+			webPerform.setEndDate(endDate);
+		
+			webPerform.updateData();
+		
+		
+		//  end Gwen Test
+		*/
 		if (filter != null) {
 			webPerform.setStartDate(filter.getActiveStartDate());
 			webPerform.setEndDate(filter.getActiveEndDate());
@@ -170,7 +211,14 @@ public class WidgetController {
 		 * Here's where we start making queries.
 		 */
 		
-		
+		/*// this is example code from Hypothetical Future
+		//Execute API commands to change the model
+		if (!changePercentage.equals("none"))
+			hypotheticalFuture.setChangePercentage(changePercentage);
+		if (!dimension.equals("none"))
+			hypotheticalFuture.setDimension(dimension);
+		hypotheticalFuture.updateData();
+		*/
 		
 		/*
 		 * Save the updated model to the session and send it to the view.
@@ -184,3 +232,4 @@ public class WidgetController {
 	}
 
 }
+

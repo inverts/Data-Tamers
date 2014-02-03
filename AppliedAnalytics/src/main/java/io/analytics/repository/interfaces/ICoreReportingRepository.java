@@ -1,10 +1,12 @@
 package io.analytics.repository.interfaces;
 import io.analytics.domain.CoreReportingData;
-import io.analytics.domain.CoreReportingTypedData;
-
-import java.io.IOException;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.services.analytics.model.GaData;
+
+import java.util.Date;
+
+
 
 public interface ICoreReportingRepository {
 	//TODO: Eventually we will want this to be 10x more flexible, so this will all probably be rewritten
@@ -12,9 +14,11 @@ public interface ICoreReportingRepository {
 	
 	public CoreReportingData getMetricByDayOfWeek(Credential credential, String profileID, String metric, String startDate, String endDate, int maxResults);
 
-	public CoreReportingTypedData getTopTrafficSources(Credential credential, String profileID, String metric, String startDate, String endDate, int maxResults) throws IOException;
+	public CoreReportingData getTopTrafficSources(Credential credential, String profileID, String metric, String startDate, String endDate, int maxResults);
 
-	public CoreReportingTypedData getPagePerformance(Credential credential, String profileID, String startDate, String endDate, int maxResults) ;
+	public GaData getPagePerformance(Credential credential, String profileID, Date startDate, Date endDate, int maxResults) ;
 
+	public GaData getTotalMetric(Credential credential, String profileID, String metric, Date startDate, Date endDate);
 	}
+
 

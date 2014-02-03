@@ -4,6 +4,7 @@
 <script src="<c:url value="cache/javascript/hypothetical-future.js" />"></script>
 <script src="<c:url value="cache/javascript/website-performance.js" />"></script>
 <script src="<c:url value="cache/javascript/revenue-sources.js" />"></script>
+<script src="<c:url value="cache/javascript/dashboard.js" />"></script>
 
 
 <style>
@@ -25,17 +26,3 @@
 	<div id="revenueSources" class="w_container" draggable="true"></div>
 	<div id="testWidget4" class="w_container" draggable="true"></div>		
 </div>
-
-<script>
-
-$(function() {
-	$('.w_container').on("drag", function(e){ 
-		$(e.target.id).before($(this));
- 	}).on("drop", function(e) {
- 		alert('e.target.id');
- 	});
-	
-});
-	
-	
-</script>

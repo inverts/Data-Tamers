@@ -1,30 +1,39 @@
 package io.analytics.site.models;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import io.analytics.domain.CoreReportingTypedData;
-import io.analytics.service.CoreReportingService;
-import io.analytics.service.interfaces.ICoreReportingService;
+import io.analytics.domain.PagePerformanceData;
+import io.analytics.service.interfaces.IPagePerfomanceService;
 import io.analytics.service.interfaces.ISessionService;
 
 public class WebsitePerformanceModel {
 	
-		private JSONObject dataPoints;
-		private ICoreReportingService reportingService;
+		private JSONObject jsonData;
+		private IPagePerfomanceService pagePerformanceService;
 		private ISessionService sessionService;
 		private Date startDate;
 		private Date endDate;
 		private String activeProfile;
+		private ArrayList<String> pagePath;
+		private ArrayList<Integer> visits;
+		private ArrayList<Double> visitsBounceRate;
+		private ArrayList<Double> exitRate;
+		private int visitsTotal;
 		
-		public WebsitePerformanceModel(ISessionService sessionService, ICoreReportingService reportingService) {	
-			super();
+		public WebsitePerformanceModel(ISessionService sessionService, IPagePerfomanceService pagePerformanceService) {	
 			this.sessionService = sessionService;
-			this.reportingService = reportingService;
-			this.dataPoints = new JSONObject();			
+			this.pagePerformanceService = pagePerformanceService;
+			this.jsonData = new JSONObject();
+			PagePerformanceData dataObject = this.pagePerformanceService.getPagePerformanceData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate, 10);
+			this.pagePath = dataObject.getPagePathData();
+			this.visits = dataObject.getVisitsData();
+			this.visitsBounceRate = dataObject.getVisitsBounceRateData();
+			this.exitRate = dataObject.getExitRateData();
+			this.visitsTotal=-1;
 		}
 		
 		public String getName() {
@@ -59,8 +68,48 @@ public class WebsitePerformanceModel {
 		 * TODO: Have this automatically occur when dependencies are updated.
 		 */
 		public void updateData() {
-			CoreReportingTypedData data = reportingService.getPagePerformance(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), startDate, endDate, 5);
-			data.getData();
+		
+			PagePerformanceData dataObject = this.pagePerformanceService.getPagePerformanceData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate, 500);
+			this.pagePath = dataObject.getPagePathData();
+			this.visits = dataObject.getVisitsData();
+			this.visitsBounceRate = dataObject.getVisitsBounceRateData();
+			this.exitRate = dataObject.getExitRateData();
+			this.visitsTotal = dataObject.getVisitsTotal();
+			
+			ArrayList<Double> weightedAvg = new ArrayList<Double>(pagePath.size());
+			for (int i=0; i<pagePath.size(); i++){
+				weightedAvg.add(i, visits.get(i)*visitsBounceRate.get(i) + 
+						visits.get(i)*exitRate.get(i));
+			}
+			
+			// iterate to find top 5 maximum weighted averages and save indices
+			double max = weightedAvg.get(0);
+			int maxIndex = 0;
+			int[] worstI = new int[5];
+			for (int i = 0; i<5; i++) {
+				worstI[i]=-1;
+			}
+			for (int j=0; j<5; j++){
+				for (int i=j; i<pagePath.size(); i++) {
+					if (max < weightedAvg.get(i) && i!=worstI[0] && i!=worstI[1] && i!=worstI[2] &&
+							i!=worstI[3] && i != worstI[4]) {
+						max = weightedAvg.get(i);
+						maxIndex = i;
+					}
+				}
+				worstI[j]=maxIndex;
+				System.out.println("Worst index = "+ maxIndex + ". Max = " + max);
+				max = 0;
+			}
+			
+		// put results into json object (print out results for now)
+			System.out.println("Page               Visits(%)      ExitRate(%)       VisitsBounceRate(%) ");
+			for (int i=0; i<5; i++){
+				System.out.println(pagePath.get(worstI[i]) + ", " + (visits.get(worstI[i]*100)/visitsTotal + ", " + 
+						exitRate.get(worstI[i]) + ", " + visitsBounceRate.get(worstI[i])));
+			}
+			
+			
 		}
 		
 		/* test method to pass data to javascript */
@@ -110,8 +159,5 @@ public class WebsitePerformanceModel {
 			
 		}
 		*/
-
-	
-
-
 }
+

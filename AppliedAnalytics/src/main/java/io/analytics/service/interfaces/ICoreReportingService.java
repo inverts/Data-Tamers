@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.services.analytics.model.GaData;
 
 public interface ICoreReportingService {
 	
@@ -16,9 +17,7 @@ public interface ICoreReportingService {
 	
 	public CoreReportingData getMetricByDayOfWeek(Credential credential, String profileID, String metric, Date startDate, Date endDate, int maxResults) ;
 	
-	public CoreReportingTypedData getTopTrafficSources(Credential credential, String profileID, String metric, Date startDate, Date endDate, int maxResults) throws IOException;
-	
-	public CoreReportingTypedData getPagePerformance(Credential credential, String profileID, Date startDate, Date endDate, int maxResults) ;
+	public CoreReportingData getTopTrafficSources(Credential credential, String profileID, String metric, Date startDate, Date endDate, int maxResults) ;
 
 }
 
