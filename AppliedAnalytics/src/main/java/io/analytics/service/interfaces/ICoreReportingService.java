@@ -1,13 +1,10 @@
 package io.analytics.service.interfaces;
 
 import io.analytics.domain.CoreReportingData;
-import io.analytics.domain.CoreReportingTypedData;
-
-import java.io.IOException;
 import java.util.Date;
 
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.services.analytics.model.GaData;
+
 
 public interface ICoreReportingService {
 	

@@ -208,7 +208,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 				gaData = reporting.get("ga:"+ profileID, // profile id (table id).
 						startDate, // Start date.
 						endDate, // End date.
-						"ga:visitsBounceRate,ga:visits,ga:exitRate") // Metrics.
+						"ga:visitBounceRate,ga:visits,ga:exitRate") // Metrics.
 						.setDimensions("ga:pagePath")
 						.setSort("-ga:visits")
 						.setMaxResults(maxResults)

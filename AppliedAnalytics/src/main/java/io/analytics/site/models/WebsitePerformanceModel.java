@@ -1,10 +1,16 @@
 package io.analytics.site.models;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.google.api.client.auth.oauth2.Credential;
 
 import io.analytics.domain.PagePerformanceData;
 import io.analytics.service.interfaces.IPagePerfomanceService;
@@ -15,25 +21,32 @@ public class WebsitePerformanceModel {
 		private JSONObject jsonData;
 		private IPagePerfomanceService pagePerformanceService;
 		private ISessionService sessionService;
+		private String activeProfile;
 		private Date startDate;
 		private Date endDate;
-		private String activeProfile;
 		private ArrayList<String> pagePath;
 		private ArrayList<Integer> visits;
 		private ArrayList<Double> visitsBounceRate;
 		private ArrayList<Double> exitRate;
 		private int visitsTotal;
-		
+        DateFormat presentationFormat = new SimpleDateFormat("MM/dd/yyyy"); 
+        private static final int MS_IN_DAY = 86400000;
+        
 		public WebsitePerformanceModel(ISessionService sessionService, IPagePerfomanceService pagePerformanceService) {	
 			this.sessionService = sessionService;
 			this.pagePerformanceService = pagePerformanceService;
 			this.jsonData = new JSONObject();
-			PagePerformanceData dataObject = this.pagePerformanceService.getPagePerformanceData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate, 10);
-			this.pagePath = dataObject.getPagePathData();
-			this.visits = dataObject.getVisitsData();
-			this.visitsBounceRate = dataObject.getVisitsBounceRateData();
-			this.exitRate = dataObject.getExitRateData();
-			this.visitsTotal=-1;
+			this.activeProfile = this.pagePerformanceService.getProfile();
+			
+			// default dates
+			this.endDate = new Date();
+			Calendar cal = new GregorianCalendar();
+			cal.setTime(this.endDate);
+			cal.add(Calendar.DAY_OF_MONTH, -30);
+			this.startDate = cal.getTime();
+            
+            updateData();
+			
 		}
 		
 		public String getName() {
@@ -42,10 +55,6 @@ public class WebsitePerformanceModel {
 
 		public String getDescription() {
 			return "View the website performance statistics for a business";
-		}
-
-		public String getActiveProfile() {
-			return this.activeProfile;
 		}
 				
 		public Date getStartDate() {
@@ -62,6 +71,10 @@ public class WebsitePerformanceModel {
 
 		public void setEndDate(Date endDate) {
 			this.endDate = endDate;
+		}
+		
+		public String getActiveProfile() {
+			return this.activeProfile;
 		}
 		
 		/**
@@ -105,11 +118,9 @@ public class WebsitePerformanceModel {
 		// put results into json object (print out results for now)
 			System.out.println("Page               Visits(%)      ExitRate(%)       VisitsBounceRate(%) ");
 			for (int i=0; i<5; i++){
-				System.out.println(pagePath.get(worstI[i]) + ", " + (visits.get(worstI[i]*100)/visitsTotal + ", " + 
-						exitRate.get(worstI[i]) + ", " + visitsBounceRate.get(worstI[i])));
+				System.out.println(pagePath.get(worstI[i]) + ", " + (visits.get(worstI[i])*100)/visitsTotal + ", " + 
+						exitRate.get(worstI[i]) + ", " + visitsBounceRate.get(worstI[i]));
 			}
-			
-			
 		}
 		
 		/* test method to pass data to javascript */
@@ -141,8 +152,6 @@ public class WebsitePerformanceModel {
 //			}
 //			 return this.dataPoints;
 //		}
-		
-		
 		
 		/*
 		// Helper method for establishing the dropdown options which uses a map to set a boolean
