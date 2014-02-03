@@ -6,6 +6,7 @@ import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
+import org.springframework.jdbc.core.*;
 
 import io.analytics.domain.User;
 import io.analytics.repository.interfaces.IUserRepository;

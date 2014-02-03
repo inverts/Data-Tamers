@@ -1,4 +1,3 @@
-
 package io.analytics.service;
 
 import java.text.SimpleDateFormat;

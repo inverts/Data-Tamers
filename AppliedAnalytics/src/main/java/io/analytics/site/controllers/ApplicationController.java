@@ -36,7 +36,7 @@ public class ApplicationController {
 	@HeaderFooter(HeaderType.APPLICATION)
 	@SidePanel(animate = true)
 	@RequestMapping(value = "/application", method = RequestMethod.GET)
-	public ModelAndView home(Locale locale, Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView dashboard(Locale locale, Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
 		boolean success = SessionService.checkAuthorization(session);
 		SettingsModel settings = null;
 		if (success) {

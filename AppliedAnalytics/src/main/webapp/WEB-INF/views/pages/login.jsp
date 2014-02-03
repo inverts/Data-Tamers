@@ -6,7 +6,10 @@
 	<form:form action="login-validation" modelAttribute="loginForm" method="POST">
 		<h1><fmt:message key="login.title" /></h1>
 		<div class="register-div">
-			<a href="/appliedanalytics/accounts/getstarted"><fmt:message key="login.register.link" /></a>
+			<h4><fmt:message key="login.register.1" />
+				<a href="/appliedanalytics/accounts/getstarted"><fmt:message key="login.register.link" /></a>
+				<fmt:message key="login.register.2" />
+			</h4>
 		</div>
 		<c:if test="${model.hasErrors}">
 			<div class="error"><fmt:message key="login.invalid" /></div>
@@ -29,11 +32,9 @@
 			</tr>
 			<tr>
 				<td class="submit">
-					<span class="remember">
-						<input type="checkbox" class="checkbox" name="remember" />
-						<fmt:message key="login.remember" />
-					</span>
-					<input type="submit" class="button" name="submit" value="<fmt:message key="login.signin" />" />
+					<input type="checkbox" class="checkbox" name="remember" />
+					<span class="remember"><fmt:message key="login.remember" /></span>
+					<input type="submit" class="btn btn-primary active" name="submit" value="<fmt:message key="login.signin" />" />
 				</td>
 			</tr>
 		</table>

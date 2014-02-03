@@ -43,7 +43,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		//private String profileID;
 		private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 		private static final JsonFactory JSON_FACTORY = new JacksonFactory();
-	
+
 		private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");;
 		private ISessionService _sessionService;
 		private Ga CORE_REPORTING;
@@ -66,7 +66,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 
 		public static final boolean SORT_ASCENDING = true;
 		public static final boolean SORT_DESCENDING = false;
-		
+
 		public static class CredentialException extends Throwable {
 			/**
 			 * 
@@ -104,7 +104,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			}
 		}*/
 
-				
+
 		/**
 		 * Get metric data vs. days (2 dimensional data) 
 		 * 
@@ -113,8 +113,8 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		public CoreReportingData getMetricByDay(Credential credential, String profileID, String metric, String startDate, String endDate, int maxResults) {
 			return getMetricForSingleDimension(credential, profileID, metric, NDAY_DIMENSION, startDate, endDate, maxResults);
 		}
-		
-		
+
+
 		/**
 		 * Get metric data by day of week
 		 * 
@@ -123,8 +123,8 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		public CoreReportingData getMetricByDayOfWeek(Credential credential, String profileID, String metric, String startDate, String endDate, int maxResults) {
 			return getMetricForSingleDimension(credential, profileID, metric, DAYOFWEEK_DIMENSION, startDate, endDate, maxResults);
 		}
-		
-		
+
+
 		/**
 		 * Obtains data for a metric over a single dimension.
 		 * 
@@ -138,10 +138,10 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		public CoreReportingData getMetricForSingleDimension(Credential credential, String profileID, String metric, String dimension, String startDate, String endDate, int maxResults) {
 			GaData data = null;
 			try {
-				
+
 				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build().data().ga();
-				
+
 				data = reporting.get("ga:" + profileID, startDate, endDate, metric) // Metrics.
 						.setDimensions(dimension)
 						.setSort(dimension)
@@ -153,11 +153,11 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 				// Catch general parsing network errors.
 				e.printStackTrace();
 			}
-			
+
 			return coreReportingMapper(data);
 		}
-		
-		
+
+
 		/**
 		 * Get top n traffic sources relative to the passed metric
 		 * 
@@ -186,7 +186,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			//return topTrafficSourcesMapper(data);
 			//return gaData;
 		}
-		
+
 		/**
 		 * Get page performance data for Web Performance widget
 		 * 
@@ -197,14 +197,14 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			GaData gaData = null;
 			String startDate = dateFormat.format(sDate);
 			String endDate = dateFormat.format(eDate);
-			
+
 			System.out.println("start date = "+startDate+", "+"end date = "+endDate);
-		
+
 			try {
-				
+
 				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build().data().ga();
-				
+
 				gaData = reporting.get("ga:"+ profileID, // profile id (table id).
 						startDate, // Start date.
 						endDate, // End date.
@@ -222,26 +222,26 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			//return pagePerformanceMapper(gaData);
 			return gaData;
 		}	
-		
+
 		/**
 		 *  Get the total metric for the website, e.g. visits, a single integer.
 		 *  
 		 *  Inputs: 
 		 *  	metric <String> must be in the GA command form 
 		 */
-		
+
 		public GaData getTotalMetric(Credential credential, String profileID, String metric, Date sDate, Date eDate){
 			GaData gaData = null;
 			String startDate = dateFormat.format(sDate);
 			String endDate = dateFormat.format(eDate);
-			
+
 			System.out.println("start date = "+startDate+", "+"end date = "+endDate);
 
 			try {
-				
+
 				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build().data().ga();
-				
+
 				gaData = reporting.get("ga:"+ profileID, // profile id (table id).
 						startDate, // Start date.
 						endDate, // End date.
@@ -256,14 +256,14 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			//return pagePerformanceMapper(gaData);
 			return gaData;
 		}
-		
+
 		private CoreReportingData coreReportingMapper(GaData data){
 			if (data == null)
 				return null;
 			CoreReportingData dataObject = new CoreReportingData(data);
 			return dataObject;
 		}
-		
+
 		/*
 		 *  CoreReportingTypedData: Contains an aggregate array list of array lists 
 		 *  	of Java numerical/string typed data. 
@@ -275,16 +275,16 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 *  	2: Integers: list of the metric count.
 		 */
 		private CoreReportingTypedData topTrafficSourcesMapper(GaData gaData){
-			
+
 			// aggregate data list for the domain object
 			ArrayList<Object> list = new ArrayList<Object>();
-			
+
 			// REVISIT: Add GaData type checking
 			ArrayList<String> dataTypes = new ArrayList<String>();
-						
+
 			int sourceColumn = -1; 
 			int metricColumn = -1; 
-			
+
 			int column = -1;
 			for (ColumnHeaders header : gaData.getColumnHeaders()) {
 				column++;
@@ -293,16 +293,16 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 					sourceColumn = column;
 			    if (name.equals("ga:visits"))
 					metricColumn = column;
-				
+
 				dataTypes.add(header.getDataType());
 			}
 
 			// Useful for debugging
 			List<GaData.ColumnHeaders> columnHeaders = gaData.getColumnHeaders();
-			
+
 			ArrayList<String> source= new ArrayList<String>();
 			ArrayList<Integer> metric= new ArrayList<Integer>();
-			
+
 			List<List<String>> dataRows = gaData.getRows();
 			try {
 			for(List<String> row : dataRows) {
@@ -315,24 +315,24 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 				//The metric we are retrieving is not numeric.
 				return null;
 			}
-			
+
 			// List the identifiers for the remaining arrays
 			ArrayList<String>types = new ArrayList<String>();
 			types.add("source"); 
 			types.add("metric");
-			
+
 			// populate aggregate list of data
 			list.add(types);
 			list.add(source);
 			list.add(metric);
-			
+
 			// create the domain dataObject with the data
 			CoreReportingTypedData dataObject = new CoreReportingTypedData(list);
 			return dataObject;
 		}
-		
-		
-		
+
+
+
 		/*
 		 *  CoreReportingTypedData: Contains an aggregate array list of array lists 
 		 *  	of Java numerical/string typed data. 
@@ -346,16 +346,16 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 *      4: Type Double: exit rate in percentage.
 		 */
 		private CoreReportingTypedData pagePerformanceMapper(GaData gaData){
-			
+
 			// aggregate data list for the domain object
 			ArrayList<Object> list = new ArrayList<Object>();
 
 			//printColumnHeaders(gaData);
 			//printDataTable(gaData);
-			
+
 			// REVISIT: Add GaData type checking
 			ArrayList<String> dataTypes = new ArrayList<String>();
-		
+
 			int pagePathColumn = -1; 
 			int visitsColumn = -1; 
 			int entranceBounceRateColumn = -1; 
@@ -372,15 +372,15 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 					entranceBounceRateColumn = column;
 				if (name.equals("ga:exitRate"))
 					exitRateColumn = column;
-					
+
 				dataTypes.add(header.getDataType());
 			}
-			
+
 			ArrayList<String> pagePath = new ArrayList<String>();
 			ArrayList<Integer> visits= new ArrayList<Integer>();
 			ArrayList<Double> entranceBounceRate = new ArrayList<Double>();
 			ArrayList<Double> exitRate = new ArrayList<Double>();
-			
+
 			List<List<String>> dataRows = gaData.getRows();
 			try {
 			for(List<String> row : dataRows) {
@@ -397,31 +397,31 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 				//The metric we are retrieving is not numeric.
 				return null;
 			}
-			
+
 			// List the identifiers for the remaining arrays
 			ArrayList<String>types = new ArrayList<String>();
 			types.add("pagePath"); 
 			types.add("visits");
 			types.add("entranceBounceRate");
 			types.add("exitRate");
-			
+
 			// populate aggregate list of data
 			list.add(types);
 			list.add(pagePath);
 			list.add(visits);
 			list.add(entranceBounceRate);
 			list.add(exitRate);
-			
+
 			// create the domain dataObject with the data
 			CoreReportingTypedData dataObject = new CoreReportingTypedData(list);
 			return dataObject;
 		}
-		
+
 		private void handleGoogleJsonResponseException(GoogleJsonResponseException e) {
 			System.err.println("There was a CoreReporting service error: " + e.getDetails().getCode() + " : "
 					+ e.getDetails().getMessage());
 		}
-		
+
 		private void printColumnHeaders(GaData gaData) {
 			 System.out.println("Column Headers:");
 
@@ -431,7 +431,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			   System.out.println("Column Data Type: " + header.getDataType());
 			 }
 			}
-		
+
 		private void printDataTable(GaData gaData) {
 			 if (gaData.getTotalResults() > 0) {
 			   System.out.println("Data Table:");
@@ -453,5 +453,5 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			   System.out.println("No Results Found");
 			 }
 		}
-		
+
 }

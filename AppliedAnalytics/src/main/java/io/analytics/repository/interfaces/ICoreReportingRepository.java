@@ -4,7 +4,6 @@ import io.analytics.domain.CoreReportingData;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.analytics.model.GaData;
 
-import java.io.IOException;
 import java.util.Date;
 
 
@@ -21,4 +20,5 @@ public interface ICoreReportingRepository {
 
 	public GaData getTotalMetric(Credential credential, String profileID, String metric, Date startDate, Date endDate);
 	}
+
 

@@ -56,8 +56,9 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
 		if (credential == null) 
 			resp.sendRedirect(contextPath + "/galogin?error=no_credential");
 		String destination = (String) req.getSession().getAttribute("destinationURL");
-		System.out.println("Destination: \"" + destination + "\"");
+		//System.out.println("Destination: \"" + destination + "\"");
 		session.setAttribute("credentials", credential);
+		session.setAttribute("googleAuthorization", "success");
 		resp.sendRedirect(destination);
 		//resp.sendRedirect(contextPath + "/application");
 	}
@@ -68,7 +69,10 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
 		// If the authorization failed or was denied, go back to the home page.
 		HttpSession session = req.getSession();
 		String contextPath = session.getServletContext().getContextPath();
-		resp.sendRedirect(contextPath + "/");
+		String destination = (String) req.getSession().getAttribute("destinationURL");
+		
+		session.setAttribute("googleAuthorization", "fail");
+		resp.sendRedirect(destination);
 	}
 
 	@Override

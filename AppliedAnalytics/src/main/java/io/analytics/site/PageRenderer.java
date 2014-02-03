@@ -12,6 +12,9 @@ import org.springframework.web.servlet.view.InternalResourceView;
 
 public class PageRenderer extends InternalResourceView {	
 	
+	private final String ACCOUNT_FORM = "accountForm";
+	private final String LOGIN_FORM = "loginForm";
+	
 	@Override
     protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String dispatcherPath = prepareForRendering(request, response);
@@ -27,12 +30,11 @@ public class PageRenderer extends InternalResourceView {
         request.setAttribute("FOOTER", model.get("FOOTER"));
         
         // Gather any forms and form results
-        if (model.containsKey("loginForm"))
-        	request.setAttribute("loginForm", model.get("loginForm"));
+        if (model.containsKey(LOGIN_FORM))
+        	request.setAttribute(LOGIN_FORM, model.get(LOGIN_FORM));
         
-        if (model.containsKey("personalForm"))
-        	request.setAttribute("personalForm", model.get("personalForm"));
-        //request.setAttribute("VALIDATION", model.get("VALIDATION"));
+        if (model.containsKey(ACCOUNT_FORM))
+        	request.setAttribute(ACCOUNT_FORM, model.get(ACCOUNT_FORM));
         
         request.setAttribute("model", model);
         

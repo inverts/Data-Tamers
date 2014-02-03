@@ -21,5 +21,21 @@ public class UserService implements IUserService {
 		
 		return user;
 	}
+	
+	public User getUserById(int id) {
+		return null;
+	}
+	
+	/**
+	 * Creates a new user.
+	 * 
+	 * @param username
+	 * @param email
+	 * @param password
+	 * @return
+	 */
+	public User createUser(String username, String email, String password) {
+		return null;
+	}
 
 }

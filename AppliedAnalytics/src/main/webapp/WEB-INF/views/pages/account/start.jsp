@@ -2,10 +2,10 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <div class="start">
-	<h1><fmt:message key="start.header" /></h1>
-	<div class="start-content"></div>
-	<ul>
-	  <li class="previous"><a href="/appliedanalytics/">&larr; Back</a></li>
-	  <li class="next"><a href="/appliedanalytics/accounts/getstarted?terms-and-conditions=1">Next &rarr;</a></li>
+	<h1><fmt:message key="account.start.header" /></h1>
+	<p class="start-content"><fmt:message key="account.start.summary" /></p>
+	<ul class="pager">
+	  <li class="previous"><a href="/appliedanalytics/"><fmt:message key="account.start.back" /></a></li>
+	  <li class="next"><a href="/appliedanalytics/accounts/getstarted?terms-and-conditions=1"><fmt:message key="account.start.next" /></a></li>
 	</ul>
 </div>

@@ -1,6 +1,7 @@
 package io.analytics.site.controllers;
 
 import io.analytics.aspect.HeaderFooter;
+import io.analytics.aspect.Reset;
 import io.analytics.domain.GoogleUserData;
 import io.analytics.enums.HeaderType;
 
@@ -12,8 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.api.client.auth.oauth2.Credential;
@@ -26,12 +29,16 @@ public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
+	@Reset
 	@HeaderFooter(HeaderType.HOME)
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ModelAndView home(Locale locale, Model model) {
+	public ModelAndView home(Locale locale, Model model, HttpSession session) {
 		model.addAttribute("isEntry", "something");
 		return new ModelAndView("home/home");
 	}
+	
+	
+	
 	
 
 	/**
@@ -64,6 +71,7 @@ public class HomeController {
 		}
 		return new ModelAndView("success");
 	}
+	
 	
 	/*
 	 *  http://docs.spring.io/spring-security/site/docs/3.0.x/reference/technical-overview.html
