@@ -2,11 +2,11 @@ package io.analytics.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import io.analytics.domain.Account;
 
-@Repository
+@Service
 public class AccountService {
 
 	/**

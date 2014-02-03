@@ -45,6 +45,8 @@ public class User implements UserDetails {
 	 * @return
 	 */
 	public boolean setPassword(String newPassword) {
+		this.passwordHash = newPassword;
+		
 		if (PasswordUtils.passwordMeetsGuidelines(newPassword)) {
 			String salt = PasswordUtils.generateSalt();
 			String hash = PasswordUtils.createPasswordHash(newPassword, salt);
@@ -54,8 +56,12 @@ public class User implements UserDetails {
 			
 			this.passwordHash = hash;
 			this.passwordSalt = salt;
+			
+			return true;
 		} 
+		
 		return false;
+		
 	}
 	
 	public String getPasswordSalt() {

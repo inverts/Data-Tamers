@@ -30,8 +30,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class LoginController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-
-	//@Autowired SiteAuthenticationProvider siteAuthenticationProvider;
 	
 	@HeaderFooter(HeaderType.SIMPLE)
 	@RequestMapping(value = "/login", method = {RequestMethod.POST, RequestMethod.GET})

@@ -6,7 +6,8 @@ import org.springframework.stereotype.Component;
 import com.google.api.services.analytics.model.*;
 
 import io.analytics.domain.GoogleUserData;
-import io.analytics.service.ManagementService;
+import io.analytics.service.interfaces.IManagementService;
+import io.analytics.service.interfaces.ISessionService;
 
 @Component
 @Scope("session")
@@ -26,8 +27,8 @@ public class SettingsModel {
 	 * 	Metric
 	 */
 	
-	
-	private ManagementService management;
+	private ISessionService sessionService;
+	private IManagementService management;
 	private GoogleUserData googleUserData;
 	
 	//The current profile used for queries
@@ -46,10 +47,11 @@ public class SettingsModel {
 	private boolean ecommerceTrackingEnabled;
 	
 	
-	public SettingsModel(ManagementService management) {
+	public SettingsModel(ISessionService sessionService, IManagementService management) {
+		this.sessionService = sessionService;
 		this.management = management;
-		currentAccounts = management.getAccounts();
-		googleUserData = management.getGoogleUserData();
+		currentAccounts = management.getAccounts(sessionService.getCredentials());
+		googleUserData = management.getGoogleUserData(sessionService.getCredentials());
 		//Select the first available account by default. 
 		if (currentAccounts != null && currentAccounts.getItems() != null && !currentAccounts.getItems().isEmpty() ) {
 			setAccountSelection(currentAccounts.getItems().get(0));
@@ -59,8 +61,8 @@ public class SettingsModel {
 	}
 	
 	
-	public SettingsModel(ManagementService management, Profile activeProfile) {
-		this(management); 
+	public SettingsModel(ISessionService sessionService, IManagementService management, Profile activeProfile) {
+		this(sessionService, management); 
 		this.setActiveProfile(activeProfile);
 	}
 
