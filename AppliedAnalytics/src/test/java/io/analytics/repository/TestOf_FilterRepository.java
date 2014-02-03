@@ -6,13 +6,12 @@ import java.util.Calendar;
 
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 
 import io.analytics.domain.Filter;
 import io.analytics.repository.interfaces.IFilterRepository;
 
 public class TestOf_FilterRepository {
+	
 	
 	private IFilterRepository FilterRepository;
 	

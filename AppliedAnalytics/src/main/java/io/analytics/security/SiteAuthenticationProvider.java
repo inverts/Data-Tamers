@@ -34,7 +34,7 @@ public class SiteAuthenticationProvider implements AuthenticationProvider {
 		// Get the user access level
 		Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
 		
-		return new UsernamePasswordAuthenticationToken(username, password, authorities);
+		return new UsernamePasswordAuthenticationToken(username, PasswordUtils.createPasswordHash(password, user.getPasswordSalt()), authorities);
 	}
 
 	@Override

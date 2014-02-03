@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.springframework.stereotype.Service;
+
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
@@ -20,6 +22,7 @@ import com.google.api.client.json.jackson.JacksonFactory;
  * @author Dave Wong
  *
  */
+@Service
 public class GoogleAuthorizationService {
 
 	private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();

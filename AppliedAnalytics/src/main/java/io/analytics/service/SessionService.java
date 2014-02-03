@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import io.analytics.repository.ManagementRepository.CredentialException;
+import io.analytics.service.interfaces.IManagementService;
 import io.analytics.service.interfaces.ISessionService;
 import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SettingsModel;
@@ -14,15 +15,18 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.google.api.client.auth.oauth2.Credential;
 
-@Service("sessionService")
+@Service
 public class SessionService implements ISessionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(SessionService.class);
+	
+	@Autowired private IManagementService ManagementService;
 	
 	private static SettingsModel userSettings = null;
 	private static FilterModel filter = null;
@@ -52,15 +56,8 @@ public class SessionService implements ISessionService {
 		if (credentials == null) {
 			return false;
 		} else if (settings == null) {
-			ManagementService management;
-			try {
-				management = new ManagementService(credentials);
-			} catch (CredentialException e) {
-				logger.info("There was a problem with credentials, but they were not null.");
-				logger.info(e.getMessage());
-				return false;
-			}
-			settings = new SettingsModel(management);
+			
+			settings = new SettingsModel(this, ManagementService);
 			session.setAttribute("settings", settings);
 			this.userSettings = settings;
 			this.credentials = credentials;

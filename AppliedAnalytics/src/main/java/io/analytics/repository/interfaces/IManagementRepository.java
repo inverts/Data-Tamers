@@ -2,6 +2,7 @@ package io.analytics.repository.interfaces;
 
 import io.analytics.domain.GoogleUserData;
 
+import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.analytics.model.Account;
 import com.google.api.services.analytics.model.Accounts;
 import com.google.api.services.analytics.model.Profiles;
@@ -15,14 +16,14 @@ public interface IManagementRepository {
 	 * 
 	 * @return
 	 */
-	public GoogleUserData getGoogleUserData();
+	public GoogleUserData getGoogleUserData(Credential credential);
 
 	/**
 	 * Gets a list of accounts and relevant data.
 	 * 
 	 * @return
 	 */
-	public Accounts getAccounts();
+	public Accounts getAccounts(Credential credential);
 	
 	public Webproperties getWebproperties(Account a);
 	

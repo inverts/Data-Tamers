@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.springframework.stereotype.Repository;
+
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpTransport;
@@ -26,15 +28,16 @@ import io.analytics.repository.interfaces.IManagementRepository;
  * @author Dave Wong
  * 
  */
+@Repository
 public class ManagementRepository implements IManagementRepository {
 
 	private final String APPLICATION_NAME = "datatamers-appliedanalytics-0.1";
-	private final String ACCESS_TOKEN;
-	private final Credential CREDENTIAL;
+	//private final String ACCESS_TOKEN;
+	//private final Credential CREDENTIAL;
 	private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 	private static final JsonFactory JSON_FACTORY = new JacksonFactory();
 
-	private final Analytics.Management MANAGEMENT;
+	private Analytics.Management MANAGEMENT;
 
 	public static class CredentialException extends Throwable {
 		public CredentialException() {
@@ -46,7 +49,7 @@ public class ManagementRepository implements IManagementRepository {
 		}
 	}
 
-	public ManagementRepository(Credential credential) throws CredentialException {
+	/*public ManagementRepository(Credential credential) throws CredentialException {
 		if (credential == null)
 			throw new CredentialException("Null credential object passed.");
 		this.ACCESS_TOKEN = credential.getAccessToken();
@@ -66,12 +69,28 @@ public class ManagementRepository implements IManagementRepository {
 			if (!success)
 				throw new CredentialException("Token refresh failed. There may not be a refresh token.");
 		}
+	}*/
+	
+	private void refreshToken(Credential credential) throws CredentialException  {
+		
+		if (credential.getExpiresInSeconds() < 10) {
+			boolean success = false;
+			try {
+				success = credential.refreshToken();
+			} catch (IOException e) {
+				throw new CredentialException("4xx error occured while refreshing token.");
+			}
+			if (!success)
+				throw new CredentialException("Token refresh failed. There may not be a refresh token.");
+		}
 	}
 
-	public GoogleUserData getGoogleUserData() {
+	public GoogleUserData getGoogleUserData(Credential credential) {
 		GoogleUserData data = null;
 		try {
-			URL url = new URL("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + ACCESS_TOKEN);
+			String accessToken = credential.getAccessToken(); // ACCESS TOKEN
+			this.refreshToken(credential);
+			URL url = new URL("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + accessToken);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
 			Gson gson = new Gson();
 			data = gson.fromJson(reader, GoogleUserData.class);
@@ -80,16 +99,21 @@ public class ManagementRepository implements IManagementRepository {
 			// TODO: Add error handling
 		} catch (IOException e) {
 			// TODO: Add error handling
+		} catch (CredentialException e) {
+			// TODO: Add error handling
 		}
 
 		return data;
 	}
 
-	public Accounts getAccounts() {
+	public Accounts getAccounts(Credential credential) {
 		Accounts accounts = null;
 		try {
-
-			accounts = MANAGEMENT.accounts().list().execute();
+			// Just create the Analytics.Builder here.
+			this.MANAGEMENT = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+										           .setApplicationName(APPLICATION_NAME).build().management();
+			this.refreshToken(credential);
+			accounts = this.MANAGEMENT.accounts().list().execute();
 
 		} catch (GoogleJsonResponseException e) {
 			handleGoogleJsonResponseException(e);
