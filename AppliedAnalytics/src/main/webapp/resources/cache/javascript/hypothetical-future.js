@@ -3,10 +3,10 @@
  */
 
 $(function() {
-	updateHypotheticalWidget('hypotheticalWidget');
+	//updateHypotheticalWidget('hypotheticalWidget');
 });
 
-function updateHypotheticalWidget(id) {
+function updateHypotheticalWidget() {
 	var margin = {
 		top : 30,
 		right : 20,
