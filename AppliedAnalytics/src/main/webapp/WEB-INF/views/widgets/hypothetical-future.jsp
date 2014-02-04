@@ -11,8 +11,6 @@ var startDate = '${ filterModel.getActiveStartDateString() }';
 var endDate = '${ filterModel.getActiveEndDateString() }';
 var futureEndDate = '${ hfModel.getFutureEndDate() }';
 </script>  
-
-<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   
 <div class="widget_wrapper widgetView">
 	<form id="hypotheticalFutureSettings">

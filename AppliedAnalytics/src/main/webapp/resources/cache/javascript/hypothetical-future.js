@@ -4,6 +4,7 @@
 
 $(function() {
 	updateHypotheticalWidget('hypotheticalWidget');
+	
 });
 
 function updateHypotheticalWidget(id) {
@@ -548,24 +549,29 @@ var hypotheticalSketch = (function($p) {
 	 * PLOT DRAGGABLE LINE
 	 **************************************************************************/
 	/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-	drawDraggableLine();
+
+
+	var drag = d3.behavior.drag().origin(Object).on('drag', dragEvent);
 	
+	var dragLine = drawDraggableLine();
+	
+
 	function drawDraggableLine() {
 		// TODO: start at last x coord value
 		var xStart = smallW / 2;		
 		
-		var drag = d3.behavior.drag()
-		.origin(function() {
-		var t = d3.select(this);
-		return {x: t.attr('x'), y: t.attr('y')};
-		})
-		//.origin(function(d) {return d;})
-		.on("drag",d3.select('#drag_line').dragEvent);	
+		/*var drag = d3.behavior.drag()
+				.origin(function() {
+					var t = d3.select(this);
+					return {x: t.attr('x'), y: t.attr('y')};
+				}).on("drag", dragEvent);*/
+		
+		
 		
 		var newg = svg.append("g")
 			.data([{x : xStart, y : 50}]);		
 	
-		var dragRect = newg.append("rect")
+		dragRect = newg.append("rect")
 			.attr("id", "drag_line")
 			.attr("x", function(d) {return d.x;})
 			.attr("y", function(d) {return d.y;})
@@ -573,24 +579,32 @@ var hypotheticalSketch = (function($p) {
 			.attr("width", 2)
 			.attr("fill", "grey")
 			.attr("cursor", "move") // can also do cursor
-		.call(drag);
-				
-		
-		function dragEvent(d,i) {	
-			var current = d3.select('#drag_line');
-			var t = d3.select(this);
-			var newX = function() {var t = d3.select(this); return {x:t.attr('x')};};
-			var newY = function() {var t = d3.select(this); return {y:t.attr('y')};};
-			if (newX <= 30) {
-                newX = 35;
-            }
-            if (newX >= w - 35) {
-                newX = w - 35;
-            }
-            dragRect.attr("x", d.x = newX);
-        }
+		.call(drag);	
 	// end of function
+		
+		return dragRect;
 	};	
+	
+	
+	function dragEvent(d) {
+
+		dragLine.attr("x", d.x);
+		
+	}
+	
+	/*function dragEvent(d,i) {	
+		var current = d3.select('#drag_line');
+		var t = d3.select(this);
+		var newX = function() {var t = d3.select(this); return {x:t.attr('x')};};
+		var newY = function() {var t = d3.select(this); return {y:t.attr('y')};};
+		if (newX <= 30) {
+            newX = 35;
+        }
+        if (newX >= w - 35) {
+            newX = w - 35;
+        }
+        dragRect.attr("x", d.x = newX);
+    }*/
 
 	/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 

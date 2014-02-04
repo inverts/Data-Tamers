@@ -164,6 +164,10 @@ line:hover {
 	opacity: 0.5;
 }
 
+#drag_rect {
+	position:relative;
+}
+
 #backrect {
 	width: 600px;
 	height: 350px;
