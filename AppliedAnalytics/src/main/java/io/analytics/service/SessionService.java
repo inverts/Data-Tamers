@@ -57,10 +57,11 @@ public class SessionService implements ISessionService {
 			return false;
 		} else if (settings == null) {
 			
+			this.credentials = credentials;
 			settings = new SettingsModel(this, ManagementService);
 			session.setAttribute("settings", settings);
 			this.userSettings = settings;
-			this.credentials = credentials;
+			
 		}
 
 		//Try get filter.
