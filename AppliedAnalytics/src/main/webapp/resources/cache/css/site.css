@@ -205,7 +205,7 @@ body {
 .axis hypoPath,.axis trendPath,.axis axisLine        
         
                 
-        path:hover {
+path:hover {
 	opacity: 0.5;
 }
 
