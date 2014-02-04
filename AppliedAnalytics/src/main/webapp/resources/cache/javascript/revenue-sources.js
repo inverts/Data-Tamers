@@ -2,17 +2,26 @@
  * revenue-sources.js
  */
 
-$(function() {	
-	GetRevenueSourcesWidget('revenueSources');
+$(function() {
+	// Temporary
+	GetRevenueSourcesWidget();
 });
 
 
-function GetRevenueSourcesWidget(id) {
+function GetRevenueSourcesWidget() {
 	
-	var $element = $('#' + id);
+	var $element = $('#revenueSource');
 	$.post("RevenueSources", null, 
 		function(response) {
-			$element.empty().append(response);
+			if ($element.length > 0)
+				$element.empty().append(response);
+			else {
+				
+				$element = $('<div>').attr({ 'id': 'revenueSource', 'class': 'w_container'})
+				 					 .prop('draggable', true)
+				 					 .appendTo('.dashboard-content')
+				 					 .append(response);
+			}
 
 			var canvas = document.getElementById('revenueSourcesData');
 				

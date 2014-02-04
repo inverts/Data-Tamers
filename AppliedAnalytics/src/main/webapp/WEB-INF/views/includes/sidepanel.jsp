@@ -25,7 +25,7 @@
 			</div>
 			<div id="suggestions" class="nav-cell">
 				<div class="nav-icon" style="background-position:0 -90px;"></div>
-				<a href="/appliedanalytics/application/suggestions" class="nav-txt"><fmt:message key="suggestions" /></a>
+				<a href="/appliedanalytics/application/alerts" class="nav-txt"><fmt:message key="alerts" /></a>
 			</div>
 		</div>	
 	</div>
