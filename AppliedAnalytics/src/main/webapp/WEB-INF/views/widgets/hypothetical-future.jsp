@@ -38,15 +38,15 @@ var futureEndDate = '${ hfModel.getFutureEndDate() }';
             <div id="top-controls">
                 <div id = "buttonsContainer">
                     <div id = "option">
-                    <input name="smoothedButton" type="button" value="smoothed" style="float:left;" onclick="updateSmoothed()"/>
-                    <input name="normalizedButton" type="button" value="normalized" style="float:left;" onclick="updateNormalized()"/>
-                    <input name="rawButton" type="button" value="raw" style="float:left;" onclick="updateRaw()"/>
+                    <input id="smoothedButton" type="button" value="smoothed" style="float:left;"/>
+                    <input id="normalizedButton" type="button" value="normalized" style="float:left;"/>
+                    <input id="rawButton" type="button" value="raw" style="float:left;"/>
                     </div>               
                 </div>
                 <div id = "timeButton">
-                    <input name="dayButton" type="button" value="day" style="float:right;" onclick="updateDay()"/>
-                    <input name="weekButton" type="button" value="week" style="float:right;" onclick="updateWeek()"/>
-                    <input name="monthButton" type="button" value="month" style="float:right;" onclick="updateMonth()"/>
+                    <input name="dayButton" type="button" value="day" style="float:right;"/>
+                    <input name="weekButton" type="button" value="week" style="float:right;"/>
+                    <input name="monthButton" type="button" value="month" style="float:right;"/>
                 </div>
             </div>
             <div id="checkboxID" style="position:absolute; left:220px; top:10px; width:200px;" onclick="addNoise()">

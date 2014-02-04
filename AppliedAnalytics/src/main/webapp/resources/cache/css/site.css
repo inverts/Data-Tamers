@@ -218,7 +218,8 @@ path:hover {
 	fill: none;
 }
 
-#line_o path.overlay {
+
+#line_trend path.overlay, #line_hypo path.overlay {
 	stroke: white;
 	stroke-opacity: 0;
 	stroke-width: 10;
@@ -229,11 +230,4 @@ path:hover {
 	stroke: black;
 	stroke-width: 2;
 	fill: none;
-}
-
-#tangent2 {
-	stroke: black;
-	stroke-width: 2;
-	fill: none;
-	opacity: 0.5;
 }

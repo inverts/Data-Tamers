@@ -8,6 +8,7 @@ $(function() {
 });
 
 function updateHypotheticalWidget(id) {
+	
 	var $element = $('#' + id);
 	$.post("HypotheticalFuture", null, function(response) {
 		$element.fadeOut("fast", function() {
@@ -16,6 +17,7 @@ function updateHypotheticalWidget(id) {
 
 			// points = HypotheticalFutureData.points;
 			var p = new Processing(canvas, hypotheticalSketch);
+			
 
 			$element.fadeIn("fast");
 			window.onresize = function(event) {
@@ -369,17 +371,27 @@ var hypotheticalSketch = (function($p) {
 			});
 
 	// added for hover
-	var trend_g = svg.append("g").attr("id", "line_o")
-	trend_g.append("path").attr("d", trendLine(trendData)).style({
-		'fill' : 'none'
-	}).style({
-		'stroke' : '#2ca02c'
-	}).style({
-		'stroke-weight' : '3px'
-	});
+	var trend_g = svg.append("g").attr("id", "line_trend");
+	trend_g.append("path")
+	.classed('overlay', true)
+	.attr("d", trendLine(trendData))
+	.style({'fill' : 'none'})
+	.style({'stroke' : '#2ca02c'})
+	.style({'stroke-weight' : '3px'});
+	
+	// call tooltip for trend line
+	svg.select('#line_trend path.overlay')
+	.on('mouseover', function() {
+		var current = d3.mouse(this);
+		var point = {'x':current[0], 'y':current[1]};
+		var data = $(this).attr('d');
+		showTooltip(point, data);
+	})
+	.on('mouseout', removeTooltip);	
 
-	var hypo_g = svg.append("g").attr("id", "line_o")
-	hypo_g.append("path").attr("d", hypoLine(hypoData)).style(
+	var hypo_g = svg.append("g").attr("id", "line_hypo").attr("class", "raw")
+	hypo_g.append("path").classed('overlay', true)
+	.attr("d", hypoLine(hypoData)).style(
 			"stroke-dasharray", ("3,3")).style({
 				'fill' : 'none'
 			}).style({
@@ -387,77 +399,46 @@ var hypotheticalSketch = (function($p) {
 			}).style({
 				'stroke-weight' : '3px'
 			});
+	
+	// call tooltip for hypo line
+	/* raw */
+	svg.select('#line_hypo.raw path.overlay')
+	.on('mouseover', function() {
+		var current = d3.mouse(this);
+		var point = {'x':current[0], 'y':current[1]};
+		var data = $(this).attr('d');
+		showTooltip(point, data);
+	})
+	.on('mouseout', removeTooltip);	
+	/* smoothed */
+	svg.select('#line_hypo.smoothed path.overlay')
+	.on('mouseover', function() {
+		var current = d3.mouse(this);
+		var point = {'x':current[0], 'y':current[1]};
+		var data = $(this).attr('d');
+		showTooltip(point, data);
+	})
+	.on('mouseout', removeTooltip);		
+	/* normalized */
+	svg.select('#line_hypo.normalized path.overlay')
+	.on('mouseover', function() {
+		var current = d3.mouse(this);
+		var point = {'x':current[0], 'y':current[1]};
+		var data = $(this).attr('d');
+		showTooltip(point, data);
+	})
+	.on('mouseout', removeTooltip);	
 
-	/* for hover showing value along line */
-    appendCircle(trend_g, hypo_g);
+ 
 
 	/***************************************************************************
 	 * HOVER TOOLTIP
 	**************************************************************************/
     
     /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
- // FUNCTION to append circle to lines
-    function appendCircle(tg, hg) {   
-
-    // make a transparant overlay to capture mousemovements
-    trend_g = tg;
-    hypo_g = hg;
-
-    /* TREND LINE */
-    trend_g.append('path')
-        .classed('overlay', true)
-        .attr('d', trendLine(trendData))
-        .selectAll('#line_o')
-        .on('mouseover', function() {d3.select(this).showTooltip();})
-        .on('mouseout', removeTooltip());
-
-    /* HYPOTHETICAL LINE */
-    hypo_g.append('path')
-        .classed('overlay', true)
-        .attr('d', hypoLine(hypoData))
-        .selectAll('#line_o')
-        .on('mouseover', function() {d3.select(this).showTooltip2();})
-        .on('mouseout', removeTooltip2());  
-      
-
-    // displays hover tooltip for TREND LINE
-    function showTooltip() {
-            var line_path = d3.select('#line_o path.overlay')[0][0];
-            var length_at_point = 0,
-            total_length = line_path.getTotalLength(),
-            mouse = d3.mouse(line_path);
-
-            // find point on the line to draw tangent on, 
-            var INTERVAL = 100;
-            while (line_path.getPointAtLength(length_at_point).x < mouse[0] && length_at_point < total_length)
-                length_at_point += INTERVAL
-
-            length_at_point -= INTERVAL
-
-
-            while (line_path.getPointAtLength(length_at_point).x < mouse[0] && length_at_point < total_length) {
-                length_at_point++;
-            };
-
-            var point = line_path.getPointAtLength(length_at_point),
-                prev = {},
-                next = {},
-                delta = {};
-
-            if (length_at_point > 1 && length_at_point < (total_length - 1)) {
-                prev = line_path.getPointAtLength(length_at_point - 1);
-                next = line_path.getPointAtLength(length_at_point + 1);
-                delta = {
-                    x: next.x - prev.x,
-                    y: next.y - prev.y
-                }
-            } else {
-
-                return;
-            };
-
-
-         trend_g.append("svg:text")
+	function showTooltip(point, data)
+	{
+		svg.append("svg:text")
         .attr('id', 'text')
         .style("font-size", "12px")
         .style("font-family", "Helvetica")
@@ -468,80 +449,19 @@ var hypotheticalSketch = (function($p) {
             //round to 2 decimal places
         .text(Math.round(point.y * 100) / 100);
 
-            var tangent = svg.append('circle')
+        var tangent = svg.append('circle')
         .attr('id', 'tangent')
-        .attr('r', 3)
+        .attr('r', 4)
         .attr('cx', point.x)
-        .attr('cy', point.y);
-        };
-
-        // displays hover tooltip for HYPOTHETICAL LINE
-    function showTooltip() {
-            var line_path2 = d3.select('#line_o path.overlay')[0][0];
-            var length_at_point2 = 0,
-            total_length2 = line_path2.getTotalLength(),
-            mouse2 = d3.mouse(line_path2);
-
-            // find point on the line to draw tangent on, 
-            var INTERVAL2 = 100;
-            while (line_path2.getPointAtLength(length_at_point2).x < mouse2[0] && length_at_point2 < total_length2)
-                length_at_point2 += INTERVAL2
-
-            length_at_point2 -= INTERVAL2
-
-
-            while (line_path2.getPointAtLength(length_at_point2).x < mouse2[0] && length_at_point2 < total_length2) {
-                length_at_point2++;
-            };
-
-            var point2 = line_path2.getPointAtLength(length_at_point2),
-                prev2 = {},
-                next2 = {},
-                delta2 = {};
-
-            if (length_at_point2 > 1 && length_at_point2 < (total_length2 - 1)) {
-                prev2 = line_path2.getPointAtLength(length_at_point2 - 1);
-                next2 = line_path2.getPointAtLength(length_at_point2 + 1);
-                delta2 = {
-                    x: next2.x - prev2.x,
-                    y: next2.y - prev2.y
-                }
-            } else {
-
-                return;
-            };
-
-         hypo_g.append("svg:text")
-            .attr('id', 'text')
-            .style("font-size", "12px")
-            .style("font-family", "Helvetica")
-            .attr('x', point2.x)
-            .attr('y', point2.y)
-            .attr('dy', '.31em')
-            .attr("transform", "translate(10,-5)")
-                //round to 2 decimal places
-            .text(Math.round(point2.y * 100) / 100);
-
-        var tangent2 = svg.append('circle')
-            .attr('id', 'tangent2')
-            .attr('r', 3)
-            .attr('cx', point2.x)
-            .attr('cy', point2.y);
-        };
-      //remove all text and circles
-        function removeTooltip() {
-            d3.select('#tangent').remove();       
-            svg.select("#text").remove();
-        };
-      //remove all text and circles
-        function removeTooltip2() {
-            d3.select('#tangent2').remove();       
-            svg.select("#text2").remove();
-        };
-
-
-    //end of function
-};     
+        .attr('cy', point.y)    
+	};
+	
+	function removeTooltip()
+	{
+		 d3.select('#tangent').remove()
+	     svg.select("#text").remove();
+	};
+	
     /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
     
 	
@@ -558,15 +478,7 @@ var hypotheticalSketch = (function($p) {
 
 	function drawDraggableLine() {
 		// TODO: start at last x coord value
-		var xStart = smallW / 2;		
-		
-		/*var drag = d3.behavior.drag()
-				.origin(function() {
-					var t = d3.select(this);
-					return {x: t.attr('x'), y: t.attr('y')};
-				}).on("drag", dragEvent);*/
-		
-		
+		var xStart = smallW / 2;				
 		
 		var newg = svg.append("g")
 			.data([{x : xStart, y : 50}]);		
@@ -579,32 +491,21 @@ var hypotheticalSketch = (function($p) {
 			.attr("width", 2)
 			.attr("fill", "grey")
 			.attr("cursor", "move") // can also do cursor
-		.call(drag);	
-	// end of function
-		
+		.call(drag);			
 		return dragRect;
-	};	
-	
+	};		
 	
 	function dragEvent(d) {
-
-		dragLine.attr("x", d.x);
-		
-	}
-	
-	/*function dragEvent(d,i) {	
-		var current = d3.select('#drag_line');
-		var t = d3.select(this);
-		var newX = function() {var t = d3.select(this); return {x:t.attr('x')};};
-		var newY = function() {var t = d3.select(this); return {y:t.attr('y')};};
-		if (newX <= 30) {
+		var newX = d3.event.x;
+        if (newX <= 30) {
             newX = 35;
         }
         if (newX >= w - 35) {
             newX = w - 35;
         }
-        dragRect.attr("x", d.x = newX);
-    }*/
+        dragRect.attr("x", d.x = newX);		
+	}	
+	
 
 	/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
@@ -649,11 +550,12 @@ var hypotheticalSketch = (function($p) {
 		d3.select("#trendlineID").remove();
 		d3.select('#smoothID').remove();
 		d3.select('#smoothID2').remove();
-	}
-
+	};
+	
+	
+	$('#smoothedButton').click(updateSmoothed);	
 	function updateSmoothed() {
 		removePrevious();
-
 		var smoothedLine = d3.svg.line().interpolate("cardinal").x(
 				function(d, i) {
 					return x(i);
@@ -662,7 +564,7 @@ var hypotheticalSketch = (function($p) {
 				});
 
 		var hg = svg.append("path").attr("id", "smoothID")
-		.attr("class", "line").attr("d", smoothedLine(hypoData)).style(
+		.attr("class", "smoothed").attr("d", smoothedLine(hypoData)).style(
 				"stroke-dasharray", ("3,3")).style({
 					'fill' : 'none'
 				}).style({
@@ -680,16 +582,16 @@ var hypotheticalSketch = (function($p) {
 
 		var tg = svg.append("path")
 		.attr("id", "smoothID2")
-		.attr("class","line")
+		.attr("class","smoothed")
 		.attr("d", smoothedTrend(trendData))
 		.style({'fill' : 'none'})
 		.style({'stroke' : '#1f77b4'})
 		.style({'stroke-weight' : '3px'});
+	
 
-		appendCircle(tg, hg);
+	};
 
-	}
-
+	$('#normalizedButton').click(updateNormalized);
 	function updateNormalized() {
 		removePrevious();
 
@@ -700,7 +602,7 @@ var hypotheticalSketch = (function($p) {
 					return y(d);
 				});
 
-		svg.append("path").attr("id", "normID").attr("class", "line").attr("d",
+		svg.append("path").attr("id", "normID").attr("class", "normalized").attr("d",
 				normalizedLine(hypoData)).style("stroke-dasharray", ("3,3"))
 				.style({
 					'fill' : 'none'
@@ -717,7 +619,7 @@ var hypotheticalSketch = (function($p) {
 					return y(d);
 				});
 
-		svg.append("path").attr("id", "normID2").attr("class", "line").attr(
+		svg.append("path").attr("id", "normID2").attr("class", "normalized").attr(
 				"d", normalizedTrend(trendData)).style({
 					'fill' : 'none'
 				}).style({
@@ -726,8 +628,9 @@ var hypotheticalSketch = (function($p) {
 					'stroke-weight' : '3px'
 				});
 
-	}
+	};
 
+	$('#rawButton').click(updateRaw);
 	function updateRaw() {
 		removePrevious();
 
@@ -737,7 +640,7 @@ var hypotheticalSketch = (function($p) {
 			return y(d);
 		});
 
-		svg.append("path").attr("id", "rawID").attr("class", "line").attr("d",
+		svg.append("path").attr("id", "rawID").attr("class", "raw").attr("d",
 				rawLine(hypoData)).style("stroke-dasharray", ("3,3")).style({
 					'fill' : 'none'
 				}).style({
@@ -752,7 +655,7 @@ var hypotheticalSketch = (function($p) {
 			return y(d);
 		});
 
-		svg.append("path").attr("id", "rawID2").attr("class", "line").attr("d",
+		svg.append("path").attr("id", "rawID2").attr("class", "raw").attr("d",
 				rawTrend(trendData)).style({
 					'fill' : 'none'
 				}).style({
@@ -761,7 +664,7 @@ var hypotheticalSketch = (function($p) {
 					'stroke-weight' : '3px'
 				});
 
-	}
+	};
 
 	/***************************************************************************
 	 * BUTTONS: month, week, day
