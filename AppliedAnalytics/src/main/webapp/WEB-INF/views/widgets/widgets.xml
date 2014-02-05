@@ -19,7 +19,7 @@
 <!-- Revenue Sources -->
 <bean id="RevenueSources" class="org.springframework.web.servlet.view.JstlView">
 	<property name="url" value = "/WEB-INF/views/widgets/revenue-sources.jsp"/>
-</bean>
+</bean> 
 
 <!-- Website Performance -->
 <bean id="WebsitePerformance" class="org.springframework.web.servlet.view.JstlView">

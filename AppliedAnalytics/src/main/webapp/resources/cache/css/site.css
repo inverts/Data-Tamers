@@ -170,6 +170,10 @@ line:hover {
 	opacity: 0.5;
 }
 
+#drag_rect {
+	position:relative;
+}
+
 #backrect {
 	width: 600px;
 	height: 350px;
@@ -211,7 +215,7 @@ body {
 .axis hypoPath,.axis trendPath,.axis axisLine        
         
                 
-        path:hover {
+path:hover {
 	opacity: 0.5;
 }
 
@@ -220,7 +224,8 @@ body {
 	fill: none;
 }
 
-#line_o path.overlay {
+
+#line_trend path.overlay, #line_hypo path.overlay {
 	stroke: white;
 	stroke-opacity: 0;
 	stroke-width: 10;
@@ -231,11 +236,4 @@ body {
 	stroke: black;
 	stroke-width: 2;
 	fill: none;
-}
-
-#tangent2 {
-	stroke: black;
-	stroke-width: 2;
-	fill: none;
-	opacity: 0.5;
 }
