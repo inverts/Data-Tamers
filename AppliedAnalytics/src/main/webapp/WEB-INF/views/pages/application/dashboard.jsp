@@ -1,25 +1,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <script src="<c:url value="cache/javascript/hypothetical-future.js" />"></script>
 <script src="<c:url value="cache/javascript/website-performance.js" />"></script>
 <script src="<c:url value="cache/javascript/revenue-sources.js" />"></script>
 <script src="<c:url value="cache/javascript/dashboard.js" />"></script>
 
-
-<style>
-.dashboard-content {
-} 
-
-.dashboard-content, .w_container {
-}
-
-.w_container {
-	float:left;
-}
-
-</style>
-
-<div class="dashboard-content">
-	
+<div class="dashboard">
+	<div class="dashboard-content">
+		
+	</div>
 </div>

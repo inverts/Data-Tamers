@@ -9,7 +9,7 @@
 					<a href="#"><fmt:message key="dashboard" /></a> | 
 					<a href="/appliedanalytics/trends"><fmt:message key="trends" /></a> | 
 					<a href="/appliedanalytics/forecast"><fmt:message key="forecast" /></a> | 
-					<a href="#"><fmt:message key="suggestions" /></a> | 
+					<a href="#"><fmt:message key="alerts" /></a> | 
 					<a href="/appliedanalytics/signout"><fmt:message key="signout" /></a> 
 				</div>
 			</c:when>
