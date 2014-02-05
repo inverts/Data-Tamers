@@ -2,25 +2,32 @@
  * website-performance.js
  */
 
-$(document).ready(function() {
-	
-	GetWebsitePerformanceWidget('websitePerformance');
+$(function() {
+	// Temporary
+	GetWebsitePerformanceWidget();
 
 });
 
 
-function GetWebsitePerformanceWidget(id) {
+function GetWebsitePerformanceWidget() {
 	
-	var $element = $('#' + id);
+	var $element = $('#websitePerformance');
+	
 	$.post("WebsitePerformance", null, 
 		function(response) {
-			$element.empty().append(response);
-
-			var canvas = document.getElementById('websitePerformanceData');
+			if ($element.length > 0)
+				$element.empty().append(response);
+			else {
 				
+				$element = $('<div>').attr({ 'id': 'websitePerformance', 'class': 'w_container'})
+									 .prop('draggable', true)
+									 .appendTo('.dashboard-content')
+									 .append(response);
+			}
+			
+			var canvas = document.getElementById('websitePerformanceData');
 			var p = new Processing(canvas, performanceSketch);
-			
-			
+
 	});		
 }
 

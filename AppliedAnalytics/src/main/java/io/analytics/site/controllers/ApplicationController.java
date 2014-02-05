@@ -85,9 +85,9 @@ public class ApplicationController {
 	
 	@HeaderFooter(HeaderType.APPLICATION)
 	@SidePanel(animate = false)
-	@RequestMapping(value = "/application/suggestions", method = RequestMethod.GET)
+	@RequestMapping(value = "/application/alerts", method = RequestMethod.GET)
 	public ModelAndView suggestions(Model model) {
-		return new ModelAndView("application/suggestions");
+		return new ModelAndView("application/alerts");
 	}
 
 	

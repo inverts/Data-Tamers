@@ -21,8 +21,5 @@
 </style>
 
 <div class="dashboard-content">
-	<div id="hypotheticalWidget" class="w_container" draggable="true"></div>
-	<div id="websitePerformance" class="w_container" draggable="true"></div>
-	<div id="revenueSources" class="w_container" draggable="true"></div>
-	<div id="testWidget4" class="w_container" draggable="true"></div>		
+	
 </div>
