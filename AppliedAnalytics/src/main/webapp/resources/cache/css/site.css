@@ -159,12 +159,6 @@ input { font: inherit; }
 .googleName { color:#00aeef; }
 .personal-info .googleAuth a:hover { cursor:pointer; color:#00aeef; }
 
-/******APPLICATION*****/
-
-/* Dashboard */
-
-.dashboard .dashboard-content, .dashboard .w_container { float:left; }
-
 /*****CSS for HYPOTHETICAL FUTURE WIDGET*****/
 line:hover {
 	opacity: 0.5;
