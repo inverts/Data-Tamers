@@ -56,7 +56,7 @@ var futureEndDate = '${ hfModel.getFutureEndDate() }';
             <div id="chart"></div>
         </div>
 			<canvas id="hypotheticalFutureData"></canvas>
-								
+
 		</div>
 	</form>
 </div>
