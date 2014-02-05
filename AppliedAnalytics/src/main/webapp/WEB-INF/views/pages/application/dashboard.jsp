@@ -3,7 +3,8 @@
 
 <script src="<c:url value="cache/javascript/hypothetical-future.js" />"></script>
 <script src="<c:url value="cache/javascript/website-performance.js" />"></script>
-<script src="<c:url value="cache/javascript/revenue-sources.js" />"></script>
+<!--  Revenue sources widget - don't include -->
+<!-- <script src="<c:url value="cache/javascript/revenue-sources.js" />"></script>   -->
 <script src="<c:url value="cache/javascript/dashboard.js" />"></script>
 
 
