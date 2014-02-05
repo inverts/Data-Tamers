@@ -20,13 +20,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class FilterRepository implements IFilterRepository {
-
-	private DataSource dataSource;
- 
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
- 
+	
 	public static final String FILTERS_TABLE = "Filters";
 	private static final class FilterTable {
 		public static final String FILTER_ID = "idFilters";
