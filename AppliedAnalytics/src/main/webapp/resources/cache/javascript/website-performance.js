@@ -25,8 +25,8 @@ function GetWebsitePerformanceWidget() {
 									 .append(response);
 			}
 			
-			var canvas = document.getElementById('websitePerformanceData');
-			var p = new Processing(canvas, performanceSketch);
+		//	var canvas = document.getElementById('websitePerformanceData');
+		//	var p = new Processing(canvas, performanceSketch);
 
 	});		
 }
