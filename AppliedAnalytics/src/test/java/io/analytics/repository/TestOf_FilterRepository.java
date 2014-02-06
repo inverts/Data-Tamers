@@ -18,7 +18,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import io.analytics.domain.Filter;
 import io.analytics.repository.interfaces.IFilterRepository;
 
-public class TestOf_FilterRepository   {
+@ContextConfiguration
+public class TestOf_FilterRepository implements ApplicationContextAware {
 	
 	private IFilterRepository filterRepository;
 	
@@ -34,24 +35,33 @@ public class TestOf_FilterRepository   {
 		if (true) {
 			Filter filter = Mockito.mock(Filter.class);
 			try {
-					
-				assert(filterRepository.addNewFilter(filter) == false);
+
+				Mockito.when(filter.getId()).thenReturn(0);	
+				
+				assert(filterRepository.addNewFilter(filter) == null);
 		
 				Mockito.when(filter.getStartDate()).thenReturn(Calendar.getInstance());
-				assert(filterRepository.addNewFilter(filter) == false);
+				assert(filterRepository.addNewFilter(filter) == null);
 		
 				Mockito.when(filter.getEndDate()).thenReturn(Calendar.getInstance());
-				assert(filterRepository.addNewFilter(filter) == false);
+				assert(filterRepository.addNewFilter(filter) == null);
 				
 				Mockito.when(filter.getInterestMetric()).thenReturn("ga:bogus");
-				assert(filterRepository.addNewFilter(filter) == false);
+				assert(filterRepository.addNewFilter(filter) == null);
 				
 				//This is the last filter property we should need in order to successfully edit
 				Mockito.when(filter.getGoogleProfileId()).thenReturn("bogusID");
-				assert(filterRepository.addNewFilter(filter) == true);
+				Filter newFilter1 = filterRepository.addNewFilter(filter);
+				System.out.println("ID: " + newFilter1.getId());
+				assert(newFilter1 != null);
+				assert(newFilter1.getId() != 0);
 				
 				Mockito.when(filter.getParentAccountId()).thenReturn(9999999);
-				assert(filterRepository.addNewFilter(filter) == false);
+				Filter newFilter2 = filterRepository.addNewFilter(filter);
+				System.out.println("ID: " + newFilter2.getId());
+				assert(newFilter2 != null);
+				assert(newFilter2.getId() != 0);
+				
 				
 			} catch (Exception e) {
 				System.err.println("testAddNewFilter() encountered errors.");
@@ -59,6 +69,12 @@ public class TestOf_FilterRepository   {
 				fail();
 			}
 		}
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext arg0) throws BeansException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

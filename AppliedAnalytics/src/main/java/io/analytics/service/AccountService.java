@@ -1,14 +1,20 @@
 package io.analytics.service;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import io.analytics.domain.Account;
+import io.analytics.repository.AccountRepository;
+import io.analytics.repository.interfaces.IAccountRepository;
 
 @Service
 public class AccountService {
 
+	//TODO: Autowire.
+	private IAccountRepository accountRepository = new AccountRepository();
+	
 	/**
 	 * Gets an Account object given its id.
 	 * @param id
@@ -42,11 +48,24 @@ public class AccountService {
 	/**
 	 * Creates a new Account. In order for an Account to exist, it must have an owner,
 	 * and it must have a default filter.
+	 * The remaining details (id and creation date) are filled in by the method.
+	 * WARNING: Currently does not return an Account with a valid Account ID.
+	 * 
 	 * @param ownerId
 	 * @param filterId
-	 * @return The new Account
+	 * @return The new Account that was created and saved to the database. <code>null</code>
+	 * if it could not be saved.
 	 */
-	public Account createAccount(int ownerId, int filterId) {
-		return null;
+	public Account createAndSaveAccount(int ownerId, int filterId) {
+		Account acc = new Account(-1);
+		acc.setOwnerId(ownerId);
+		acc.setDefaultFilterId(filterId);
+		acc.setCreationDate(Calendar.getInstance());
+		
+		if (accountRepository.addNewAccount(acc))
+			return acc;
+		else
+			return null;
+		
 	}
 }
