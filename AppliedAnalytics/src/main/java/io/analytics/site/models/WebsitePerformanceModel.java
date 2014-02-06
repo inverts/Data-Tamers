@@ -7,17 +7,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.google.api.client.auth.oauth2.Credential;
 
 import io.analytics.domain.PagePerformanceData;
 import io.analytics.service.interfaces.IPagePerfomanceService;
 import io.analytics.service.interfaces.ISessionService;
 
 public class WebsitePerformanceModel {
-	
+
 		private JSONObject jsonData;
 		private IPagePerfomanceService pagePerformanceService;
 		private ISessionService sessionService;
@@ -29,6 +28,11 @@ public class WebsitePerformanceModel {
 		private ArrayList<Double> visitsBounceRate;
 		private ArrayList<Double> exitRate;
 		private int visitsTotal;
+		private String[] pagePathResults;
+		private double[] visitsPercentResults;
+		private double[] bounceRateResults;
+		private double[] exitRateResults;
+
         DateFormat presentationFormat = new SimpleDateFormat("MM/dd/yyyy"); 
         private static final int MS_IN_DAY = 86400000;
         
@@ -37,7 +41,11 @@ public class WebsitePerformanceModel {
 			this.pagePerformanceService = pagePerformanceService;
 			this.jsonData = new JSONObject();
 			this.activeProfile = this.pagePerformanceService.getProfile();
-			
+			pagePathResults = new String[5];
+			visitsPercentResults = new double[5];
+			bounceRateResults = new double[5];
+			exitRateResults = new double[5];	
+
 			// default dates
 			this.endDate = new Date();
 			Calendar cal = new GregorianCalendar();
@@ -46,9 +54,9 @@ public class WebsitePerformanceModel {
 			this.startDate = cal.getTime();
             
             updateData();
-			
+
 		}
-		
+
 		public String getName() {
 			return "Website Performance";
 		}
@@ -56,7 +64,7 @@ public class WebsitePerformanceModel {
 		public String getDescription() {
 			return "View the website performance statistics for a business";
 		}
-				
+
 		public Date getStartDate() {
 			return startDate;
 		}
@@ -72,29 +80,29 @@ public class WebsitePerformanceModel {
 		public void setEndDate(Date endDate) {
 			this.endDate = endDate;
 		}
-		
+
 		public String getActiveProfile() {
 			return this.activeProfile;
 		}
-		
+
 		/**
 		 * TODO: Have this automatically occur when dependencies are updated.
 		 */
 		public void updateData() {
-		
+
 			PagePerformanceData dataObject = this.pagePerformanceService.getPagePerformanceData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate, 500);
 			this.pagePath = dataObject.getPagePathData();
 			this.visits = dataObject.getVisitsData();
 			this.visitsBounceRate = dataObject.getVisitsBounceRateData();
 			this.exitRate = dataObject.getExitRateData();
 			this.visitsTotal = dataObject.getVisitsTotal();
-			
+
 			ArrayList<Double> weightedAvg = new ArrayList<Double>(pagePath.size());
 			for (int i=0; i<pagePath.size(); i++){
 				weightedAvg.add(i, visits.get(i)*visitsBounceRate.get(i) + 
 						visits.get(i)*exitRate.get(i));
 			}
-			
+
 			// iterate to find top 5 maximum weighted averages and save indices
 			double max = weightedAvg.get(0);
 			int maxIndex = 0;
@@ -111,62 +119,38 @@ public class WebsitePerformanceModel {
 					}
 				}
 				worstI[j]=maxIndex;
-				System.out.println("Worst index = "+ maxIndex + ". Max = " + max);
 				max = 0;
 			}
-			
-		// put results into json object (print out results for now)
-			System.out.println("Page               Visits(%)      ExitRate(%)       VisitsBounceRate(%) ");
-			for (int i=0; i<5; i++){
-				System.out.println(pagePath.get(worstI[i]) + ", " + (visits.get(worstI[i])*100)/visitsTotal + ", " + 
-						exitRate.get(worstI[i]) + ", " + visitsBounceRate.get(worstI[i]));
-			}
-		}
-		
-		/* test method to pass data to javascript */
-		
-//		public JSONObject getDataPoints() {
-//		
-//			Double[] data = new Double[this.getDataPoints().length()];
-//			int i;
-//			for (i=0; i<this.getDataPoints().length(); i++) {
-//				//data[i] = this.getDataPoints().get(i);
-//			}
-//			
-//			float[] pts = new float[] { 5, 6, 7, 8, 10};
-//			
-//			 try {
-//				 
-//				 /* Feel free to create categories of data like I did for points. */
-//				 JSONObject points = new JSONObject();
-//				 points.put("values", Arrays.toString(data));
-//				 
-//				 /* this.data is the parent object that will contain ALL of
-//				  * the data that will be processed by the visualization.
-//				  */
-//				 this.dataPoints.put("points", points);
-//				
-//			} catch (JSONException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			 return this.dataPoints;
-//		}
-		
-		/*
-		// Helper method for establishing the dropdown options which uses a map to set a boolean
-		// for the selected item.
-		private Map<String, String> setDropDownOptions (String selected, String[] values) {
-			
-			Map<String, String> result = new TreeMap<String, String>();
-			
-			for (String value : values) {
-					result.put(value, value.equals(selected) ? "selected" : "");
-			}
-			
-			return result;
-			
-		}
-		*/
-}
 
+		// put results into arrays
+			for (int i=0; i<5; i++){
+				pagePathResults[i] = pagePath.get(worstI[i]);
+				visitsPercentResults[i] = Math.round(visits.get(worstI[i])*100.00/visitsTotal*10.0)/10.0;
+				bounceRateResults[i] = Math.round(visitsBounceRate.get(worstI[i])*10.0)/10.0;
+				exitRateResults[i] = Math.round(exitRate.get(worstI[i])*10.0)/10.0;
+			}
+
+			this.getDataPoints();
+		}
+
+		// put data into JSON object to pass to the view website-performance.jsp 
+
+		public JSONObject getDataPoints()  {
+			 try {	
+				 JSONArray arr1 = new JSONArray();
+				 JSONArray arr2 = new JSONArray();
+				 JSONArray arr3 = new JSONArray();
+				 JSONArray arr4 = new JSONArray();
+
+				 this.jsonData.put("pagePath", arr1.put(pagePathResults));
+				 this.jsonData.put("visitsPercent", arr2.put(visitsPercentResults));
+				 this.jsonData.put("bounceRate", arr3.put(bounceRateResults));
+				 this.jsonData.put("exitRate", arr4.put(exitRateResults));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			 return this.jsonData;
+		}
+}
