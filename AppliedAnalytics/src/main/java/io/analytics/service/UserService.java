@@ -18,7 +18,8 @@ public class UserService implements IUserService {
 	@Override
 	public User loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userRepository.loadUserByUsername(username);
-		
+		if (user == null)
+			throw new UsernameNotFoundException("Username not found.");
 		return user;
 	}
 	

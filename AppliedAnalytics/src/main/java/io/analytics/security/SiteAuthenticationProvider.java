@@ -33,8 +33,10 @@ public class SiteAuthenticationProvider implements AuthenticationProvider {
 		
 		// Get the user access level
 		Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
-		
-		return new UsernamePasswordAuthenticationToken(username, PasswordUtils.createPasswordHash(password, user.getPasswordSalt()), authorities);
+		if (PasswordUtils.isPasswordValid(user.getPassword(), password, user.getPasswordSalt()))
+			return new UsernamePasswordAuthenticationToken(username, PasswordUtils.createPasswordHash(password, user.getPasswordSalt()), authorities);
+		else
+			throw new BadCredentialsException("Invalid password.");
 	}
 
 	@Override

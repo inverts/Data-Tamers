@@ -13,7 +13,7 @@ function GetWebsitePerformanceWidget() {
 	
 	var $element = $('#websitePerformance');
 	
-	$.post("WebsitePerformance", null, 
+	$.post(applicationRoot + "/WebsitePerformance", null, 
 		function(response) {
 			if ($element.length > 0)
 				$element.empty().append(response);

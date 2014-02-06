@@ -4,6 +4,8 @@
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc 
  		http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -13,8 +15,17 @@
 	
 	<mvc:annotation-driven />
 	
-	<beans:bean id="customAuthentication" class="io.analytics.service.UserService" />
-
+	<beans:bean id="customAuthenticationUserService" class="io.analytics.service.UserService" />
+	<beans:bean id="customAuthenticationProvider" class="io.analytics.security.SiteAuthenticationProvider" />
+	
+	<beans:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<beans:property name="url" value="jdbc:mysql://davidkainoa.com:3306/davidkai_analytics" />
+		<beans:property name="username" value="davidkai_data" />
+		<beans:property name="password" value="PNjO_#a40@wZPmh-Q" />
+	</beans:bean>
+	
+    <context:component-scan base-package="org.springframework.docs.test" />
 	<context:component-scan base-package="io.analytics.site" />
 	<context:component-scan base-package="io.analytics.service" />
 	<context:component-scan base-package="io.analytics.service.interfaces" />

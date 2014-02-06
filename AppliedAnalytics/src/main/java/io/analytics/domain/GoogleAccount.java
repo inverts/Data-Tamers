@@ -11,7 +11,8 @@ public class GoogleAccount {
 	private int ownerAccountId;
 	private String activeRefreshToken;
 	
-	public GoogleAccount() {
+	public GoogleAccount(int id) {
+		this.id = id;
 	}
 	public int getId() {
 		return id;

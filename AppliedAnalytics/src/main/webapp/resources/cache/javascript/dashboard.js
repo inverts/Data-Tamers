@@ -4,7 +4,13 @@
 
 
 $(function() {
-	$('.dashboard-content').sortable({ revert: true, tolerance: 'pointer' });
+	
+	$('.dashboard-content').sortable({ 
+		revert: true, 
+		tolerance: 'pointer', 
+		containment: $('.content')
+	});
+
 });
 
 

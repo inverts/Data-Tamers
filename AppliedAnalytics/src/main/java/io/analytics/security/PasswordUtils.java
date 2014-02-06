@@ -43,17 +43,17 @@ public class PasswordUtils {
 	/**
 	 * Indicates whether or not the a password and salt combination matches a particular hash.
 	 * 
-	 * @param password
-	 * @param hash
-	 * @param salt
+	 * @param password The raw password to check.
+	 * @param hash The hash to check against.
+	 * @param salt The salt used while hashing.
 	 * @return
 	 */
-	public static boolean isPasswordValid(String password, String hash, String salt) {
+	public static boolean isPasswordValid(String hash, String password, String salt) {
 		if (password == null || hash == null || salt == null)
 			return false;
 		passwordEncoder.setIterations(generateIterationCount(salt));
 		try {
-			return passwordEncoder.isPasswordValid(password, hash, salt);
+			return passwordEncoder.isPasswordValid(hash, password, salt);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return false;

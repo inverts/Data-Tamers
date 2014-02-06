@@ -15,18 +15,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 @Repository
+@Component
 public class FilterRepository implements IFilterRepository {
-
-	private DataSource dataSource;
- 
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
- 
+	
 	public static final String FILTERS_TABLE = "Filters";
 	private static final class FilterTable {
 		public static final String FILTER_ID = "idFilters";
@@ -68,8 +67,9 @@ public class FilterRepository implements IFilterRepository {
 	
 	private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 	
-	public boolean addNewFilter(Filter f) {
+	public Filter addNewFilter(Filter f) {
 		JdbcTemplate jdbc = new JdbcTemplate(DATASOURCE);
+        
 		String preStatement;
 		Object[] args;
 		int[] argTypes;
@@ -102,14 +102,26 @@ public class FilterRepository implements IFilterRepository {
 		
 		int affectedRows;
 		try {
+			//These will not work unless we're in a transaction.
+			//int lastRowFirst = jdbc.queryForInt("SELECT LAST_INSERT_ID();");
 			affectedRows = jdbc.update(preStatement, args, argTypes);
+			//int lastRow = jdbc.queryForInt("SELECT LAST_INSERT_ID();");
+
+			if (affectedRows == 1) { //&& lastRowFirst != lastRow) {
+				Filter newFilter = new Filter(0); //TODO: Replace with correct ID. This is wrong.
+				newFilter.setStartDate(f.getStartDate());
+				newFilter.setEndDate(f.getEndDate());
+				newFilter.setGoogleProfileId(f.getGoogleProfileId());
+				newFilter.setInterestMetric(f.getInterestMetric());
+				newFilter.setParentAccountId(f.getParentAccountId());
+				return newFilter;
+			} else {
+				return null;
+			}
 		} catch (DataAccessException e) {
 			//TODO: Standardize error handling for the database.
 			e.printStackTrace();
-			return false;
+			return null;
 		}
-		
-		//Return true if the statement successfully affected one row.
-		return affectedRows == 1;
 	}
 }

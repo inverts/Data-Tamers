@@ -19,6 +19,15 @@ public class User implements UserDetails {
 	private String firstName;
 	private String lastName;
 	private String passwordSalt;
+	private int id;
+	
+	public User() {
+		super();
+	}
+	public User(int id) {
+		super();
+		this.id = id;
+	}
 	
 	public void setAuthorities(Collection<? extends GrantedAuthority> roles) {
 		this.roles = roles;
@@ -64,8 +73,18 @@ public class User implements UserDetails {
 		
 	}
 	
+	public User setPasswordHash(String hash) {
+		this.passwordHash = hash;
+		return this;
+	}
+	
 	public String getPasswordSalt() {
 		return passwordSalt;
+	}
+	
+	public User setPasswordSalt(String salt) {
+		this.passwordSalt = salt;
+		return this;
 	}
 
 	public void setUsername(String username) {

@@ -28,7 +28,8 @@
  
  <!-- Custom Authentication Bean that gets ran upon validation from login --> 
  <authentication-manager alias="authenticationManager">
-   <authentication-provider user-service-ref="customAuthentication" />
+   <authentication-provider user-service-ref="customAuthenticationUserService" />
+   <authentication-provider ref="customAuthenticationProvider" />
  </authentication-manager>
   
 </beans:beans>  

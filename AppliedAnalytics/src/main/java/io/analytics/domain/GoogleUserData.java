@@ -1,6 +1,8 @@
 package io.analytics.domain;
 
 import java.io.Serializable;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class GoogleUserData implements Serializable {
 	/**
@@ -16,6 +18,7 @@ public class GoogleUserData implements Serializable {
 	private String family_name;
 	private String link;
 	private String picture;
+	private String pictureNoParams;
 	private String gender;
 	private String locale;
 
@@ -41,7 +44,18 @@ public class GoogleUserData implements Serializable {
 		return link;
 	}
 	public String getPicture() {
-		return picture;
+		if (pictureNoParams == null && picture != null) {
+			URI u = URI.create(picture);
+			try {
+				URI picURI = new URI(picture);
+				pictureNoParams = String.format("%s://%s%s", picURI.getScheme(), picURI.getAuthority(), picURI.getPath());
+			} catch (URISyntaxException e) {
+				// This should mean that Google's URI response was not valid.
+				picture = null;
+				e.printStackTrace();
+			}
+		}
+		return pictureNoParams;
 	}
 	public String getGender() {
 		return gender;

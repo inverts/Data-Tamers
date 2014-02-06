@@ -11,7 +11,7 @@ $(function() {
 function GetRevenueSourcesWidget() {
 	
 	var $element = $('#revenueSource');
-	$.post("RevenueSources", null, 
+	$.post(applicationRoot + "/RevenueSources", null, 
 		function(response) {
 			if ($element.length > 0)
 				$element.empty().append(response);
