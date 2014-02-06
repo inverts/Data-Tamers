@@ -13,7 +13,8 @@
 	
 	<mvc:annotation-driven />
 	
-	<beans:bean id="customAuthentication" class="io.analytics.service.UserService" />
+	<beans:bean id="customAuthenticationUserService" class="io.analytics.service.UserService" />
+	<beans:bean id="customAuthenticationProvider" class="io.analytics.security.SiteAuthenticationProvider" />
 
 	<context:component-scan base-package="io.analytics.site" />
 	<context:component-scan base-package="io.analytics.service" />
