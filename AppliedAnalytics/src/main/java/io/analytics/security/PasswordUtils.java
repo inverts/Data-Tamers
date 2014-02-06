@@ -53,7 +53,7 @@ public class PasswordUtils {
 			return false;
 		passwordEncoder.setIterations(generateIterationCount(salt));
 		try {
-			return passwordEncoder.isPasswordValid(password, hash, salt);
+			return passwordEncoder.isPasswordValid(hash, password, salt);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			return false;
