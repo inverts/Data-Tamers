@@ -34,7 +34,7 @@ var futureEndDate = '${ hfModel.getFutureEndDate() }';
 		<div id="hypotheticalFutureGraph" class="hf_visual">
 			<!-- add Visualization elements -->
 			<!-- ADDED 2/1 -->
-			<div id="backrect">
+			<div id="backrect" class="widget-content">
             <div id="top-controls">
                 <div id = "buttonsContainer">
                     <div id = "option">

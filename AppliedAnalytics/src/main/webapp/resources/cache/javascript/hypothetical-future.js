@@ -3,27 +3,41 @@
  */
 
 $(function() {
-	updateHypotheticalWidget('hypotheticalWidget');
+	updateHypotheticalWidget();
+	
+
 	
 });
 
-function updateHypotheticalWidget(id) {
+function updateHypotheticalWidget() {
 	
-	var $element = $('#' + id);
-	$.post("HypotheticalFuture", null, function(response) {
-		$element.fadeOut("fast", function() {
-			$element.html(response);
-			var canvas = document.getElementById('hypotheticalFutureData');
-
-			// points = HypotheticalFutureData.points;
-			var p = new Processing(canvas, hypotheticalSketch);
+	var $element = $('#hypotheticalFuture');
+	$.post(applicationRoot + "/HypotheticalFuture", null, function(response) {
+		if ($element.length > 0) {
+			$element.fadeOut("fast", function() { 
+					$element.empty().append(response).show(); 
+			});
+		}
+		else {
+			$element = $('<div>').attr({ 'id': 'hypotheticalFuture', 'class': 'w_container'})
+								 .prop('draggable', true)
+								 .appendTo('.dashboard-content')
+								 .append(response);
+		}
 			
+		var canvas = document.getElementById('hypotheticalFutureData');
+		
+		// points = HypotheticalFutureData.points;
+		var p = new Processing(canvas, hypotheticalSketch);
+		
 
-			$element.fadeIn("fast");
-			window.onresize = function(event) {
-				var p = new Processing(canvas, hypotheticalSketch);
-			}
-		});
+		//$element.fadeIn("fast");
+		window.onresize = function(event) {
+			var p = new Processing(canvas, hypotheticalSketch);
+		}
+		
+		// widget will not be dragged while user clicks on content
+		$('.dashboard-content').sortable({ cancel: '.widget-content'});
 	});
 }
 
