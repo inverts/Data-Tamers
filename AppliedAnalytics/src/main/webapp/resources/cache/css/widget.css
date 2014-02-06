@@ -1,58 +1,32 @@
 @CHARSET "ISO-8859-1";
 
+/*** GENERAL WIDGET STYLING ***/
 
-.widget_wrapper {
-	padding:15px;
-	background:url("../images/widget_bg.png") repeat;
-	clear:both;
-	border-radius: 8px;
-	-webkit-border-radius: 8px;
-	-moz-border-radius: 8px;
-	
-	box-shadow: 0px 0px 6px 0px;
-	-webkit-box-shadow: 0px 0px 6px 0px;
-	-mozbox-shadow: 0px 0px 6px 0px;
-	
-	margin: 10px;
-	/*
-	-webkit-border-top-left-radius: 20px;
-	-webkit-border-top-right-radius: 20px;
-	-webkit-border-bottom-left-radius: 20px;
-	-webkit-border-bottom-right-radius: 20px;
-	
-	-moz-border-radius-topleft: 20px;
-	-moz-border-radius-topright: 20px;
-	-moz-border-radius-bottomleft: 20px;
-	-moz-border-radius-bottomright: 20px;
-	*/
-}
+.widget { padding:15px; background:url("../images/widget_bg.png") repeat; clear:both; border-radius: 8px; -webkit-border-radius: 8px; -moz-border-radius: 8px; box-shadow: 0px 0px 6px 0px; 
+		  -webkit-box-shadow: 0px 0px 6px 0px; -mozbox-shadow: 0px 0px 6px 0px; margin: 10px; }
+
+.widget .widget_header { height: 80px; width: 100%; }
+.widget .widget_title { font-size: 1.55em; color: #00aeef; text-shadow: 0 0 3px rgb(0, 173, 255); margin-bottom: 5px; }
+
+.widget .widgetView { visibility:'hidden'; }
 
 
-.widget_header {
-	height: 80px;
-	width: 100%;
-}
+/*****CSS for HYPOTHETICAL FUTURE WIDGET*****/
 
-.widget_title {
-	font-size: 1.55em;
-	color: #00aeef;
-	text-shadow: 0 0 3px rgb(0, 173, 255);
-	margin-bottom: 5px;
-}
+line:hover { opacity: 0.5; }
+#drag_rect { position:relative; }
+#backrect { width:540px; padding:0 30px; height:350px; background-color:#CCC; }
+#chart { font-size:12px; }
+#chart line.data { stroke:grey; stroke-width:5px; }
+#chart .xaxis { stroke:grey; stroke-width:5px; }
+#chart path { fill:none; }
+#draggableLine { cursor:pointer; }
 
+body { font: 12px Helvetica; }
 
-.widgetView {
-	visibility:'hidden';
-}
+.axisLine { fill: none; stroke-width: 1, stroke: grey; }
+.axis hypoPath, .axis trendPath, .axis axisLinem path:hover { opacity: 0.5; }
+#line_o path { stroke: black; fill: none; }
+#line_trend path.overlay, #line_hypo path.overlay { stroke: white; stroke-opacity: 0; stroke-width: 10; fill: none; }
+#tangent { stroke: black; stroke-width: 2; fill: none; }
 
-
-.widget_input {
-	float: right;
-	margin-right:10px;
-	clear: left;	
-}
-
-.widget_input label {
-	font: .9em arial,sans-serif;
-	color: white;
-}
