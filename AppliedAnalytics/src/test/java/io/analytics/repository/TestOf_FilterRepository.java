@@ -37,6 +37,7 @@ public class TestOf_FilterRepository implements ApplicationContextAware {
 			try {
 
 				Mockito.when(filter.getId()).thenReturn(0);	
+				Mockito.when(filter.getParentAccountId()).thenReturn(-1);
 				
 				assert(filterRepository.addNewFilter(filter) == null);
 		
@@ -52,15 +53,16 @@ public class TestOf_FilterRepository implements ApplicationContextAware {
 				//This is the last filter property we should need in order to successfully edit
 				Mockito.when(filter.getGoogleProfileId()).thenReturn("bogusID");
 				Filter newFilter1 = filterRepository.addNewFilter(filter);
-				System.out.println("ID: " + newFilter1.getId());
+				//System.out.println("ID: " + newFilter1.getId());
 				assert(newFilter1 != null);
-				assert(newFilter1.getId() != 0);
+				//assert(newFilter1.getId() != 0);
 				
+				//We attempt to construct a non-existent parent account ID, which should fail.
 				Mockito.when(filter.getParentAccountId()).thenReturn(9999999);
 				Filter newFilter2 = filterRepository.addNewFilter(filter);
-				System.out.println("ID: " + newFilter2.getId());
-				assert(newFilter2 != null);
-				assert(newFilter2.getId() != 0);
+				//System.out.println("ID: " + newFilter2.getId());
+				assert(newFilter2 == null);
+				//assert(newFilter2.getId() != 0);
 				
 				
 			} catch (Exception e) {

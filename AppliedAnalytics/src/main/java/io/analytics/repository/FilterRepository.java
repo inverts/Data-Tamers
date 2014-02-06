@@ -120,7 +120,7 @@ public class FilterRepository implements IFilterRepository {
 			}
 		} catch (DataAccessException e) {
 			//TODO: Standardize error handling for the database.
-			//e.printStackTrace();
+			e.printStackTrace();
 			return null;
 		}
 	}
