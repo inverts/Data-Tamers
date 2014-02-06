@@ -9,7 +9,7 @@ $(function() {
 
 
 function GetRevenueSourcesWidget() {
-	
+/*	
 	var $element = $('#revenueSource');
 	$.post("RevenueSources", null, 
 		function(response) {
@@ -28,7 +28,7 @@ function GetRevenueSourcesWidget() {
 			var p = new Processing(canvas, revenueSketch);
 			
 			
-	});		
+	});	*/	
 }
 
 // assume everything in points is a string!
