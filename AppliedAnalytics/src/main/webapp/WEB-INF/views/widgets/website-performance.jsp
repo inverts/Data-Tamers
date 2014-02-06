@@ -5,7 +5,7 @@
 //var WebsitePerformanceData = JSON.parse('${DATA}');
 </script>  
   
-<div class="widget_wrapper widgetView">
+<div class="widget widgetView">
 	<form id="websitePerformanceSettings">
 		<div class="widget_header">			
 			<div class="widget_title"><fmt:message key="websiteperformance.title" /></div>

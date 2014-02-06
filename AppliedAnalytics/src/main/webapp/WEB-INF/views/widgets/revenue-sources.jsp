@@ -5,7 +5,7 @@
 //var RevenueSourceData = JSON.parse('${DATA}');
 </script>  
   
-<div class="widget_wrapper widgetView">
+<div class="widget widgetView">
 	<form id="revenueSourcesSettings">
 		<div class="widget_header">			
 			<div class="widget_title"><fmt:message key="revenuesources.title" /></div>
