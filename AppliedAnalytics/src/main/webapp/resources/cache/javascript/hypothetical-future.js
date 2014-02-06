@@ -4,11 +4,11 @@
 
 $(function() {
 	updateHypotheticalWidget('hypotheticalWidget');
-
+	
 });
 
 function updateHypotheticalWidget(id) {
-
+	
 	var $element = $('#' + id);
 	$.post("HypotheticalFuture", null, function(response) {
 		$element.fadeOut("fast", function() {
@@ -17,7 +17,7 @@ function updateHypotheticalWidget(id) {
 
 			// points = HypotheticalFutureData.points;
 			var p = new Processing(canvas, hypotheticalSketch);
-
+			
 
 			$element.fadeIn("fast");
 			window.onresize = function(event) {
@@ -378,7 +378,7 @@ var hypotheticalSketch = (function($p) {
 	.style({'fill' : 'none'})
 	.style({'stroke' : '#2ca02c'})
 	.style({'stroke-weight' : '3px'});
-
+	
 	// call tooltip for trend line
 	svg.select('#line_trend path.overlay')
 	.on('mouseover', function() {
@@ -399,7 +399,7 @@ var hypotheticalSketch = (function($p) {
 			}).style({
 				'stroke-weight' : '3px'
 			});
-
+	
 	// call tooltip for hypo line
 	/* raw */
 	svg.select('#line_hypo.raw path.overlay')
@@ -455,16 +455,16 @@ var hypotheticalSketch = (function($p) {
         .attr('cx', point.x)
         .attr('cy', point.y)    
 	};
-
+	
 	function removeTooltip()
 	{
 		 d3.select('#tangent').remove()
 	     svg.select("#text").remove();
 	};
-
+	
     /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
     
-
+	
 	/***************************************************************************
 	 * PLOT DRAGGABLE LINE
 	 **************************************************************************/
@@ -472,17 +472,17 @@ var hypotheticalSketch = (function($p) {
 
 
 	var drag = d3.behavior.drag().origin(Object).on('drag', dragEvent);
-
+	
 	var dragLine = drawDraggableLine();
-
+	
 
 	function drawDraggableLine() {
 		// TODO: start at last x coord value
 		var xStart = smallW / 2;				
-
+		
 		var newg = svg.append("g")
 			.data([{x : xStart, y : 50}]);		
-
+	
 		dragRect = newg.append("rect")
 			.attr("id", "drag_line")
 			.attr("x", function(d) {return d.x;})
@@ -494,7 +494,7 @@ var hypotheticalSketch = (function($p) {
 		.call(drag);			
 		return dragRect;
 	};		
-
+	
 	function dragEvent(d) {
 		var newX = d3.event.x;
         if (newX <= 30) {
@@ -505,7 +505,7 @@ var hypotheticalSketch = (function($p) {
         }
         dragRect.attr("x", d.x = newX);		
 	}	
-
+	
 
 	/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
@@ -551,8 +551,8 @@ var hypotheticalSketch = (function($p) {
 		d3.select('#smoothID').remove();
 		d3.select('#smoothID2').remove();
 	};
-
-
+	
+	
 	$('#smoothedButton').click(updateSmoothed);	
 	function updateSmoothed() {
 		removePrevious();
@@ -587,7 +587,7 @@ var hypotheticalSketch = (function($p) {
 		.style({'fill' : 'none'})
 		.style({'stroke' : '#1f77b4'})
 		.style({'stroke-weight' : '3px'});
-
+	
 
 	};
 
@@ -602,7 +602,9 @@ var hypotheticalSketch = (function($p) {
 					return y(d);
 				});
 
-		svg.append("path").attr("id", "normID").attr("class", "normalized").attr("d",
+		svg.append("path").attr("id", "normID").attr("class", "normalized").attr
+
+("d",
 				normalizedLine(hypoData)).style("stroke-dasharray", ("3,3"))
 				.style({
 					'fill' : 'none'
@@ -641,7 +643,9 @@ var hypotheticalSketch = (function($p) {
 		});
 
 		svg.append("path").attr("id", "rawID").attr("class", "raw").attr("d",
-				rawLine(hypoData)).style("stroke-dasharray", ("3,3")).style({
+				rawLine(hypoData)).style("stroke-dasharray", ("3,3")).style
+
+({
 					'fill' : 'none'
 				}).style({
 					'stroke' : '#2ca02c'
