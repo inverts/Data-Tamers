@@ -23,5 +23,15 @@ public interface IGoogleAccountRepository {
 	 * @return A List of GoogleAccounts, which may be empty if none are found.
 	 */
 	public List<GoogleAccount> getGoogleAccountsForOwner(int ownerId);
+
+	/**
+	 * Adds an access relationship between a Google Account and an Account.
+	 * The given Account will be given access to the provided Google Account.
+	 * 
+	 * @param googleAccountId The Google Account ID.
+	 * @param accountId The Account ID.
+	 * @return <code>true</code> if the operation succeeded, <code>false</code> otherwise.
+	 */
+	public boolean addRelationshipToAccount(int googleAccountId, int accountId);
 	
 }
