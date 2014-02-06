@@ -30,9 +30,9 @@ public class PasswordUtils {
 	}
 	
 	public static boolean passwordMeetsGuidelines(String password) {
-		if (password.length() < PasswordUtils.maxLength)
+		if (password.length() > PasswordUtils.maxLength)
 			return false;
-		if (password.length() > PasswordUtils.minLength)
+		if (password.length() < PasswordUtils.minLength)
 			return false;
 		for (char c : password.toCharArray()) {
 			//TODO: If we decide not to use Regex, search this way.
