@@ -16,7 +16,7 @@ import io.analytics.service.interfaces.IPagePerfomanceService;
 import io.analytics.service.interfaces.ISessionService;
 
 public class WebsitePerformanceModel {
-	
+
 		private JSONObject jsonData;
 		private IPagePerfomanceService pagePerformanceService;
 		private ISessionService sessionService;
@@ -32,7 +32,7 @@ public class WebsitePerformanceModel {
 		private double[] visitsPercentResults;
 		private double[] bounceRateResults;
 		private double[] exitRateResults;
-		
+
         DateFormat presentationFormat = new SimpleDateFormat("MM/dd/yyyy"); 
         private static final int MS_IN_DAY = 86400000;
         
@@ -45,7 +45,7 @@ public class WebsitePerformanceModel {
 			visitsPercentResults = new double[5];
 			bounceRateResults = new double[5];
 			exitRateResults = new double[5];	
-			
+
 			// default dates
 			this.endDate = new Date();
 			Calendar cal = new GregorianCalendar();
@@ -54,9 +54,9 @@ public class WebsitePerformanceModel {
 			this.startDate = cal.getTime();
             
             updateData();
-			
+
 		}
-		
+
 		public String getName() {
 			return "Website Performance";
 		}
@@ -64,7 +64,7 @@ public class WebsitePerformanceModel {
 		public String getDescription() {
 			return "View the website performance statistics for a business";
 		}
-				
+
 		public Date getStartDate() {
 			return startDate;
 		}
@@ -80,29 +80,29 @@ public class WebsitePerformanceModel {
 		public void setEndDate(Date endDate) {
 			this.endDate = endDate;
 		}
-		
+
 		public String getActiveProfile() {
 			return this.activeProfile;
 		}
-		
+
 		/**
 		 * TODO: Have this automatically occur when dependencies are updated.
 		 */
 		public void updateData() {
-		
+
 			PagePerformanceData dataObject = this.pagePerformanceService.getPagePerformanceData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate, 500);
 			this.pagePath = dataObject.getPagePathData();
 			this.visits = dataObject.getVisitsData();
 			this.visitsBounceRate = dataObject.getVisitsBounceRateData();
 			this.exitRate = dataObject.getExitRateData();
 			this.visitsTotal = dataObject.getVisitsTotal();
-			
+
 			ArrayList<Double> weightedAvg = new ArrayList<Double>(pagePath.size());
 			for (int i=0; i<pagePath.size(); i++){
 				weightedAvg.add(i, visits.get(i)*visitsBounceRate.get(i) + 
 						visits.get(i)*exitRate.get(i));
 			}
-			
+
 			// iterate to find top 5 maximum weighted averages and save indices
 			double max = weightedAvg.get(0);
 			int maxIndex = 0;
@@ -121,7 +121,7 @@ public class WebsitePerformanceModel {
 				worstI[j]=maxIndex;
 				max = 0;
 			}
-			
+
 		// put results into arrays
 			for (int i=0; i<5; i++){
 				pagePathResults[i] = pagePath.get(worstI[i]);
@@ -129,12 +129,11 @@ public class WebsitePerformanceModel {
 				bounceRateResults[i] = Math.round(visitsBounceRate.get(worstI[i])*10.0)/10.0;
 				exitRateResults[i] = Math.round(exitRate.get(worstI[i])*10.0)/10.0;
 			}
-			
 			this.getDataPoints();
 		}
-		
+
 		// put data into JSON object to pass to the view website-performance.jsp 
-		
+
 		public JSONObject getDataPoints()  {
 			 try {	
 				 JSONArray arr1 = new JSONArray();
@@ -150,8 +149,7 @@ public class WebsitePerformanceModel {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			 
+
 			 return this.jsonData;
 		}
 }
-

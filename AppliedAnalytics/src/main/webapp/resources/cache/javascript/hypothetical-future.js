@@ -24,17 +24,19 @@ function updateHypotheticalWidget() {
 								 .appendTo('.dashboard-content')
 								 .append(response);
 		}
-			
-		var canvas = document.getElementById('hypotheticalFutureData');
+		
+		$('#hypotheticalFutureData').append(hypotheticalSketch);
+		
+		//var canvas = document.getElementById('hypotheticalFutureData');
 		
 		// points = HypotheticalFutureData.points;
-		var p = new Processing(canvas, hypotheticalSketch);
+		//var p = new Processing(canvas, hypotheticalSketch);
 		
 
 		//$element.fadeIn("fast");
-		window.onresize = function(event) {
+		/*window.onresize = function(event) {
 			var p = new Processing(canvas, hypotheticalSketch);
-		}
+		}*/
 		
 		// widget will not be dragged while user clicks on content
 		$('.dashboard-content').sortable({ cancel: '.widget-content'});
@@ -87,7 +89,7 @@ var hypotheticalSketch = (function($p) {
 	 * DRAW INNER BACKGROUND
 	 **************************************************************************/
 	// draw background shape
-	var w = 600;
+	var w = 575;
 	var h = 300;
 	var svg = d3.select("#backrect").append("svg").attr("width", w).attr(
 			"height", h);

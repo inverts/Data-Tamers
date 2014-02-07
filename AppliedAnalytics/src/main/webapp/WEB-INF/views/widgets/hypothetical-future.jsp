@@ -12,24 +12,10 @@ var endDate = '${ filterModel.getActiveEndDateString() }';
 var futureEndDate = '${ hfModel.getFutureEndDate() }';
 </script>  
   
-<div class="widget_wrapper widgetView">
+<div class="widget widgetView">
 	<form id="hypotheticalFutureSettings">
 		<div class="widget_header">			
 			<div class="widget_title"><fmt:message key="dataforecast.title" /></div>
-			<!-- Temporarily hidden until implemented. -->
-			<div style="display:none;">
-				<div class="widget_input">
-					<label>Traffic Source:</label> <select id="traffic_source"></select>
-				</div>
-				<div class="widget_input">				
-					<label>Increase:</label> <select id="change_pct">
-						<c:forEach var="option" items="${changeOptions}">
-							<option value="${option.getKey()}" ${option.getValue()}>
-								${option.getKey()}%</option>
-						</c:forEach>
-					</select>
-				</div>
-			</div>
 		</div>
 		<div id="hypotheticalFutureGraph" class="hf_visual">
 			<!-- add Visualization elements -->
@@ -55,8 +41,8 @@ var futureEndDate = '${ hfModel.getFutureEndDate() }';
             <div id="smooth_button" original-title="view smoothed graph"></div>
             <div id="chart"></div>
         </div>
-			<canvas id="hypotheticalFutureData"></canvas>
-
+			<div id="hypotheticalFutureData"></div>
+								
 		</div>
 	</form>
 </div>

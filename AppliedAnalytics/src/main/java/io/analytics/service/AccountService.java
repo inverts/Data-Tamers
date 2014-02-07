@@ -7,13 +7,17 @@ import org.springframework.stereotype.Service;
 
 import io.analytics.domain.Account;
 import io.analytics.repository.AccountRepository;
+import io.analytics.repository.GoogleAccountRepository;
 import io.analytics.repository.interfaces.IAccountRepository;
+import io.analytics.repository.interfaces.IGoogleAccountRepository;
+import io.analytics.service.interfaces.IAccountService;
 
 @Service
-public class AccountService {
+public class AccountService implements IAccountService {
 
 	//TODO: Autowire.
 	private IAccountRepository accountRepository = new AccountRepository();
+	private IGoogleAccountRepository googleAccountRepository = new GoogleAccountRepository();
 	
 	/**
 	 * Gets an Account object given its id.
@@ -67,5 +71,10 @@ public class AccountService {
 		else
 			return null;
 		
+	}
+
+	@Override
+	public boolean addAccountToGoogleAccount(int accountId, int googleAccountId) {
+		return googleAccountRepository.addRelationshipToAccount(googleAccountId, accountId);
 	}
 }

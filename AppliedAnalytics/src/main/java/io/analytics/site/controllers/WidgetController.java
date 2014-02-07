@@ -1,22 +1,15 @@
 package io.analytics.site.controllers;
 
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import io.analytics.service.PagePerformanceService;
 import io.analytics.service.interfaces.ICoreReportingService;
 import io.analytics.service.interfaces.IPagePerfomanceService;
 import io.analytics.service.interfaces.ISessionService;
 import io.analytics.site.models.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,15 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.gdata.util.ParseException;
 
 @Controller
 public class WidgetController {
-	
+
 	@Autowired private ICoreReportingService CoreReportingService;
 	@Autowired private ISessionService SessionService;
 	@Autowired private IPagePerfomanceService PagePerformanceService;
-	
+
 	@RequestMapping(value = "/HypotheticalFuture", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView hypotheticalFutureView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,	
 												@RequestParam(value = "change", defaultValue = "none") String changePercentage,
@@ -51,13 +43,13 @@ public class WidgetController {
 			return new ModelAndView("unavailable");
 		}
 		if (settings.getActiveProfile() == null) {
-			
+
 			//TODO: Make an informative view for when widgets don't have an active profile to get data from.
 			return new ModelAndView("unavailable");
 		}
-		
+
 		HypotheticalFutureModel hypotheticalFuture = SessionService.getModel(session, "hypotheticalFuture", HypotheticalFutureModel.class);
-		
+
 		//If there is no model available, or if the active profile changed, create a new model.
 		if ((hypotheticalFuture == null) || !(settings.getActiveProfile().equals(hypotheticalFuture.getActiveProfile()))) {
 			//CoreReportingService reportingService = null;
@@ -72,13 +64,13 @@ public class WidgetController {
 			//hypotheticalFuture = new HypotheticalFutureModel(reportingService);
 			hypotheticalFuture = new HypotheticalFutureModel(this.SessionService, this.CoreReportingService);
 		}
-		
+
 		if (filter != null) {
 			hypotheticalFuture.setStartDate(filter.getActiveStartDate());
 			hypotheticalFuture.setEndDate(filter.getActiveEndDate());
 		}
-		
-		
+
+
 		//Execute API commands to change the model
 		if (!changePercentage.equals("none"))
 			hypotheticalFuture.setChangePercentage(changePercentage);
@@ -98,10 +90,10 @@ public class WidgetController {
 		return new ModelAndView("HypotheticalFuture");
 
 	}
-	
+
 	@RequestMapping(value = "/RevenueSources", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView revenueSourcesView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-		
+
 		Credential credential;
 		SettingsModel settings;
 		FilterModel filter;
@@ -113,19 +105,19 @@ public class WidgetController {
 			SessionService.redirectToLogin(session, request, response);
 			return new ModelAndView("unavailable");
 		}
-		
+
 		if (settings.getActiveProfile() == null) {
 			//TODO: Make an informative view for when widgets don't have an active profile to get data from.
 			return new ModelAndView ("unavailable");
 		}
-		
+
 		return new ModelAndView("RevenueSources");
 	}
-	
+
 
 	@RequestMapping(value = "/WebsitePerformance", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView websitePerformanceView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-		
+
 		Credential credential;
 		SettingsModel settings;
 		FilterModel filter;
@@ -137,44 +129,43 @@ public class WidgetController {
 			SessionService.redirectToLogin(session, request, response);
 			return new ModelAndView("unavailable");
 		}
-		
+
 		if (settings.getActiveProfile() == null) {
 			//TODO: Make an informative view for when widgets don't have an active profile to get data from.
 			return new ModelAndView ("unavailable");
 		}
-		
-		
+
+
 		//
 		// Setting up the model.
 		//
-		
+
 		WebsitePerformanceModel webPerform = SessionService.getModel(session, "webPerform", WebsitePerformanceModel.class);
-		
+
 		//If there is no model available, or if the active profile changed, create a new model.
 		if ((webPerform == null) || !(settings.getActiveProfile().equals(webPerform.getActiveProfile()))) {
 			webPerform = new WebsitePerformanceModel(this.SessionService, this.PagePerformanceService);
 		}
-		
+
 		if (filter != null) {
 			webPerform.setStartDate(filter.getActiveStartDate());
 			webPerform.setEndDate(filter.getActiveEndDate());
 		}
-		
+
 		/*
 		 * Here's where we start making queries.
 		 */
 		webPerform.updateData();
-		
+
 		/*
 		 * Save the updated model to the session and send it to the view.
 		 */
-		
+
 		SessionService.saveModel(session, "websitePerformance", webPerform);
 		viewMap.addAttribute("wpModel", webPerform);
 		//viewMap.addAttribute("filterModel", filter);
-		
+
 		return new ModelAndView("WebsitePerformance");
 	}
 
 }
-

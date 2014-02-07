@@ -6,6 +6,10 @@ import java.io.IOException;
 
 
 
+
+
+import java.util.Calendar;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,9 +17,11 @@ import javax.validation.Valid;
 
 import io.analytics.aspect.HeaderFooter;
 import io.analytics.domain.GoogleUserData;
+import io.analytics.domain.User;
 import io.analytics.enums.HeaderType;
 import io.analytics.forms.NewAccountForm;
 import io.analytics.service.interfaces.ISessionService;
+import io.analytics.service.interfaces.IUserService;
 import io.analytics.site.models.SettingsModel;
 
 import org.slf4j.Logger;
@@ -42,6 +48,7 @@ public class AccountController {
 	
 	@Autowired PasswordEncoder passwordEncoder;
 	@Autowired ISessionService SessionService;
+	@Autowired IUserService UserService;
 	
 	// some kind of user service.
 	
@@ -175,6 +182,16 @@ public class AccountController {
 		}
 		else {
 			// TODO: Send form data to service for upload
+			User u = new User(-1);
+			u.setUsername(form.getUsername());
+			u.setEmail(form.getEmail());
+			u.setPassword(form.getPassword());
+			u.setFirstName(form.getFirstname());
+			u.setLastName(form.getLastname());
+			u.setJoinDate(Calendar.getInstance());
+			
+			boolean success = UserService.addNewUser(u) != null;
+			
 			return new ModelAndView("redirect:/application");
 			
 		}

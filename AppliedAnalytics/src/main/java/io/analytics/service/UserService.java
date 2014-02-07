@@ -10,10 +10,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
-@Service
 public class UserService implements IUserService {
 
-	@Autowired private IUserRepository userRepository;
+	@Autowired 
+	private IUserRepository userRepository;
 	
 	@Override
 	public User loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -35,8 +35,24 @@ public class UserService implements IUserService {
 	 * @param password
 	 * @return
 	 */
-	public User createUser(String username, String email, String password) {
-		return null;
+	public User addNewUser(String username, String email, String password) {
+		User u = new User(-1);
+		u.setUsername(username);
+		u.setEmail(email);
+		u.setPassword(password);
+		return this.addNewUser(u);
+	}
+
+	@Override
+	public User addNewUser(User u) {
+		if (u.getUsername() == null || u.getEmail() == null || u.getPassword() == null)
+			return null;
+
+		//TODO: Change to accept a return value of User type, and propogate the return.
+		if (userRepository.addNewUser(u))
+			return u;
+		else
+			return null;
 	}
 
 }

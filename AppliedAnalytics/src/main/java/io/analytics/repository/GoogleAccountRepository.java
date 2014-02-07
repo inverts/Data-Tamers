@@ -87,4 +87,11 @@ public class GoogleAccountRepository implements IGoogleAccountRepository {
 		return null;
 	}
 
+
+	@Override
+	public boolean addRelationshipToAccount(int googleAccountId, int accountId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
