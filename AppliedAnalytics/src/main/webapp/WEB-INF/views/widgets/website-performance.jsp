@@ -42,7 +42,7 @@ document.getElementById("exit4").innerHTML=data.exitRate[0][4];
 </script> 
 </head>
 <body>
-<div class="widget_wrapper widgetView"><!-- onDEVbranch <div class="widget widgetView"> -->
+<div class="widget widgetView">
 	<form id="websitePerformanceSettings">
 		<div class="widget_header">			
 			<div class="widget_title"><fmt:message key="websiteperformance.title" /></div>			
