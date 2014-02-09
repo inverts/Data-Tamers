@@ -9,5 +9,7 @@ public interface IUserRepository {
 	public boolean addNewUser(User u);
 	
 	public User loadUserByUsername(String username);
+	
+	public User getUserById(int userId);
 
 }

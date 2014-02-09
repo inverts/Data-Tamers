@@ -144,19 +144,12 @@ public class UserRepository implements IUserRepository {
 			return null;
 		}
 		
-		
-		//TODO: JDBC into the database to retrieve user by username.
-		
-		// For now I just created this customer.
-		/*
-		User user = new User();
-		user.setPassword("123456");
-		user.setUsername("user");
-		Set roles = new HashSet<GrantedAuthority>();
-		roles.add(new Role("ROLE_USER"));
-		user.setAuthorities(roles);
-		
-		return user;
-		*/
+	}
+
+
+	@Override
+	public User getUserById(int userId) {
+		// TODO get User data and map into a User object.
+		return null;
 	}
 } 
