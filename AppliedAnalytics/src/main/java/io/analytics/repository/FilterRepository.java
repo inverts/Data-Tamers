@@ -23,10 +23,18 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
 @Repository
-@Component
 public class FilterRepository implements IFilterRepository {
 	
 	public static final String FILTERS_TABLE = "Filters";
+	
+	private final JdbcTemplate jdbc;
+	
+	@Autowired
+	public FilterRepository(DataSource dataSource) {
+		this.jdbc = new JdbcTemplate(dataSource);
+	}
+	
+	
 	private static final class FilterTable {
 		public static final String FILTER_ID = "idFilters";
 		public static final String PARENT_ACCOUNT_ID = "parentAccountId";
@@ -35,6 +43,7 @@ public class FilterRepository implements IFilterRepository {
 		public static final String INTEREST_METRIC = "interestMetric";
 		public static final String GOOGLE_PROFILE_ID = "googleProfileId";
 	}
+	
 	private static final class FilterMapper implements RowMapper<Filter> {
 
 		@Override
@@ -68,7 +77,7 @@ public class FilterRepository implements IFilterRepository {
 	private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 	
 	public Filter addNewFilter(Filter f) {
-		JdbcTemplate jdbc = new JdbcTemplate(DATASOURCE);
+		//JdbcTemplate jdbc = new JdbcTemplate(DATASOURCE);
         
 		String preStatement;
 		Object[] args;
@@ -104,7 +113,7 @@ public class FilterRepository implements IFilterRepository {
 		try {
 			//These will not work unless we're in a transaction.
 			//int lastRowFirst = jdbc.queryForInt("SELECT LAST_INSERT_ID();");
-			affectedRows = jdbc.update(preStatement, args, argTypes);
+			affectedRows = this.jdbc.update(preStatement, args, argTypes);
 			//int lastRow = jdbc.queryForInt("SELECT LAST_INSERT_ID();");
 
 			if (affectedRows == 1) { //&& lastRowFirst != lastRow) {

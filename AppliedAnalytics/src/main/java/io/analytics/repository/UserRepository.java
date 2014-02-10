@@ -9,9 +9,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.sql.DataSource;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -24,6 +27,13 @@ import io.analytics.security.Role;
 @Repository
 public class UserRepository implements IUserRepository {
 
+	private final JdbcTemplate jdbc;
+	
+	@Autowired
+	public UserRepository(DataSource dataSource) {
+		this.jdbc = new JdbcTemplate(dataSource);
+	}
+	
 	private static final class UserMapper implements RowMapper<User> {
 
 		@Override
@@ -76,7 +86,7 @@ public class UserRepository implements IUserRepository {
 	 */
 	public boolean addNewUser(User u) {
 
-		JdbcTemplate jdbc = new JdbcTemplate(DATASOURCE);
+		//JdbcTemplate jdbc = new JdbcTemplate(DATASOURCE);
 		String preStatement;
 		Object[] args;
 		int[] argTypes;
@@ -99,7 +109,7 @@ public class UserRepository implements IUserRepository {
 		
 		int affectedRows;
 		try {
-			affectedRows = jdbc.update(preStatement, args, argTypes);
+			affectedRows = this.jdbc.update(preStatement, args, argTypes);
 		} catch (DataAccessException e) {
 			//TODO: Standardize error handling for the database.
 			e.printStackTrace();
@@ -113,7 +123,7 @@ public class UserRepository implements IUserRepository {
 	
 	public User loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-		JdbcTemplate jdbc = new JdbcTemplate(DATASOURCE);
+		//JdbcTemplate jdbc = new JdbcTemplate(DATASOURCE);
 		String preStatement;
 		Object[] args;
 		int[] argTypes;
@@ -124,7 +134,7 @@ public class UserRepository implements IUserRepository {
 		
 		try {
 			
-			List<User> users = jdbc.query(preStatement, args, argTypes, new UserMapper());
+			List<User> users = this.jdbc.query(preStatement, args, argTypes, new UserMapper());
 			
 			if (users.isEmpty())
 				return null;

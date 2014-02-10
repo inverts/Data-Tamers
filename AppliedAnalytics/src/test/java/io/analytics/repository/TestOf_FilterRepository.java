@@ -2,7 +2,6 @@ package io.analytics.repository;
 
 import static org.junit.Assert.*;
 
-
 import java.util.Calendar;
 
 import org.junit.Test;
@@ -12,16 +11,19 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import io.analytics.domain.Filter;
 import io.analytics.repository.interfaces.IFilterRepository;
 
-@ContextConfiguration
-public class TestOf_FilterRepository implements ApplicationContextAware {
+@ComponentScan
+@Component
+public class TestOf_FilterRepository {
 	
-	private IFilterRepository filterRepository;
+	@Autowired private IFilterRepository filterRepository;
 	
 	@Test
 	public void testAddNewFilter() {
@@ -30,7 +32,7 @@ public class TestOf_FilterRepository implements ApplicationContextAware {
 		 * Do not enable the code below, it will add bogus rows to the actual database.
 		 * This is just here for some raw preliminary testing.
 		 */
-		filterRepository = new FilterRepository();
+		//filterRepository = new FilterRepository();
 		
 		if (true) {
 			Filter filter = Mockito.mock(Filter.class);
@@ -73,10 +75,10 @@ public class TestOf_FilterRepository implements ApplicationContextAware {
 		}
 	}
 
-	@Override
+	/*@Override
 	public void setApplicationContext(ApplicationContext arg0) throws BeansException {
 		// TODO Auto-generated method stub
 		
-	}
+	}*/
 
 }

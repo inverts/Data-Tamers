@@ -1,20 +1,24 @@
 package io.analytics.repository;
 
 import static org.junit.Assert.fail;
-import io.analytics.domain.Filter;
 import io.analytics.domain.User;
-import io.analytics.repository.interfaces.IFilterRepository;
 import io.analytics.repository.interfaces.IUserRepository;
 import io.analytics.security.PasswordUtils;
 
 import java.util.Calendar;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 
+@RunWith(SpringJUnit4ClassRunner.class) 
+@ContextConfiguration(locations={"**/test-context.xml"})
 public class TestOf_UserRepository {
 
-	private IUserRepository userRepository;
+	@Autowired private IUserRepository userRepository;
 	
 	@Test
 	public void testAddNewUser() {
@@ -25,7 +29,7 @@ public class TestOf_UserRepository {
 		 */
 		
 		//TODO: Autowire this.
-		userRepository = new UserRepository();
+		//userRepository = new UserRepository();
 		
 		if (true) {
 			User user = Mockito.mock(User.class);
