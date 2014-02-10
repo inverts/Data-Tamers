@@ -2,12 +2,12 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <head>
 <style>
-table, th, td
+#websitePerformanceSettings table, #websitePerformanceSettings th, #websitePerformanceSettings td
 {
 background-color:#DCDCDC;
 border:1px solid black;
 }
-th, td
+#websitePerformanceSettings th, #websitePerformanceSettings td
 {
 padding:3px;
 }

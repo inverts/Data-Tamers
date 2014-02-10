@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.google.api.client.auth.oauth2.Credential;
 
 import io.analytics.domain.CoreReportingData;
+import io.analytics.domain.ForecastData;
 import io.analytics.repository.interfaces.ICoreReportingRepository;
 import io.analytics.service.interfaces.ICoreReportingService;
 import io.analytics.service.interfaces.ISessionService;
@@ -45,6 +46,12 @@ public class CoreReportingService implements ICoreReportingService {
 	
 	public CoreReportingData getTopTrafficSources(Credential credential, String profileID, String metric, Date startDate, Date endDate, int maxResults)  {
 		return REPOSITORY.getTopTrafficSources(credential, profileID, metric, dateFormat.format(startDate), dateFormat.format(endDate), maxResults);
+	}
+
+	@Override
+	public ForecastData getForecastData(Credential credential, String profileID) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 
