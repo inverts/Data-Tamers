@@ -5,14 +5,14 @@
 
 $(function() {
 	
+	// Dragging Feature
 	$('.dashboard-content').sortable({ 
 		revert: true, 
 		tolerance: 'pointer', 
 		containment: $('.content')
 	});
-
+	
 });
-
 
 function getWidget(widgetId, data) {
 	

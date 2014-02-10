@@ -5,7 +5,7 @@
 $(function() {
 	updateHypotheticalWidget();
 	
-
+	
 	
 });
 
@@ -26,6 +26,12 @@ function updateHypotheticalWidget() {
 		}
 		
 		$('#hypotheticalFutureData').append(hypotheticalSketch);
+		
+		// Collapse Event
+		$('.dataForecast .widget_title').click(function() {
+			$('.dataForecast .widget-content').slideToggle('fast');
+		});
+		
 		
 		//var canvas = document.getElementById('hypotheticalFutureData');
 		

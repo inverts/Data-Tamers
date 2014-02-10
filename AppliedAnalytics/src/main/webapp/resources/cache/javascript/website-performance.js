@@ -27,6 +27,11 @@ function GetWebsitePerformanceWidget() {
 			
 		//	var canvas = document.getElementById('websitePerformanceData');
 		//	var p = new Processing(canvas, performanceSketch);
+			
+		// Collapse Event
+		$('.pagePerformance .widget_title').click(function() {
+			$('.pagePerformance .widget-content').slideToggle('fast');
+		});
 
 	});		
 }

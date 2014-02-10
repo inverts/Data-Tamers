@@ -5,16 +5,20 @@
 .widget { padding:15px; background:url("../images/widget_bg.png") repeat; clear:both; border-radius: 8px; -webkit-border-radius: 8px; -moz-border-radius: 8px; box-shadow: 0px 0px 6px 0px; 
 		  -webkit-box-shadow: 0px 0px 6px 0px; -mozbox-shadow: 0px 0px 6px 0px; margin: 10px; }
 
-.widget .widget_header { height: 80px; width: 100%; }
+.widget .widget_header { width: 100%; }
 .widget .widget_title { font-size: 1.55em; color: #00aeef; text-shadow: 0 0 3px rgb(0, 173, 255); margin-bottom: 5px; }
+.widget .widget_title:hover { cursor:pointer; }
+.widget .widget_collapse { float:left; width:20px; }
 
 .widget .widgetView { visibility:'hidden'; }
 
 
-/*****CSS for HYPOTHETICAL FUTURE WIDGET*****/
+/*****CSS for DATA FORECAST WIDGET*****/
 
 line:hover { opacity: 0.5; }
+
 #drag_rect { position:relative; }
+#backrect, .dataForecast { width:600px;}
 #backrect { width:540px; padding:0 30px; height:350px; background-color:#CCC; }
 #chart { font-size:12px; }
 #chart line.data { stroke:grey; stroke-width:5px; }
@@ -30,3 +34,6 @@ body { font: 12px Helvetica; }
 #line_trend path.overlay, #line_hypo path.overlay { stroke: white; stroke-opacity: 0; stroke-width: 10; fill: none; }
 #tangent { stroke: black; stroke-width: 2; fill: none; }
 
+/*****CSS for PAGE PERFORMANCE WIDGET ****/
+
+.pagePerformance { width:600px; }

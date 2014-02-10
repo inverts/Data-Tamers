@@ -12,9 +12,9 @@ var endDate = '${ filterModel.getActiveEndDateString() }';
 var futureEndDate = '${ hfModel.getFutureEndDate() }';
 </script>  
   
-<div class="widget widgetView">
+<div class="widget widgetView dataForecast">
 	<form id="hypotheticalFutureSettings">
-		<div class="widget_header">			
+		<div class="widget_header">
 			<div class="widget_title"><fmt:message key="dataforecast.title" /></div>
 		</div>
 		<div id="hypotheticalFutureGraph" class="hf_visual">
