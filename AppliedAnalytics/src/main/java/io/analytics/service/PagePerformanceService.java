@@ -22,13 +22,10 @@ public class PagePerformanceService implements IPagePerfomanceService{
 	/*
 	 *  Class: PagePerformanceService 
 	 *  
-	 *  Description: Collects the Google Analytic data via calls to
-	 *    CoreReportingRespository methods which returns GaData objects. Parses 
-	 *    the Google Analytic data, creates a PagePerformanceData 
-	 *    domain object and loads it with the data. Returns PagePerformanceData.
+	 *  Description: Collects the Google Analytic data for the Website Performance widget
 	 *  
-	 *  Parameters: credential, profileID, metric, startDate, endDate, number of results.
-	 *  Return: domain object PagePerformanceData.
+	 *  Input: credential, profileID, metric, startDate, endDate, number of results.
+	 *  Output: domain object PagePerformanceData.
 	 *  
 	 *  @author Gwen Knight
 	 */
@@ -53,7 +50,7 @@ public class PagePerformanceService implements IPagePerfomanceService{
 	
 		int pagePathColumn = -1; 
 		int visitsColumn = -1; 
-		int visitsBounceRateColumn = -1; 
+		int visitBounceRateColumn = -1; 
 		int exitRateColumn = -1; 
 		int column = -1;
 		for (ColumnHeaders header : gaData.getColumnHeaders()) {
@@ -64,7 +61,7 @@ public class PagePerformanceService implements IPagePerfomanceService{
 		    if (name.equals("ga:visits"))
 				visitsColumn = column;
 			if (name.equals("ga:visitBounceRate"))
-				visitsBounceRateColumn = column;
+				visitBounceRateColumn = column;
 			if (name.equals("ga:exitRate"))
 				exitRateColumn = column;
 				
@@ -73,7 +70,7 @@ public class PagePerformanceService implements IPagePerfomanceService{
 		
 		ArrayList<String> pagePath = new ArrayList<String>();
 		ArrayList<Integer> visits= new ArrayList<Integer>();
-		ArrayList<Double> visitsBounceRate = new ArrayList<Double>();
+		ArrayList<Double> visitBounceRate = new ArrayList<Double>();
 		ArrayList<Double> exitRate = new ArrayList<Double>();
 		
 		List<List<String>> dataRows = gaData.getRows();
@@ -81,11 +78,11 @@ public class PagePerformanceService implements IPagePerfomanceService{
 		for(List<String> row : dataRows) {
 			String one = row.get(pagePathColumn);
 			int two = Integer.parseInt(row.get(visitsColumn));
-			double three = Double.parseDouble(row.get(visitsBounceRateColumn));
+			double three = Double.parseDouble(row.get(visitBounceRateColumn));
 			double four = Double.parseDouble(row.get(exitRateColumn));
 			pagePath.add(one);
 			visits.add(two);
-			visitsBounceRate.add(three);
+			visitBounceRate.add(three);
 			exitRate.add(four);
 		}
 		} catch (NumberFormatException e) {
@@ -95,18 +92,18 @@ public class PagePerformanceService implements IPagePerfomanceService{
 		
 		pagePath.trimToSize();
 		visits.trimToSize();
-		visitsBounceRate.trimToSize();
+		visitBounceRate.trimToSize();
 		exitRate.trimToSize();
 		
 		// Create the domain dataObject, add page performance data
 		PagePerformanceData dataObject = new PagePerformanceData();
 		dataObject.setPagePathData(pagePath);
 		dataObject.setVisitsData(visits);
-		dataObject.setVisitsBounceRateData(visitsBounceRate);
+		dataObject.setVisitsBounceRateData(visitBounceRate);
 		dataObject.setExitRateData(exitRate);
 
 		// ********************
-		// GA query visits
+		// GA query visits (total)
 		
 		gaData = REPOSITORY.getTotalMetric(credential, profileID,  CoreReportingRepository.VISITS_METRIC, startDate, endDate);
 		

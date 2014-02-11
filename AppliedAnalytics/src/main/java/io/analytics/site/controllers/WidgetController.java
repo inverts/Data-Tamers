@@ -1,22 +1,15 @@
 package io.analytics.site.controllers;
 
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import io.analytics.service.PagePerformanceService;
 import io.analytics.service.interfaces.ICoreReportingService;
 import io.analytics.service.interfaces.IPagePerfomanceService;
 import io.analytics.service.interfaces.ISessionService;
 import io.analytics.site.models.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.gdata.util.ParseException;
 
 @Controller
 public class WidgetController {
@@ -144,10 +136,6 @@ public class WidgetController {
 		}
 		
 		
-		//
-		// Setting up the model.
-		//
-		
 		WebsitePerformanceModel webPerform = SessionService.getModel(session, "webPerform", WebsitePerformanceModel.class);
 		
 		//If there is no model available, or if the active profile changed, create a new model.
@@ -160,15 +148,10 @@ public class WidgetController {
 			webPerform.setEndDate(filter.getActiveEndDate());
 		}
 		
-		/*
-		 * Here's where we start making queries.
-		 */
+		// make queries.
 		webPerform.updateData();
-		
-		/*
-		 * Save the updated model to the session and send it to the view.
-		 */
-		
+				
+		// Save the updated model to the session and send it to the view.
 		SessionService.saveModel(session, "websitePerformance", webPerform);
 		viewMap.addAttribute("wpModel", webPerform);
 		//viewMap.addAttribute("filterModel", filter);
@@ -177,4 +160,3 @@ public class WidgetController {
 	}
 
 }
-
