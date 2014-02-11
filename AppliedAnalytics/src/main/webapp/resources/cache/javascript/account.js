@@ -13,3 +13,12 @@ $(function() {
 	$('#terms-cancel').on('click', function(){ window.location.href = applicationRoot; });
 	$('#account-submit.disabled').on('click', function(){ alert("A google account must be attached!");});
 });
+
+function invokeGoogleAuthentication(formId) {
+	var invokeFlag = $('<input>')
+					.attr('type', 'hidden')
+					.attr('name', 'googleAuth').val('1');
+	
+	$('#' + formId).append(invokeFlag).submit();
+	
+}

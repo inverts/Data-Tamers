@@ -2,12 +2,6 @@ package io.analytics.site.controllers;
 
 import java.io.IOException;
 
-
-
-
-
-
-
 import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,12 +35,11 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@SessionAttributes({"personalForm", "validation", "googleAuthorization"})
+@SessionAttributes({"accountForm", "validation", "googleAuthorization"})
 public class AccountController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
-	@Autowired PasswordEncoder passwordEncoder;
 	@Autowired ISessionService SessionService;
 	@Autowired IUserService UserService;
 	
@@ -107,9 +100,19 @@ public class AccountController {
 	 */
 	@HeaderFooter(HeaderType.SIMPLE)
 	@RequestMapping(value = "/accounts/newaccount", method = RequestMethod.GET)
-	public ModelAndView newAccountPage(@ModelAttribute("googleAuthorization") String googleAuthorization, Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session)
+	public ModelAndView newAccountPage(@ModelAttribute("googleAuthorization") String googleAuthorization, 
+									   @ModelAttribute("accountForm") NewAccountForm form, Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session, 
+									   @RequestParam(value = "gaAuth", defaultValue = "0") boolean googleAuth)
 	{
 		ModelAndView page = new ModelAndView("account/personal-info");
+		
+		if (googleAuth) {
+			if (SessionService.redirectToLogin(session, request, response))
+				return null;
+			
+			return new ModelAndView("redirect:/accounts/newaccount");
+		}
+		
 		// Flag indicating that user has selected to sign up using google.
 		if (googleAuthorization.equals("success") && SessionService.checkAuthorization(session)) {
 			
@@ -118,21 +121,21 @@ public class AccountController {
 			settings = (SettingsModel) session.getAttribute("settings");
 			model.addAttribute("settings", settings);
 			GoogleUserData googleData = SessionService.getUserSettings().getGoogleUserData();
-			NewAccountForm accountForm = new NewAccountForm();
 			
 			// Only pre-populate fields that the user has no input in.
-			if (accountForm.getFirstname() == null)
-				accountForm.setFirstname(googleData.getName());
-			if (accountForm.getLastname() == null)
-				accountForm.setLastname(googleData.getGiven_name());
-			if (accountForm.getEmail() == null) {
-				accountForm.setEmail(googleData.getEmail());
-				accountForm.setConfirmEmail(googleData.getEmail());
+			if (form.getFirstname().isEmpty())
+				form.setFirstname(googleData.getName());
+			if (form.getLastname().isEmpty())
+				form.setLastname(googleData.getGiven_name());
+			if (form.getEmail().isEmpty()) {
+				form.setEmail(googleData.getEmail());
+				form.setConfirmEmail(googleData.getEmail());
 			}
 			
-			model.addAttribute("accountForm", accountForm);
+			model.addAttribute("accountForm", form);
 			//String googleEmail = googleData.getEmail();
 			page.addObject("googleAccountName", googleData.getEmail());
+			page.addObject("accountForm", form);
 			
 			// let the page know google authenticated successfully.
 			page.addObject("googleSuccess", true);
@@ -153,7 +156,7 @@ public class AccountController {
 	 * @param response
 	 * @param session
 	 */
-	@RequestMapping(value = "/accounts/GoogleAuthenticateHandler", method = RequestMethod.GET)
+	@RequestMapping(value = "/accounts/GoogleAuthenticateHandler", method = RequestMethod.POST)
 	public String processGooglePage(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session,
 			@RequestParam(value = "login", defaultValue = "0") boolean gaLogin)
 	{
@@ -170,15 +173,19 @@ public class AccountController {
 	 * @param session
 	 */
 	@RequestMapping(value = "/accounts/ProcessNewAccountInfo", method = RequestMethod.POST)
-	public ModelAndView processAccountForm(@Valid @ModelAttribute("accountForm") NewAccountForm form, BindingResult result, Model model) 
+	public String processAccountForm(@Valid @ModelAttribute("accountForm") NewAccountForm form, BindingResult result, 
+											@RequestParam(value = "googleAuth", defaultValue = "0") boolean googleAuth, 
+											HttpSession session, Model model) 
 	{
-		if (result.hasErrors()) {
+		if (googleAuth) {
+			return "redirect:/accounts/newaccount?gaAuth=1";
+		}
+		else if (result.hasErrors()) {
 			// Don't retain passwords
 			form.setPassword("");
-			String test = passwordEncoder.encode(form.getPassword());
 			form.setConfirmPassword("");
 			model.addAttribute("validation", result);
-			return new ModelAndView("redirect:/accounts/newaccount");
+			return "redirect:/accounts/newaccount";
 		}
 		else {
 			// TODO: Send form data to service for upload
@@ -192,7 +199,7 @@ public class AccountController {
 			
 			boolean success = UserService.addNewUser(u) != null;
 			
-			return new ModelAndView("redirect:/application");
+			return "redirect:/application";
 			
 		}
 	}
