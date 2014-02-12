@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.*;
@@ -84,7 +85,7 @@ public class UserRepository implements IUserRepository {
 	 * @param u
 	 * @return
 	 */
-	public boolean addNewUser(User u) {
+	public User addNewUser(User u) {
 
 		//JdbcTemplate jdbc = new JdbcTemplate(DATASOURCE);
 		String preStatement;
@@ -107,17 +108,43 @@ public class UserRepository implements IUserRepository {
 		argTypes = new int[]{ Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR , Types.VARCHAR, Types.VARCHAR, Types.DATE };
 		
 		
-		int affectedRows;
-		try {
-			affectedRows = this.jdbc.update(preStatement, args, argTypes);
-		} catch (DataAccessException e) {
-			//TODO: Standardize error handling for the database.
-			e.printStackTrace();
-			return false;
-		}
+		int userId = insertUser(preStatement, args, argTypes);
+		if (userId <= 0)
+			return null;
+		
+		User result = new User(userId);
+		result.setAuthorities(u.getAuthorities());
+		result.setEmail(u.getEmail());
+		result.setFirstName(u.getFirstName());
+		result.setJoinDate(u.getJoinDate());
+		result.setLastName(u.getLastName());
+		result.setPasswordHash(u.getPassword());
+		result.setPasswordSalt(u.getPasswordSalt());
+		result.setProfileImageUrl(u.getProfileImageUrl());
+		result.setUsername(u.getUsername());
 		
 		//Return true if the statement successfully affected one row.
-		return affectedRows == 1;
+		return result;
+	}
+
+
+	@Transactional("transactionManager")
+	private int insertUser(String preStatement, Object[] args, int[] argTypes) {
+		int affectedRows;
+		int userId;
+		try {
+			affectedRows = this.jdbc.update(preStatement, args, argTypes);
+			userId = this.jdbc.queryForInt("SELECT LAST_INSERT_ID();");
+		} catch (DataAccessException e) {
+			//TODO: Standardize error handling for the database.
+			//e.printStackTrace();
+			return -1;
+		}
+		
+		if (affectedRows != 1)
+			return -1;
+		
+		return userId;
 	}
 	
 	
@@ -150,7 +177,7 @@ public class UserRepository implements IUserRepository {
 			
 		} catch (DataAccessException e) {
 			//TODO: Standardize error handling for the database.
-			e.printStackTrace();
+			//e.printStackTrace();
 			return null;
 		}
 		

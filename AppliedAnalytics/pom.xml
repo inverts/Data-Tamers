@@ -33,7 +33,34 @@
                         <artifactId>spring-webmvc</artifactId>
                         <version>${org.springframework-version}</version>
                 </dependency>
-                
+                <!-- Aspect Oriented Programming (AOP) Framework 
+				    (depends on spring-core, spring-beans)
+				    Define this if you use Spring AOP APIs 
+				    (org.springframework.aop.*)-->
+				<dependency>
+				    <groupId>org.springframework</groupId>
+				    <artifactId>spring-aop</artifactId>
+				    <version>${org.springframework-version}</version>
+				</dependency>
+				<!-- Bean Factory and JavaBeans utilities (depends on spring-core)
+				    Define this if you use Spring Bean APIs 
+				    (org.springframework.beans.*)-->
+				<dependency>
+				    <groupId>org.springframework</groupId>
+				    <artifactId>spring-beans</artifactId>
+				    <version>${org.springframework-version}</version>
+				</dependency>
+				<!-- Transaction Management Abstraction 
+				    (depends on spring-core, spring-beans, spring-aop, spring-context)
+				    Define this if you use Spring Transactions or DAO Exception Hierarchy
+				    (org.springframework.transaction.*/org.springframework.dao.*)-->
+				<dependency>
+				    <groupId>org.springframework</groupId>
+				    <artifactId>spring-tx</artifactId>
+				    <version>${org.springframework-version}</version>
+				</dependency>
+				
+				
                  <!-- Form Validation -->
                 <dependency>
                 		<groupId>javax.validation</groupId>
@@ -158,7 +185,7 @@
                 <dependency>
                         <groupId>junit</groupId>
                         <artifactId>junit</artifactId>
-                        <version>4.11</version>
+                        <version>4.4</version>
                         <scope>test</scope>
                 </dependency>  
                 

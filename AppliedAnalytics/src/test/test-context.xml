@@ -9,15 +9,13 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc 
  		http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-	
-	<!-- Root Context: defines shared resources visible to all other web components -->
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 	
 	<mvc:annotation-driven />
 	
-	<beans:bean id="userRepository" class="io.analytics.repository.UserRepository">
-		<beans:constructor-arg name="dataSource" ref="dataSource" />
-	</beans:bean>
+	<beans:bean id="customAuthenticationUserService" class="io.analytics.service.UserService" />
+	<beans:bean id="customAuthenticationProvider" class="io.analytics.security.SiteAuthenticationProvider" />
 	
 	<beans:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
@@ -25,6 +23,21 @@
 		<beans:property name="username" value="davidkai_data" />
 		<beans:property name="password" value="PNjO_#a40@wZPmh-Q" />
 	</beans:bean>
-
+	<beans:bean id="transactionManager"
+	  class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+	  scope="singleton">
+	  <beans:property name="dataSource" ref="dataSource" />
+	</beans:bean>
 	
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+    <context:component-scan base-package="org.springframework.docs.test" />
+	<context:component-scan base-package="io.analytics.site" />
+	<context:component-scan base-package="io.analytics.service" />
+	<context:component-scan base-package="io.analytics.service.interfaces" />
+	<context:component-scan base-package="io.analytics.repository" />
+	<context:component-scan base-package="io.analytics.repository.interfaces" />
+	<context:component-scan base-package="io.analytics.site.models" />
+	<context:component-scan base-package="io.analytics.forms" />
+	<context:component-scan base-package="io.analytics.security" />
 </beans:beans>

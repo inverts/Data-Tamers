@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class) 
-@ContextConfiguration(locations={"**/test-context.xml"})
+@ContextConfiguration(locations={"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
 public class TestOf_UserRepository {
 
 	@Autowired private IUserRepository userRepository;
@@ -35,35 +35,35 @@ public class TestOf_UserRepository {
 			User user = Mockito.mock(User.class);
 			try {
 					
-				assert(userRepository.addNewUser(user) == false);
+				assert(userRepository.addNewUser(user) == null);
 
 				Mockito.when(user.getFirstName()).thenReturn("Larry");
-				assert(userRepository.addNewUser(user) == false);
+				assert(userRepository.addNewUser(user) == null);
 				
 				Mockito.when(user.getLastName()).thenReturn("Page");
-				assert(userRepository.addNewUser(user) == false);
+				assert(userRepository.addNewUser(user) == null);
 				
 				String uniqueEmail = PasswordUtils.createPasswordHash(PasswordUtils.generateSalt(), PasswordUtils.generateSalt());
 				Mockito.when(user.getEmail()).thenReturn(uniqueEmail.substring(uniqueEmail.length() - 127));
-				assert(userRepository.addNewUser(user) == false);
+				assert(userRepository.addNewUser(user) == null);
 
 				String uniqueUsername = PasswordUtils.createPasswordHash(PasswordUtils.generateSalt(), PasswordUtils.generateSalt());
 				Mockito.when(user.getUsername()).thenReturn(uniqueUsername.substring(uniqueUsername.length() - 45));
-				assert(userRepository.addNewUser(user) == false);
+				assert(userRepository.addNewUser(user) == null);
 				
 				String salt = PasswordUtils.generateSalt();
 				
 				Mockito.when(user.getPassword()).thenReturn(PasswordUtils.createPasswordHash("123456", salt));
-				assert(userRepository.addNewUser(user) == false);
+				assert(userRepository.addNewUser(user) == null);
 				
 				Mockito.when(user.getPasswordSalt()).thenReturn(salt);
-				assert(userRepository.addNewUser(user) == false);
+				assert(userRepository.addNewUser(user) == null);
 
 				Mockito.when(user.getProfileImageUrl()).thenReturn("http://www.google.com/pagepagepage.jpg");
-				assert(userRepository.addNewUser(user) == false);
+				assert(userRepository.addNewUser(user) == null);
 				
 				Mockito.when(user.getJoinDate()).thenReturn(Calendar.getInstance());
-				assert(userRepository.addNewUser(user) == true);
+				assert(userRepository.addNewUser(user) == null);
 				
 				
 			} catch (Exception e) {

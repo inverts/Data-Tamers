@@ -47,11 +47,7 @@ public class UserService implements IUserService {
 		if (u.getUsername() == null || u.getEmail() == null || u.getPassword() == null)
 			return null;
 
-		//TODO: Change to accept a return value of User type, and propogate the return.
-		if (userRepository.addNewUser(u))
-			return u;
-		else
-			return null;
+		return userRepository.addNewUser(u);
 	}
 
 }
