@@ -19,16 +19,12 @@ public interface ICoreReportingRepository {
 	public GaData getPagePerformance(Credential credential, String profileID, Date startDate, Date endDate, int maxResults) ;
 
 	public GaData getTotalMetric(Credential credential, String profileID, String metric, Date startDate, Date endDate);
-<<<<<<< HEAD
 
 	public GaData getMetricForGaDimension(Credential credential, String profileID, String metric, String gaDimension, Date startDate, Date endDate, int maxResults);
 	
 	public GaData getTopTrafficSources1(Credential credential, String profileID, String metric, Date startDate, Date endDate, int maxResults);
 
 }
-=======
-	
-	}
->>>>>>> f9278cc45e8c0ef566e4d4ce9fe5d17d36b5747b
+
 
 
