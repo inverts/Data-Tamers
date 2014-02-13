@@ -1,5 +1,7 @@
 package io.analytics.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import io.analytics.domain.Filter;
 import io.analytics.repository.FilterRepository;
 import io.analytics.repository.interfaces.IFilterRepository;
@@ -7,7 +9,8 @@ import io.analytics.service.interfaces.IFilterService;
 
 public class FilterService implements IFilterService {
 
-	IFilterRepository filterRepository = new FilterRepository();
+	@Autowired private IFilterRepository filterRepository;
+	//IFilterRepository filterRepository = new FilterRepository();
 	
 	@Override
 	public Filter addNewFilter(Filter f) {

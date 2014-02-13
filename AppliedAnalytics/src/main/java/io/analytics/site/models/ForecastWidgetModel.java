@@ -182,12 +182,19 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
                         return false;
                 }
                 double[] adjustment = new double[7];
+                //Sum up the metric for days of the week.
                 for (double[] adjustments : dayOfWeekTotals) 
                         for(int i=0; i < adjustments.length; i++)
                                 adjustment[i] += adjustments[i];
 
+                //Create the adjustments from average
+                double average = (double) (dayOfWeekTotals.size() * totalStats.getMean());
+                
                 for(int i=0; i < adjustment.length; i++) 
-                        adjustment[i] = adjustment[i] / (double) (dayOfWeekTotals.size() * totalStats.getMean());
+                	if (average == 0.0)
+                		adjustment[i] = 1.0;
+                	else
+                        adjustment[i] = adjustment[i] / average;
                 
 
                 System.out.println("Std Deviation: " + totalStats.getStandardDeviation());
@@ -248,8 +255,15 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
                 for (int i=0; i < yValues.size(); i++) 
                         yValuesNormalized.add(yValues.get(i) / adjustment[(startDateC.get(Calendar.DAY_OF_WEEK) + i - 1) % 7]);
 
-                dataSmoothNormalized = updateSmoothedData(yValuesNormalized, 0.45, 0.3);
-                yValuesForecastNormalized = updateForecast(yValuesNormalized, (int) daysToPredict);
+                SimpleEntry<ArrayList<Double>, Double> dataAndSlope = updateSmoothedData(yValuesNormalized, 0.45, 0.3);
+                if (dataAndSlope == null)
+                	dataSmoothNormalized = new ArrayList<Double>();
+                else 
+                	dataSmoothNormalized = dataAndSlope.getKey();
+                
+                yValuesForecastNormalized = updateForecast(yValuesNormalized, (int) daysToPredict, dataAndSlope.getValue());
+                if (yValuesForecastNormalized == null)
+                	yValuesForecastNormalized = new ArrayList<Double>();
                 
                 double forecastMax = 0.0;
                 double forecastMin = 0.0;
@@ -282,14 +296,15 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
          * of the trend line generated at the end of the smoothing process.
          * 
          * @param data
-         * @param alpha
-         * @param beta
-         * @return
+         * @param alpha Must be a double between 0 and 1.
+         * @param beta Must be a double between 0 and 1.
+         * @return A SimpleEntry containing a smoothed data ArrayList<Double> as the key, and a double as the value
+         * indicating the slope at the last data point from exponential smoothing.
          */
-        private ArrayList<Double> updateSmoothedData(ArrayList<Double> data, double alpha, double beta) {
+        private SimpleEntry<ArrayList<Double>, Double> updateSmoothedData(ArrayList<Double> data, double alpha, double beta) {
                 int N = data.size();
                 if (N < 2)
-                        return data;
+                        return new SimpleEntry<ArrayList<Double>, Double>(data, 0.0);
                 Double[] result = new Double[N];
                 
                 /* First do a backward pass. */
@@ -317,10 +332,9 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
                         result[i] = Math.max(0, smoothedCurrent);
                 }
                 
-                finalTrend = slope;
-                dataSmoothNormalized = new ArrayList<Double>(Arrays.asList(result));
-                
-                return dataSmoothNormalized;
+                SimpleEntry<ArrayList<Double>, Double> results = 
+                		new SimpleEntry<ArrayList<Double>, Double>(new ArrayList<Double>(Arrays.asList(result)), slope);
+                return results;
         }
         
         /**
@@ -333,7 +347,7 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
          * @param length
          * @return
          */
-        private ArrayList<Double> updateForecast(ArrayList<Double> data, int length) {
+        private ArrayList<Double> updateForecast(ArrayList<Double> data, int length, double lastSlope) {
                 
                 yValuesForecastNormalized = new ArrayList<Double>(length);
                 
@@ -362,7 +376,7 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
                 }
                 double minMSE = 0.0, error, lastMSE, currentMSE = 0.0, breakpoint = 0;
                 for (int i=1; i < length; i++) {
-                        error = Math.pow(data.get(N-1-i) - (data.get(N-1) - (i * finalTrend)), 2);
+                        error = Math.pow(data.get(N-1-i) - (data.get(N-1) - (i * lastSlope)), 2);
                         lastMSE = currentMSE;
                         currentMSE = lastMSE * (i/(i+1)) + (error / (i+1));
                         if (currentMSE < minMSE || i <= 3) //Record first MSE 3 data points in
@@ -376,7 +390,10 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
                 slope = reg.getSlope();
                 Double lastPoint = data.get(N-1);
                 System.out.println("slope: " + slope);
-                System.out.println("finalTrend: " + finalTrend);
+                System.out.println("finalTrend: " + lastSlope);
+                if (Double.isNaN(slope))
+                	return null;
+                
                 double percentComplete;
                 for(double i=0; i < length; i++) {
                         //percentComplete = i / (double) length;

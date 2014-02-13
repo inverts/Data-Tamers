@@ -1,20 +1,37 @@
 package io.analytics.repository;
 
+
 import io.analytics.domain.GoogleAccount;
 import io.analytics.repository.interfaces.IGoogleAccountRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.springframework.dao.DataAccessException;
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class GoogleAccountRepository implements IGoogleAccountRepository {
 
+	private final JdbcTemplate jdbc;
+	private final SimpleJdbcInsert jdbcInsert;
+	
+	@Autowired
+	public GoogleAccountRepository(DataSource dataSource) {
+		this.jdbc = new JdbcTemplate(dataSource);
+		//Must specify .usingGeneratedKeyColumns in order to use .executeAndReturnKey.
+		jdbcInsert = new SimpleJdbcInsert(this.jdbc).withTableName(GOOGLEACCOUNTS_TABLE).usingGeneratedKeyColumns(GoogleAccountsTable.GOOGLEACCOUNTS_ID);
+	}
+	
 	public static final String GOOGLEACCOUNTS_TABLE = "GoogleAccounts";
 	private static final class GoogleAccountsTable {
 		public static final String GOOGLEACCOUNTS_ID = "idGoogleAccounts";
@@ -45,33 +62,29 @@ public class GoogleAccountRepository implements IGoogleAccountRepository {
 	 * @param account The GoogleAccount to add to the database.
 	 * @return Returns true on success, false otherwise.
 	 */
-	public boolean addGoogleAccount(GoogleAccount account) {
+	public GoogleAccount addGoogleAccount(GoogleAccount account) {
 		if(account.getActiveRefreshToken() == null || account.getOwnerAccountId() < 0)
-			return false;
+			return null;
 		
-		JdbcTemplate jdbc = new JdbcTemplate(DATASOURCE);
-		String preStatement;
-		Object[] args;
-		int[] argTypes;
-		
-		preStatement = String.format("INSERT INTO `%s` (`%s`, `%s`) VALUES (?, ?);", 
-				GOOGLEACCOUNTS_TABLE, GoogleAccountsTable.REFRESH_TOKEN, GoogleAccountsTable.OWNER_ACCOUNT_ID);
+        Map<String, Object> insertParams = new HashMap<String, Object>();
+        insertParams.put(GoogleAccountsTable.REFRESH_TOKEN, account.getActiveRefreshToken());
+        insertParams.put(GoogleAccountsTable.OWNER_ACCOUNT_ID, account.getOwnerAccountId());
+        Number newGoogleAccountId;
+        try {
+        	newGoogleAccountId = jdbcInsert.executeAndReturnKey(insertParams);
+        } catch (Exception e) {
+        	//Not sure what exceptions can be thrown, the documentation simply says:
+        	//"This method will always return a key or throw an exception if a key was not returned."
+        	//I would imagine we'll see SQLExceptions.
+        	e.printStackTrace();
+        	return null;
+        }
 
-		args = new Object[] { account.getActiveRefreshToken(), account.getOwnerAccountId() };
+        GoogleAccount newGoogleAccount = new GoogleAccount(newGoogleAccountId.intValue()); //TODO: Replace with correct ID. This is wrong.
+        newGoogleAccount.setActiveRefreshToken(account.getActiveRefreshToken());
+        newGoogleAccount.setOwnerAccountId(account.getOwnerAccountId());
+		return newGoogleAccount;
 		
-		argTypes = new int[] { Types.VARCHAR, Types.INTEGER };
-		
-		int affectedRows;
-		try {
-			affectedRows = jdbc.update(preStatement, args, argTypes);
-		} catch (DataAccessException e) {
-			//TODO: Standardize error handling for the database.
-			e.printStackTrace();
-			return false;
-		}
-		
-		//Return true if the statement successfully affected one row.
-		return affectedRows == 1;
 	}
 	
 

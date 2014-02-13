@@ -3,6 +3,7 @@ package io.analytics.service;
 import java.util.Calendar;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.analytics.domain.Account;
@@ -15,9 +16,10 @@ import io.analytics.service.interfaces.IAccountService;
 @Service
 public class AccountService implements IAccountService {
 
-	//TODO: Autowire.
-	private IAccountRepository accountRepository = new AccountRepository();
-	private IGoogleAccountRepository googleAccountRepository = new GoogleAccountRepository();
+	@Autowired
+	private IAccountRepository accountRepository;
+	@Autowired
+	private IGoogleAccountRepository googleAccountRepository;
 	
 	/**
 	 * Gets an Account object given its id.
@@ -66,10 +68,7 @@ public class AccountService implements IAccountService {
 		acc.setDefaultFilterId(filterId);
 		acc.setCreationDate(Calendar.getInstance());
 		
-		if (accountRepository.addNewAccount(acc))
-			return acc;
-		else
-			return null;
+		return accountRepository.addNewAccount(acc);
 		
 	}
 

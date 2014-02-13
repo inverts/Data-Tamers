@@ -1,31 +1,41 @@
 package io.analytics.repository;
 import io.analytics.domain.Account;
-import io.analytics.domain.User;
 import io.analytics.repository.interfaces.IAccountRepository;
-import io.analytics.security.Role;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 
 
-import java.util.Set;
+import java.util.Map;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.*;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
 public class AccountRepository implements IAccountRepository {
 
-	private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private final JdbcTemplate jdbc;
+	private final SimpleJdbcInsert jdbcInsert;
+	
+	@Autowired
+	public AccountRepository(DataSource dataSource) {
+		this.jdbc = new JdbcTemplate(dataSource);
+		//Must specify .usingGeneratedKeyColumns in order to use .executeAndReturnKey.
+		jdbcInsert = new SimpleJdbcInsert(this.jdbc).withTableName(ACCOUNTS_TABLE).usingGeneratedKeyColumns(AccountTable.ACCOUNT_ID);
+	}
+	
+	
 	public static final String ACCOUNTS_TABLE = "Accounts";
 	private static final class AccountTable {
 		public static final String ACCOUNT_ID = "idAccounts";
@@ -33,6 +43,7 @@ public class AccountRepository implements IAccountRepository {
 		public static final String OWNER_USER_ID = "ownerUserId";
 		public static final String CREATION_DATE = "creationDate";
 	}
+	
 	private static final class AccountMapper implements RowMapper<Account> {
 
 		@Override
@@ -50,11 +61,50 @@ public class AccountRepository implements IAccountRepository {
 		}
 		
 	}
+
+	private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 	
-	//TODO: Use a connection properties file.
-	private static DriverManagerDataSource DATASOURCE = 
-				new DriverManagerDataSource("jdbc:mysql://davidkainoa.com:3306/davidkai_analytics", 
-						"davidkai_data", "PNjO_#a40@wZPmh-Q");
+	/**
+	 * Adds a new account to the database.
+	 * 
+	 * @param a The new Account to add.
+	 * @return <code>true</code> if the Account was added successfully. <code>false</code> otherwise.
+	 */
+	public Account addNewAccount(Account a) {
+		
+		String creationDate;
+		if (a.getOwnerId() <= 0 || a.getDefaultFilterId() <= 0)
+			return null;
+		if (a.getCreationDate() == null)
+			creationDate = formatter.format(Calendar.getInstance().getTime());
+		else
+			creationDate = formatter.format(a.getCreationDate().getTime());
+		
+        Map<String, Object> insertParams = new HashMap<String, Object>();
+        insertParams.put(AccountTable.FILTER_ID, a.getDefaultFilterId());
+        insertParams.put(AccountTable.OWNER_USER_ID, a.getDefaultFilterId());
+        insertParams.put(AccountTable.CREATION_DATE, creationDate);
+        
+        Number newAccountId;
+        try {
+        	newAccountId = jdbcInsert.executeAndReturnKey(insertParams);
+        } catch (Exception e) {
+        	//Not sure what exceptions can be thrown, the documentation simply says:
+        	//"This method will always return a key or throw an exception if a key was not returned."
+        	//I would imagine we'll see SQLExceptions.
+        	e.printStackTrace();
+        	return null;
+        }
+
+        Account newAccount = new Account(newAccountId.intValue()); //TODO: Replace with correct ID. This is wrong.
+        newAccount.setCreationDate(a.getCreationDate());
+        newAccount.setDefaultFilterId(a.getDefaultFilterId());
+        newAccount.setOwnerId(a.getOwnerId());
+		return newAccount;
+		
+	}
+	
 	
 	/**
 	 * Gets a list of accounts that this user owns.
@@ -66,7 +116,6 @@ public class AccountRepository implements IAccountRepository {
 		if (ownerUserId < 0)
 			return null;
 		
-		JdbcTemplate jdbc = new JdbcTemplate(DATASOURCE);
 		String preStatement;
 		Object[] args;
 		int[] argTypes;
@@ -88,41 +137,5 @@ public class AccountRepository implements IAccountRepository {
 		
 	}
 	
-	
-	/**
-	 * Adds a new account to the database.
-	 * 
-	 * @param a The new Account to add.
-	 * @return <code>true</code> if the Account was added successfully. <code>false</code> otherwise.
-	 */
-	public boolean addNewAccount(Account a) {
-		JdbcTemplate jdbc = new JdbcTemplate(DATASOURCE);
-		String preStatement;
-		Object[] args;
-		int[] argTypes;
-		
-		preStatement = String.format("INSERT INTO `%s` (`%s`, `%s`, `%s`) VALUES (?, ?, ?);", 
-				ACCOUNTS_TABLE, AccountTable.FILTER_ID, AccountTable.OWNER_USER_ID, AccountTable.CREATION_DATE);
-		
-		args = new Object[] { a.getDefaultFilterId(), a.getOwnerId(), formatter.format(a.getCreationDate().getTime()) };
-		
-		argTypes = new int[] { Types.INTEGER, Types.INTEGER, Types.DATE };
-		
-		int affectedRows;
-		try {
-			//Don't delete commented lines below - these should be implemented on the next build.
-			//int lastRowFirst = jdbc.queryForInt("SELECT LAST_INSERT_ID();");
-			affectedRows = jdbc.update(preStatement, args, argTypes);
-			//int lastRow = jdbc.queryForInt("SELECT LAST_INSERT_ID();");
-		} catch (DataAccessException e) {
-			//TODO: Standardize error handling for the database.
-			e.printStackTrace();
-			return false;
-		}
-		
-		//Return true if the statement successfully affected one row.
-		return affectedRows == 1;
-		
-	}
 }
 

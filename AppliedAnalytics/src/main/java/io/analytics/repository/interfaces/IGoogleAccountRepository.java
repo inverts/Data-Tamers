@@ -13,7 +13,7 @@ public interface IGoogleAccountRepository {
 	 * @param account The GoogleAccount to add to the database.
 	 * @return Returns true on success, false otherwise.
 	 */
-	public boolean addGoogleAccount(GoogleAccount account);
+	public GoogleAccount addGoogleAccount(GoogleAccount account);
 
 	/**
 	 * Retrieves a list of Google accounts owned by one particular user.

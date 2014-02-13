@@ -2,12 +2,12 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <head>
 <style>
-table, th, td
+#websitePerformanceSettings table, #websitePerformanceSettings th, #websitePerformanceSettings td
 {
 background-color:#DCDCDC;
 border:1px solid black;
 }
-th, td
+#websitePerformanceSettings th, #websitePerformanceSettings td
 {
 padding:3px;
 }
@@ -42,12 +42,12 @@ document.getElementById("exit4").innerHTML=data.exitRate[0][4];
 </script> 
 </head>
 <body>
-<div class="widget widgetView">
+<div class="widget widgetView pagePerformance">
 	<form id="websitePerformanceSettings">
 		<div class="widget_header">			
 			<div class="widget_title"><fmt:message key="websiteperformance.title" /></div>			
 		</div>
-	
+	<div class="widget-content">
 		<table>
 			<th> Webpage Path </th>
 			<th> Visits (%)</th>
@@ -84,6 +84,7 @@ document.getElementById("exit4").innerHTML=data.exitRate[0][4];
 			<td id = exit4> </td>
 		</tr>   
 		</table>
+	</div>
 	    <!--<div id="websitePerformanceGraph" class="rs_visual">  -->
 			<!-- add Visualization elements -->
 		<!--<canvas id="websitePerformanceData"></canvas>  -->

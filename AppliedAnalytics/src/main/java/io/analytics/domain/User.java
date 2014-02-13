@@ -33,6 +33,10 @@ public class User implements UserDetails {
 		this.roles = roles;
 	}
 	
+	public int getId() {
+		return this.id;
+	}
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return this.roles;

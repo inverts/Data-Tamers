@@ -9,9 +9,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.sql.DataSource;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -24,6 +28,13 @@ import io.analytics.security.Role;
 @Repository
 public class UserRepository implements IUserRepository {
 
+	private final JdbcTemplate jdbc;
+	
+	@Autowired
+	public UserRepository(DataSource dataSource) {
+		this.jdbc = new JdbcTemplate(dataSource);
+	}
+	
 	private static final class UserMapper implements RowMapper<User> {
 
 		@Override
@@ -74,9 +85,9 @@ public class UserRepository implements IUserRepository {
 	 * @param u
 	 * @return
 	 */
-	public boolean addNewUser(User u) {
+	public User addNewUser(User u) {
 
-		JdbcTemplate jdbc = new JdbcTemplate(DATASOURCE);
+		//JdbcTemplate jdbc = new JdbcTemplate(DATASOURCE);
 		String preStatement;
 		Object[] args;
 		int[] argTypes;
@@ -97,23 +108,49 @@ public class UserRepository implements IUserRepository {
 		argTypes = new int[]{ Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR , Types.VARCHAR, Types.VARCHAR, Types.DATE };
 		
 		
-		int affectedRows;
-		try {
-			affectedRows = jdbc.update(preStatement, args, argTypes);
-		} catch (DataAccessException e) {
-			//TODO: Standardize error handling for the database.
-			e.printStackTrace();
-			return false;
-		}
+		int userId = insertUser(preStatement, args, argTypes);
+		if (userId <= 0)
+			return null;
+		
+		User result = new User(userId);
+		result.setAuthorities(u.getAuthorities());
+		result.setEmail(u.getEmail());
+		result.setFirstName(u.getFirstName());
+		result.setJoinDate(u.getJoinDate());
+		result.setLastName(u.getLastName());
+		result.setPasswordHash(u.getPassword());
+		result.setPasswordSalt(u.getPasswordSalt());
+		result.setProfileImageUrl(u.getProfileImageUrl());
+		result.setUsername(u.getUsername());
 		
 		//Return true if the statement successfully affected one row.
-		return affectedRows == 1;
+		return result;
+	}
+
+
+	@Transactional("transactionManager")
+	private int insertUser(String preStatement, Object[] args, int[] argTypes) {
+		int affectedRows;
+		int userId;
+		try {
+			affectedRows = this.jdbc.update(preStatement, args, argTypes);
+			userId = this.jdbc.queryForInt("SELECT LAST_INSERT_ID();");
+		} catch (DataAccessException e) {
+			//TODO: Standardize error handling for the database.
+			//e.printStackTrace();
+			return -1;
+		}
+		
+		if (affectedRows != 1)
+			return -1;
+		
+		return userId;
 	}
 	
 	
 	public User loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-		JdbcTemplate jdbc = new JdbcTemplate(DATASOURCE);
+		//JdbcTemplate jdbc = new JdbcTemplate(DATASOURCE);
 		String preStatement;
 		Object[] args;
 		int[] argTypes;
@@ -124,7 +161,7 @@ public class UserRepository implements IUserRepository {
 		
 		try {
 			
-			List<User> users = jdbc.query(preStatement, args, argTypes, new UserMapper());
+			List<User> users = this.jdbc.query(preStatement, args, argTypes, new UserMapper());
 			
 			if (users.isEmpty())
 				return null;
@@ -140,23 +177,16 @@ public class UserRepository implements IUserRepository {
 			
 		} catch (DataAccessException e) {
 			//TODO: Standardize error handling for the database.
-			e.printStackTrace();
+			//e.printStackTrace();
 			return null;
 		}
 		
-		
-		//TODO: JDBC into the database to retrieve user by username.
-		
-		// For now I just created this customer.
-		/*
-		User user = new User();
-		user.setPassword("123456");
-		user.setUsername("user");
-		Set roles = new HashSet<GrantedAuthority>();
-		roles.add(new Role("ROLE_USER"));
-		user.setAuthorities(roles);
-		
-		return user;
-		*/
+	}
+
+
+	@Override
+	public User getUserById(int userId) {
+		// TODO get User data and map into a User object.
+		return null;
 	}
 } 

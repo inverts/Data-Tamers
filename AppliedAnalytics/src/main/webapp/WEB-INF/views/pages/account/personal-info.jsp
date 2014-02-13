@@ -15,24 +15,20 @@
 <div class="personal-info">
 	<h1><fmt:message key="account.new.title" /></h1>
 	<br/>
-	
-		<form id="googleAuth" method="GET" action="GoogleAuthenticateHandler">
-			<input type="hidden" name="login" value="1" />
-			<div class="googleAuth">
-				<h4><a onclick="$('#googleAuth').submit(); return false;">
-				<c:choose>
-					<c:when test="${model.googleSuccess}">
-						<fmt:message key="account.new.google.change" />
-					</c:when>
-					<c:otherwise>
-						<fmt:message key="account.new.google" />
-					</c:otherwise>
-				</c:choose>
-				</a></h4>
-			</div>
-		</form>
-	<br/>
-	<form:form action="ProcessNewAccountInfo" modelAttribute="accountForm" method="POST">
+	<form:form id="accountAction" action="ProcessNewAccountInfo" modelAttribute="accountForm" method="POST">
+		<div class="googleAuth">
+			<h4><a onclick="invokeGoogleAuthentication('accountAction');">
+			<c:choose>
+				<c:when test="${model.googleSuccess}">
+					<fmt:message key="account.new.google.change" />
+				</c:when>
+				<c:otherwise>
+					<fmt:message key="account.new.google" />
+				</c:otherwise>
+			</c:choose>
+			</a></h4>
+		</div>
+		<br/>
 		<table>
 			<tr>
 				<td><form:label path="firstname"><fmt:message key="account.name.first" /></form:label></td>

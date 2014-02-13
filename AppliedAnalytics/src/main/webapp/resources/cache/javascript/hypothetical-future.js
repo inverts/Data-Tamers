@@ -2,122 +2,8 @@
  * hypothetical-future.js
  */
 
-$(function() {
-	updateHypotheticalWidget();
-	
 
-	
-});
-
-function updateHypotheticalWidget() {
-	
-	var $element = $('#hypotheticalFuture');
-	$.post(applicationRoot + "/HypotheticalFuture", null, function(response) {
-		if ($element.length > 0) {
-			$element.fadeOut("fast", function() { 
-					$element.empty().append(response).show(); 
-			});
-		}
-		else {
-			$element = $('<div>').attr({ 'id': 'hypotheticalFuture', 'class': 'w_container'})
-								 .prop('draggable', true)
-								 .appendTo('.dashboard-content')
-								 .append(response);
-		}
-		
-		$('#hypotheticalFutureData').append(hypotheticalSketch);
-		
-		//var canvas = document.getElementById('hypotheticalFutureData');
-		
-		// points = HypotheticalFutureData.points;
-		//var p = new Processing(canvas, hypotheticalSketch);
-		
-
-		//$element.fadeIn("fast");
-		/*window.onresize = function(event) {
-			var p = new Processing(canvas, hypotheticalSketch);
-		}*/
-		
-		// widget will not be dragged while user clicks on content
-		$('.dashboard-content').sortable({ cancel: '.widget-content'});
-	});
-}
-
-//assume everything in points is a string!
-var hypotheticalSketch = (function($p) {
-	var margin = {
-			top : 30,
-			right : 20,
-			bottom : 30,
-			left : 50
-	}, width = 600 - margin.left - margin.right, height = 300 - margin.top
-	- margin.bottom;
-	var top = 30;
-	var right = 20;
-	var bottom = 30;
-	var left = 20;
-
-	/***************************************************************************
-	 * GET (TODO:REAL) DATA
-	 **************************************************************************/
-
-	// TODO test data : need to replace w/ real
-	var hypoData = [];
-	var hypoDates = []
-	var trendData = [];
-	var trendDates = [];
-
-	for (var i = 0; i < 11; i++) {
-		var fakeData = Math.random() * 30;
-		hypoData.push(fakeData);
-		var fakeTrend = Math.random() * 30;
-		trendData.push(fakeTrend);
-	}
-	for (var i = 0; i < 11; i++) {
-		var fakeDate = i;
-		hypoDates.push(i);
-	}
-	for (var i = 11; i < 22; i++) {
-		var fakeDate = i;
-		trendDates.push(fakeDate);
-	}
-
-	var stopX = hypoData[hypoData.length];
-	var stopY = hypoDates[hypoDates.length];
-
-	/***************************************************************************
-	 * DRAW INNER BACKGROUND
-	 **************************************************************************/
-	// draw background shape
-	var w = 575;
-	var h = 300;
-	var svg = d3.select("#backrect").append("svg").attr("width", w).attr(
-			"height", h);
-
-	var buttons = document.getElementById("buttonsContainer");
-	svg.select("#buttons");
-
-	var borderpath = svg.append("rect").attr("x", 30).attr("y", 50).attr(
-			"width", w - 60).attr("height", h - 80).style("stroke-width", 5)
-			.style("stroke", "grey");
-
-	var focus = svg.append("g").attr("class", "focus").style("display", "none");
-
-	focus.append("circle").attr("r", 4.5);
-
-	focus.append("text").attr("x", 9).attr("dy", ".35em");
-
-	var innerRect = svg.append("rect").attr("x", 30).attr("y", 50).attr(
-			"width", w - 60).attr("height", h - 80).attr("fill", "#F0F0F0");
-
-	var smallW = w - 35;
-	var smallH = h - 80;
-
-	/***************************************************************************
-	 * GET (TODO: REAL) DATE DATA PLOT X AXIS
-	 **************************************************************************/
-
-	var data = [ {
+var data = [ {
 		"jsonDate" : "09\/22\/11",
 		"jsonHitCount" : 2,
 		"seriesKey" : "Website Usage"
@@ -231,7 +117,7 @@ var hypotheticalSketch = (function($p) {
 		"seriesKey" : "Website Usage"
 	}, {
 		"jsonDate" : "11\/16\/11",
-		"jsonHitCount" : 5,
+		"jsonHitCount" : 42,
 		"seriesKey" : "Website Usage"
 	}, {
 		"jsonDate" : "11\/17\/11",
@@ -266,6 +152,138 @@ var hypotheticalSketch = (function($p) {
 		"jsonHitCount" : 3,
 		"seriesKey" : "Website Usage"
 	} ];
+
+$(function() {
+	updateHypotheticalWidget();
+	
+	
+	
+});
+
+function updateHypotheticalWidget() {
+	
+	var $element = $('#hypotheticalFuture');
+	$.post(applicationRoot + "/HypotheticalFuture", null, function(response) {
+		if ($element.length > 0) {
+			$element.fadeOut("fast", function() { 
+					$element.empty().append(response).show(); 
+			});
+		}
+		else {
+			$element = $('<div>').attr({ 'id': 'hypotheticalFuture', 'class': 'w_container'})
+								 .prop('draggable', true)
+								 .appendTo('.dashboard-content')
+								 .append(response);
+		}
+		
+		//$('#hypotheticalFutureData').append(hypotheticalSketch);
+		
+		$('#hypotheticalFutureData').graph({
+			data: data,
+			key: 'jsonDate',
+			pointSize: 3.5,
+			startIndex: 16,
+			endIndex: 21,
+		});
+		
+		
+		// Collapse Event
+		$('.dataForecast .widget_title').click(function() {
+			$('.dataForecast .widget-content').slideToggle('fast');
+		});
+		
+		
+		//var canvas = document.getElementById('hypotheticalFutureData');
+		
+		// points = HypotheticalFutureData.points;
+		//var p = new Processing(canvas, hypotheticalSketch);
+		
+
+		//$element.fadeIn("fast");
+		/*window.onresize = function(event) {
+			var p = new Processing(canvas, hypotheticalSketch);
+		}*/
+		
+		// widget will not be dragged while user clicks on content
+		$('.dashboard-content').sortable({ cancel: '.widget-content'});
+	});
+}
+
+//assume everything in points is a string!
+var hypotheticalSketch = (function($p) {
+	var margin = {
+			top : 30,
+			right : 20,
+			bottom : 30,
+			left : 50
+	}, width = 600 - margin.left - margin.right, height = 300 - margin.top
+	- margin.bottom;
+	var top = 30;
+	var right = 20;
+	var bottom = 30;
+	var left = 20;
+
+	/***************************************************************************
+	 * GET (TODO:REAL) DATA
+	 **************************************************************************/
+
+	// TODO test data : need to replace w/ real
+	var hypoData = [];
+	var hypoDates = []
+	var trendData = [];
+	var trendDates = [];
+
+	for (var i = 0; i < 11; i++) {
+		var fakeData = Math.random() * 30;
+		hypoData.push(fakeData);
+		var fakeTrend = Math.random() * 30;
+		trendData.push(fakeTrend);
+	}
+	for (var i = 0; i < 11; i++) {
+		var fakeDate = i;
+		hypoDates.push(i);
+	}
+	for (var i = 11; i < 22; i++) {
+		var fakeDate = i;
+		trendDates.push(fakeDate);
+	}
+
+	var stopX = hypoData[hypoData.length];
+	var stopY = hypoDates[hypoDates.length];
+
+	/***************************************************************************
+	 * DRAW INNER BACKGROUND
+	 **************************************************************************/
+	// draw background shape
+	var w = 575;
+	var h = 300;
+	var svg = d3.select("#backrect").append("svg").attr("width", w).attr(
+			"height", h);
+
+	var buttons = document.getElementById("buttonsContainer");
+	svg.select("#buttons");
+
+	var borderpath = svg.append("rect").attr("x", 30).attr("y", 50).attr(
+			"width", w - 60).attr("height", h - 80).style("stroke-width", 5)
+			.style("stroke", "grey");
+
+	var focus = svg.append("g").attr("class", "focus").style("display", "none");
+
+	focus.append("circle").attr("r", 4.5);
+
+	focus.append("text").attr("x", 9).attr("dy", ".35em");
+
+	var innerRect = svg.append("rect").attr("x", 30).attr("y", 50).attr(
+			"width", w - 60).attr("height", h - 80).attr("fill", "#F0F0F0");
+
+	var smallW = w - 35;
+	var smallH = h - 80;
+
+	/***************************************************************************
+	 * GET (TODO: REAL) DATE DATA PLOT X AXIS
+	 **************************************************************************/
+
+	
 
 	/* DEFAULT: WEEKLY VIEW */
 	drawWeekDates();

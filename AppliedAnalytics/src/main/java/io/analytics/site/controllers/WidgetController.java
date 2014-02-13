@@ -9,6 +9,8 @@ import io.analytics.service.interfaces.IPagePerfomanceService;
 import io.analytics.service.interfaces.ISessionService;
 import io.analytics.site.models.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,18 +24,21 @@ import com.google.api.client.auth.oauth2.Credential;
 @Controller
 public class WidgetController {
 
+	private static final Logger logger = LoggerFactory.getLogger(WidgetController.class);
+	
 	@Autowired private ICoreReportingService CoreReportingService;
 	@Autowired private ISessionService SessionService;
 	@Autowired private IPagePerfomanceService PagePerformanceService;
 
 	@RequestMapping(value = "/HypotheticalFuture", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView hypotheticalFutureView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,	
+	public ModelAndView DataForecastView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,	
 												@RequestParam(value = "change", defaultValue = "none") String changePercentage,
-												@RequestParam(value = "dimension", defaultValue = "none") String dimension) {
-
+												@RequestParam(value = "dimension", defaultValue = "none") String dimension) 
+	{
 		Credential credential;
 		SettingsModel settings;
 		FilterModel filter;
+		
 		if (SessionService.checkAuthorization(session)) {
 			credential = SessionService.getCredentials();
 			filter = SessionService.getFilter();
@@ -48,37 +53,27 @@ public class WidgetController {
 			return new ModelAndView("unavailable");
 		}
 
-		HypotheticalFutureModel hypotheticalFuture = SessionService.getModel(session, "hypotheticalFuture", HypotheticalFutureModel.class);
+		DataForecastModel dataForecast = SessionService.getModel(session, "hypotheticalFuture", DataForecastModel.class);
 
 		//If there is no model available, or if the active profile changed, create a new model.
-		if ((hypotheticalFuture == null) || !(settings.getActiveProfile().equals(hypotheticalFuture.getActiveProfile()))) {
-			//CoreReportingService reportingService = null;
-			/*try {
-				// this is naughty. We need to be using the interface
-				//reportingService = new CoreReportingService(credential, settings.getActiveProfile().getId());
-			} catch (io.analytics.repository.CoreReportingRepository.CredentialException e) {
-				e.printStackTrace();
-				SessionService.redirectToLogin(session, response);
-				return new ModelAndView("unavailable");
-			}*/
-			//hypotheticalFuture = new HypotheticalFutureModel(reportingService);
-			hypotheticalFuture = new HypotheticalFutureModel(this.SessionService, this.CoreReportingService);
+		if ((dataForecast == null) || !(settings.getActiveProfile().equals(dataForecast.getActiveProfile()))) {
+			dataForecast = new DataForecastModel(this.SessionService, this.CoreReportingService);
 		}
 
 		if (filter != null) {
-			hypotheticalFuture.setStartDate(filter.getActiveStartDate());
-			hypotheticalFuture.setEndDate(filter.getActiveEndDate());
+			dataForecast.setStartDate(filter.getActiveStartDate());
+			dataForecast.setEndDate(filter.getActiveEndDate());
 		}
 
 
 		//Execute API commands to change the model
 		if (!changePercentage.equals("none"))
-			hypotheticalFuture.setChangePercentage(changePercentage);
+			dataForecast.setChangePercentage(changePercentage);
 		if (!dimension.equals("none"))
-			hypotheticalFuture.setDimension(dimension);
-		hypotheticalFuture.updateData();
-		SessionService.saveModel(session, "hypotheticalFuture", hypotheticalFuture);
-		viewMap.addAttribute("hfModel", hypotheticalFuture);
+			dataForecast.setDimension(dimension);
+		dataForecast.updateData();
+		SessionService.saveModel(session, "hypotheticalFuture", dataForecast);
+		viewMap.addAttribute("hfModel", dataForecast);
 		viewMap.addAttribute("filterModel", filter);
 		/*
 		HypotheticalFutureModel hypotheticalFuture = new HypotheticalFutureModel(adjustBy, source);
@@ -90,6 +85,20 @@ public class WidgetController {
 		return new ModelAndView("HypotheticalFuture");
 
 	}
+	
+	@RequestMapping(value = "/saveDataForecast", method = RequestMethod.POST)
+	private void saveDataForecastSettings(@RequestParam("widgetId") int widgetId, 
+										  @RequestParam("data") String inputData)
+	{
+		try {
+			
+			
+		} catch(Exception e) {
+			logger.info("Could not save DataForecast data");
+			logger.info(e.getMessage());
+		}
+	}
+	
 
 	@RequestMapping(value = "/RevenueSources", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView revenueSourcesView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {

@@ -9,7 +9,7 @@ import java.util.Arrays;
 import org.json.*;
 
 
-public class HypotheticalFutureModel extends ForecastWidgetModel {
+public class DataForecastModel extends ForecastWidgetModel {
 	
 	private JSONObject dataPoints;
 	private Integer changePercentage;
@@ -26,7 +26,7 @@ public class HypotheticalFutureModel extends ForecastWidgetModel {
 	 * var hypotheticalData = JSON.parse('${ hfModel.???????? }');
 	 * 
 	 */
-	public HypotheticalFutureModel(ISessionService sessionService, ICoreReportingService reportingService) {	
+	public DataForecastModel(ISessionService sessionService, ICoreReportingService reportingService) {	
 		super(sessionService, reportingService);
 		this.activeProfile = reportingService.getProfile();
 		this.changePercentage = 10;

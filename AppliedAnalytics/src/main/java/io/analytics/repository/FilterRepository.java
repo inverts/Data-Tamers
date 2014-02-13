@@ -5,28 +5,34 @@ import io.analytics.repository.interfaces.IFilterRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
 
 @Repository
-@Component
 public class FilterRepository implements IFilterRepository {
 	
+	private final JdbcTemplate jdbc;
+	private final SimpleJdbcInsert jdbcInsert;
+	
+	@Autowired
+	public FilterRepository(DataSource dataSource) {
+		this.jdbc = new JdbcTemplate(dataSource);
+		jdbcInsert = new SimpleJdbcInsert(this.jdbc).withTableName(FILTERS_TABLE).usingGeneratedKeyColumns(FilterTable.FILTER_ID);
+	}
+
 	public static final String FILTERS_TABLE = "Filters";
+		
 	private static final class FilterTable {
 		public static final String FILTER_ID = "idFilters";
 		public static final String PARENT_ACCOUNT_ID = "parentAccountId";
@@ -35,6 +41,7 @@ public class FilterRepository implements IFilterRepository {
 		public static final String INTEREST_METRIC = "interestMetric";
 		public static final String GOOGLE_PROFILE_ID = "googleProfileId";
 	}
+	
 	private static final class FilterMapper implements RowMapper<Filter> {
 
 		@Override
@@ -60,20 +67,10 @@ public class FilterRepository implements IFilterRepository {
 		
 	}
 	
-	//TODO: Use a connection properties file.
-	private static DriverManagerDataSource DATASOURCE = 
-				new DriverManagerDataSource("jdbc:mysql://davidkainoa.com:3306/davidkai_analytics", 
-						"davidkai_data", "PNjO_#a40@wZPmh-Q");
-	
 	private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 	
+	
 	public Filter addNewFilter(Filter f) {
-		JdbcTemplate jdbc = new JdbcTemplate(DATASOURCE);
-        
-		String preStatement;
-		Object[] args;
-		int[] argTypes;
-		
 		String startDate, endDate;
 		if (f.getStartDate() == null)
 			startDate = null;
@@ -85,43 +82,31 @@ public class FilterRepository implements IFilterRepository {
 		else
 			endDate = formatter.format(f.getEndDate().getTime());
 		
+        Map<String, Object> insertParams = new HashMap<String, Object>();
+        if (f.getParentAccountId() > 0)
+        	insertParams.put(FilterTable.PARENT_ACCOUNT_ID, f.getParentAccountId());
+        insertParams.put(FilterTable.START_DATE, startDate);
+        insertParams.put(FilterTable.END_DATE, endDate);
+        insertParams.put(FilterTable.INTEREST_METRIC, f.getInterestMetric());
+        insertParams.put(FilterTable.GOOGLE_PROFILE_ID, f.getGoogleProfileId());
+        Number newFilterId;
+        try {
+        	newFilterId = jdbcInsert.executeAndReturnKey(insertParams);
+        } catch (Exception e) {
+        	//Not sure what exceptions can be thrown, the documentation simply says:
+        	//"This method will always return a key or throw an exception if a key was not returned."
+        	//I would imagine we'll see SQLExceptions.
+        	e.printStackTrace();
+        	return null;
+        }
 
-		if (f.getParentAccountId() <= 0) {
-			preStatement = String.format("INSERT INTO `%s` (`%s`, `%s`, `%s`, `%s`) VALUES (?, ?, ?, ?);", 
-					FILTERS_TABLE, FilterTable.START_DATE, FilterTable.END_DATE, 
-					FilterTable.INTEREST_METRIC, FilterTable.GOOGLE_PROFILE_ID);
-			args = new Object[]{ startDate, endDate, f.getInterestMetric(), f.getGoogleProfileId() };
-			argTypes = new int[]{ Types.DATE, Types.DATE, Types.VARCHAR, Types.VARCHAR };
-		} else {
-			preStatement = String.format("INSERT INTO `%s` (`%s`, `%s`, `%s`, `%s`, `%s`) VALUES (?, ?, ?, ?, ?);", 
-					FILTERS_TABLE, FilterTable.PARENT_ACCOUNT_ID, FilterTable.START_DATE, FilterTable.END_DATE, 
-					FilterTable.INTEREST_METRIC, FilterTable.GOOGLE_PROFILE_ID);
-			args = new Object[]{ f.getParentAccountId(), startDate, endDate, f.getInterestMetric(), f.getGoogleProfileId() };
-			argTypes = new int[]{ Types.INTEGER, Types.DATE, Types.DATE, Types.VARCHAR, Types.VARCHAR };
-		}
+		Filter newFilter = new Filter(newFilterId.intValue()); //TODO: Replace with correct ID. This is wrong.
+		newFilter.setStartDate(f.getStartDate());
+		newFilter.setEndDate(f.getEndDate());
+		newFilter.setGoogleProfileId(f.getGoogleProfileId());
+		newFilter.setInterestMetric(f.getInterestMetric());
+		newFilter.setParentAccountId(f.getParentAccountId());
+		return newFilter;
 		
-		int affectedRows;
-		try {
-			//These will not work unless we're in a transaction.
-			//int lastRowFirst = jdbc.queryForInt("SELECT LAST_INSERT_ID();");
-			affectedRows = jdbc.update(preStatement, args, argTypes);
-			//int lastRow = jdbc.queryForInt("SELECT LAST_INSERT_ID();");
-
-			if (affectedRows == 1) { //&& lastRowFirst != lastRow) {
-				Filter newFilter = new Filter(0); //TODO: Replace with correct ID. This is wrong.
-				newFilter.setStartDate(f.getStartDate());
-				newFilter.setEndDate(f.getEndDate());
-				newFilter.setGoogleProfileId(f.getGoogleProfileId());
-				newFilter.setInterestMetric(f.getInterestMetric());
-				newFilter.setParentAccountId(f.getParentAccountId());
-				return newFilter;
-			} else {
-				return null;
-			}
-		} catch (DataAccessException e) {
-			//TODO: Standardize error handling for the database.
-			e.printStackTrace();
-			return null;
-		}
 	}
 }
