@@ -21,5 +21,5 @@ public interface IAccountRepository {
 	 * @param a The new Account to add.
 	 * @return <code>true</code> if the Account was added successfully. <code>false</code> otherwise.
 	 */
-	public boolean addNewAccount(Account a);
+	public Account addNewAccount(Account a);
 }
