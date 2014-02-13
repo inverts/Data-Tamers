@@ -12,6 +12,13 @@
 
 .widget .widgetView { visibility:'hidden'; }
 
+/*** GENERAL GRAPHING ***/
+svg { font: 10px sans-serif; }
+svg path { fill:none; stroke:blue; }
+svg .axis path { display: none; }
+svg .axis line { shape-rendering: crispEdges; stroke: #000; }
+svg .axis .minor line { stroke:#777; stroke-dasharray:2,2; }
+
 
 /*****CSS for DATA FORECAST WIDGET*****/
 
