@@ -8,6 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
 <!-- CSS -->
+<link href="<c:url value="/cache/css/libs/bootstrap.css" />" rel="stylesheet">
 <link href="<c:url value="/cache/css/site.css" />" rel="stylesheet">
 <link href="<c:url value="/cache/css/widget.css" />" rel="stylesheet">
 <link href="<c:url value="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />" rel="stylesheet">

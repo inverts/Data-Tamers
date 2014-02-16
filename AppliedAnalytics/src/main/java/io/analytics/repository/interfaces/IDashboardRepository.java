@@ -4,7 +4,7 @@ import io.analytics.domain.Dashboard;
 
 public interface IDashboardRepository {
 
-	public void addNewDashboard(int accountId, int userId, String dashboardName);
+	public int addNewDashboard(int accountId, int userId, String dashboardName);
 	
 	public void deleteDashboard(int dashboardId);
 	

@@ -7,23 +7,30 @@
 <!-- Register Widgets and the View Resolver used to display them (if you don't know use the JstlView) 
 	 note that the id is the name of the view you will be calling in the controller. -->
 
-<!-- Hypothetical Future -->
-<bean id="HypotheticalFuture" class="org.springframework.web.servlet.view.JstlView">
-	<property name="url" value="/WEB-INF/views/widgets/hypothetical-future.jsp" />
-</bean>
+	<!-- Hypothetical Future -->
+	<bean id="HypotheticalFuture" class="org.springframework.web.servlet.view.JstlView">
+		<property name="url" value="/WEB-INF/views/widgets/hypothetical-future.jsp" />
+	</bean>
+	
+	<!-- Revenue Sources -->
+	 <bean id="RevenueSources" class="org.springframework.web.servlet.view.JstlView">
+		<property name="url" value = "/WEB-INF/views/widgets/revenue-sources.jsp"/>
+	</bean> 
+	
+	<!-- Website Performance -->
+	<bean id="WebsitePerformance" class="org.springframework.web.servlet.view.JstlView">
+		<property name="url" value = "/WEB-INF/views/widgets/website-performance.jsp"/>
+	</bean>
 
-<bean id="settings" class="org.springframework.web.servlet.view.JstlView">
-	<property name="url" value="/WEB-INF/views/includes/settings.jsp" />
-</bean>
+	<!-- INCLUDES -->
+	<bean id="settings" class="org.springframework.web.servlet.view.JstlView">
+		<property name="url" value="/WEB-INF/views/includes/settings.jsp" />
+	</bean>
+	
+	<bean id="addDashboard" class="org.springframework.web.servlet.view.JstlView">
+		<property name="url" value="/WEB-INF/views/includes/add-dashboard.jsp" />
+	</bean>
 
-<!-- Revenue Sources -->
- <bean id="RevenueSources" class="org.springframework.web.servlet.view.JstlView">
-	<property name="url" value = "/WEB-INF/views/widgets/revenue-sources.jsp"/>
-</bean> 
 
-<!-- Website Performance -->
-<bean id="WebsitePerformance" class="org.springframework.web.servlet.view.JstlView">
-	<property name="url" value = "/WEB-INF/views/widgets/website-performance.jsp"/>
-</bean>
 
 </beans>   

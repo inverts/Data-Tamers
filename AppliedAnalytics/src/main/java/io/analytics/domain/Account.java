@@ -15,29 +15,47 @@ public class Account {
 	private int defaultFilterId;
 	private Calendar creationDate;
 	
+	// list of dashboards associated with the account
+	private Dashboard[] dashboardList; 
+	
 	public Account(int id) {
 		this.id = id;
 	}
+	
 	public int getId() {
 		return id;
 	}
+	
 	public int getOwnerId() {
 		return ownerId;
 	}
+	
 	public void setOwnerId(int ownerId) {
 		this.ownerId = ownerId;
 	}
+	
 	public int getDefaultFilterId() {
 		return defaultFilterId;
 	}
+	
 	public void setDefaultFilterId(int defaultFilterId) {
 		this.defaultFilterId = defaultFilterId;
 	}
+	
 	public Calendar getCreationDate() {
 		return creationDate;
 	}
+	
 	public void setCreationDate(Calendar creationDate) {
 		this.creationDate = creationDate;
+	}
+	
+	public void setDashboardList(Dashboard[] dashboards) {
+		this.dashboardList = dashboards;
+	}
+	
+	public Dashboard[] getDashboardList() {
+		return this.dashboardList;
 	}
 	
 }

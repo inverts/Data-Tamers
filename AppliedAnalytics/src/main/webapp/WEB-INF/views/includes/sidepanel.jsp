@@ -3,7 +3,11 @@
 
 <script src="<c:url value="/cache/javascript/sidepanel.js" />"></script>
 
-<!-- <div class="sidepanel-background" data-animate="${SIDEPANEL.animate}"></div>  -->
+<script>
+var dashboardLinks = '${SIDEPANEL.model.getDashboardFakes()}';
+$(function(){ getDashboardList($.parseJSON(dashboardLinks)); });
+</script>
+
 <nav id="sidepanel" class="sidepanel" data-animate="${SIDEPANEL.animate}">
 	<div class="sidepanel-content" >
 		<div class="sidepanel-header">
@@ -14,7 +18,13 @@
 				<div class="nav-icon" style="background-position:0 0;"></div>
 				<a class="nav-txt"><fmt:message key="dashboard" /></a>
 			</div>
-			<div id="dashlist" class="dashlist"></div>
+			<div class="dashlist">
+				<ul id="dashlist" class="dashlist"></ul>
+				<div class="addNewDash" id="addDashboard">
+					<span class="glyphicon glyphicon-plus"></span>
+					<fmt:message key="dashboard.add.link" />
+				</div>
+			</div>
 			<div id="trends"class="nav-cell">
 				<div class="nav-icon" style="background-position:0 -30px;"></div>
 				<a href="/appliedanalytics/application/trends" class="nav-txt"><fmt:message key="trends" /></a>

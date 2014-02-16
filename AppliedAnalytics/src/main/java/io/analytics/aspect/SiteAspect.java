@@ -54,7 +54,8 @@ public class SiteAspect {
 		
 		Sidepanel.put("path", "/WEB-INF/views/includes/sidepanel.jsp");
 		Sidepanel.put("animate", sidepanel.animate());
-		
+		Sidepanel.put("model", model.asMap().get("sidePanelModel"));
+
 		model.addAttribute("SIDEPANEL", Sidepanel);
 		
 		return joinPoint.proceed();

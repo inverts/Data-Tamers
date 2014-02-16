@@ -14,9 +14,9 @@ public class DashboardService implements IDashboardService {
 	@Autowired IDashboardRepository DashboardRepository;
 	
 	@Override
-	public void addNewDashboard(User user, int accountId, String dashboardName) {
+	public int addNewDashboard(User user, int accountId, String dashboardName) {
 		// TODO Validate User permissions
-		DashboardRepository.addNewDashboard(accountId, user.getId(), dashboardName);
+		return DashboardRepository.addNewDashboard(accountId, user.getId(), dashboardName);
 	}
 
 	@Override
