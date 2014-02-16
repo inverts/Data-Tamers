@@ -51,7 +51,7 @@ function addDashboardPage() {
 /* Removes a dashboard */
 function removeDashboard(dashboardId) {
 	
-	$.post("application/deleteDashboard", {dashboardId: dashboardId}, function(result) {
+	$.post(applicationRoot + "application/deleteDashboard", {dashboardId: dashboardId}, function(result) {
 		alert("removed " + result);
 	});
 }

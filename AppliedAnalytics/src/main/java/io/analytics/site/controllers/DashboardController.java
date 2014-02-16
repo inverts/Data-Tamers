@@ -146,19 +146,25 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 	 * @param userId - current User Id
 	 * @param dashboardId - Id of dashboard to be deleted.
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/application/deleteDashboard", method = RequestMethod.POST)
-	private void removeDashboard (@ModelAttribute("USER_ID") int userId,
+	private String removeDashboard (@ModelAttribute("USER_ID") int userId,
 								  @RequestParam("dashboardId") int dashboardId)
 	{
+		JSONObject result = new JSONObject();
 		try {
 			
-			User user = this.UserService.getUserById(userId);
-			this.DashboardService.deleteDashboard(user, dashboardId);
+			//User user = this.UserService.getUserById(userId);
+			//this.DashboardService.deleteDashboard(user, dashboardId);
+			
+			result.put("dashboardId", dashboardId);
 			
 		} catch (Exception e) {
 			logger.info("Could not delete dashboard");
 			logger.info(e.getMessage());
 		}
+		
+		return result.toString();
 	}
 	
 	/* Spoof Attributes */
