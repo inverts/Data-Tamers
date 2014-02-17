@@ -114,23 +114,5 @@ public class DataForecastModel extends ForecastWidgetModel {
 		}
 		 return this.dataPoints;
 	}
-	
-	
-	
-	/*
-	// Helper method for establishing the dropdown options which uses a map to set a boolean
-	// for the selected item.
-	private Map<String, String> setDropDownOptions (String selected, String[] values) {
-		
-		Map<String, String> result = new TreeMap<String, String>();
-		
-		for (String value : values) {
-				result.put(value, value.equals(selected) ? "selected" : "");
-		}
-		
-		return result;
-		
-	}
-	*/
 
 }
