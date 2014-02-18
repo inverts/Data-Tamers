@@ -22,12 +22,15 @@ import io.analytics.domain.GoogleUserData;
 import io.analytics.repository.interfaces.IManagementRepository;
 
 /**
- * 
- * TODO: Make sure we are respecting the rate limit (10 queries per second)
+ * A repository for interacting with the Google Analytics Management API.
+ * Here, we can obtain information about the user, their various Google Analytics
+ * accounts, web properties, and profiles, as well as segments, goals, and Google's
+ * available metrics and dimensions.
  * 
  * @author Dave Wong
  * 
  */
+//TODO: Make sure we are respecting the rate limit (10 queries per second)
 @Repository
 public class ManagementRepository implements IManagementRepository {
 

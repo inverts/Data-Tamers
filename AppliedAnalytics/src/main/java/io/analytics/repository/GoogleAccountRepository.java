@@ -19,6 +19,13 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Repository;
 
+
+/**
+ * A repository for querying and updating GoogleAccounts in the database.
+ * 
+ * @author Dave Wong
+ *
+ */
 @Repository
 public class GoogleAccountRepository implements IGoogleAccountRepository {
 

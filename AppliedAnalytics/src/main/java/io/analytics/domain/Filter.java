@@ -2,6 +2,16 @@ package io.analytics.domain;
 
 import java.util.Calendar;
 
+/**
+ * This represents a Filter in our application.
+ * A Filter is what governs/guides the data that is shown in Widgets. It helps a
+ * Widget customize its display to be more relevant to the user who chose a particular
+ * Filter. A Filter has a single parent Account that is its owner, but can be used by 
+ * many Dashboards and Widgets.
+ * 
+ * @author Dave Wong
+ *
+ */
 public class Filter {
 
 	private int id;

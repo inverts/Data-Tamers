@@ -14,6 +14,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+/**
+ * A repository for querying and updating Dashboards in the database.
+ * 
+ * @author Dave Wong
+ *
+ */
 @Repository
 public class DashboardRepository implements IDashboardRepository {
 

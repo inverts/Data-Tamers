@@ -8,8 +8,18 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+/**
+ * This represents a User of our application as it exists in the database.
+ * This is a User specific to our application, and is different from a
+ * Google account user, for example.
+ * 
+ * @author Dave Wong
+ *
+ */
 public class User implements UserDetails {
 
+	private static final long serialVersionUID = 1L;
+	
 	private Collection<? extends GrantedAuthority> roles;
 	private String username;
 	private String passwordHash;

@@ -22,6 +22,12 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 
+/**
+ * A repository for gathering Account data from the database.
+ * 
+ * @author Dave Wong
+ *
+ */
 @Repository
 public class AccountRepository implements IAccountRepository {
 

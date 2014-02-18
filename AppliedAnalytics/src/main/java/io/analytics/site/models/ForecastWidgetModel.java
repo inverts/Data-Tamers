@@ -226,8 +226,8 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
                         adjustment[i] = adjustment[i] / average;
                 
 
-                System.out.println("Std Deviation: " + totalStats.getStandardDeviation());
-                System.out.println("Mean: " + totalStats.getMean());
+                //System.out.println("Std Deviation: " + totalStats.getStandardDeviation());
+                //System.out.println("Mean: " + totalStats.getMean());
                 
                 //Once we're sure the set is complete, update the model.
                 xValues = new ArrayList<Double>(xValuesTemp);

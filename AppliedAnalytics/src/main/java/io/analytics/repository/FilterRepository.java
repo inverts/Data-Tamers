@@ -19,6 +19,12 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Repository;
 
+/**
+ * A repository for querying and updating Filters in the database.
+ * 
+ * @author Dave Wong
+ *
+ */
 @Repository
 public class FilterRepository implements IFilterRepository {
 	

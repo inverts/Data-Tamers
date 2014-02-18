@@ -25,6 +25,12 @@ import io.analytics.domain.User;
 import io.analytics.repository.interfaces.IUserRepository;
 import io.analytics.security.Role;
 
+/**
+ * A repository for querying and updating Users in the database.
+ * 
+ * @author Dave Wong
+ *
+ */
 @Repository
 public class UserRepository implements IUserRepository {
 

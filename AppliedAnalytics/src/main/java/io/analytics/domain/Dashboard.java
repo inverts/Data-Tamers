@@ -1,5 +1,13 @@
 package io.analytics.domain;
 
+/**
+ * This represents a Dashboard in our application.
+ * A Dashboard is defined as a particular set of ordered widgets. Every Dashboard
+ * belongs to a single Account, and has a name (not necessarily unique!).
+ * 
+ * @author Dave Wong
+ *
+ */
 public class Dashboard {
 	private int id;
 	//For now, the Account ID serves as the parent/owner account. But in the distant future we may 

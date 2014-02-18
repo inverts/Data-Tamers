@@ -4,7 +4,11 @@ import java.util.Calendar;
 
 /**
  * Represents an Account with our application.
- * @author Dave
+ * An Account is independent of a Google Account or a Google Analytics Account,
+ * this is specifically an Account with our application. An Account has few properties
+ * on its own, and is mostly defined by the relationships it has with other entities.
+ * 
+ * @author Dave Wong
  *
  */
 public class Account {

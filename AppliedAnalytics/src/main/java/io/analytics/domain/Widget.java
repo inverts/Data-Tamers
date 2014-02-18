@@ -1,8 +1,9 @@
 package io.analytics.domain;
 
 /**
- * Represents a single instance of a widget that belongs to a dashboard and can
+ * Represents a single instance of a WidgetType that belongs to a Dashboard and can
  * be shown to the user.
+ * 
  * @author Dave
  *
  */
