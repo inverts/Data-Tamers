@@ -5,11 +5,11 @@ import io.analytics.domain.User;
 
 public interface IDashboardService {
 
-	void addNewDashboard(User user, int accountId, String dashboardName);
+	public int addNewDashboard(User user, int accountId, String dashboardName);
 	
-	void deleteDashboard(User user, int dashboardId);
+	public void deleteDashboard(User user, int dashboardId);
 	
-	void updateDashboardWidgetLayout(User user, int dashboardId);
+	public void updateDashboardWidgetLayout(User user, int dashboardId);
 	
 	public Dashboard getDashboard(int dashboardId);
 	

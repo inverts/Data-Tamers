@@ -41,8 +41,10 @@ public class DashboardRepository implements IDashboardRepository {
 	}
 
 	@Override
-	public void addNewDashboard(int accountId, int userId, String dashboardName) {
+	public int addNewDashboard(int accountId, int userId, String dashboardName) {
 		// TODO Create a new dashboard for user __ in account __ with dashboardName
+		// return new dashboard id
+		return 0;
 	}
 
 	@Override

@@ -102,18 +102,32 @@ input { font: inherit; }
 /******SIDEPANEL******/
 .page .sidepanel-background { left:-500px; background:#444; position:absolute; top:0; z-index:4; box-shadow:0 1px 5px #000; width:310px; }
 .page #sidepanel { display:none; float:left; left:-500px; background:#444; position:absolute; top:0; z-index:4; box-shadow:0 1px 5px #000; height: 100%; }
-.page #sidepanel a { text-decoration:none; }
-.sidepanel .sidepanel-content { padding:15px; width:310px; position:relative; z-index:4;}
+.sidepanel a  { text-decoration:none; }
+.sidepanel li { list-style-type:none; }
+.sidepanel .sidepanel-content { padding:5px; width:310px; position:relative; z-index:4;}
 .sidepanel .sidepanel-header { height:110px; padding:20px 10px; }
 .sidepanel .sidepanel-nav { padding:10px; }
 .sidepanel .sidepanel-nav .nav-cell { height:20px; margin:20px 0; padding:20px; background:inherit; }
 .sidepanel .sidepanel-nav .nav-cell:hover { cursor:pointer; }
 .sidepanel .sidepanel-nav .nav-txt { font-size: 20px; color:#fff; line-height:15px; margin-left:10px; }
+.sidepanel .addNewDash { color:#fff; margin:0 0 10px 15px; font-size:15px; clear:both; }
+.sidepanel .addNewDash:hover { cursor:pointer; }
+.sidepanel .addNewDash .glyphicon { color:green; }
+.sidepanel .dashlist { vertical-align:middle; margin:0 0 -10px 15px; font-size:11px; width:97%; height:250px; display:none; }
+.sidepanel #dashlist.dashlist { overflow:auto; height:200px; margin-bottom:25px; }
+.sidepanel .dashlist .dashlink { color:#fffffe; width:205px; padding:15px 0; }
+.sidepanel .dashlist .dashlink:hover, 
+	.sidepanel .dashlist .dashlink.selected { color:#00aeef; }
+.sidepanel .dashlist .dashlink-cell { width:180px; float:left; }
+.sidepanel .dashlist .deleteDash { float:right; color:red; width:20px; min-height:20px; vertical-align:middle; }
+.sidepanel .dashlist .deleteDash:hover { cursor:pointer; }
+.sidepanel .nav-icon { width:30px; height:30px; float:left; margin-top:-8px; background:url(../images/navicons.png) no-repeat; }
 
-.nav-icon { width:30px; height:30px; float:left; margin-top:-8px; background:url(../images/navicons.png) no-repeat; }
-.dashlist { width:100%; height:200px; display:none; }
-
-
+/******ADD DASHBOARD*****/
+.addDashboard-content { margin-top:20px; padding:20px; display:none; }
+.addDashboard-content table { cellspacing:2 }
+.addDashboard-content tr > td { padding-bottom:1em; }
+.addDashboard-content .btn { float:right; }
 
 /******SETTINGS******/
 .settings-content { margin-top:20px; padding:20px; }
@@ -165,3 +179,4 @@ input { font: inherit; }
 /* Dashboard */
 
 .dashboard .dashboard-content, .dashboard .w_container { float:left;}
+

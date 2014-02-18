@@ -14,6 +14,7 @@ public class PageRenderer extends InternalResourceView {
 	
 	private final String ACCOUNT_FORM = "accountForm";
 	private final String LOGIN_FORM = "loginForm";
+	private final String DASHBOARD_FORM = "dashboardForm";
 	
 	@Override
     protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -35,6 +36,9 @@ public class PageRenderer extends InternalResourceView {
         
         if (model.containsKey(ACCOUNT_FORM))
         	request.setAttribute(ACCOUNT_FORM, model.get(ACCOUNT_FORM));
+        
+        if (model.containsKey(DASHBOARD_FORM))
+        	request.setAttribute(DASHBOARD_FORM, model.get(DASHBOARD_FORM));
         
         request.setAttribute("model", model);
         

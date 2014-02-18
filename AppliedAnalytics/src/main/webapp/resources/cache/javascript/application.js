@@ -131,5 +131,6 @@ function hideSettingsPanel() {
 					.removeClass('settings')
 					.hide();
                 $(window).off('click.settings');
+                $('.settings-content').hide();
         });
 }
