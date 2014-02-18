@@ -89,10 +89,10 @@
 			var downx = Math.NaN,
 				downy = Math.NaN;
 			
-			//var dragged = selected = null;
-			//this.dragged = this.selected = null;
-			
-			var dragged = false;
+
+			// Compute width of entire graph
+			var graphWidth  = x(getDate(settings.data[settings.data.length - 1])),
+			    graphHeight =  y(settings.data[getIndexBy(settings.data, "jsonHitCount", Math.max)].jsonHitCount);
 
 			// the graph SVG with all properties
 			var vis = d3.select(this).append("svg:svg").attr({ // svg as a d3 object
@@ -102,28 +102,28 @@
 						}).append("g").attr("transform", "translate(" + padding.left + "," + padding.right + ")");
 			
 			$.extend(settings, {constraint: { x: {
-												  	min: x(getDate(settings.data[0])), 
-												  	max: x(getDate(settings.data[settings.data.length - 1])) - vis[0].parentNode.clientWidth
+												  	min: x(getDate(settings.data[0])) - 2, 
+												  	max: w - graphWidth + 2
 												 }, 
-											  y: {	min: 0, 
-												  	max: 0 
+											  y: {	min: 0,
+												  	max: graphHeight - 2
 												 }}});
 			
-			var zoom = d3.behavior.zoom().x(x).y(y).on("zoom", function() {
+			var zoomOut = Math.round(x(getDate(settings.data[settings.data.length - 1])) / w),
+				zoomIn = 0 - (h / graphHeight);
+			
+			var zoom = d3.behavior.zoom().x(x).y(y).scaleExtent([zoomIn, zoomOut]).on("zoom", function() {
 															var t = zoom.translate(),
 															tx = t[0],
 															ty = t[1];
-															
-															
-															
+
 															tx = Math.min(tx, 0 - settings.constraint.x.min);
 															tx = Math.max(tx, settings.constraint.x.max);
 															
-															//ty = Math.min(5, ty);
-															//ty = Math.max(5, ty);
+															ty = Math.min(ty, 0 - settings.constraint.y.max);
+															ty = Math.max(ty, settings.constraint.y.min);
 															
 															zoom.translate([tx, ty]);
-															//tx = Math.max(tx, w - xMax);
 															
 															drawGraph()();
 														});
