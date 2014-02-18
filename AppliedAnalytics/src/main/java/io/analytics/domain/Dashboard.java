@@ -16,15 +16,28 @@ public class Dashboard {
 	private int defaultFilterId;
 	private String name;
 	
-	public Dashboard() {
+	public Dashboard(int id) {
+		this.id = id;
 	}
 	
-	public void setId(int id) {
-		this.id = id;
+	public Dashboard() {
+		
 	}
 	
 	public int getId() {
 		return id;
+	}
+	
+	/**
+	 * Do not use.
+	 * 
+	 * @deprecated When a Dashboard is created, its identity should not change from that point. 
+	 * You can create a Dashboard and do things to it, but you can't create one and then turn it into another.
+	 * A clone() method may be one appropriate addition to accommodate for this.
+	 * @param id
+	 */
+	public void setId(int id) {
+		this.id = id;
 	}
 	public int getAccountId() {
 		return accountId;

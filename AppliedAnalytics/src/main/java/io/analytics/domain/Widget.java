@@ -15,7 +15,8 @@ public class Widget {
 	private int dashboardId;
 	private int priority;
 	
-	public Widget() {
+	public Widget(int id) {
+		this.id = id;
 	}
 	public int getId() {
 		return this.id;

@@ -25,10 +25,12 @@ public class DashboardService implements IDashboardService {
 		DashboardRepository.deleteDashboard(dashboardId);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	@Override
 	public void updateDashboardWidgetLayout(User user, int dashboardId) {
-		// TODO Validate User permissions
-		DashboardRepository.updateDashboardWidgetLayout(dashboardId);
+		
 	}
 
 	@Override
