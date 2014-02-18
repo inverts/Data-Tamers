@@ -30,7 +30,7 @@ public class WidgetController {
 	@Autowired private ISessionService SessionService;
 	@Autowired private IPagePerfomanceService PagePerformanceService;
 
-	@RequestMapping(value = "/HypotheticalFuture", method = {RequestMethod.POST, RequestMethod.GET})
+	@RequestMapping(value = "/DataForecast", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView DataForecastView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,	
 												@RequestParam(value = "change", defaultValue = "none") String changePercentage,
 												@RequestParam(value = "dimension", defaultValue = "none") String dimension) 
@@ -82,7 +82,7 @@ public class WidgetController {
 		viewMap.addAttribute("changeOptions", hypotheticalFuture.getChangePercentOptions());
 		viewMap.addAttribute("DATA", hypotheticalFuture.getVisualization());
 		 */
-		return new ModelAndView("HypotheticalFuture");
+		return new ModelAndView("DataForecast");
 
 	}
 	

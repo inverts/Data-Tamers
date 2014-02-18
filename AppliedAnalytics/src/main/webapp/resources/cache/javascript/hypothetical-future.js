@@ -163,7 +163,7 @@ $(function() {
 function updateHypotheticalWidget() {
 	
 	var $element = $('#hypotheticalFuture');
-	$.post(applicationRoot + "/HypotheticalFuture", null, function(response) {
+	$.post(applicationRoot + "DataForecast", null, function(response) {
 		if ($element.length > 0) {
 			$element.fadeOut("fast", function() { 
 					$element.empty().append(response).show(); 
@@ -178,11 +178,10 @@ function updateHypotheticalWidget() {
 		
 		//$('#hypotheticalFutureData').append(hypotheticalSketch);
 		
-		$('#hypotheticalFutureData').graph({
+		$('#dataForecastData').graph({
 			data: data,
-			key: 'jsonDate',
-			pointSize: 3.5,
-			startIndex: 16,
+			pointSize: 3,
+			startIndex: 12,
 			endIndex: 21,
 		});
 		

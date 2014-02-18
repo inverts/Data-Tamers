@@ -8,8 +8,8 @@
 	 note that the id is the name of the view you will be calling in the controller. -->
 
 	<!-- Hypothetical Future -->
-	<bean id="HypotheticalFuture" class="org.springframework.web.servlet.view.JstlView">
-		<property name="url" value="/WEB-INF/views/widgets/hypothetical-future.jsp" />
+	<bean id="DataForecast" class="org.springframework.web.servlet.view.JstlView">
+		<property name="url" value="/WEB-INF/views/widgets/data-forecast.jsp" />
 	</bean>
 	
 	<!-- Revenue Sources -->
