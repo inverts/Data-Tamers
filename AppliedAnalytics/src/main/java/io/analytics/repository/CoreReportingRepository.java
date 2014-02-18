@@ -324,6 +324,85 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			return gaData;
 		}
 
+		/**
+		 * Get page performance data for Web Performance widget
+		 * 
+		 * @return
+		 */
+
+		public GaData getKeywords(Credential credential, String profileID, Date sDate, Date eDate, int maxResults, String medium, String substring) {
+			GaData gaData = null;
+			String startDate = dateFormat.format(sDate);
+			String endDate = dateFormat.format(eDate);
+			String searchKeyword = "";
+			if (!substring.isEmpty()) {
+				searchKeyword = ";ga:keyword=@"+substring;
+			}
+
+			try {
+				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build().data().ga();
+ 
+				gaData = reporting.get("ga:"+ profileID, // profile id (table id).
+						startDate, // Start date.
+						endDate, // End date.
+						"ga:visits,ga:visitBounceRate") // Metrics.
+						.setDimensions("ga:medium,ga:keyword")
+						.setFilters("ga:medium=="+medium+";ga:keyword!=(not provided)"+ searchKeyword)
+						.setSort("-ga:visits")
+						.setMaxResults(maxResults)
+						.execute();
+			} catch (GoogleJsonResponseException e) {
+				handleGoogleJsonResponseException(e);
+			} catch (IOException e) {
+				// Catch general parsing network errors.
+				e.printStackTrace();
+			}
+			return gaData;
+		}	
+		
+		/*
+		 *  getMediumVisitsTotal:
+		 *  	Get the total number of visits for the medium of "organic" or "cpc". 
+		 *  	If the medium is organic and isSSL is true then returns the total visits
+		 *  	for the SSL organic searches. 
+		 *      If the  medium is organic and isSSL is false then returns the total 
+		 *      visits for all the organic searches.
+		 *  Special Inputs: 
+		 *  	String <medium> expecting "organic" or "cpc"
+		 *      boolean isSSL - True for return of "organic SSL search" visits total
+		 */
+		public GaData getMediumVisitsTotal(Credential credential, String profileID, Date sDate, Date eDate, String medium, boolean isPrivate) {
+			GaData gaData = null;
+			String startDate = dateFormat.format(sDate);
+			String endDate = dateFormat.format(eDate);
+
+			String addFilter = "";
+			// Keywords do not show up for SSL searches. Get visit counts for SSL searches
+			if (isPrivate && medium.contentEquals(new StringBuffer("organic"))){
+				addFilter = ";ga:keyword==(not provided)";
+			}
+			
+			try {
+				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build().data().ga();
+ 
+				gaData = reporting.get("ga:"+ profileID, // profile id (table id).
+						startDate, // Start date.
+						endDate, // End date.
+						"ga:visits") // Metrics.
+						.setDimensions("ga:medium")
+						.setFilters("ga:medium=="+medium+addFilter)
+						.execute();
+			} catch (GoogleJsonResponseException e) {
+				handleGoogleJsonResponseException(e);
+			} catch (IOException e) {
+				// Catch general parsing network errors.
+				e.printStackTrace();
+			}
+			return gaData;
+		}	
+		
 		private CoreReportingData coreReportingMapper(GaData data){
 			if (data == null)
 				return null;

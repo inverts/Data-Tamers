@@ -34,7 +34,6 @@ public class WebsitePerformanceModel {
 		private double[] exitRateResults;
 		
         DateFormat presentationFormat = new SimpleDateFormat("MM/dd/yyyy"); 
-        private static final int MS_IN_DAY = 86400000;
         
 		public WebsitePerformanceModel(ISessionService sessionService, IPagePerfomanceService pagePerformanceService) {	
 			this.sessionService = sessionService;
