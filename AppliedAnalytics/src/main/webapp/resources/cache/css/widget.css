@@ -21,7 +21,7 @@ svg .axis .minor line { stroke:#777; stroke-dasharray:2,2; }
 /*****CSS for DATA FORECAST WIDGET*****/
 
 .dataForecast .widget-content { height: 500px;}
-.dataForecast #dataForecastData { width:inherit; height:450px; background:#fff; }
+.dataForecast #dataForecastData { width:inherit; height:450px; background:#535151; }
 
 line:hover { opacity: 0.5; }
 

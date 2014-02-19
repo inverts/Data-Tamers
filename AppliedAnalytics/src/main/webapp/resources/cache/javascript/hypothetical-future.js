@@ -30,7 +30,7 @@ function updateHypotheticalWidget() {
 		//$('#hypotheticalFutureData').append(hypotheticalSketch);
 		
 		$('#dataForecastData').graph({
-			data: createDataSet(5000, [1, 2000]),
+			data: createDataSet(50, [1, 200]),
 			pointSize: 3,
 			databuffer: 10
 		});
