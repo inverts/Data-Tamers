@@ -3,155 +3,6 @@
  */
 
 
-var data = [ {
-		"jsonDate" : "09\/22\/11",
-		"jsonHitCount" : 2,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "09\/26\/11",
-		"jsonHitCount" : 9,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "09\/27\/11",
-		"jsonHitCount" : 9,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "09\/29\/11",
-		"jsonHitCount" : 26,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "09\/30\/11",
-		"jsonHitCount" : 2,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "10\/03\/11",
-		"jsonHitCount" : 3,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "10\/06\/11",
-		"jsonHitCount" : 2,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "10\/11\/11",
-		"jsonHitCount" : 2,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "10\/12\/11",
-		"jsonHitCount" : 2,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "10\/13\/11",
-		"jsonHitCount" : 1,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "10\/14\/11",
-		"jsonHitCount" : 5,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "10\/17\/11",
-		"jsonHitCount" : 2,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "10\/18\/11",
-		"jsonHitCount" : 6,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "10\/19\/11",
-		"jsonHitCount" : 8,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "10\/20\/11",
-		"jsonHitCount" : 2,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "10\/21\/11",
-		"jsonHitCount" : 4,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "10\/24\/11",
-		"jsonHitCount" : 1,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "10\/25\/11",
-		"jsonHitCount" : 1,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "10\/27\/11",
-		"jsonHitCount" : 3,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "11\/01\/11",
-		"jsonHitCount" : 2,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "11\/02\/11",
-		"jsonHitCount" : 1,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "11\/03\/11",
-		"jsonHitCount" : 2,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "11\/04\/11",
-		"jsonHitCount" : 37,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "11\/08\/11",
-		"jsonHitCount" : 1,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "11\/10\/11",
-		"jsonHitCount" : 39,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "11\/11\/11",
-		"jsonHitCount" : 1,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "11\/14\/11",
-		"jsonHitCount" : 15,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "11\/15\/11",
-		"jsonHitCount" : 2,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "11\/16\/11",
-		"jsonHitCount" : 42,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "11\/17\/11",
-		"jsonHitCount" : 4,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "11\/21\/11",
-		"jsonHitCount" : 2,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "11\/22\/11",
-		"jsonHitCount" : 3,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "11\/23\/11",
-		"jsonHitCount" : 11,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "11\/24\/11",
-		"jsonHitCount" : 2,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "11\/25\/11",
-		"jsonHitCount" : 1,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "11\/28\/11",
-		"jsonHitCount" : 10,
-		"seriesKey" : "Website Usage"
-	}, {
-		"jsonDate" : "11\/29\/11",
-		"jsonHitCount" : 3,
-		"seriesKey" : "Website Usage"
-	} ];
 
 $(function() {
 	updateHypotheticalWidget();
@@ -179,10 +30,9 @@ function updateHypotheticalWidget() {
 		//$('#hypotheticalFutureData').append(hypotheticalSketch);
 		
 		$('#dataForecastData').graph({
-			data: data,
+			data: createDataSet(5000, [1, 2000]),
 			pointSize: 3,
-			startIndex: 12,
-			endIndex: 21,
+			databuffer: 10
 		});
 		
 		

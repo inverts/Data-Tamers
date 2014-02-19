@@ -20,7 +20,8 @@
 			'yLabel': 'Test Y',
 			'showLines': false,
 			'hideYaxis': false,
-			'pointSize': 0
+			'pointSize': 0,
+			'databuffer': 0
 	}; 
 	
 	/* function declaration */
@@ -45,7 +46,7 @@
 				h = height - padding.top - padding.bottom;
 			
 			if (!settings.endIndex)
-				settings.endIndex = settings.data.length;
+				settings.endIndex = settings.data.length - 1;
 			
 
 			// Base Cases
@@ -64,11 +65,11 @@
 			
 			// get date range
 			
-			var xMin = getDate(settings.data[0]),
+			var xMin = getDate(settings.data[0]) - settings.databuffer,
 				xMax = getDate(settings.data[settings.data.length - 1]);
 			
 			var xlimit = d3.time.scale().domain([xMin, xMax]).nice();
-			//xMax = xlimit.domain()[1];
+			xMax = xlimit.domain()[1];
 			xMin = xlimit.domain()[0];
 			
 			var xFrom = getDate(settings.data[settings.startIndex]),
@@ -102,11 +103,11 @@
 						}).append("g").attr("transform", "translate(" + padding.left + "," + padding.right + ")");
 			
 			$.extend(settings, {constraint: { x: {
-												  	min: x(getDate(settings.data[0])) - 2, 
+												  	min: x(getDate(settings.data[0])) - settings.databuffer, 
 												  	max: w - graphWidth + 2
 												 }, 
 											  y: {	min: 0,
-												  	max: graphHeight - 2
+												  	max: graphHeight - settings.databuffer
 												 }}});
 			
 			var zoomOut = Math.round(x(getDate(settings.data[settings.data.length - 1])) / w),
@@ -209,25 +210,7 @@
 			  
 			  function pan() {
 				  return function() {
-				    //registerKeyboardHandler(keydown());
 				    d3.select("body").style("cursor", "move");
-				    dragged = true;
-				    /*if (d3.event.altKey) {
-				      var p = d3.svg.mouse(vis.node());
-				      var newpoint = {};
-				      newpoint.x = x.invert(Math.max(0, Math.min(w,  p[0])));
-				      newpoint.y = y.invert(Math.max(0, Math.min(h, p[1])));
-				      points.push(newpoint);
-				      points.sort(function(a, b) {
-				        if (a.x < b.x) { return -1; };
-				        if (a.x > b.x) { return  1; };
-				        return 0
-				      });
-				      selected = newpoint;
-				      update();
-				      d3.event.preventDefault();
-				      d3.event.stopPropagation();
-				    }    */
 				  };
 			  };
 			  
@@ -242,7 +225,8 @@
 				  graph.data([settings.data]).append("path").attr({
 						"d": d3.svg.line().x(function(d) { return x(getDate(d)); })
 		  				  				  .y(function(d) { return y(d.jsonHitCount); })
-				  });
+				  }).attr("pointer-events", "all").on("mousedown.drag", pan())
+			      .call(zoom);
 				  
 				  // apply the circles
 				  var circle = vis.select("svg").selectAll("circle")
@@ -253,7 +237,8 @@
 				      .attr("cx",    function(d) { return x(new Date(d.jsonDate)); })
 				      .attr("cy",    function(d) { return y(d.jsonHitCount); })
 				      .attr("r", settings.pointSize)
-				      .style("cursor", "ns-resize");
+				      .attr("pointer-events", "all").on("mousedown.drag", pan())
+				      .call(zoom);
 				 
 				  circle
 				      .attr("class", function(d) { return d === this.selected ? "selected" : null; })
