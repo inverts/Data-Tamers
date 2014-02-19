@@ -21,6 +21,18 @@ function getDate(d) {
 }
 
 
+function getIndexBy(objectarray, key, math) {
+	var values = $.map(objectarray, function(obj){
+					return obj[key];
+				  });
+	
+	if (values.length)
+		return getIndex(objectarray, key, math.apply( Math, values));
+	
+	return -1;
+}
+
+
 /* UTILITY TESTS */
 $(function(){
 	
@@ -56,5 +68,31 @@ $(function(){
 		idx = getIndex(testData, testkey, "09\/28\/11");
 		if (idx != -1)
 			console.error("getIndex - multiObj: expected -1, got " + idx + " for value = 09\/26\/11");
+		
+		
+	// Test of getIndexOfMax
 	
+		var objArrMax = [{"andrew": 12 }, {"andrew": 10 }, {"andrew": 20 }, {"andrew": 15 }, {"andrew": 7}];
+		
+		testkey = "andrew";
+		idx = getIndexBy(objArrMax, testkey, Math.max);
+		if (idx != 2)
+			console.error("getIndexBy - Max -base: expected 2, got " + idx);
+		
+		idx = getIndexBy(objArrMax, testkey, Math.min);
+		if (idx != 4)
+			console.error("getIndexBy - Min -base: expected 4, got " + idx);
+		
+		testkey = "dave"
+		idx = getIndexBy(objArrMax, testkey, Math.max);
+		if (idx != -1)
+			console.error("getIndexBy - none: expected -1, got " + idx + " for value");
+		
+		objArrMax.push({"andrew": 20 });
+		
+		testkey = "andrew";
+		idx = getIndexBy(objArrMax, testkey, Math.max);
+		if (idx != 2)
+			console.error("getIndexBy - duplicate: expected 2, got " + idx);
+		
 });

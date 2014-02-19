@@ -2,14 +2,12 @@
 
 /*** GENERAL WIDGET STYLING ***/
 
-.widget { padding:15px; background:url("../images/widget_bg.png") repeat; clear:both; border-radius: 8px; -webkit-border-radius: 8px; -moz-border-radius: 8px; box-shadow: 0px 0px 6px 0px; 
+.widget { padding:5px; background:url("../images/widget_bg.png") repeat; clear:both; border-radius: 8px; -webkit-border-radius: 8px; -moz-border-radius: 8px; box-shadow: 0px 0px 6px 0px; 
 		  -webkit-box-shadow: 0px 0px 6px 0px; -mozbox-shadow: 0px 0px 6px 0px; margin: 10px; }
-
 .widget .widget_header { width: 100%; }
 .widget .widget_title { font-size: 1.55em; color: #00aeef; text-shadow: 0 0 3px rgb(0, 173, 255); margin-bottom: 5px; }
 .widget .widget_title:hover { cursor:pointer; }
 .widget .widget_collapse { float:left; width:20px; }
-
 .widget .widgetView { visibility:'hidden'; }
 
 /*** GENERAL GRAPHING ***/
@@ -21,6 +19,9 @@ svg .axis .minor line { stroke:#777; stroke-dasharray:2,2; }
 
 
 /*****CSS for DATA FORECAST WIDGET*****/
+
+.dataForecast .widget-content { height: 500px;}
+.dataForecast #dataForecastData { width:inherit; height:450px; background:#fff; }
 
 line:hover { opacity: 0.5; }
 
