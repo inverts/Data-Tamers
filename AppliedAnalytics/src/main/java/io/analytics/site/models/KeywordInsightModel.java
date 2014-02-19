@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,7 +43,7 @@ public class KeywordInsightModel {
 		this.keywordInsightService = keywordInsightService;
 		this.jsonData = new JSONObject();
 		this.activeProfile = this.keywordInsightService.getProfile();
-		
+
 		// default dates
 		this.endDate = new Date();
 		Calendar cal = new GregorianCalendar();
@@ -101,97 +102,149 @@ public class KeywordInsightModel {
 		organicVisitsTotal = dataObject.getOrganicVisitsTotal();
 		cpcVisitsTotal = dataObject.getCpcVisitsTotal();
 		
-		for (int i=0; i<organicKeywords.size(); i++){	
-			organicData.add(new KeyData(organicKeywords.get(i),organicVisits.get(i),organicBounceRate.get(i)));
+		Iterator<String> itk = organicKeywords.iterator();
+		Iterator<Integer> itv = organicVisits.iterator();
+		Iterator<Double> itb = organicBounceRate.iterator();
+		organicData = new ArrayList<KeyData>(organicKeywords.size());
+	
+		while(itk.hasNext()) {
+			organicData.add(new KeyData(itk.next(),itv.next(),itb.next()));
 		}
-		for (int i=0; i<cpcKeywords.size(); i++){
-			cpcData.add(new KeyData(cpcKeywords.get(i),cpcVisits.get(i),cpcBounceRate.get(i)));
+      
+		Iterator<KeyData> it = organicData.iterator();
+		while (it.hasNext()){
+			KeyData kd = it.next();
+			kd.rank= kd.visits*kd.bounceRate;
+			kd.visitsPercent = Math.round(10000.0*kd.visits/(this.organicVisitsTotal-this.privateOrganicVisitsTotal))/100.0;
 		}
 		
-		System.out.println("keyword Insight model reached");
-		int breakpoint = 0;
-	/*	ArrayList<Double> weightedAvg = new ArrayList<Double>(pagePath.size());
-		for (int i=0; i<pagePath.size(); i++){
-			weightedAvg.add(i, visits.get(i)*visitsBounceRate.get(i) + 
-					visits.get(i)*exitRate.get(i));
+		itk = cpcKeywords.iterator();
+		itv = cpcVisits.iterator();
+		itb = cpcBounceRate.iterator();
+		cpcData = new ArrayList<KeyData>(cpcKeywords.size());
+		
+		while(itk.hasNext()) {
+			cpcData.add(new KeyData(itk.next(),itv.next(),itb.next()));
 		}
 		
-		// iterate to find top 5 maximum weighted averages and save indices
-		double max = weightedAvg.get(0);
-		int maxIndex = 0;
-		int[] worstI = new int[5];
-		for (int i = 0; i<5; i++) {
-			worstI[i]=-1;
+		it = cpcData.iterator();
+		while (it.hasNext()){
+			KeyData kd = it.next();
+			kd.rank= kd.visits*kd.bounceRate;
+			kd.visitsPercent = Math.round(10000.0*kd.visits/this.cpcVisitsTotal)/100.0;
 		}
-		for (int j=0; j<5; j++){
-			for (int i=j; i<pagePath.size(); i++) {
-				if (max < weightedAvg.get(i) && i!=worstI[0] && i!=worstI[1] && i!=worstI[2] &&
-						i!=worstI[3] && i != worstI[4]) {
-					max = weightedAvg.get(i);
-					maxIndex = i;
-				}
+		
+		// * * * * * * * * * * * * * * * * * * * * *
+		// "Consider adding these keywords to AdWords:"
+		// select organic keywords with high visits that are not cpc keywords.
+		
+		
+		// * * * * * * * * * * * * * * * * * * * * *
+		// "Consider removing these keywords from AdWords:"
+		// select cpc keywords with low visits
+		ArrayList<KeyData> removeKeywords = new ArrayList<KeyData>();
+		it = cpcData.iterator();
+		while (it.hasNext()){
+			KeyData kd = it.next();
+			if (kd.visitsPercent<.1 && kd.visits<2){
+				removeKeywords.add(kd);
 			}
-			worstI[j]=maxIndex;
-			max = 0;
+		}
+
+		// * * * * * * * * * * * * * * * * * * * * *
+		// "Change website to better address these keywords:"
+		// select keywords with high visits and high bounce rate that
+		//    are either organic or cpc keywords.
+		 
+		// doing only cpc keywords right now
+		// select keywords with visits>5% and bouncerate<50%
+		
+		ArrayList<KeyData> helpKeywords = new ArrayList<KeyData>();
+		it = cpcData.iterator();
+		while (it.hasNext()){
+			KeyData kd = it.next();
+			if (kd.visitsPercent>5.0 && kd.bounceRate<50){
+				helpKeywords.add(kd);
+			}
 		}
 		
-	// put results into arrays
-		for (int i=0; i<5; i++){
-			pagePathResults[i] = pagePath.get(worstI[i]);
-			visitsPercentResults[i] = Math.round(visits.get(worstI[i])*100.00/visitsTotal*10.0)/10.0;
-			bounceRateResults[i] = Math.round(visitsBounceRate.get(worstI[i])*10.0)/10.0;
-			exitRateResults[i] = Math.round(exitRate.get(worstI[i])*10.0)/10.0;
-		}
 		
-		this.getDataPoints(); */
+		// * * * * * * * * * * * * * * * * * * * * *
+		// sort organicData based on rank
+		
+		
+		// sort cpcData based on rank
+		
+
+		// Find all keywords that contain the user entered substring
+		//    (organic and cpc separate)
+		
+		
+		System.out.println("Keyword Insight model reached");
+		int breakpoint = 0;	
+		
+		// put data into the JSON Object member jsonData
+		this.createJson(removeKeywords, helpKeywords); 
+		
 	}
 	
 	// put data into JSON object to pass to the view website-performance.jsp 
 	
-/*	public JSONObject getDataPoints()  {
+	public void createJson(ArrayList<KeyData> rk, ArrayList<KeyData> hk)  {
 		 try {	
-			 JSONArray arr1 = new JSONArray();
-			 JSONArray arr2 = new JSONArray();
-			 JSONArray arr3 = new JSONArray();
-			 JSONArray arr4 = new JSONArray();
-
-			 this.jsonData.put("pagePath", arr1.put(pagePathResults));
-			 this.jsonData.put("visitsPercent", arr2.put(visitsPercentResults));
-			 this.jsonData.put("bounceRate", arr3.put(bounceRateResults));
-			 this.jsonData.put("exitRate", arr4.put(exitRateResults)); 
+			 JSONArray removeKeywords = new JSONArray();
+			 JSONArray removeVisitsPercent = new JSONArray();
+			 JSONArray helpKeywords = new JSONArray();
+			 JSONArray helpVisitsPercent = new JSONArray();
+			 JSONArray helpBounceRate = new JSONArray();
+			 
+			 Iterator<KeyData> it = rk.iterator();
+			 while (it.hasNext()){
+				 KeyData d = it.next();
+				 removeKeywords.put(d.keyword);
+				 removeVisitsPercent.put(d.visitsPercent);
+			 }
+			
+			 it = hk.iterator();
+			 while (it.hasNext()){
+				 KeyData d = it.next();
+				 helpKeywords.put(d.keyword);
+				 helpVisitsPercent.put(d.visitsPercent);
+				 helpBounceRate.put(d.bounceRate);
+			 }
+			 
+			 this.jsonData.put("removeKeywords", removeKeywords);
+			 this.jsonData.put("removeVisitsPercent", removeVisitsPercent);
+			 this.jsonData.put("helpKeywords", helpKeywords);
+			 this.jsonData.put("helpVisitsPercent", helpVisitsPercent);
+			 this.jsonData.put("helpBounceRate", helpBounceRate);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		 
-		 return this.jsonData;
-	} */
+	} 
 		
-	
+	public JSONObject getDataPoints() {
+		return this.jsonData;
+	}
 }
 
 // class to hold related keyword, visits, visitBounceRate
 
-class KeyData {
+ class KeyData {
 	public String keyword;
 	public int visits;
 	public double bounceRate;
+	public double rank;
+	public double visitsPercent;
 	
 	public KeyData(String keyword, int visits, double bounceRate){
 		this.keyword = keyword;
 		this.visits = visits;
 		this.bounceRate = bounceRate;
+		this.rank = -1.;
+		this.visitsPercent = -1.;
 	}
 	
-	public String getKeyword(){
-		return new String(this.keyword);
-	}
-	
-	public int getVisits(){
-		return this.visits;
-	}
-	
-	public double getBounceRate(){
-		return this.bounceRate;
-	}
 }

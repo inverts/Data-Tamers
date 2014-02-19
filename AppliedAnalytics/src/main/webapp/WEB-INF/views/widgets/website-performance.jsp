@@ -16,9 +16,8 @@ padding:3px;
 <script>
  
 var data =JSON.parse('${ wpModel.getDataPoints() }');
-//var obj = eval ("(" + data + ")");
 console.log(data);
-//var arr = JSON.parse(JSONObject);
+
 document.getElementById("visits0").innerHTML=data.visitsPercent[0][0];
 document.getElementById("page0").innerHTML=data.pagePath[0][0]; 
 document.getElementById("bounce0").innerHTML=data.bounceRate[0][0];

@@ -325,7 +325,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		}
 
 		/**
-		 * Get page performance data for Web Performance widget
+		 * Get keywords
 		 * 
 		 * @return
 		 */
@@ -363,14 +363,12 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		
 		/*
 		 *  getMediumVisitsTotal:
-		 *  	Get the total number of visits for the medium of "organic" or "cpc". 
-		 *  	If the medium is organic and isSSL is true then returns the total visits
-		 *  	for the SSL organic searches. 
-		 *      If the  medium is organic and isSSL is false then returns the total 
-		 *      visits for all the organic searches.
+		 *  	Get the total number of visits for the GA dimension medium.
 		 *  Special Inputs: 
 		 *  	String <medium> expecting "organic" or "cpc"
-		 *      boolean isSSL - True for return of "organic SSL search" visits total
+		 *      boolean isPrivate - True for return of "organic private search" visits total
+		 *      				  - False for return of private and public total "organic search" visits 
+		 *      				  - Don't care for medium = cpc
 		 */
 		public GaData getMediumVisitsTotal(Credential credential, String profileID, Date sDate, Date eDate, String medium, boolean isPrivate) {
 			GaData gaData = null;
