@@ -14,236 +14,241 @@
 	/* global variables */
 	var defaults = { // default parameter values
 			'startIndex': 0,
-			'endIndex': 0,
-			'title': '',
-			'xLabel': 'Test X',
-			'yLabel': 'Test Y',
-			'showLines': false,
-			'hideYaxis': false,
-			'pointSize': 0,
-			'databuffer': 0
+			'endIndex'	: 0,
+			'dataSet'	: [],		// dataSet takes precedence over data
+			'title'		: '',
+			'xLabel'	: 'Test X',
+			'yLabel'	: 'Test Y',
+			'showLines'	: false,
+			'hideYaxis'	: false,
+			'pointSize'	: 0,
+			'databuffer': 0,
+			'rangeMin'	: 4
 	}; 
 	
 	/* function declaration */
 	$.fn.graph = function (params) { // params is the javascript object of all of the parameters
 		return this.each(function() {
-			var $this = $(this).sortable({ cancel: '.widget-content'}); // get a jQuery object of the element graph is attached too
-			var settings = $.extend({}, defaults, params); // we are integrating our default values into our params.
-			var elementId = this.id;
+			var $this = $(this).sortable({ cancel: '.widget-content'}); 	// disable widget drag on graph
+			var settings = $.extend({}, defaults, params); 					// we are integrating our default values into our params.
 			
 			var padding = {
-				     		 "top":    settings.title  ? 40 :20,
+				     		 "top":    settings.title  ? 40 :20,			// padding required for graph labels
 				    	     "right":  30,
 				    	     "bottom": settings.xLabel ? 60 : 10,
 				    	     "left":   settings.yLabel ? 70 : 45
 				    	  };
-			
-			
-			var width = $this.width(),
+
+			var width = $this.width(),										// svg takes on width and height of parent element.
 				height = $this.height();
 			
-			var w = width - padding.left - padding.right,
-				h = height - padding.top - padding.bottom;
+			//TODO: Find which data set has the largest date range; make graph based off its dimensions
 			
-			if (!settings.endIndex)
+			//if (settings.dataSet.length > 0)
+			
+
+			// graph object
+			var graph = {
+							"title"		: null,
+							"data"		: settings.data,
+							"view"		: {
+											"width": width - padding.left - padding.right, 
+											"height": height - padding.top - padding.bottom,
+											"rect": null,
+											"svg": null
+										  },
+							"x"			: { "domain": [], "point": function(){}, "axis": {"label": null, "svg": null}, "down": Math.NaN },
+							"y"			: { "domain": [], "point": function(){}, "axis": {"label": null, "svg": null}, "down": Math.NaN },
+							"size"		: { "width": 0, "height": 0 },
+							"zoom"		: function() {}
+						};
+			
+
+			graph.x.domain = [getValueBy(graph.data, "jsonDate", Math.min), getValueBy(graph.data, "jsonDate", Math.max)];
+			graph.y.domain = [0, getValueBy(graph.data, "jsonHitCount", Math.max)];
+			
+			if (!settings.endIndex)											
 				settings.endIndex = settings.data.length - 1;
 			
+			var from = getDate(graph.data[settings.startIndex]),		// static date range chosen.
+			  	  to = getDate(graph.data[settings.endIndex ]);
 
 			// Base Cases
 			if (settings.endIndex >= settings.data.length || 
 					settings.endIndex < settings.startIndex || 
-					settings.endIndex - settings.startIndex < 4)
+					settings.endIndex - settings.startIndex < settings.rangeMin)
 				return;
-			
-			
-			// parse out data of date range.
-			var showData = settings.data.slice(settings.startIndex, settings.endIndex);
-			
-			var dateRange = $.map(showData, function(val){
-								return new Date(val.jsonDate);
-							});
-			
-			// get date range
-			
-			var xMin = getDate(settings.data[0]) - settings.databuffer,
-				xMax = getDate(settings.data[settings.data.length - 1]);
-			
-			var xlimit = d3.time.scale().domain([xMin, xMax]).nice();
-			xMax = xlimit.domain()[1];
-			xMin = xlimit.domain()[0];
-			
-			var xFrom = getDate(settings.data[settings.startIndex]),
-				xTo = getDate(settings.data[settings.endIndex]);
-			
-			// get max value
-			var yShowMax = d3.max(showData, function(d){ return d.jsonHitCount;});
-			
-			// get Y range
-			var yMin = 0,
-				yMax = d3.max(settings.data, function(d){return d.jsonHitCount;});
-			
-			// Data Points
-			var x = d3.time.scale().domain([xFrom, xTo]).range([0, w]),
-		    	y = d3.scale.linear().domain([yShowMax, yMin]).nice().range([0, h]).nice();
 
 			
-			var downx = Math.NaN,
-				downy = Math.NaN;
-			
+			graph.x.point = d3.time.scale().domain([from, to]).range([0, graph.view.width]); 		// function to get data points at x
+			graph.y.point = d3.scale.linear().domain(graph.y.domain.reverse()).nice().range([0, graph.view.height]).nice();	// function to get data points at y
+
+			// create a buffer region for the dates
+			graph.x.domain = d3.time.scale().domain(graph.x.domain).nice().domain();
 
 			// Compute width of entire graph
-			var graphWidth  = x(getDate(settings.data[settings.data.length - 1])),
-			    graphHeight =  y(settings.data[getIndexBy(settings.data, "jsonHitCount", Math.max)].jsonHitCount);
+			graph.size.width  = graph.x.point(getDate(graph.data[graph.data.length - 1])),
+			graph.size.height =  graph.y.point(graph.data[getIndexBy(graph.data, "jsonHitCount", Math.max)].jsonHitCount);
 
 			// the graph SVG with all properties
-			var vis = d3.select(this).append("svg:svg").attr({ // svg as a d3 object
-							"width": width, 
-							"height": height,
-							"id": this.id + "Graph"
-						}).append("g").attr("transform", "translate(" + padding.left + "," + padding.right + ")");
+			var vis = d3.select(this).append("svg:svg")
+									 .attr({ 
+											"width": width, 
+											"height": height,
+											"id": this.id + "Graph"
+									 	   })
+									 .append("g")
+									 .attr("transform", "translate(" + padding.left + "," + padding.right + ")");
 			
+			// panning and zoom boundaries
 			$.extend(settings, {constraint: { x: {
-												  	min: x(getDate(settings.data[0])) - settings.databuffer, 
-												  	max: w - graphWidth + 2
+												  	min: graph.x.point(getDate(graph.data[0])) - settings.databuffer, 
+												  	max: graph.view.width - graph.size.width + 2
 												 }, 
 											  y: {	min: 0,
-												  	max: graphHeight - settings.databuffer
+												  	max: graph.size.height - settings.databuffer
 												 }}});
+			// Zoom limits
+			var zoomOut = Math.round(graph.x.point(getDate(graph.data[graph.data.length - 1])) / graph.view.width),
+				zoomIn = 0 - (graph.view.height / graph.size.height);
 			
-			var zoomOut = Math.round(x(getDate(settings.data[settings.data.length - 1])) / w),
-				zoomIn = 0 - (h / graphHeight);
-			
-			var zoom = d3.behavior.zoom().x(x).y(y).scaleExtent([zoomIn, zoomOut]).on("zoom", function() {
-															var t = zoom.translate(),
+			graph.zoom = d3.behavior.zoom()
+									.x(graph.x.point)
+									.y(graph.y.point)
+									.scaleExtent([zoomIn, zoomOut])
+									.on("zoom", function() {
+															var t = graph.zoom.translate(),
 															tx = t[0],
 															ty = t[1];
-
+															
+															// x - boundaries
 															tx = Math.min(tx, 0 - settings.constraint.x.min);
 															tx = Math.max(tx, settings.constraint.x.max);
-															
+															// y - boundaries
 															ty = Math.min(ty, 0 - settings.constraint.y.max);
 															ty = Math.max(ty, settings.constraint.y.min);
 															
-															zoom.translate([tx, ty]);
+															// move graph
+															graph.zoom.translate([tx, ty]);
 															
+															// redraw the graph that moved
 															drawGraph()();
 														});
 			
-			var plot = vis.append("rect").attr({"width": w, "height": h})
-										 .style({
-											 		"stroke": "#CCC",
-											 		"stroke-width": 1,
-											 		"fill": "#FFF"
-											 	})
-										 .attr("pointer-events", "all").on("mousedown.drag", pan())
-										 .call(zoom);
+			graph.view.rect = vis.append("rect")
+									   .attr({
+												"width": graph.view.width, 
+												"height": graph.view.height
+											})
+									   .style({
+										 		"stroke": "#CCC",
+										 		"stroke-width": 1,
+										 		"fill": "#FFF"
+											 })
+									   .attr("pointer-events", "all").on("mousedown.drag", pan())
+									   .call(graph.zoom);
 			
-			var graph = vis.append("svg").attr({
-				"top": 0,
-				"left": 0,
-				"width": w,
-				"height": h,
-				"viewBox": "0 0 " + w + " " + h,
-				"class": "line"
-			});
 			
-			/*var tick = d3.svg.line()
-				    .interpolate("monotone")
-				    .x(function(d) { return x(new Date(d.jsonDate)); })
-				    .y(function(d) { return y(d.jsonHitCount); });*/
+			graph.view.svg = vis.append("svg")
+									  .attr({
+												"top": 0,
+												"left": 0,
+												"width": graph.view.width,
+												"height": graph.view.height,
+												"viewBox": "0 0 " + graph.view.width + " " + graph.view.height,
+												"class": "line"
+											});
 			
-			// append x-axis
+			
+			// x axis label
 			vis.append("g")
-				 .attr("class", "xaxis")
-				 .attr("transform", "translate(0, " + h + ")");
+			   .attr({
+				  		"class": "xaxis",
+				  		"transform": "translate(0, " + graph.view.height + ")"
+				  	 });
 			
-			// append y-axis
-			vis.append("g")
-				.attr("class", "yaxis")
-				.attr("transform", "translate(0, 0)");
+			 if (settings.xLabel) {
+				 graph.x.axis.label = vis.append("text")
+								         .attr("class", "axis")
+								         .text(settings.xLabel)
+								         .attr({"x": graph.view.width/2, "y": graph.view.height, "dy": "3.5em" })
+								         .style("text-anchor","middle");
+			 }
 			
-			//var graph = vis.data([showData]).append("g").attr("transform", "translate(0, 0)");
-			
-			
-			
-			// old way of applying graph
-			/*vis.append("svg:path").attr({
-				"class": "line",
-				"d": d3.svg.line().x(function(d) { return x(getDate(d)); })
-								  .y(function(d) { return y(d.jsonHitCount); })
-			});*/
-			
-			
-			 // apply graph title
-			 if (settings.title) {
-				    vis.append("text")
-				        .attr("class", "axis")
-				        .text(settings.title)
-				        .attr({ "x": w/2, "dy": "-0.8em" })
-				        .style("text-anchor","middle");
-				  }
-			
-			 
-			 // apply x-axis label
-			  if (settings.xLabel) {
-			    vis.append("text")
-			        .attr("class", "axis")
-			        .text(settings.xLabel)
-			        .attr({"x": w/2, "y": h, "dy": "3.5em" })
-			        .style("text-anchor","middle");
-			  }
-			  
-			  // apply y-axis label
-			  if (settings.yLabel) {
-			    vis.append("g").append("text")
-			        .attr("class", "axis")
-			        .text(settings.yLabel)
-			        .style("text-anchor","middle")
-			        .attr("transform","translate(" + -40 + " " + h/2+") rotate(-90)");
-			  }
-			  
-			  d3.select(this)
-		      	.on("mousemove.drag", mousemove())
-		      	.on("mouseup.drag",   mouseup());
-			  
-			  drawGraph()();
-			  
-			  function pan() {
-				  return function() {
-				    d3.select("body").style("cursor", "move");
-				  };
-			  };
-			  
 
-			  function update() {
-				  // update the graph line on redraw
-				  /*var lines = vis.select("path").attr("d", d3.svg.line().x(function(d) { return x(getDate(d)); })
-		  			  												.y(function(d) { return y(d.jsonHitCount); }));*/
+			
+			//  y-axis label
+			vis.append("g")
+			   .attr({
+				  		"class": "yaxis",
+				  		"transform": "translate(0, 0)"
+				  	 });
+			
+			if (settings.yLabel) {
+			    graph.y.axis.label = vis.append("g").append("text")
+								        .attr("class", "axis")
+								        .text(settings.yLabel)
+								        .style("text-anchor","middle")
+								        .attr("transform","translate(" + -40 + " " + graph.view.height/2+") rotate(-90)");
+			}
+			
+
+			// apply graph title
+			if (settings.title) {
+				    graph.title = vis.append("text")
+							         .attr("class", "axis")
+							         .text(settings.title)
+							         .attr({ "x": graph.view.width/2, "dy": "-0.8em" })
+							         .style("text-anchor","middle");
+			}
+			
+			  
+			  
+			 d3.select(this)
+		       .on("mousemove.drag", mousemove())
+		       .on("mouseup.drag",   mouseup());
+			  
+			 drawGraph()(); // draw graph on DOM load
+			  
+			 function pan() {
+				 return function() {
+					 d3.select("body").style("cursor", "move");
+				 };
+			 };
+			  
+			 /**
+			  * Redraws the points on the graph
+			  */
+			 function update() {
 				  
-				  d3.selectAll("path").remove();
+				  d3.selectAll("path").remove(); // remove old graph points/lines
 				  
-				  graph.data([settings.data]).append("path").attr({
-						"d": d3.svg.line().x(function(d) { return x(getDate(d)); })
-		  				  				  .y(function(d) { return y(d.jsonHitCount); })
-				  }).attr("pointer-events", "all").on("mousedown.drag", pan())
-			      .call(zoom);
+				  graph.view.svg.data([graph.data])
+				  					  .append("path")
+				  					  .attr({
+												"d": d3.svg.line().x(function(d) { return graph.x.point(getDate(d)); })
+								  				  				  .y(function(d) { return graph.y.point(d.jsonHitCount); }),
+								  				"pointer-events": "all"
+				  					  		})
+				  					  .on("mousedown.drag", pan())
+				  					  .call(graph.zoom);
 				  
 				  // apply the circles
 				  var circle = vis.select("svg").selectAll("circle")
-				      .data(function(d) { return d; });
+				      							.data(function(d) { return d; });
 				 
 				  circle.enter().append("circle")
-				      .attr("class", function(d) { return d === this.selected ? "selected" : null; })
-				      .attr("cx",    function(d) { return x(new Date(d.jsonDate)); })
-				      .attr("cy",    function(d) { return y(d.jsonHitCount); })
-				      .attr("r", settings.pointSize)
-				      .attr("pointer-events", "all").on("mousedown.drag", pan())
-				      .call(zoom);
+						        .attr("class", function(d) { return d === this.selected ? "selected" : null; })
+						        .attr("cx",    function(d) { return graph.x.point(new Date(d.jsonDate)); })
+						        .attr("cy",    function(d) { return graph.y.point(d.jsonHitCount); })
+						        .attr("r", settings.pointSize)
+						        .attr("pointer-events", "all").on("mousedown.drag", pan())
+						        .call(graph.zoom);
 				 
 				  circle
 				      .attr("class", function(d) { return d === this.selected ? "selected" : null; })
-				      .attr("cx", function(d) { return x(new Date(d.jsonDate)); })
-				      .attr("cy", function(d) { return y(d.jsonHitCount); });
+				      .attr("cx", function(d) { return graph.x.point(new Date(d.jsonDate)); })
+				      .attr("cy", function(d) { return graph.y.point(d.jsonHitCount); });
 				 
 				  circle.exit().remove();
 				 
@@ -262,34 +267,34 @@
 					    	update();
 					    }
 					    
-					    if (!isNaN(downx)) {
+					    if (!isNaN(graph.x.down)) {
 					      d3.select("body").style("cursor", "ew-resize");
-					      var rupx = x.invert(p[0]),
-					          xaxis1 = x.domain()[0],
-					          xaxis2 = x.domain()[1],
+					      var rupx = graph.x.point.invert(p[0]),
+					          xaxis1 = graph.x.point.domain()[0],
+					          xaxis2 = graph.x.point.domain()[1],
 					          xextent = xaxis2 - xaxis1;
 					      if (rupx != 0) {
 					        var changex, new_domain;
 					        changex = downx / rupx;
 					        new_domain = [xaxis1, xaxis1 + (xextent * changex)];
-					        x.domain(new_domain);
+					        graph.x.point.domain(new_domain);
 					        drawGraph()();
 					      }
 					      d3.event.preventDefault();
 					      d3.event.stopPropagation();
 					    };
 					    
-					    if (!isNaN(downy)) {
+					    if (!isNaN(graph.y.down)) {
 					      d3.select("body").style("cursor", "ns-resize");
-					      var rupy = y.invert(p[1]),
-					          yaxis1 = y.domain()[1],
-					          yaxis2 = y.domain()[0],
+					      var rupy = graph.y.point.invert(p[1]),
+					          yaxis1 = graph.y.point.domain()[1],
+					          yaxis2 = graph.y.point.domain()[0],
 					          yextent = yaxis2 - yaxis1;
 					      if (rupy != 0) {
 					        var changey, new_domain;
 					        changey = downy / rupy;
 					        new_domain = [yaxis1 + (yextent * changey), yaxis1];
-					        y.domain(new_domain);
+					        graph.y.point.domain(new_domain);
 					        drawGraph()();
 					      }
 					      d3.event.preventDefault();
@@ -302,16 +307,15 @@
 						  return function() {
 						    document.onselectstart = function() { return true; };
 						    d3.select("body").style("cursor", "auto");
-						    d3.select("body").style("cursor", "auto");
-						    if (!isNaN(downx)) {
+						    if (!isNaN(graph.x.down)) {
 						      drawGraph()();
-						      downx = Math.NaN;
+						      graph.x.down = Math.NaN;
 						      d3.event.preventDefault();
 						      d3.event.stopPropagation();
 						    };
-						    if (!isNaN(self.downy)) {
+						    if (!isNaN(graph.y.down)) {
 						      drawGraph()();
-						      downy = Math.NaN;
+						      graph.y.down = Math.NaN;
 						      d3.event.preventDefault();
 						      d3.event.stopPropagation();
 						    }
@@ -323,55 +327,28 @@
 					
 					function drawGraph() {
 						return function() {
-							
-							//zoom.translate([tx, ty]);
-							
-							
-							/* Constrain the pan domain */
-							/*var xCurrent = { min: x.domain()[0], max: x.domain()[1] },
-								yCurrent = { max: y.domain()[0], min: y.domain()[1] };
-
-							if (xCurrent.max > xMax) {
-								x.domain([xCurrent.min, xMax]);
-								return;
-							}
-							else if (xCurrent.min < xMin) {
-								x.domain([xCurrent.xMax, xMin]);
-								return;
-							}
-							
-							if (yCurrent.max > yMax) {
-								y.domain([yMax, yCurrent.min]);
-								return;
-							}
-							else if (yCurrent.min < yMin) {
-								y.domain([yCurrent.max, yMin]);
-								return;
-							}*/
-							
-							
-								
+	
 							// d is the tick point.
 						    /*var tx = function(d) { return "translate(" + x(d) + ",0)"; },
 						    	ty = function(d) { return "translate(0," + y(d) + ")"; },*/
 						    
 						    stroke = function(d) { return d ? "#ccc" : "#666"; },
 						    
-						    fx = x.tickFormat(d3),
-						    fy = y.tickFormat(10);
+						    //fx = x.tickFormat(d3),
+						    //fy = y.tickFormat(10);
 						 
-						  var xAxis = d3.svg.axis()
-						  					.scale(x)
-						  					.orient("bottom")
-						  					.tickFormat(d3.time.format("%b %d"));
+						  graph.x.axis.svg = d3.svg.axis()
+						  						   .scale(graph.x.point)
+						  						   .orient("bottom")
+						  						   .tickFormat(d3.time.format("%b %d"));
 						  
-						  var yAxis = d3.svg.axis()
-					  					.scale(y)
-					  					.orient("left");
+						  graph.y.axis.svg = d3.svg.axis()
+					  							   .scale(graph.y.point)
+					  							   .orient("left");
 						    
-						  vis.select("g.xaxis").call(xAxis);
+						  vis.select("g.xaxis").call(graph.x.axis.svg);
 						  
-						  vis.select("g.yaxis").call(yAxis);
+						  vis.select("g.yaxis").call(graph.y.axis.svg);
 						  
 						// Regenerate x-axis lines…
 						    /*var gx = vis.selectAll("g.x")
@@ -445,7 +422,7 @@
 						  
 						    //vis.selectAll("path").attr("transform", tx);
  
-						    plot.call(zoom);
+						  	graph.view.rect.call(graph.zoom);
 						    update();    
 						  }; 
 						}
@@ -454,7 +431,7 @@
 						  return function(d) {
 						    document.onselectstart = function() { return false; };
 						    var p = d3.mouse(vis[0][0]);
-						    downx = x.invert(p[0]);
+						    graph.x.down = graph.x.point.invert(p[0]);
 						  };
 						};
 						 
@@ -462,7 +439,7 @@
 						  return function(d) {
 						    document.onselectstart = function() { return false; };
 						    var p = d3.mouse(vis[0][0]);
-						    downy = y.invert(p[1]);
+						    graph.y.down = graph.y.point.invert(p[1]);
 						  };
 					};
 			

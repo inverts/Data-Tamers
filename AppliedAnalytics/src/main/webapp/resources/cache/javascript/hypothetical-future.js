@@ -29,8 +29,11 @@ function updateHypotheticalWidget() {
 		
 		//$('#hypotheticalFutureData').append(hypotheticalSketch);
 		
+		var testSet = [ createDataSet(50, [1, 200]), createDataSet(50, [1, 200]), createDataSet(50, [1, 200]) ];
+		
 		$('#dataForecastData').graph({
 			data: createDataSet(50, [1, 200]),
+			//dataSet: testSet,
 			pointSize: 3,
 			databuffer: 10
 		});

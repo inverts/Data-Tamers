@@ -20,7 +20,8 @@ function getDate(d) {
 	return new Date(d.jsonDate);
 }
 
-
+// gets the index of the object in an object 
+// array based on a given Math metric
 function getIndexBy(objectarray, key, math) {
 	var values = $.map(objectarray, function(obj){
 					return obj[key];
@@ -32,67 +33,30 @@ function getIndexBy(objectarray, key, math) {
 	return -1;
 }
 
-
-/* UTILITY TESTS */
-$(function(){
+// gets the value based on the specified metric!
+// array could be an object array or array of object arrays!
+function getValueBy(array, key, math) {
 	
-	// Test of getIndex
-		
-		var objArr = [{"lynn": 12 }, {"dave": 10 }, {"gwen": 20 }, {"andrew": 15 }, {"andrew": 7}];
-		
-		var testkey = "andrew";
-		var idx = getIndex(objArr, testkey, 15);
-		if (idx != 3)
-			console.error("getIndex - singleObj: expected 3, got " + idx + " for value = 15");
-		
-		idx = getIndex(objArr, testkey, 7);
-		if (idx != 4)
-			console.error("getIndex - singleObj: expected 4, got " + idx + " for value = 7");
-
-		
-		var testData = [ {
-			"jsonDate" : "09\/22\/11",
-			"jsonHitCount" : 2,
-			"seriesKey" : "Website Usage"
-		}, {
-			"jsonDate" : "09\/26\/11",
-			"jsonHitCount" : 9,
-			"seriesKey" : "Website Usage"
-		}];
-		
-		testkey = "jsonDate";
-		idx = getIndex(testData, testkey, "09\/26\/11");
-		if (idx != 1)
-			console.error("getIndex - multiObj: expected 1, got " + idx + " for value = 09\/26\/11");
-		
-		idx = getIndex(testData, testkey, "09\/28\/11");
-		if (idx != -1)
-			console.error("getIndex - multiObj: expected -1, got " + idx + " for value = 09\/26\/11");
-		
-		
-	// Test of getIndexOfMax
+	if (array.length == 0)
+		return;
+	var values = [];
 	
-		var objArrMax = [{"andrew": 12 }, {"andrew": 10 }, {"andrew": 20 }, {"andrew": 15 }, {"andrew": 7}];
+	if (array[0] instanceof Array) {
 		
-		testkey = "andrew";
-		idx = getIndexBy(objArrMax, testkey, Math.max);
-		if (idx != 2)
-			console.error("getIndexBy - Max -base: expected 2, got " + idx);
+		values = $.map(array, function(val) {
+			return getValueBy(val, key, math);
+		});
 		
-		idx = getIndexBy(objArrMax, testkey, Math.min);
-		if (idx != 4)
-			console.error("getIndexBy - Min -base: expected 4, got " + idx);
-		
-		testkey = "dave"
-		idx = getIndexBy(objArrMax, testkey, Math.max);
-		if (idx != -1)
-			console.error("getIndexBy - none: expected -1, got " + idx + " for value");
-		
-		objArrMax.push({"andrew": 20 });
-		
-		testkey = "andrew";
-		idx = getIndexBy(objArrMax, testkey, Math.max);
-		if (idx != 2)
-			console.error("getIndexBy - duplicate: expected 2, got " + idx);
-		
-});
+	}
+	else {
+		values = $.map(array, function(obj){
+			return (key == "jsonDate") ? new Date(obj[key]) : obj[key];
+		});
+
+	}
+	
+	if (values.length)
+		return math.apply(Math, values);
+}
+
+
