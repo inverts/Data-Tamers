@@ -10,7 +10,7 @@ $(function() {
 
 function GetRevenueSourcesWidget() {
 
-	/*
+	
 	var $element = $('#revenueSource');
 	$.post(applicationRoot + "/RevenueSources", null, 
 		function(response) {
@@ -24,12 +24,12 @@ function GetRevenueSourcesWidget() {
 				 					 .append(response);
 			}
 
-			var canvas = document.getElementById('revenueSourcesData');
+			//var canvas = document.getElementById('revenueSourcesData');
 				
-			var p = new Processing(canvas, revenueSketch);
+			//var p = new Processing(canvas, revenueSketch);
 			
 			
-	});	*/	
+	});	
 }
 
 // assume everything in points is a string!

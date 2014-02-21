@@ -44,4 +44,161 @@ body { font: 12px Helvetica; }
 
 /*****CSS for PAGE PERFORMANCE WIDGET ****/
 
-.pagePerformance { width:600px; }
+.pagePerformance { width:600px; height:320px; }
+
+#websitePerformance-table {
+	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;	
+	background-color:#D5D5D5;	
+	//background: -webkit-gradient(linear, center bottom, center top, from(#D0D0D0), to(#CCC));
+	color:#505050;
+	padding:5px;
+	border-style:solid;
+	border-width:5px;
+	border-color:#D5D5D5;
+}
+#websitePerformanceSettings th, #websitePerformanceSettings td
+{
+border-width:5px;
+padding:8px;
+}
+#websitePerformance-table th{
+	font:20px, 'Helvetica Neue';	
+}
+#websitePerformance-table td{
+	border-style:solid;
+	border-width:1px;
+	border-color:#D5D5D5;	
+}
+#websitePerformanceSettings th:hover{
+	background-color:#C0C0C0;		
+}
+#websitePerformanceSettings td:hover{
+	background-color:#C0C0C0;	
+}
+
+#websitePerformanceSettings tbody tr:last-child td {
+  border-bottom:none;
+  &:first-child {
+    @include border-bottom-left-radius(5px);
+  }
+  &:last-child {
+    @include border-bottom-right-radius(5px);
+  }
+}
+
+#websitePerformanceSettings tbody:hover > tr:hover td {
+  @include text-shadow(none);
+  color:#2d2d2d;
+  @include opacity(0.5); 
+  font-weight:bold;
+}
+
+
+
+/*****CSS for KEY CONTRIBUTING FACTORS WIDGET ****/
+
+.keyContributingFactors{ width:600px; height:350px;}
+
+#keyContributingFactors-table {
+	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;
+	height:350px;		
+	background-color:#D5D5D5;	
+	color:#505050;
+}
+
+.keyContributingFactorsChart{
+	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;	
+	background-color:#D5D5D5;	
+	color:#505050;
+	
+	border-style:solid;
+	border-width:5px;
+	border-color:#D5D5D5;
+	
+	padding:15px;
+	height:285px;
+}
+
+.chart-background{
+	width:100%;
+	height:100%;
+	background:#F0F0F0;
+	float:right;
+}
+
+.column{
+	width: 50px;
+	height: 100%;
+	margin: 230px 20px;
+	float: left;
+	position:relative;
+}
+
+.column .fill{
+	width: 100%;
+	position: absolute;
+	bottom: 50px;
+}
+
+.column:hover {
+	@include text-shadow(none);
+	color: #2d2d2d;
+	font-weight: bold;
+	
+	-webkit-transform: translateZ(0);
+	font-size: 12px;
+	position: relative;
+	border : 2px solid;
+	padding: 0px;
+	background-color: #FFF;
+	opacity: 0.8;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	border-radius: 5px;
+	border: 2px solid;
+}
+
+.label{
+	text-align: center;
+}
+
+
+.legend-wrapper{
+	width:150px;
+	height:150px;
+	background:#F0F0F0;
+	float:right;
+	position:relative;
+	left:-75px;
+}
+.legend{
+	width:10px;
+	height:10px;
+	margin: 0px 5px 5px 20px;
+	position:relative;
+}
+.legend .fill-legend{
+	width: 100%;
+	position: absolute;
+}
+
+.legend .inline{	
+	width:100px;
+	white-space:nowrap;
+	overflow:hidden;
+	margin: 15px 20px;
+}
+
+
+
+#keyContributingFactors-wrapper{	
+	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;		
+	background-color:#D5D5D5;	
+	color:#505050;
+	border-style:solid;
+	border-width:5px;
+	border-color:#D5D5D5;
+}
+
+
