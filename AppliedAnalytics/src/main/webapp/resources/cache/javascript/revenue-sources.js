@@ -24,9 +24,12 @@ function GetRevenueSourcesWidget() {
 				 					 .append(response);
 			}
 
-			//var canvas = document.getElementById('revenueSourcesData');
-				
+			//var canvas = document.getElementById('revenueSourcesData');				
 			//var p = new Processing(canvas, revenueSketch);
+			// Collapse Event
+			$('.keyContributingFactors .widget_title').click(function() {
+				$('.keyContributingFactors .widget-content').slideToggle('fast');
+			});
 			
 			
 	});	
