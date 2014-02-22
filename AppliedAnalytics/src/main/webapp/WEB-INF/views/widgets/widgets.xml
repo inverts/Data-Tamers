@@ -14,7 +14,7 @@
 	
 	<!-- Revenue Sources -->
 	 <bean id="RevenueSources" class="org.springframework.web.servlet.view.JstlView">
-		<property name="url" value = "/WEB-INF/views/widgets/revenue-sources.jsp"/>
+		<property name="url" value = "/WEB-INF/views/widgets/key-contributing-factors.jsp"/>
 	</bean> 
 	
 	<!-- Website Performance -->
@@ -31,6 +31,9 @@
 		<property name="url" value="/WEB-INF/views/includes/add-dashboard.jsp" />
 	</bean>
 
-
+	<!-- Key Contributing Factors -->
+	<bean id="KeyContributingFactors" class="org.springframework.web.servlet.view.JstlView">
+		<property name="url" value = "/WEB-INF/views/widgets/key-contributing-factors.jsp"/>
+	</bean>
 
 </beans>   

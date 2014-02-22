@@ -8,13 +8,16 @@
 function createDataSet(size, yrange) {
 	
 	var result = [];
-	var date = new Date();
-	
+	var date = new Date("01\/10\/14");
+	var today = new Date();
 	for(var i = 0; i < size; i++) {
 		var obj = {};
 
 		obj["jsonDate"] = date.toDateString();
+		
 		obj["jsonHitCount"] = Math.floor((Math.random()*yrange[1]) + yrange[0]);
+		obj["smooth"] = Math.floor((Math.random()*yrange[1]) + yrange[0]);
+		obj["normal"] = Math.floor((Math.random()*yrange[1]) + yrange[0]);
 		result.push(obj);
 		date = new Date(date.getTime() + 86400000);
 	}
@@ -22,6 +25,7 @@ function createDataSet(size, yrange) {
 	return result;
 	
 }
+
 
 
 
@@ -100,39 +104,58 @@ $(function() {
 		console.error("getValueBy - obj - max: expected 20, got " + val);
 	
 	testkey = "andrew";
-	var val = getValueBy(objArrMax, testkey, Math.min);
+	val = getValueBy(objArrMax, testkey, Math.min);
 	if (val != 7)
 		console.error("getValueBy - obj - min: expected 7, got " + val);
 	
 	
 	var testSet = [objArrMax, 
-	               [{"andrew": 6}, {"andrew": 9}, {"andrew": 27}], 
-	               [{"andrew": 13}, {"andrew": 4}, {"andrew": 25}, {"andrew": 21} ] 
+	               [{"andrew": 6, "dave": 4}, {"andrew": 9, "dave": 14}, {"andrew": 27, "dave": 12}], 
+	               [{"andrew": 13}, {"andrew": 7}, {"andrew": 25}, {"andrew": 21} ] 
 				  ];
 	
 	
 	testkey = "andrew";
-	var val = getValueBy(testSet, testkey, Math.max);
+	val = getValueBy(testSet, testkey, Math.max);
 	if (val != 27)
 		console.error("getValueBy - array - max: expected 27, got " + val);
 	
-	testkey = "andrew";
-	var val = getValueBy(testSet, testkey, Math.min);
+	testkey = ["andrew", "dave"];
+	val = getValueBy(testSet, testkey, Math.min);
 	if (val != 4)
 		console.error("getValueBy - array - min: expected 4, got " + val);
 	
 	// Dates
-	var dateArray = [{"jsonDate": "09\/22\/11"}, {"jsonDate": "12\/12\/11"}, {"jsonDate": "01\/22\/12"}, {"jsonDate": "07\/31\/11"}];
+	/*var dateArray = [{"jsonDate": "09\/22\/11"}, {"jsonDate": "12\/12\/11"}, {"jsonDate": "01\/22\/12"}, {"jsonDate": "07\/31\/11"}];
 	
 	testkey = "jsonDate";
-	var val = getValueBy(dateArray, testkey, Math.max);
+	val = getValueBy(dateArray, testkey, Math.max);
 	if (val != new Date("01\/22\/12").valueOf())
 		console.error("getValueBy - date - max: expected " + new Date("01\/22\/12").toDateString() + ", got " + new Date(val).toDateString());
 	
 	testkey = "jsonDate";
-	var val = getValueBy(dateArray, testkey, Math.min);
+	val = getValueBy(dateArray, testkey, Math.min);
 	if (val != new Date("07\/31\/11").valueOf())
 		console.error("getValueBy - date - min: expected " + new Date("07\/31\/11").toDateString() + ", got " + new Date(val).toDateString());
+	*/
+	
+	// Get Array By
+	var arr = getArrayBy(objArrMax, Math.max);
+	if (arr.length != objArrMax.length)
+		console.error("getArrayBy - single - max: expected 5, got " + arr.length);
+	
+	arr = getArrayBy(objArrMax, Math.min);
+	if (arr.length != objArrMax.length)
+		console.error("getArrayBy - single - min: expected 5, got " + arr.length);
+	
+	arr = getArrayBy(testSet, Math.max);
+	if (arr.length != objArrMax.length)
+		console.error("getArrayBy - multi - max: expected 5, got " + arr.length);
+	
+	arr = getArrayBy(testSet, Math.min);
+	if (arr.length != testSet[1].length)
+		console.error("getArrayBy - multi - min: expected 3, got " + arr.length);
+	
 	
 	
 	

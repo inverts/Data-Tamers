@@ -10,7 +10,7 @@ $(function() {
 
 function GetRevenueSourcesWidget() {
 
-	/*
+	
 	var $element = $('#revenueSource');
 	$.post(applicationRoot + "/RevenueSources", null, 
 		function(response) {
@@ -24,12 +24,15 @@ function GetRevenueSourcesWidget() {
 				 					 .append(response);
 			}
 
-			var canvas = document.getElementById('revenueSourcesData');
-				
-			var p = new Processing(canvas, revenueSketch);
+			//var canvas = document.getElementById('revenueSourcesData');				
+			//var p = new Processing(canvas, revenueSketch);
+			// Collapse Event
+			$('.keyContributingFactors .widget_title').click(function() {
+				$('.keyContributingFactors .widget-content').slideToggle('fast');
+			});
 			
 			
-	});	*/	
+	});	
 }
 
 // assume everything in points is a string!
