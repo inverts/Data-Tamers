@@ -1,11 +1,16 @@
 package io.analytics.site.models;
 
+import java.util.List;
+
 import io.analytics.domain.Account;
 import io.analytics.domain.Dashboard;
 import io.analytics.service.interfaces.IAccountService;
 import io.analytics.service.interfaces.IDashboardService;
+import io.analytics.service.interfaces.ISessionService;
+import io.analytics.site.models.SessionModel.CorruptedSessionException;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,44 +19,52 @@ import org.springframework.stereotype.Component;
 @Scope("session")
 public class SidePanelModel {
 
-	private IAccountService AccountService;
-	//private IDashboardService DashboardService;
-	private int accountId;
+	private IDashboardService DashboardService;
+	private SessionModel sessionModel;
+	private JSONArray dashboardLinks;
 
 	
-	public SidePanelModel(IAccountService accountService, int accountId)
+	public SidePanelModel(IDashboardService dashboardService, SessionModel sessionModel)
 	{
-		if (accountService == null) throw new NullPointerException("Account Service is null for SidePanelModel.");
-		this.AccountService = accountService;
+		if (dashboardService == null || sessionModel == null)
+			throw new IllegalArgumentException();
+		this.DashboardService = dashboardService;
+		this.sessionModel = sessionModel;
+		dashboardLinks = new JSONArray();
 		
-		this.accountId = accountId;
+	}
+
+	public JSONArray getDashboardLinks() {
+		return dashboardLinks;
 	}
 	
-	/* Returns a JSON Array of dashboard Ids */
-	public JSONArray getDashboardLinks() {
+	/**
+	 * 
+	 * @return
+	 * @throws CorruptedSessionException 
+	 */
+	public void generateDashboardLinks() throws CorruptedSessionException {
 		
-		JSONArray result = new JSONArray();
+		Account account = sessionModel.getAccount();
+		List<Dashboard> dashboards = DashboardService.getAccountDashboards(account.getId());
 		
-		Account current = AccountService.getAccountById(this.accountId);
-		Dashboard[] dashboardList = current.getDashboardList();
-		
-		for(Dashboard dashboard : dashboardList) {
+		for(Dashboard dashboard : dashboards) {
 			
 			JSONObject content = new JSONObject();
 			String url = "/application/" + dashboard.getId();
 			
 			try {
 				content.put("url", url);
-				content.put("id", dashboard.getAccountId());
+				content.put("id", dashboard.getId());
 				content.put("name", dashboard.getName());
-			} catch (Exception e) {
-				//TODO: handle this
+			} catch (JSONException e) {
+				//This only occurs if the key is null or the value being put is a non-finite number.
+				e.printStackTrace();
 			}
 			
-			result.put(content);
+			dashboardLinks.put(content);
 		}
 		
-		return result;
 		
 	}
 	

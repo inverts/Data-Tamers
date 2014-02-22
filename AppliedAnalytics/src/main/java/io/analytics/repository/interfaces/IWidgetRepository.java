@@ -31,13 +31,6 @@ public interface IWidgetRepository {
 	public void deleteWidget(int widgetId);
 
 	/**
-	 * Gets a Widget given an id.
-	 * @param dashboardId
-	 * @return A Widget with the matching id, or null if no Widget could be found or if there was an error.
-	 */
-	public Widget getDashboard(int dashboardId);
-	
-	/**
 	 * Retrieves all the Widgets that are listed under a particular Dashboard ID.
 	 * @param accountId
 	 * @return

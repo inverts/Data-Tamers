@@ -73,8 +73,8 @@ public class DashboardRepository implements IDashboardRepository {
 	
 
 	@Override
-	public int addNewDashboard(int accountId, int defaultFilterId, String dashboardName) {
-		if (accountId < 0 || defaultFilterId < 0 || dashboardName == null)
+	public int addNewDashboard(int accountId, Integer defaultFilterId, String dashboardName) {
+		if (accountId < 0 || dashboardName == null)
 			return -1;
 		Map<String, Object> insertParams = new HashMap<String, Object>();
         insertParams.put(DashboardTable.ACCOUNT_ID, accountId);
@@ -99,15 +99,32 @@ public class DashboardRepository implements IDashboardRepository {
 	}
 
 	@Override
+	//TODO: Possibly return a value in the future.
 	public void deleteDashboard(int dashboardId) {
-		// TODO Remove dashboard with id.
-		// We will validate they have permissions in the service level.
+		String preStatement;
+		Object[] args;
+		int[] argTypes;
+
+		preStatement = String.format("DELETE FROM `%s` WHERE `%s`=?", DASHBOARD_TABLE, DashboardTable.DASHBOARD_ID);
+		args = new Object[] { dashboardId };
+		argTypes = new int[] { Types.INTEGER };
+
+		try {
+			int rowsAffected = jdbc.update(preStatement, args, argTypes);
+			/*
+			 * if (rowsAffected !=1)
+			 * return false;
+			 */
+		} catch (DataAccessException e) {
+			//TODO: Standardize error handling for the database.
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public Dashboard getDashboard(int dashboardId) {
 		if (dashboardId < 0)
-			return null;
+			throw new IllegalArgumentException();
 		
 		String preStatement;
 		Object[] args;

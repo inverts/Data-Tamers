@@ -105,8 +105,24 @@ public class WidgetRepository implements IWidgetRepository {
 
 	@Override
 	public void deleteWidget(int widgetId) {
-		// TODO Auto-generated method stub
-		
+		String preStatement;
+		Object[] args;
+		int[] argTypes;
+
+		preStatement = String.format("DELETE FROM `%s` WHERE `%s`=?", WIDGET_TABLE, WidgetTable.WIDGET_ID);
+		args = new Object[] { widgetId };
+		argTypes = new int[] { Types.INTEGER };
+
+		try {
+			int rowsAffected = jdbc.update(preStatement, args, argTypes);
+			/*
+			 * if (rowsAffected !=1)
+			 * return false;
+			 */
+		} catch (DataAccessException e) {
+			//TODO: Standardize error handling for the database.
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -131,12 +147,6 @@ public class WidgetRepository implements IWidgetRepository {
 			e.printStackTrace();
 			return null;
 		}
-	}
-
-	@Override
-	public Widget getDashboard(int dashboardId) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 }

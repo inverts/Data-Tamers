@@ -13,7 +13,7 @@ public interface IDashboardRepository {
 	 * @param dashboardName
 	 * @return The id of the new Dashboard.
 	 */
-	public int addNewDashboard(int accountId, int defaultFilterId, String dashboardName);
+	public int addNewDashboard(int accountId, Integer defaultFilterId, String dashboardName);
 
 	/**
 	 * Adds a new Dashboard to the database, returning the id of the newly added Dashboard.

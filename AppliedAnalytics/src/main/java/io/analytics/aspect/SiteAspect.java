@@ -43,7 +43,7 @@ public class SiteAspect {
 		return joinPoint.proceed();
 	}
 	
-
+/*
 	// @SidePanel
 	@Around("publicMethod() && @annotation(sidepanel)")
 	public Object SidePanelAdvice(ProceedingJoinPoint joinPoint, SidePanel sidepanel) throws Throwable
@@ -60,7 +60,7 @@ public class SiteAspect {
 		
 		return joinPoint.proceed();
 	}
-	
+	*/
 	
 	@Around("publicMethod() && @annotation(reset)")
 	public Object ResetAdvice(ProceedingJoinPoint joinPoint, Reset reset) throws Throwable

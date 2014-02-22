@@ -31,7 +31,10 @@ boolean checkAuthorization(HttpSession session);
 	<T> T getModel(HttpSession session, String s, Class<T> c);
 	
 	void saveModel(HttpSession session, String s, Object model);
-	
-	boolean redirectToLogin(HttpSession session, HttpServletRequest request, HttpServletResponse response);
 
+	boolean redirectToLogin(HttpSession session, HttpServletRequest request, HttpServletResponse response);
+	
+	
+	boolean redirectToRegularLogin(HttpSession session, String queryString, HttpServletResponse response);
+	
 }

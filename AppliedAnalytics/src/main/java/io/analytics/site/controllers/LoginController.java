@@ -33,12 +33,17 @@ public class LoginController {
 	
 	@HeaderFooter(HeaderType.SIMPLE)
 	@RequestMapping(value = "/login", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView loginPage(Model model, HttpServletResponse response, HttpServletRequest request,
-			@RequestParam(value = "errors", defaultValue = "0") boolean hasErrors)
+	public ModelAndView loginPage(Model model, HttpSession session, HttpServletResponse response, HttpServletRequest request,
+			@RequestParam(value = "errors", defaultValue = "0") boolean hasErrors,
+			@RequestParam(value = "noaccount", defaultValue = "0") boolean noAccount)
 	{
 		// Everytime we load the login page, we want a clean form.
+
+		session.invalidate();
 		ModelAndView loginPage = new ModelAndView("login", "loginForm", getLoginForm());
 		loginPage.addObject("hasErrors", hasErrors); // flag indicating there are errors.
+		if (noAccount)
+			loginPage.addObject("message", "There were no accounts for this user - please try user \"beta\".");
 		return loginPage;
 	}
 	

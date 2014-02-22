@@ -42,13 +42,13 @@ public class AccountService implements IAccountService {
 	}
 	
 	/**
-	 * Gets a list of accounts 
+	 * Gets a list of accounts owned by a particular user.
+	 * 
 	 * @param userId
-	 * @return
+	 * @return a list of accounts owned by a particular user.
 	 */
 	public List<Account> getAccountsOwnedByUser(int userId) {
-		//TODO: Implement.
-		return null;
+		return accountRepository.getUserOwnedAccounts(userId);
 	}
 	
 	/**

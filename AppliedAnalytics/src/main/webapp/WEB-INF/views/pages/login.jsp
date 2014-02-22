@@ -14,6 +14,9 @@
 		<c:if test="${model.hasErrors}">
 			<div class="error"><fmt:message key="login.invalid" /></div>
 		</c:if>
+		<c:if test="${not empty model.message}">
+			<div class="error">${model.message}</div>
+		</c:if>
 		<table>
 			<tr>
 				<td>

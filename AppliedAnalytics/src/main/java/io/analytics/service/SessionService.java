@@ -148,7 +148,7 @@ public class SessionService implements ISessionService {
 	}
 	
 	/**
-	 * This will redirect the user to the login page, keeping track of the URL the user
+	 * This will redirect the user to the Google Analytics login page, keeping track of the URL the user
 	 * attempted to access, as indicated in the HttpServletRequest. WARNING: This will not,
 	 * however, keep track of any query parameters in that URL.
 	 * 
@@ -157,8 +157,18 @@ public class SessionService implements ISessionService {
 	public boolean redirectToLogin(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
 		String contextPath = session.getServletContext().getContextPath();
 		try {
-			String test = request.getRequestURL().toString();
 			response.sendRedirect(contextPath + "/galogin" + "?destinationURL=" + request.getRequestURL());
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	public boolean redirectToRegularLogin(HttpSession session, String queryString, HttpServletResponse response) {
+		String contextPath = session.getServletContext().getContextPath();
+		try {
+			response.sendRedirect(contextPath + "/login" + queryString);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;

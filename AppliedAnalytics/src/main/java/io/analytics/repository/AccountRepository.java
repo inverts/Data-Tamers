@@ -120,7 +120,7 @@ public class AccountRepository implements IAccountRepository {
 	 */
 	public List<Account> getUserOwnedAccounts(int ownerUserId) {
 		if (ownerUserId < 0)
-			return null;
+			throw new IllegalArgumentException();
 		
 		String preStatement;
 		Object[] args;

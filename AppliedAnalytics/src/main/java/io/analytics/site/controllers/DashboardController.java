@@ -1,6 +1,9 @@
 package io.analytics.site.controllers;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import io.analytics.aspect.HeaderFooter;
 import io.analytics.aspect.SidePanel;
+import io.analytics.domain.Account;
 import io.analytics.domain.User;
 import io.analytics.enums.HeaderType;
 import io.analytics.forms.DashboardForm;
@@ -16,13 +20,17 @@ import io.analytics.service.interfaces.IDashboardService;
 import io.analytics.service.interfaces.ISessionService;
 import io.analytics.service.interfaces.IUserService;
 import io.analytics.site.models.FilterModel;
+import io.analytics.site.models.SessionModel;
+import io.analytics.site.models.SessionModel.CorruptedSessionException;
 import io.analytics.site.models.SettingsModel;
 import io.analytics.site.models.SidePanelModel;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -54,7 +62,10 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 	@RequestMapping(value = "/application", method = RequestMethod.GET)
 	public ModelAndView getDashboard(Locale locale, Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
 		
+		SessionModel sessionModel = new SessionModel(session);
+		
 		boolean success = SessionService.checkAuthorization(session);
+		
 		SettingsModel settings = null;
 		if (success) {
 			//If authorization succeeded, the following must succeed.
@@ -65,6 +76,27 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 		} else {
 			return new ModelAndView("unavailable");
 		}
+		
+		try {
+			if (sessionModel.getUser() == null) {
+				User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+				sessionModel.setUser(user);
+			}
+			if (sessionModel.getAccount() == null) {
+				List<Account> accounts = AccountService.getAccountsOwnedByUser(sessionModel.getUser().getId());
+				if (accounts.isEmpty()) {
+					SessionService.redirectToRegularLogin(session, "?errors=1&noaccount=1", response);
+					return null;
+				}
+				//Get the first account owned by the user - this could change in the future.
+				sessionModel.setAccount(accounts.get(0));
+			}
+			
+		} catch (CorruptedSessionException e1) {
+			e1.printStackTrace();
+			SessionService.redirectToLogin(session, request, response);
+		}
+		
 		
 		FilterModel filter = null;
 		try {
@@ -83,6 +115,22 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 		
 		model.addAttribute("filter", filter);
 
+		SidePanelModel sidePanelModel = new SidePanelModel(this.DashboardService, sessionModel);
+		try {
+			sidePanelModel.generateDashboardLinks();
+		} catch (CorruptedSessionException e) {
+			SessionService.redirectToLogin(session, request, response);
+		}
+
+		
+		Map<String, Object> Sidepanel = new HashMap<String, Object>();
+		
+		Sidepanel.put("path", "/WEB-INF/views/includes/sidepanel.jsp");
+		Sidepanel.put("animate", false);
+		Sidepanel.put("model", sidePanelModel);
+
+		model.addAttribute("SIDEPANEL", Sidepanel);
+		
 		return new ModelAndView("application/dashboard");
 	}
 	
@@ -120,9 +168,8 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 				//TODO: Do something
 			}
 			
-			//User user = this.UserService.getUserById(userId);
-			//int newDashboardId = this.DashboardService.addNewDashboard(user, accountId, name);
-			int newDashboardId = 392750;
+			//TODO: Change account number to active account number.
+			int newDashboardId = this.DashboardService.addNewDashboard(1, null, name);
 			String url = "application/" + newDashboardId;
 			
 			dashboardData.put("id", newDashboardId);
@@ -148,20 +195,25 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/application/deleteDashboard", method = RequestMethod.POST)
-	private String removeDashboard (@ModelAttribute("USER_ID") int userId,
-								  @RequestParam("dashboardId") int dashboardId)
+	private String removeDashboard (@RequestParam("dashboardId") int dashboardId,
+								  HttpSession session, HttpServletRequest request, HttpServletResponse response)
 	{
+		
+		SessionModel sessionModel = new SessionModel(session);
+		
 		JSONObject result = new JSONObject();
 		try {
-			
-			//User user = this.UserService.getUserById(userId);
-			//this.DashboardService.deleteDashboard(user, dashboardId);
+			User user = sessionModel.getUser();
+			this.DashboardService.deleteDashboard(user, dashboardId);
 			
 			result.put("dashboardId", dashboardId);
 			
-		} catch (Exception e) {
+		} catch (CorruptedSessionException e) {
+			e.printStackTrace();
+			SessionService.redirectToLogin(session, request, response);
+		} catch (JSONException e) {
 			logger.info("Could not delete dashboard");
-			logger.info(e.getMessage());
+			e.printStackTrace();
 		}
 		
 		return result.toString();
@@ -175,7 +227,7 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 	
 	@ModelAttribute("ACCOUNT_ID")
 	public int getAccountId() {
-		return 987654321;
+		return 1;
 	}
 	
 	/**
@@ -201,14 +253,6 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 		}
 	}
 	
-	
-	
-	/* Gets a new instance of the sidepanel */
-	@ModelAttribute("sidePanelModel")
-	public SidePanelModel getSidePanelData(/*@ModelAttribute("ACCOUNT_ID") int accountId*/) { // will not work until there is an accountId in the session
-		int spoofAct = 123;
-		return new SidePanelModel(this.AccountService, spoofAct);
-	}
 	
 
 }

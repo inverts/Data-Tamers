@@ -4,7 +4,7 @@
 <script src="<c:url value="/cache/javascript/sidepanel.js" />"></script>
 
 <script>
-var dashboardLinks = '${SIDEPANEL.model.getDashboardFakes()}';
+var dashboardLinks = '${SIDEPANEL.model.getDashboardLinks()}';
 $(function(){ getDashboardList($.parseJSON(dashboardLinks)); });
 </script>
 
