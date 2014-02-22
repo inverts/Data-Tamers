@@ -13,7 +13,7 @@ var futureEndDate = '${ hfModel.getFutureEndDate() }';
 </script>  
  
 <style>
-#top-controls { height:50px; }
+#top-controls { padding-bottom:5px; }
 circle { fill:blue; }
 </style>
 
@@ -22,19 +22,21 @@ circle { fill:blue; }
 		<div class="widget_title"><fmt:message key="dataforecast.title" /></div>
 	</div>
 		<div class="widget-content">
-            <div id="top-controls">
-                <div id = "buttonsContainer">
-                    <div id = "option">
-                    <input id="smoothedButton" type="button" value="smoothed" style="float:left;"/>
-                    <input id="normalizedButton" type="button" value="normalized" style="float:left;"/>
-                    <input id="rawButton" type="button" value="raw" style="float:left;"/>
-                    </div>               
-                </div>
-                <div id = "timeButton">
-                    <input name="dayButton" type="button" value="day" style="float:right;"/>
-                    <input name="weekButton" type="button" value="week" style="float:right;"/>
-                    <input name="monthButton" type="button" value="month" style="float:right;"/>
-                </div>
+            <div class="controls">
+            	<div class="btn-group btn-group-sm left">
+            		<button type="button" id="smoothBtn" class="btn btn-default"><fmt:message key="dataforecast.button.smoothed" /></button>
+            		<button type="button" id="normBtn" class="btn btn-default"><fmt:message key="dataforecast.button.normal" /></button>
+            		<button type="button" id="rawBtn" class="btn btn-default"><fmt:message key="dataforecast.button.raw" /></button>
+            	</div>
+            	<div class="noise left">
+            		<input type="checkbox" class="checkbox" name="noise" />
+            		<label name="noise"><fmt:message key="dataforecast.checkbox.noise" /></label>
+            	</div>
+            	<div class="btn-group btn-group-sm right">
+            		<button type="button" id="dayBtn" class="btn btn-default"><fmt:message key="dataforecast.button.day" /></button>
+            		<button type="button" id="weekBtn" class="btn btn-default"><fmt:message key="dataforecast.button.week" /></button>
+            		<button type="button" id="monBtn" class="btn btn-default"><fmt:message key="dataforecast.button.month" /></button>
+            	</div>
             </div>
         <div id="smooth_button"></div>
         <div id="chart"></div>

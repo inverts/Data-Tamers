@@ -5,23 +5,41 @@
 .widget { padding:5px; background:url("../images/widget_bg.png") repeat; clear:both; border-radius: 8px; -webkit-border-radius: 8px; -moz-border-radius: 8px; box-shadow: 0px 0px 6px 0px; 
 		  -webkit-box-shadow: 0px 0px 6px 0px; -mozbox-shadow: 0px 0px 6px 0px; margin: 10px; }
 .widget .widget_header { width: 100%; }
-.widget .widget_title { font-size: 1.55em; color: #00aeef; text-shadow: 0 0 3px rgb(0, 173, 255); margin-bottom: 5px; }
+.widget .widget_title { font-size: 1.55em; color:#00aeef; text-shadow: 0 0 3px rgb(0, 173, 255); margin-bottom: 5px; }
 .widget .widget_title:hover { cursor:pointer; }
 .widget .widget_collapse { float:left; width:20px; }
 .widget .widgetView { visibility:'hidden'; }
 
 /*** GENERAL GRAPHING ***/
 svg { font: 10px sans-serif; }
-svg path { fill:none; stroke:blue; }
+svg path { fill:none; stroke:blue; stroke-width:3; }
+svg line { stroke:black; }
 svg .axis path { display: none; }
-svg .axis line { shape-rendering: crispEdges; stroke: #000; }
-svg .axis .minor line { stroke:#777; stroke-dasharray:2,2; }
+svg path.domain { stroke:#333; stroke-width:2; }
+svg .line1 { stroke:blue; }
+svg .line2 { stroke:red; }
 
 
 /*****CSS for DATA FORECAST WIDGET*****/
 
 .dataForecast .widget-content { height: 500px;}
-.dataForecast #dataForecastData { width:inherit; height:450px; background:#535151; }
+.dataForecast #dataForecastData { width:inherit; height:460px; background:#535151; }
+.dataForecast .controls { padding-bottom:5px; height:40px; }
+.dataForecast .controls .left { float:left; }
+.dataForecast .controls .right { float:right; }
+.dataForecast svg .raw { stroke:#00aeef; display:none; }
+.dataForecast svg .raw.active { display:block; }
+.dataForecast svg .smooth { stroke:green; display:none; }
+.dataForecast svg .smooth.active { display:block; }
+.dataForecast svg .normal {stroke:orange; display:none; }
+.dataForecast svg .normal.active { display:block; }
+.dataForecast svg .future {stroke:blue; }
+.dataForecast .btn.active { background:#FFFF30; }
+.dataForecast .btn { &:hover { background-color:none; } }
+.dataForecast .controls .noise { height:inherit; vertical-align:middle; color:#fff; position:relative; margin-left:20px; padding-top:3px; }
+.dataForecast .controls .noise input[type='checkbox'] { vertical-align:middle; }
+.dataForecast .controls .noise label { margin-top:3px; }
+.dateForecast svg line .dateLine { stroke-width:3; }
 
 line:hover { opacity: 0.5; }
 

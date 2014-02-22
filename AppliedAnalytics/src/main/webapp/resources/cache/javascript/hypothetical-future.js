@@ -29,20 +29,32 @@ function updateHypotheticalWidget() {
 		
 		//$('#hypotheticalFutureData').append(hypotheticalSketch);
 		
-		var testSet = [ createDataSet(50, [1, 200]), createDataSet(50, [1, 200]), createDataSet(50, [1, 200]) ];
 		
 		$('#dataForecastData').graph({
 			data: createDataSet(50, [1, 200]),
-			//dataSet: testSet,
-			pointSize: 3,
-			databuffer: 10
+			yKey: ['jsonHitCount', 'smooth', 'normal'],
+			lineClass: ['raw', 'smooth', 'normal'],
+			lineType: ['', 'cardinal', ''],
+			//startIndex: 22,
+			//endIndex: 39,
+			pointSize: 0,
+			databuffer: 10,
+			dateLine: new Date()
+				
 		});
-		
 		
 		// Collapse Event
 		$('.dataForecast .widget_title').click(function() {
 			$('.dataForecast .widget-content').slideToggle('fast');
 		});
+		
+		$('#rawBtn').on('click', function() { toggleLine('raw', this); });
+		
+		$('#normBtn').on('click', function() { toggleLine('normal', this); });
+		
+		$('#smoothBtn').on('click', function() { toggleLine('smooth', this); });
+		
+		$('#rawBtn').click();
 		
 		
 		//var canvas = document.getElementById('hypotheticalFutureData');
@@ -59,6 +71,19 @@ function updateHypotheticalWidget() {
 		// widget will not be dragged while user clicks on content
 		$('.dashboard-content').sortable({ cancel: '.widget-content'});
 	});
+}
+
+
+function toggleLine(className, btn) {
+	var line = d3.select('.' + className);
+	var current = line.attr('class');
+	if (current == className)
+		line.attr('class', className + ' active');
+	else
+		line.attr('class', className);
+	
+	$(btn).toggleClass('active');
+	
 }
 
 //assume everything in points is a string!
