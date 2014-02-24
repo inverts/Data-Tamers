@@ -39,7 +39,8 @@ function updateHypotheticalWidget() {
 			endIndex: 39,
 			pointSize: 0,
 			databuffer: 10,
-			dateLine: new Date().setHours(0,0,0,0)
+			dateLine: new Date().setHours(0,0,0,0),
+			addedClass: 'active'
 				
 		});
 		

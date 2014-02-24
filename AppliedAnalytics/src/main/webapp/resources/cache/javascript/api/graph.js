@@ -26,7 +26,8 @@
 			'pointSize'	: 0,
 			'databuffer': 0,
 			'rangeMin'	: 4,
-			'dateLine'	: null
+			'dateLine'	: null,
+			'addedClass': ''
 	}; 
 	
 	/* function declaration */
@@ -86,7 +87,7 @@
 											
 							"size"		: { "width": 0, "height": 0 },
 							"zoom"		: function() {},
-							"line"		: { "_class": settings.lineClass, "type": settings.lineType }
+							"line"		: { "_class": settings.lineClass, "type": settings.lineType, "addedClass": settings.addedClass }
 						};
 			
 			
@@ -262,14 +263,15 @@
 					  
 					  var $line = $("." + graph.line._class[i]);
 					  var classes = null;
-					  var active = false;
+					  var addedClass = false;
 					  
 					  if($line.length) {
 						  classes = $line.attr("class");
-						  active = classes.indexOf("active") != -1;
+						  if (graph.line.addedClass)
+							  addedClass = classes.indexOf(graph.line.addedClass) != -1;
 						  d3.select("." + graph.line._class[i]).remove();
 						  d3.select("." + graph.line._class[i] + ".alternate" ).remove();
-					  	  d3.select("#" + graph.line._class[i] + "clip").remove();
+					  	  d3.select("#" + graph.line._class[i] + "clip").remove(); 
 					  }
 					  
 					  // Setup clipping if applicable
@@ -301,8 +303,8 @@
 					  if (clip.show) {
 						  graph.view.svg.append("path")
 						  				.attr({
-						  						"class": (active) ? graph.line._class[i] + " alternate active" 
-						  										  : graph.line._class[i] + " alternate",
+						  						"class": (addedClass) ? graph.line._class[i] + " alternate " + graph.line.addedClass 
+						  										      : graph.line._class[i] + " alternate",
 						  						"clip-path": "url(#" + graph.line._class[i] + "clip)"
 						  					  })
 						  			    .datum(graph.data)
