@@ -76,11 +76,18 @@ function updateHypotheticalWidget() {
 
 function toggleLine(className, btn) {
 	var line = d3.select('.' + className);
+	var altLine = d3.select('.' + className + '.alternate');
 	var current = line.attr('class');
-	if (current == className)
+	if (current == className) {
 		line.attr('class', className + ' active');
-	else
+		if (altLine.length)
+			altLine.attr('class', className + ' alternate active');
+	}
+	else{
 		line.attr('class', className);
+		if (altLine.length)
+			altLine.attr('class', className + ' alternate');
+	}
 	
 	$(btn).toggleClass('active');
 	

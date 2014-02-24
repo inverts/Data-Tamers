@@ -249,40 +249,40 @@
 			 function update(dateLine) {
 				 
 				 // Clipping object
-				/* var clip = { "x": null, "width": null, "height": graph.view.height, "show": false };
+				var clip = { "x": null, "width": null, "height": graph.view.height, "show": false };
 				 
 				 if (dateLine) {
 					 clip.x = graph.x.point(dateLine);
 					 clip.width = graph.view.width - graph.x.point(dateLine);
 					 clip.show = graph.x.point(dateLine) < graph.view.width;
-					 
-				 }*/
+				 }
 
 				  // draw all graphs
 				  for (var i = 0; i < graph.y.keys.length; i++) {
 					  
 					  var $line = $("." + graph.line._class[i]);
 					  var classes = null;
+					  var active = false;
 					  
 					  if($line.length) {
 						  classes = $line.attr("class");
+						  active = classes.indexOf("active") != -1;
 						  d3.select("." + graph.line._class[i]).remove();
-						  if (i == 0)
-							  d3.select(".line2").remove();
-						  d3.select("." + graph.line._class[i] + "clip").remove();
+						  d3.select("." + graph.line._class[i] + ".alternate" ).remove();
+					  	  d3.select("#" + graph.line._class[i] + "clip").remove();
 					  }
 					  
 					  // Setup clipping if applicable
-					  /*if (clip.show) {
+					  if (clip.show) {
 						  vis.select("svg").append("clipPath")
-						  				   .attr("class", graph.line._class[i] + "clip")
+						  				   .attr("id", graph.line._class[i] + "clip")
 										   .append("rect")
 										   .attr({
-												"x":  clip.x,
-												"width": clip.width,
-												"height": clip.height
-											});
-					  }*/
+													"x":  clip.x,
+													"width": clip.width,
+													"height": clip.height
+												});
+					  }
 	  
 					  // Draw the graph line
 					  graph.view.svg.data([graph.data])
@@ -294,25 +294,25 @@
 									  				"pointer-events": "all",
 									  				"class": classes || graph.line._class[i]
 					  					  		})
-					  					  //.style("stroke", "url(#" + graph.line._class[i] + "gradient)")
 					  					  .on("mousedown.drag", pan())
 					  					  .call(graph.zoom);
 					  
 					  // apply clipping mask if applicable
-					  /*if (clip.show && i == 0) {
+					  if (clip.show) {
 						  graph.view.svg.append("path")
 						  				.attr({
-						  						"class": "line2",
-						  						"clip-path": "url(." + graph.line._class[i] + "clip)"
+						  						"class": (active) ? graph.line._class[i] + " alternate active" 
+						  										  : graph.line._class[i] + " alternate",
+						  						"clip-path": "url(#" + graph.line._class[i] + "clip)"
 						  					  })
 						  			    .datum(graph.data)
 						  			    .attr("d", d3.svg.line().interpolate(graph.line.type[i])
 													  .x(function(d) { return graph.x.point(getDate(d)); })
 					  				  				  .y(function(d) { return graph.y.point(d[graph.y.keys[i]]); }));
-					  }*/
+					  }
 					  
 					  // apply the circles
-					 /* var circle = vis.select("svg").selectAll("circle")
+					 /*var circle = vis.select("svg").selectAll("circle")
 					      							.data(function(d) { return d; });
 					  
 					  
@@ -330,7 +330,7 @@
 					      .attr("cx", function(d) { return graph.x.point(new Date(d.jsonDate)); })
 					      .attr("cy", function(d) { return graph.y.point(d[graph.y.keys[i]]); });
 					 
-					  circle.exit().remove(); */
+					  circle.exit().remove();*/
 				  } // end for
 				  
 				  if (dateLine) {
