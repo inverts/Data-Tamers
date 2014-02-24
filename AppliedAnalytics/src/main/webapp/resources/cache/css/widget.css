@@ -2,10 +2,10 @@
 
 /*** GENERAL WIDGET STYLING ***/
 
-.widget { padding:5px; background:url("../images/widget_bg.png") repeat; clear:both; border-radius: 8px; -webkit-border-radius: 8px; -moz-border-radius: 8px; box-shadow: 0px 0px 6px 0px; 
-		  -webkit-box-shadow: 0px 0px 6px 0px; -mozbox-shadow: 0px 0px 6px 0px; margin: 10px; }
-.widget .widget_header { width: 100%; }
-.widget .widget_title { font-size: 1.55em; color:#00aeef; text-shadow: 0 0 3px rgb(0, 173, 255); margin-bottom: 5px; }
+.widget { padding:5px; background:#d2d2d2 repeat; clear:both; border-radius: 8px; -webkit-border-radius: 8px; -moz-border-radius: 8px; box-shadow: 0px 0px 6px 0px; 
+		  -webkit-box-shadow:0px 0px 6px 0px; -mozbox-shadow:0px 0px 6px 0px; margin:10px; }
+.widget .widget_header { padding:8px 0 0 45px; }
+.widget .widget_title { font-size: 1.55em; color:#003333; text-shadow: 0 0 3px rgb(0, 173, 255); margin-bottom: 5px; }
 .widget .widget_title:hover { cursor:pointer; }
 .widget .widget_collapse { float:left; width:20px; }
 .widget .widgetView { visibility:'hidden'; }
@@ -21,22 +21,23 @@ svg .line2 { stroke:red; }
 
 
 /*****CSS for DATA FORECAST WIDGET*****/
-
-.dataForecast .widget-content { height: 500px;}
-.dataForecast #dataForecastData { width:inherit; height:460px; background:#535151; }
-.dataForecast .controls { padding-bottom:5px; height:40px; }
+.dataForecast { width:1000px; }
+.dataForecast .widget-content { height:320px; width:990px;}
+.dataForecast #dataForecastData { width:inherit; height:280px; background:#d2d2d2; }
+.dataForecast .controls { padding: 0 30px 5px 45px; }
 .dataForecast .controls .left { float:left; }
 .dataForecast .controls .right { float:right; }
-.dataForecast svg .raw { stroke:#00aeef; display:none; }
+.dataForecast svg .raw { stroke:red; ; display:none; }
+.dataForecast svg .raw.line2 { stroke:red; ; display:none; }
 .dataForecast svg .raw.active { display:block; }
 .dataForecast svg .smooth { stroke:green; display:none; }
 .dataForecast svg .smooth.active { display:block; }
 .dataForecast svg .normal {stroke:orange; display:none; }
 .dataForecast svg .normal.active { display:block; }
 .dataForecast svg .future {stroke:blue; }
-.dataForecast .btn.active { background:#FFFF30; }
+.dataForecast .btn.active { background:#00aeef; }
 .dataForecast .btn { &:hover { background-color:none; } }
-.dataForecast .controls .noise { height:inherit; vertical-align:middle; color:#fff; position:relative; margin-left:20px; padding-top:3px; }
+.dataForecast .controls .noise { height:inherit; vertical-align:middle; position:relative; margin-left:20px; padding-top:3px; }
 .dataForecast .controls .noise input[type='checkbox'] { vertical-align:middle; }
 .dataForecast .controls .noise label { margin-top:3px; }
 .dateForecast svg line .dateLine { stroke-width:3; }
@@ -44,7 +45,6 @@ svg .line2 { stroke:red; }
 line:hover { opacity: 0.5; }
 
 #drag_rect { position:relative; }
-#backrect, .dataForecast { width:600px;}
 #backrect { width:540px; padding:0 30px; height:350px; background-color:#CCC; }
 #chart { font-size:12px; }
 #chart line.data { stroke:grey; stroke-width:5px; }

@@ -35,11 +35,11 @@ function updateHypotheticalWidget() {
 			yKey: ['jsonHitCount', 'smooth', 'normal'],
 			lineClass: ['raw', 'smooth', 'normal'],
 			lineType: ['', 'cardinal', ''],
-			//startIndex: 22,
-			//endIndex: 39,
+			startIndex: 22,
+			endIndex: 39,
 			pointSize: 0,
 			databuffer: 10,
-			dateLine: new Date()
+			dateLine: new Date().setHours(0,0,0,0)
 				
 		});
 		

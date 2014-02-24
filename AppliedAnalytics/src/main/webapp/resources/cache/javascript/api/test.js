@@ -8,8 +8,7 @@
 function createDataSet(size, yrange) {
 	
 	var result = [];
-	var date = new Date("01\/10\/14");
-	var today = new Date();
+	var date = new Date("01\/20\/14");
 	for(var i = 0; i < size; i++) {
 		var obj = {};
 
