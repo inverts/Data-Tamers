@@ -7,7 +7,7 @@
 <!-- Register Widgets and the View Resolver used to display them (if you don't know use the JstlView) 
 	 note that the id is the name of the view you will be calling in the controller. -->
 
-	<!-- Hypothetical Future -->
+	<!-- Data Forecast -->
 	<bean id="DataForecast" class="org.springframework.web.servlet.view.JstlView">
 		<property name="url" value="/WEB-INF/views/widgets/data-forecast.jsp" />
 	</bean>
@@ -26,6 +26,11 @@
 	<bean id="KeywordInsight" class="org.springframework.web.servlet.view.JstlView">
 		<property name="url" value = "/WEB-INF/views/widgets/keyword-insight.jsp"/>
 	</bean>
+	
+	<!-- Key Contributing Factors -->
+	<bean id="KeyContributingFactors" class="org.springframework.web.servlet.view.JstlView">
+		<property name="url" value = "/WEB-INF/views/widgets/key-contributing-factors.jsp"/>
+	</bean>
 
 	<!-- INCLUDES -->
 	<bean id="settings" class="org.springframework.web.servlet.view.JstlView">
@@ -34,11 +39,6 @@
 	
 	<bean id="addDashboard" class="org.springframework.web.servlet.view.JstlView">
 		<property name="url" value="/WEB-INF/views/includes/add-dashboard.jsp" />
-	</bean>
-
-	<!-- Key Contributing Factors -->
-	<bean id="KeyContributingFactors" class="org.springframework.web.servlet.view.JstlView">
-		<property name="url" value = "/WEB-INF/views/widgets/key-contributing-factors.jsp"/>
 	</bean>
 
 </beans>   

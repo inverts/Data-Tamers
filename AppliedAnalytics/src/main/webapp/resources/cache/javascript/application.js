@@ -39,7 +39,7 @@ $(document).ready(function() {
 				.on( "click", "#update-button", function() {
 					$.post(applicationRoot + "settings", { update: 1 }, function( data ) {
 						  $(".settings").html( data );
-							updateHypotheticalWidget('hypotheticalWidget');
+						  updateWidgets();
 					});
 				});
 

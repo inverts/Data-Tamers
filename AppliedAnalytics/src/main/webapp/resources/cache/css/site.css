@@ -180,6 +180,7 @@ input { font: inherit; }
 /* Dashboard */
 
 .dashboard .dashboard-content, .dashboard .w_container { float:left;}
+.dashboard .dashboard-content { padding:5px 0; }
 
 =======
 @CHARSET "ISO-8859-1";

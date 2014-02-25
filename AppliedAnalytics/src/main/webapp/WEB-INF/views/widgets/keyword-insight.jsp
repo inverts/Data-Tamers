@@ -1,6 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<head>
+
 <style>
 table, th, td
 {
@@ -13,6 +13,7 @@ th, td
 padding:3px;
 }
 </style>
+
 <script>
 var dataPoints = ('${ kiModel.getDataPoints() }');
 
@@ -45,50 +46,52 @@ else { // else parse and display data
 	table.appendTo("#keywordInsightSettings");
 }
 </script>
-</head>
-<body>
-<div class="widget_wrapper widgetView">
-	<form id="keywordInsightSettings">
-		<div class="widget_header">			
-			<div class="widget_title"><fmt:message key="keywordinsight.title" /></div>			
-		    <h3><fmt:message key="keywordinsight.removeSuggestion"/></h3>
-		</div>
-	</form>
-	<br>
-	<br>
-	<h3><fmt:message key="keywordinsight.addSuggestion"/></h3>	
-	<br>
-	<table>
-	<tr>
-			<th> Organic Keyword </th>
-			<th> Visits (%)</th>
-			<th> Bounce Rate (%)</th>
-	</tr>
-	<tr>
-			<td> </td>
-			<td> </td>
-			<td> </td>
-	</tr>	
-	</table>
-	<br>
-	<br>
-	<h3><fmt:message key="keywordinsight.changeSuggestion"/></h3>
-	<br>
-	<table>
-	<tr>
-			<th> Keyword </th>
-			<th> Type</th>
-			<th> Visits (%)</th>
-			<th> Bounce Rate (%)</th>
-	</tr>
-	<tr>
-			<td> </td>
-			<td> </td>
-			<td> </td>
-			<td> </td>
-	</tr>
-	</table>
-	<br>
-	<br>
+
+<div class="widget widget_wrapper widgetView keywordInsight">
+	<div class="widget_header">			
+		<div class="widget_title"><fmt:message key="keywordinsight.title" /></div>			
+	    <h4><fmt:message key="keywordinsight.removeSuggestion"/></h4>
+	</div>
+	<div class="widget-content">
+		<form id="keywordInsightSettings">
+			
+		</form>
+	
+		<br>
+		<br>
+		<h3><fmt:message key="keywordinsight.addSuggestion"/></h3>	
+		<br>
+		<table>
+		<tr>
+				<th> Organic Keyword </th>
+				<th> Visits (%)</th>
+				<th> Bounce Rate (%)</th>
+		</tr>
+		<tr>
+				<td> </td>
+				<td> </td>
+				<td> </td>
+		</tr>	
+		</table>
+		<br>
+		<br>
+		<h4><fmt:message key="keywordinsight.changeSuggestion"/></h4>
+		<br>
+		<table>
+		<tr>
+				<th> Keyword </th>
+				<th> Type</th>
+				<th> Visits (%)</th>
+				<th> Bounce Rate (%)</th>
+		</tr>
+		<tr>
+				<td> </td>
+				<td> </td>
+				<td> </td>
+				<td> </td>
+		</tr>
+		</table>
+		<br>
+		<br>
+	</div>
 </div>
-</body>

@@ -2,30 +2,36 @@
  * keyword-insight.js
  */
 
-$(function() {
-	// Temporary
-	GetKeywordInsightWidget();
 
-});
-
-
-function GetKeywordInsightWidget() {
+function loadKeywordInsight(id) {
 	
-	var $element = $('#keywordInsight');
+	var $element = $("#" + id);
 	
-	$.post("KeywordInsight", null, 
+	$.post(applicationRoot + "KeywordInsight", null, 
 		function(response) {
-			if ($element.length > 0)
-				$element.empty().append(response);
+		if ($element.length > 0) {
+			$element.fadeIn("fast", function() { 
+					$element.append(response); 
+			});
+		}
 			else {
 				
-				$element = $('<div>').attr({ 'id': 'keywordInsight', 'class': 'w_container'})
-									 .prop('draggable', false)
-									 .appendTo('.dashboard-content')
-									 .append(response);
+				console.error("could not append Keyword Insight Widget to id: " + id)
 			}
+		
+		//TODO: Visualization
+		
+		//TODO: Other widget functions
+		
+		// Collapse Event
+		$('.keywordInsight .widget_title').click(function() {
+			$('.keywordInsight .widget-content').slideToggle('fast');
+		});
+
 	});		
 }
 
 
-	    
+function updateKeywordInsight(id) {
+	
+}
