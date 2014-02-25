@@ -24,6 +24,11 @@ function GetKeywordInsightWidget() {
 									 .appendTo('.dashboard-content')
 									 .append(response);
 			}
+			// Collapse Event
+			$('.keywordInsight .widget_title').click(function() {
+				$('.keywordInsight .widget-content').slideToggle('fast');
+			});
+
 	});		
 }
 
