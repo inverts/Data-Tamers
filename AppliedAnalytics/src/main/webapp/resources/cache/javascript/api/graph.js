@@ -27,7 +27,7 @@
 			'databuffer': 0,
 			'rangeMin'	: 4,
 			'dateLine'	: null,
-			'addedClass': ''
+			'showLegend': true
 	}; 
 	
 	/* function declaration */
@@ -37,7 +37,7 @@
 			var settings = $.extend({}, defaults, params); 					// we are integrating our default values into our params.
 			
 			var padding = {
-				     		 "top":    settings.title  ? 40 :20,			// padding required for graph labels
+				     		 "top":    settings.title  ? 22 : 5,			// padding required for graph labels
 				    	     "right":  30,
 				    	     "bottom": settings.xLabel ? 60 : 30,
 				    	     "left":   settings.yLabel ? 70 : 45
@@ -64,7 +64,9 @@
 			}
 			
 
-			// graph object
+			/********************************
+			 *		GRAPH PROPERTIES		*
+			 ********************************/
 			var graph = {
 							"title"		: null,
 							"data"		: settings.data,
@@ -87,10 +89,12 @@
 											
 							"size"		: { "width": 0, "height": 0 },
 							"zoom"		: function() {},
-							"line"		: { "_class": settings.lineClass, "type": settings.lineType, "addedClass": settings.addedClass }
+							"line"		: { "_class": settings.lineClass, "type": settings.lineType },
 						};
 			
-			
+			/********************************
+			 *		  GRAPH DOMAIN			*
+			 ********************************/
 			graph.x.domain = [d3.min(graph.data, function(d) { return getDate(d[graph.x.key]); }), 
 			                  d3.max(graph.data, function(d) { return getDate(d[graph.x.key]); })];
 			graph.y.domain = [0, getValueBy(graph.data, graph.y.keys, Math.max)];
@@ -101,13 +105,17 @@
 			var from = getDate(graph.data[settings.startIndex]),		// static date range chosen.
 			  	  to = getDate(graph.data[settings.endIndex ]);
 
-			// Base Cases
+			/********************************
+			 *			BASE CASES			*
+			 ********************************/
 			if (settings.endIndex >= settings.data.length || 
 					settings.endIndex < settings.startIndex || 
 					settings.endIndex - settings.startIndex < settings.rangeMin)
 				return;
 
-			
+			/********************************
+			 *			GRAPH SCALE			*
+			 ********************************/
 			graph.x.point = d3.time.scale().domain([from, to]).range([0, graph.view.width]); 		// function to get data points at x
 			graph.y.point = d3.scale.linear().domain(graph.y.domain.reverse()).nice().range([0, graph.view.height]).nice();	// function to get data points at y
 
@@ -126,9 +134,11 @@
 											"id": this.id + "Graph"
 									 	   })
 									 .append("g")
-									 .attr("transform", "translate(" + padding.left + "," + padding.right + ")");
+									 .attr("transform", "translate(" + padding.left + "," + padding.top + ")");
 			
-			// panning and zoom boundaries
+			/********************************
+			 *		ZOOM BOUNDARIES			*
+			 ********************************/
 			$.extend(settings, {constraint: { x: {
 												  	min: graph.x.point(getDate(graph.data[0])) - settings.databuffer, 
 												  	max: graph.view.width - graph.size.width + 2
@@ -162,14 +172,16 @@
 															// redraw the graph that moved
 															drawGraph()();
 														});
-			
+			/********************************
+			 *	  CREATE GRAPH VIEW AREA	*
+			 ********************************/
 			graph.view.rect = vis.append("rect")
 									   .attr({
 												"width": graph.view.width, 
 												"height": graph.view.height
 											})
 									   .style({
-										 		"stroke": "#CCC",
+										 		"stroke": "#666",
 										 		"stroke-width": 1,
 										 		"fill": "#FFF"
 											 })
@@ -184,11 +196,13 @@
 												"width": graph.view.width,
 												"height": graph.view.height,
 												"viewBox": "0 0 " + graph.view.width + " " + graph.view.height,
-												"class": graph.line.class
+												//"class": graph.line._class
 											});
 			
 			
-			// x axis label
+			/********************************
+			 *		APPLY X-AXIS LABEL		*
+			 ********************************/
 			vis.append("g")
 			   .attr({
 				  		"class": "xaxis",
@@ -204,8 +218,9 @@
 			 }
 			
 
-			
-			//  y-axis label
+			/********************************
+			 *		APPLY Y-AXIS LABEL		*
+			 ********************************/
 			vis.append("g")
 			   .attr({
 				  		"class": "yaxis",
@@ -214,42 +229,45 @@
 			
 			if (settings.yLabel) {
 			    graph.y.axis.label = vis.append("g").append("text")
-								        .attr("class", "axis")
+								        .attr("class", "xaxis label")
 								        .text(settings.yLabel)
 								        .style("text-anchor","middle")
 								        .attr("transform","translate(" + -40 + " " + graph.view.height/2+") rotate(-90)");
 			}
 			
-
-			// apply graph title
+			
+			/********************************
+			 *		 APPLY GRAPH TITLE		*
+			 ********************************/
 			if (settings.title) {
 				    graph.title = vis.append("text")
-							         .attr("class", "axis")
+							         .attr("class", "yaxis label")
 							         .text(settings.title)
 							         .attr({ "x": graph.view.width/2, "dy": "-0.8em" })
 							         .style("text-anchor","middle");
 			}
 			
-			  
-			  
-			 d3.select(this)
+  
+			 d3.select(this) // event registration
 		       .on("mousemove.drag", mousemove())
 		       .on("mouseup.drag",   mouseup());
 			  
 			 drawGraph()(); // draw graph on DOM load
-			  
+			 
 			 function pan() {
 				 return function() {
 					 d3.select("body").style("cursor", "move");
 				 };
 			 };
 			  
-			 /**
-			  * Redraws the points on the graph
-			  */
+			/********************************
+			 *	 UPDATES THE GRAPH LINES	*
+			 ********************************/
 			 function update(dateLine) {
 				 
-				 // Clipping object
+				/********************************
+				 *	 	CLIPPING PROPERTIES		*
+				 ********************************/
 				var clip = { "x": null, "width": null, "height": graph.view.height, "show": false };
 				 
 				 if (dateLine) {
@@ -258,20 +276,21 @@
 					 clip.show = graph.x.point(dateLine) < graph.view.width;
 				 }
 
-				  // draw all graphs
-				  for (var i = 0; i < graph.y.keys.length; i++) {
+				/********************************
+				 *	 	  DRAW ALL LINES		*
+				 ********************************/
+				 for (var i = 0; i < graph.y.keys.length; i++) {
 					  
-					  var $line = $("." + graph.line._class[i]);
+					  var $line = $("." + graph.line._class[i] + ".plot");
 					  var classes = null;
-					  var addedClass = false;
+					  var active = false;
 					  
 					  if($line.length) {
 						  classes = $line.attr("class");
-						  if (graph.line.addedClass)
-							  addedClass = classes.indexOf(graph.line.addedClass) != -1;
-						  d3.select("." + graph.line._class[i]).remove();
+						  active = classes.indexOf("active") != -1;
+						  d3.select("." + graph.line._class[i] + ".plot").remove();
 						  d3.select("." + graph.line._class[i] + ".alternate" ).remove();
-					  	  d3.select("#" + graph.line._class[i] + "clip").remove(); 
+					  	  d3.select("#" + graph.line._class[i] + "clip").remove();
 					  }
 					  
 					  // Setup clipping if applicable
@@ -286,7 +305,9 @@
 												});
 					  }
 	  
-					  // Draw the graph line
+					  /********************************
+					   *		PLOT THE LINE		  *
+					   ********************************/
 					  graph.view.svg.data([graph.data])
 					  					  .append("path")
 					  					  .attr({
@@ -294,17 +315,19 @@
 																	  .x(function(d) { return graph.x.point(getDate(d)); })
 									  				  				  .y(function(d) { return graph.y.point(d[graph.y.keys[i]]); }),
 									  				"pointer-events": "all",
-									  				"class": classes || graph.line._class[i]
+									  				"class": classes || graph.line._class[i] + " plot"
 					  					  		})
 					  					  .on("mousedown.drag", pan())
 					  					  .call(graph.zoom);
 					  
-					  // apply clipping mask if applicable
+					  /********************************
+					   *	 APPLY CLIPPING MASK	  *
+					   ********************************/
 					  if (clip.show) {
 						  graph.view.svg.append("path")
 						  				.attr({
-						  						"class": (addedClass) ? graph.line._class[i] + " alternate " + graph.line.addedClass 
-						  										      : graph.line._class[i] + " alternate",
+						  						"class": (active) ? graph.line._class[i] + " alternate active" 
+						  										  : graph.line._class[i] + " alternate",
 						  						"clip-path": "url(#" + graph.line._class[i] + "clip)"
 						  					  })
 						  			    .datum(graph.data)
@@ -335,6 +358,9 @@
 					  circle.exit().remove();*/
 				  } // end for
 				  
+				 /********************************
+				  *	  APPLY VERTICAL DATE LINE   *
+				  ********************************/
 				  if (dateLine) {
 					  d3.selectAll("line.dateLine").remove();
 					  vis.select("svg").append("line")
@@ -354,6 +380,7 @@
 				  }
 				};
 
+				
 				function mousemove() {
 					  return function() {
 					    var p = d3.mouse(vis[0][0]);
@@ -425,38 +452,40 @@
 						return function() {
 	
 							// d is the tick point.
-						    var tx = function(d) { 
+						    /*var tx = function(d) { 
 						    	var today = new Date();
 						    	if (d == today.getDate())
 						    		settings.onToday;
 						    	else
 						    		return null;
-						    };
+						    };*/
 						    
 						    	//ty = function(d) { return "translate(0," + y(d) + ")"; },
 						    
-						    stroke = function(d) { return d ? "#ccc" : "#666"; },
-						    
-						    //fx = x.tickFormat(d3),
-						    //fy = y.tickFormat(10);
-						 
+						  //stroke = function(d) { return d ? "#ccc" : "#666"; },
+
+						  /********************************
+						   *	APPLY X-AXIS TICKS		  *
+						   ********************************/
 						  graph.x.axis.svg = d3.svg.axis()
 						  						   .scale(graph.x.point)
 						  						   .orient("bottom")
 						  						   .tickFormat(d3.time.format("%b %d"));
 						  
+						  vis.select("g.xaxis").call(graph.x.axis.svg);
+						  
+						  /********************************
+						   *	APPLY Y-AXIS TICKS		  *
+						   ********************************/
 						  graph.y.axis.svg = d3.svg.axis()
 					  							   .scale(graph.y.point)
 					  							   .orient("left");
-						  
-						  
-						    
-						  
-						  vis.select("g.xaxis").call(graph.x.axis.svg);
-						  
+
 						  vis.select("g.yaxis").call(graph.y.axis.svg);
 
- 
+						  /********************************
+						   *		REDRAW LINES		  *
+						   ********************************/
 						  graph.view.rect.call(graph.zoom);
 						  update(settings.dateLine);    
 						}; 
