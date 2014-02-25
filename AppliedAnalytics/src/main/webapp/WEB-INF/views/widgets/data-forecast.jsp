@@ -10,6 +10,9 @@ var Y_MAX = ${ hfModel.getYRange().getValue() + hfModel.getYRangePadding() };
 var startDate = '${ filterModel.getActiveStartDateString() }';
 var endDate = '${ filterModel.getActiveEndDateString() }';
 var futureEndDate = '${ hfModel.getFutureEndDate() }';
+
+window.newData = JSON.parse('${ hfModel.getJSONPointsFormatted() }');
+//window.onload(updateHypotheticalWidget());
 </script>  
  
 <style>
@@ -43,3 +46,9 @@ circle { fill:blue; }
         <div id="dataForecastData"></div>
      </div>						
 </div>
+
+<script tpye="text/javascript">
+
+registerData();
+
+</script>

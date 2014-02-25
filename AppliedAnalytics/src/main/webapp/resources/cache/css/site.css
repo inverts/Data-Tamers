@@ -51,6 +51,7 @@ input { font: inherit; }
 
 /******RIGHT PANE******/
 .page .right-pane { width:0; height:100%; position:absolute; float:right; background:#444; color:#fff; z-index:10; right: 0; display:none; border-left: 3px solid #ccc; }
+.page .right-pane select, .page .right-pane input { color: #222; }
 
 /******HEADER/FOOTER******/
 .page #header { width:inherit; z-index:3; }

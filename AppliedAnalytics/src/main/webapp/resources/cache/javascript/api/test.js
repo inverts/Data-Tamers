@@ -6,7 +6,6 @@
 
 
 function createDataSet(size, yrange) {
-	
 	var result = [];
 	var date = new Date("01\/20\/14");
 	for(var i = 0; i < size; i++) {
@@ -20,8 +19,8 @@ function createDataSet(size, yrange) {
 		result.push(obj);
 		date = new Date(date.getTime() + 86400000);
 	}
-
-	return result;
+	return window.newData;
+	//return result;
 	
 }
 
@@ -30,7 +29,7 @@ function createDataSet(size, yrange) {
 
 
 $(function() {
-	
+	return;
 	var test = createDataSet(3, [1, 20]);
 	
 	if (test.length != 3)

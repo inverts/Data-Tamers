@@ -6,10 +6,23 @@
 
 $(function() {
 	updateHypotheticalWidget();
-	
-	
-	
 });
+
+function registerData() {
+	$('#dataForecastData').graph({
+		data: window.newData,
+		yKey: ['jsonHitCount', 'smooth', 'normal'],
+		lineClass: ['raw', 'smooth', 'normal'],
+		lineType: ['', 'cardinal', ''],
+		startIndex: 0,
+		endIndex: window.newData.length-1,
+		pointSize: 10,
+		databuffer: 10,
+		dateLine: new Date().setHours(0,0,0,0),
+		addedClass: 'active'
+			
+	});
+}
 
 function updateHypotheticalWidget() {
 	
@@ -29,20 +42,6 @@ function updateHypotheticalWidget() {
 		
 		//$('#hypotheticalFutureData').append(hypotheticalSketch);
 		
-		
-		$('#dataForecastData').graph({
-			data: createDataSet(50, [1, 200]),
-			yKey: ['jsonHitCount', 'smooth', 'normal'],
-			lineClass: ['raw', 'smooth', 'normal'],
-			lineType: ['', 'cardinal', ''],
-			startIndex: 22,
-			endIndex: 39,
-			pointSize: 0,
-			databuffer: 10,
-			dateLine: new Date().setHours(0,0,0,0),
-			addedClass: 'active'
-				
-		});
 		
 		// Collapse Event
 		$('.dataForecast .widget_title').click(function() {

@@ -82,7 +82,8 @@ public class SettingsController {
 	/*
 	 * FilterView 
 	 */
-	@RequestMapping(value = "/filter", method = {RequestMethod.POST, RequestMethod.GET})
+	//For some reason, this wasn't picking up on just "/filter" anymore, and I had to add /application/filter.
+	@RequestMapping(value = {"/filter", "/application/filter"} , method = {RequestMethod.POST, RequestMethod.GET})
 	public void filterView(Model viewMap, HttpServletRequest request,  HttpServletResponse response, HttpSession session, 
 			@RequestParam(value = "startDate") String startDate,
 			@RequestParam(value = "endDate") String endDate) {

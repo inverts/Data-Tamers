@@ -4,7 +4,6 @@
  * These are utility functions to help with our visualization API
  */
 
-
 function checkKeys(obj, idx, keys, value) {
 	
 	if (keys.length == 0)

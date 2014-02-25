@@ -606,7 +606,35 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
         	JSONArray points = new JSONArray();
         	for (Double value : values) {
         		try {
-					JSONObject point = new JSONObject().put("date", startDateTime).put("value", value);
+					JSONObject point = new JSONObject().put("jsonDate", startDateTime).put("jsonHitCount", value);
+	        		points.put(point);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return new JSONArray().toString();
+				}
+        		//Add one day.
+        		startDateTime += 1000 * 60 * 60 * 24;
+        	}
+        	return points.toString();
+        }
+        
+        /**
+         * 
+         * @param startDateTime
+         * @return
+         */
+        public String getJSONPointsFormatted() {
+        	long startDateTime = this.startDateC.getTime().getTime();
+        	JSONArray points = new JSONArray();
+        	int i;
+        	ArrayList<Double> smoothed = this.getDataSmoothed();
+        	for (i=0; i < this.dataOriginal.size(); i++) {
+        		try {
+					JSONObject point = new JSONObject().put("jsonDate", startDateTime)
+							.put("jsonHitCount", this.dataOriginal.get(i))
+							.put("smooth", smoothed.get(i))
+							.put("normal", this.dataNormalized.get(i));
 	        		points.put(point);
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
