@@ -21,6 +21,11 @@
 	<bean id="WebsitePerformance" class="org.springframework.web.servlet.view.JstlView">
 		<property name="url" value = "/WEB-INF/views/widgets/website-performance.jsp"/>
 	</bean>
+	
+	<!-- Keyword Insight -->
+	<bean id="KeywordInsight" class="org.springframework.web.servlet.view.JstlView">
+		<property name="url" value = "/WEB-INF/views/widgets/keyword-insight.jsp"/>
+	</bean>
 
 	<!-- INCLUDES -->
 	<bean id="settings" class="org.springframework.web.servlet.view.JstlView">

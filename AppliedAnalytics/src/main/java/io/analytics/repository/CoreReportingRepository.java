@@ -58,12 +58,18 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 
 		public static final String SOURCE_DIMENSION = "ga:source";
 		public static final String KEYWORD_DIMENSION = "ga:keyword";
+		public static final String MEDIUM_DIMENSION = "ga:medium";
 		public static final String VISITLENGTH_DIMENSION = "ga:visitLength";
 		public static final String DAYOFWEEK_DIMENSION = "ga:dayOfWeek";
 		public static final String DAYOFMONTH_DIMENSION = "ga:day";
 		public static final String MONTHOFYEAR_DIMENSION = "ga:month";
 		public static final String NDAY_DIMENSION = "ga:nthDay";
+		
+		public static final String CPC_MEDIUM = "cpc";
+		public static final String ORGANIC_MEDIUM = "organic";
 
+		public static final String KEYWORD_NOT_PROVIDED_FILTER = "ga:keyword==(not provided)";
+		
 		public static final boolean SORT_ASCENDING = true;
 		public static final boolean SORT_DESCENDING = false;
 
@@ -229,6 +235,11 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 * Get top n traffic sources relative to the passed metric
 		 *    Widgets where used:
 		 *       - Hypothetical Future
+		 *       	 * @param metric
+		 * @param metric
+		 * @param startDate
+		 * @param endDate
+		 * @param n
 		 * @return
 		 */
 		public GaData getTopTrafficSources1(Credential credential, String profileID, String metric, Date startDate, Date endDate, int n) {
@@ -259,6 +270,9 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		/**
 		 * Get page performance data for Web Performance widget
 		 * 
+		 * @param startDate
+		 * @param endDate
+		 * @param maxResults
 		 * @return
 		 */
 
@@ -323,7 +337,127 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			//return pagePerformanceMapper(gaData);
 			return gaData;
 		}
+		
+		/**
+		 * Get the "cpc" or "organic" keywords that are not "(not provided)"
+		 *   Special Inputs: 
+		 *   	String <medium>: expect "cpc" or "organic"
+		 * 
+		 * @param sDate
+		 * @param eDate
+		 * @param maxResults
+		 * @param medium
+		 * @return
+		 */
 
+		public GaData getKeywords(Credential credential, String profileID, Date sDate, Date eDate, int maxResults, String medium) {
+			return getKeywords(credential, profileID, sDate, eDate,maxResults, medium, "");
+		}	
+
+		/**
+		 * Get the "cpc" or "organic" keywords that contain the substring and are not "(not provided)"
+		 *   Special Inputs: 
+		 *   	String <medium>: expect "cpc" or "organic"
+		 *      String <substring>: filter based on this substring
+		 *      
+		 * @param sDate
+		 * @param eDate
+		 * @param maxResults
+		 * @param medium
+		 * @param substring
+		 * @return
+		 */
+
+		public GaData getKeywords(Credential credential, String profileID, Date sDate, Date eDate, int maxResults, String medium, String substring) {
+			GaData gaData = null;
+			String startDate = dateFormat.format(sDate);
+			String endDate = dateFormat.format(eDate);
+			String searchKeyword = "";
+			if (!substring.isEmpty()) {
+				searchKeyword = ";ga:keyword=@"+substring;
+			}
+
+			try {
+				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build().data().ga();
+ 
+				gaData = reporting.get("ga:"+ profileID, // profile id (table id).
+						startDate, // Start date.
+						endDate, // End date.
+						"ga:visits,ga:visitBounceRate") // Metrics.
+						.setDimensions("ga:medium,ga:keyword")
+						.setFilters("ga:medium=="+medium+";ga:keyword!=(not provided)"+ searchKeyword)
+						.setSort("-ga:visits")
+						.setMaxResults(maxResults)
+						.execute();
+			} catch (GoogleJsonResponseException e) {
+				handleGoogleJsonResponseException(e);
+			} catch (IOException e) {
+				// Catch general parsing network errors.
+				e.printStackTrace();
+			}
+			return gaData;
+		}	
+	
+		/*
+		 *  getMediumVisitsTotal:
+		 *  	Get the total number of visits for the GA dimension medium 
+		 *  Special Inputs: 
+		 *  	String <medium> expecting "cpc" or "organic"
+		 *  
+		 * @param sDate
+		 * @param eDate
+		 * @param medium
+		 * @return
+		 */
+		public GaData getMediumVisitsTotal(Credential credential, String profileID, Date sDate, Date eDate, String medium) {
+			return getMediumVisitsTotal(credential, profileID, sDate, eDate, medium, "");
+		}
+		
+		/*
+		 *  getMediumVisitsTotal:
+		 *  	Get the total number of visits for the GA dimension medium with a filter.
+		 *  Special Inputs: 
+		 *  	String <medium> expecting "cpc" or "organic"
+		 *      String <filter> expecting "" or valid filter, e.g. KEYWORD_NOT_PROVIDED_FILTER
+		 *      
+		 * @param sDate
+		 * @param eDate
+		 * @param medium
+		 * @param filter
+		 * @return
+		 */
+		public GaData getMediumVisitsTotal(Credential credential, String profileID, Date sDate, Date eDate, String medium, String filter) {
+			GaData gaData = null;
+			String startDate = dateFormat.format(sDate);
+			String endDate = dateFormat.format(eDate);
+
+			String addFilter = "";
+			// Add to filter if provided
+			if (!filter.isEmpty()) {
+				addFilter = ";"+filter;
+			}
+			
+			try {
+				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build().data().ga();
+ 
+				gaData = reporting.get("ga:"+ profileID, // profile id (table id).
+						startDate, // Start date.
+						endDate, // End date.
+						"ga:visits") // Metrics.
+						.setDimensions("ga:medium")
+						.setFilters("ga:medium=="+medium+addFilter)
+						.execute();
+			} catch (GoogleJsonResponseException e) {
+				handleGoogleJsonResponseException(e);
+			} catch (IOException e) {
+				// Catch general parsing network errors.
+				e.printStackTrace();
+			}
+			return gaData;
+		}		
+		
 		private CoreReportingData coreReportingMapper(GaData data){
 			if (data == null)
 				return null;

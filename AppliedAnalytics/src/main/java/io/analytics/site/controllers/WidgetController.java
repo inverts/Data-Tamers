@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import io.analytics.service.interfaces.ICoreReportingService;
+import io.analytics.service.interfaces.IKeywordInsightService;
 import io.analytics.service.interfaces.IPagePerfomanceService;
 import io.analytics.service.interfaces.ISessionService;
 import io.analytics.site.models.*;
@@ -29,7 +30,8 @@ public class WidgetController {
 	@Autowired private ICoreReportingService CoreReportingService;
 	@Autowired private ISessionService SessionService;
 	@Autowired private IPagePerfomanceService PagePerformanceService;
-
+	@Autowired private IKeywordInsightService KeywordInsightService;
+	
 	@RequestMapping(value = "/DataForecast", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView DataForecastView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,	
 												@RequestParam(value = "change", defaultValue = "none") String changePercentage,
@@ -144,11 +146,6 @@ public class WidgetController {
 			return new ModelAndView ("unavailable");
 		}
 
-
-		//
-		// Setting up the model.
-		//
-
 		WebsitePerformanceModel webPerform = SessionService.getModel(session, "webPerform", WebsitePerformanceModel.class);
 
 		//If there is no model available, or if the active profile changed, create a new model.
@@ -177,4 +174,46 @@ public class WidgetController {
 		return new ModelAndView("WebsitePerformance");
 	}
 
+	@RequestMapping(value = "/KeywordInsight", method = {RequestMethod.POST, RequestMethod.GET})
+	public ModelAndView keywordInsightView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+		
+		Credential credential;
+		SettingsModel settings;
+		FilterModel filter;
+		if (SessionService.checkAuthorization(session)) {
+			credential = SessionService.getCredentials();
+			filter = SessionService.getFilter();
+			settings = SessionService.getUserSettings();
+		} else {
+			SessionService.redirectToLogin(session, request, response);
+			return new ModelAndView("unavailable");
+		}
+		
+		if (settings.getActiveProfile() == null) {
+			//TODO: Make an informative view for when widgets don't have an active profile to get data from.
+			return new ModelAndView ("unavailable");
+		}		
+		
+		KeywordInsightModel keyInsight = SessionService.getModel(session, "keyInsight", KeywordInsightModel.class);
+		
+		//If there is no model available, or if the active profile changed, create a new model.
+		if ((keyInsight == null) || !(settings.getActiveProfile().equals(keyInsight.getActiveProfile()))) {
+			keyInsight = new KeywordInsightModel(this.SessionService, this.KeywordInsightService);
+		}
+		
+		if (filter != null) {
+			keyInsight.setStartDate(filter.getActiveStartDate());
+			keyInsight.setEndDate(filter.getActiveEndDate());
+		}
+		
+		// make queries.
+		keyInsight.updateData();
+				
+		// Save the updated model to the session and send it to the view.
+		SessionService.saveModel(session, "keywordInsight", keyInsight);
+		viewMap.addAttribute("kiModel", keyInsight);
+		//viewMap.addAttribute("filterModel", filter);
+		
+		return new ModelAndView("KeywordInsight");
+	}
 }

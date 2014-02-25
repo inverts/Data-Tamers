@@ -23,7 +23,14 @@ public interface ICoreReportingRepository {
 	public GaData getMetricForGaDimension(Credential credential, String profileID, String metric, String gaDimension, Date startDate, Date endDate, int maxResults);
 	
 	public GaData getTopTrafficSources1(Credential credential, String profileID, String metric, Date startDate, Date endDate, int maxResults);
+	
+	public GaData getKeywords(Credential credential, String profileID, Date startDate, Date endDate, int maxResults, String medium);
 
+	public GaData getKeywords(Credential credential, String profileID, Date startDate, Date endDate, int maxResults, String medium, String substring);
+	
+	public GaData getMediumVisitsTotal(Credential credential, String profileID, Date startDate, Date endDate, String medium);
+	
+	public GaData getMediumVisitsTotal(Credential credential, String profileID, Date startDate, Date endDate, String medium, String filter);
 }
 
 

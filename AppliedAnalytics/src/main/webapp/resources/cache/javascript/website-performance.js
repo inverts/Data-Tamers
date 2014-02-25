@@ -18,7 +18,6 @@ function GetWebsitePerformanceWidget() {
 			if ($element.length > 0)
 				$element.empty().append(response);
 			else {
-				
 				$element = $('<div>').attr({ 'id': 'websitePerformance', 'class': 'w_container'})
 									 .prop('draggable', true)
 									 .appendTo('.dashboard-content')

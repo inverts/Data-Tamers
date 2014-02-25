@@ -91,3 +91,4 @@ document.getElementById("exit4").innerHTML=data.exitRate[0][4];
 </div>
 </div>
 </body>
+
