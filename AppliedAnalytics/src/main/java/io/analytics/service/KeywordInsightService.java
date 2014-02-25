@@ -57,6 +57,9 @@ public class KeywordInsightService implements IKeywordInsightService {
 		int visitsColumn = -1; 
 		int visitBounceRateColumn = -1; 
 		int column = -1;
+		if (gaData.isEmpty()) {
+			return null;
+		}
 		for (ColumnHeaders header : gaData.getColumnHeaders()) {
 			column++;
 			String name = header.getName();
@@ -97,10 +100,10 @@ public class KeywordInsightService implements IKeywordInsightService {
 		dataObject.setOrganicVisitBounceRate(organicVisitBounceRate);
 
 		/* * * * * * * * * * * * * * * * * * * * *
-		/* GA query organic private search visits total
+		/* GA query organic private search visits total (use filter keyword==(not provided)
 		/* * * * * * * * * * * * * * * * * * * * */
-		boolean isPrivate=true;
-		gaData = REPOSITORY.getMediumVisitsTotal(credential, profileID, startDate, endDate, "organic", true);
+		
+		gaData = REPOSITORY.getMediumVisitsTotal(credential, profileID, startDate, endDate, CoreReportingRepository.ORGANIC_MEDIUM, CoreReportingRepository.KEYWORD_NOT_PROVIDED_FILTER);
 		
 		//printColumnHeaders(gaData);
 		//printDataTable(gaData);
@@ -129,8 +132,7 @@ public class KeywordInsightService implements IKeywordInsightService {
 		/* * * * * * * * * * * * * * * * * * * * *
 		/* GA query organic search visits total
 		/* * * * * * * * * * * * * * * * * * * * */
-		isPrivate=false;
-		gaData = REPOSITORY.getMediumVisitsTotal(credential, profileID, startDate, endDate, "organic", isPrivate);
+		gaData = REPOSITORY.getMediumVisitsTotal(credential, profileID, startDate, endDate, CoreReportingRepository.ORGANIC_MEDIUM);
 		
 		//printColumnHeaders(gaData);
 		//printDataTable(gaData);
@@ -159,7 +161,7 @@ public class KeywordInsightService implements IKeywordInsightService {
 		/* * * * * * * * * * * * * * * * * * * * *
 		/* GA query CPC (paid) keywords, visits, visitBounceRate
 		/* * * * * * * * * * * * * * * * * * * * */
-		gaData = REPOSITORY.getKeywords(credential, profileID, startDate, endDate, maxResults, "cpc", subString);
+		gaData = REPOSITORY.getKeywords(credential, profileID, startDate, endDate, maxResults, CoreReportingRepository.CPC_MEDIUM, subString);
 		
 		//printColumnHeaders(gaData);
 		//printDataTable(gaData);
@@ -214,8 +216,7 @@ public class KeywordInsightService implements IKeywordInsightService {
 		/* GA query CPC search visits total
 		/* * * * * * * * * * * * * * * * * * * * */
 		
-		// isPrivate = don't care, when medium = cpc 
-		gaData = REPOSITORY.getMediumVisitsTotal(credential, profileID, startDate, endDate, "cpc", isPrivate);
+		gaData = REPOSITORY.getMediumVisitsTotal(credential, profileID, startDate, endDate, CoreReportingRepository.CPC_MEDIUM);
 		
 		//printColumnHeaders(gaData);
 		//printDataTable(gaData);

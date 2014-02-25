@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -92,6 +93,11 @@ public class KeywordInsightModel {
 	public void updateData() {
 	
 		KeywordInsightData dataObject = this.keywordInsightService.getKeywordInsightData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate, 500, this.keywordSubstring);
+		// over quota error returns no data, try again
+		if (dataObject==null){
+			this.jsonData=null;
+			return;
+		}
 		organicKeywords = dataObject.getOrganicKeywords();
 		cpcKeywords = dataObject.getCpcKeywords();
 		organicVisits = dataObject.getOrganicVisits();
@@ -108,15 +114,16 @@ public class KeywordInsightModel {
 		organicData = new ArrayList<KeyData>(organicKeywords.size());
 	
 		while(itk.hasNext()) {
-			organicData.add(new KeyData(itk.next(),itv.next(),itb.next()));
+			organicData.add(new KeyData(itk.next(),itv.next(),itb.next(), "organic"));
 		}
       
 		Iterator<KeyData> it = organicData.iterator();
 		while (it.hasNext()){
 			KeyData kd = it.next();
-			kd.rank= kd.visits*kd.bounceRate;
+			kd.rank= kd.visits*(100-kd.bounceRate);
 			kd.visitsPercent = Math.round(10000.0*kd.visits/(this.organicVisitsTotal-this.privateOrganicVisitsTotal))/100.0;
 		}
+		Collections.sort(organicData);
 		
 		itk = cpcKeywords.iterator();
 		itv = cpcVisits.iterator();
@@ -124,15 +131,16 @@ public class KeywordInsightModel {
 		cpcData = new ArrayList<KeyData>(cpcKeywords.size());
 		
 		while(itk.hasNext()) {
-			cpcData.add(new KeyData(itk.next(),itv.next(),itb.next()));
+			cpcData.add(new KeyData(itk.next(),itv.next(),itb.next(), "cpc"));
 		}
 		
 		it = cpcData.iterator();
 		while (it.hasNext()){
 			KeyData kd = it.next();
-			kd.rank= kd.visits*kd.bounceRate;
+			kd.rank= kd.visits*(100.0-kd.bounceRate);
 			kd.visitsPercent = Math.round(10000.0*kd.visits/this.cpcVisitsTotal)/100.0;
 		}
+		Collections.sort(cpcData);
 		
 		// * * * * * * * * * * * * * * * * * * * * *
 		// "Consider adding these keywords to AdWords:"
@@ -143,13 +151,28 @@ public class KeywordInsightModel {
 		// "Consider removing these keywords from AdWords:"
 		// select cpc keywords with low visits
 		ArrayList<KeyData> removeKeywords = new ArrayList<KeyData>();
+		
+		KeyData minKd;
 		it = cpcData.iterator();
-		while (it.hasNext()){
-			KeyData kd = it.next();
-			if (kd.visitsPercent<.1 && kd.visits<2){
-				removeKeywords.add(kd);
-			}
+		if (it.hasNext()){
+			 minKd = it.next();
+			 // if the rank 
+			 if (minKd.rank < 1.){
+				 removeKeywords.add(minKd);
+				 
+				 while (it.hasNext()){
+						KeyData kd = it.next();
+						if (Math.abs((minKd.rank - kd.rank)) < 1e-9) {
+							removeKeywords.add(kd);
+						}
+						else {
+							break;
+						}
+				}
+			 }
 		}
+		
+		removeKeywords.trimToSize();
 
 		// * * * * * * * * * * * * * * * * * * * * *
 		// "Change website to better address these keywords:"
@@ -163,26 +186,21 @@ public class KeywordInsightModel {
 		it = cpcData.iterator();
 		while (it.hasNext()){
 			KeyData kd = it.next();
-			if (kd.visitsPercent>5.0 && kd.bounceRate<50){
+			if (kd.visitsPercent>5.0 && kd.bounceRate>50){
 				helpKeywords.add(kd);
 			}
 		}
+		helpKeywords.trimToSize();
 		
 		
 		// * * * * * * * * * * * * * * * * * * * * *
-		// sort organicData based on rank
-		
-		
-		// sort cpcData based on rank
-		
-
 		// Find all keywords that contain the user entered substring
 		//    (organic and cpc separate)
 		
 		
 		System.out.println("Keyword Insight model reached");
 		int breakpoint = 0;	
-		
+		int val = breakpoint;
 		// put data into the JSON Object member jsonData
 		this.createJson(removeKeywords, helpKeywords); 
 		
@@ -194,6 +212,7 @@ public class KeywordInsightModel {
 		 try {	
 			 JSONArray removeKeywords = new JSONArray();
 			 JSONArray removeVisitsPercent = new JSONArray();
+			 JSONArray removeBounceRate = new JSONArray();
 			 JSONArray helpKeywords = new JSONArray();
 			 JSONArray helpVisitsPercent = new JSONArray();
 			 JSONArray helpBounceRate = new JSONArray();
@@ -203,6 +222,7 @@ public class KeywordInsightModel {
 				 KeyData d = it.next();
 				 removeKeywords.put(d.keyword);
 				 removeVisitsPercent.put(d.visitsPercent);
+				 removeBounceRate.put(d.bounceRate);
 			 }
 			
 			 it = hk.iterator();
@@ -215,6 +235,7 @@ public class KeywordInsightModel {
 			 
 			 this.jsonData.put("removeKeywords", removeKeywords);
 			 this.jsonData.put("removeVisitsPercent", removeVisitsPercent);
+			 this.jsonData.put("removeBounceRate", removeBounceRate);
 			 this.jsonData.put("helpKeywords", helpKeywords);
 			 this.jsonData.put("helpVisitsPercent", helpVisitsPercent);
 			 this.jsonData.put("helpBounceRate", helpBounceRate);
@@ -230,21 +251,29 @@ public class KeywordInsightModel {
 	}
 }
 
+
+
 // class to hold related keyword, visits, visitBounceRate
 
- class KeyData {
+ class KeyData implements Comparable<KeyData>{
 	public String keyword;
 	public int visits;
 	public double bounceRate;
 	public double rank;
 	public double visitsPercent;
+	public String medium;
 	
-	public KeyData(String keyword, int visits, double bounceRate){
+	public KeyData(String keyword, int visits, double bounceRate, String medium){
 		this.keyword = keyword;
 		this.visits = visits;
-		this.bounceRate = bounceRate;
+		this.bounceRate = Math.round(100.0*bounceRate)/100.0;
 		this.rank = -1.;
 		this.visitsPercent = -1.;
+		this.medium = medium;
+	}
+	
+	public int compareTo(KeyData kd){
+		return Double.compare(this.rank, kd.rank);
 	}
 	
 }

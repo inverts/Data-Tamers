@@ -14,27 +14,36 @@ padding:3px;
 }
 </style>
 <script>
-var data =JSON.parse('${ kiModel.getDataPoints() }');
-console.log(data);
-console.log(data.removeKeywords[0]);
-var table = $('<table><tbody>');
-var tr = $('<tr>');
-$('<th>Keywords</th>').appendTo(tr);
-$('<th>Visits(%)</th>').appendTo(tr);
-tr.appendTo(table);
-for(var r = 0; r < data.removeKeywords[0].length; r++)
-{
-    var tr = $('<tr>');
-    var key = '<td>'+data.removeKeywords[r]+'</td>';
-    var visits = '<td>'+data.removeVisitsPercent[r]+'</td>';
-    
-    $(key).appendTo(tr);
-    $(visits).appendTo(tr);
-    tr.appendTo(table);
+var dataPoints = ('${ kiModel.getDataPoints() }');
+
+// if no data display error message
+if (dataPoints == null) {
+	("#keywordInsightSettings").append('<h2><fmt:message key="keywordinsight.gaOverQuotaError"/></h2>');
 }
-
-table.appendTo("#keywordInsightSettings");
-
+else { // else parse and display data
+	var data =JSON.parse('${ kiModel.getDataPoints() }');
+	console.log(data);
+	var table = $('<table><tbody>');
+	var tr = $('<tr>');
+	$('<th>Keywords</th>').appendTo(tr);
+	$('<th>Visits (%)</th>').appendTo(tr);
+	$('<th>Bounce Rate (%)</th>').appendTo(tr);
+	tr.appendTo(table);
+	for(var r = 0; r < data.removeKeywords.length; r++)
+	{
+	    var tr = $('<tr>');
+	    var key = '<td>'+data.removeKeywords[r]+'</td>';
+	    var visits = '<td>'+data.removeVisitsPercent[r]+'</td>';
+	    var bounceRate = '<td>'+data.removeBounceRate[r]+'</td>';
+	    
+	    $(key).appendTo(tr);
+	    $(visits).appendTo(tr);
+	    $(bounceRate).appendTo(tr);
+	    tr.appendTo(table);
+	}
+	
+	table.appendTo("#keywordInsightSettings");
+}
 </script>
 </head>
 <body>
