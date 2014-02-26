@@ -1,3 +1,4 @@
 activeuserprofiles=My-PC;Team
 eclipse.preferences.version=1
 org.eclipse.rse.systemtype.local.systemType.defaultUserId=Knight
+useridperkey=My-PC.Local\=Knight;

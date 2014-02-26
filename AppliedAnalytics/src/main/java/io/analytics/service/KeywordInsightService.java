@@ -57,7 +57,7 @@ public class KeywordInsightService implements IKeywordInsightService {
 		int visitsColumn = -1; 
 		int visitBounceRateColumn = -1; 
 		int column = -1;
-		if (gaData.isEmpty()) {
+		if (gaData==null) {
 			return null;
 		}
 		for (ColumnHeaders header : gaData.getColumnHeaders()) {
