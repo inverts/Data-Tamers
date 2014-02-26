@@ -7,7 +7,6 @@ table, th, td
 background-color:#DCDCDC;
 border:1px solid black;
 }
-h3{color:#DCDCDC;}
 th, td
 {
 padding:3px;
@@ -24,7 +23,9 @@ if (dataPoints == null) {
 else { // else parse and display data
 	var data =JSON.parse('${ kiModel.getDataPoints() }');
 	console.log(data);
+	
 	// Remove keywords table
+	var message = $('<h4><fmt:message key="keywordinsight.removeSuggestion"/></h4><br>');
 	var table = $('<table><tbody>');
 	var tr = $('<tr>');
 	$('<th>Keywords</th>').appendTo(tr);
@@ -46,10 +47,11 @@ else { // else parse and display data
 	    $(rank).appendTo(tr);
 	    tr.appendTo(table);
 	}
+	message.appendTo("#keywordInsightSettings");
 	table.appendTo("#keywordInsightSettings");
 	
 	// Help keywords table
-	var message = $('<br><br><h3><fmt:message key="keywordinsight.changeSuggestion"/></h3><br>');
+	var message = $('<br><h4><fmt:message key="keywordinsight.changeSuggestion"/></h4><br>');
 	var table = $('<table><tbody>');
 	var tr = $('<tr>');
 	$('<th>Keywords</th>').appendTo(tr);
@@ -75,7 +77,7 @@ else { // else parse and display data
 	table.appendTo("#keywordInsightSettings");
 	
 	// Best keywords table
-	var message = $('<br><br><h3><fmt:message key="keywordinsight.bestMessage"/></h3><br>');
+	var message = $('<br><h4><fmt:message key="keywordinsight.bestMessage"/></h4><br>');
 	var table = $('<table><tbody>');
 	var tr = $('<tr>');
 	$('<th>Keywords</th>').appendTo(tr);
@@ -100,8 +102,56 @@ else { // else parse and display data
 	message.appendTo("#keywordInsightSettings");
 	table.appendTo("#keywordInsightSettings");
 	
-	// All word substring keyword performance table
-	var message = $('<br><br><h3><fmt:message key="keywordinsight.wordPerformanceMessage"/></h3><br>');
+
+	
+	// Best keyword substring performance table
+	var message = $('<br><h4><fmt:message key="keywordinsight.bestWordsMessage"/></h4><br>');
+	var table = $('<table><tbody>');
+	var tr = $('<tr>');
+	$('<th>Word Substring</th>').appendTo(tr);
+	$('<th>Keyword Count</th>').appendTo(tr);
+	$('<th>Multipage Visits (%)</th>').appendTo(tr);
+	tr.appendTo(table);
+	for(var r = 0; r < data.bestWords.length; r++)
+	{
+	    var tr = $('<tr>');
+	    var word = '<td>'+data.bestWords[r]+'</td>';
+	    var keywordCount = '<td>'+data.bestWordsCount[r]+'</td>';
+	    var rank = '<td>'+ Math.round(100*data.bestWordsMultipageVisitsPercent[r])/100.0+'</td>';
+	    
+	    $(word).appendTo(tr);
+	    $(keywordCount).appendTo(tr);
+	    $(rank).appendTo(tr);
+	    tr.appendTo(table);
+	}
+	message.appendTo("#keywordInsightSettings");
+	table.appendTo("#keywordInsightSettings"); 
+	
+	// Worst keyword substring performance table
+	var message = $('<br><h4><fmt:message key="keywordinsight.worstWordsMessage"/></h4><br>');
+	var table = $('<table><tbody>');
+	var tr = $('<tr>');
+	$('<th>Word Substring</th>').appendTo(tr);
+	$('<th>Keyword Count</th>').appendTo(tr);
+	$('<th>Multipage Visits (%)</th>').appendTo(tr);
+	tr.appendTo(table);
+	for(var r = 0; r < data.worstWords.length; r++)
+	{
+	    var tr = $('<tr>');
+	    var word = '<td>'+data.worstWords[r]+'</td>';
+	    var keywordCount = '<td>'+data.worstWordsCount[r]+'</td>';
+	    var rank = '<td>'+ Math.round(100*data.worstWordsMultipageVisitsPercent[r])/100.0+'</td>';
+	    
+	    $(word).appendTo(tr);
+	    $(keywordCount).appendTo(tr);
+	    $(rank).appendTo(tr);
+	    tr.appendTo(table);
+	}
+	message.appendTo("#keywordInsightSettings");
+	table.appendTo("#keywordInsightSettings"); 
+	
+	/* 	// All keyword substring performance table
+	var message = $('<br><h4><fmt:message key="keywordinsight.bestWordsMessage"/></h4><br>');
 	var table = $('<table><tbody>');
 	var tr = $('<tr>');
 	$('<th>Word Substring</th>').appendTo(tr);
@@ -121,10 +171,10 @@ else { // else parse and display data
 	    tr.appendTo(table);
 	}
 	message.appendTo("#keywordInsightSettings");
-	table.appendTo("#keywordInsightSettings");
+	table.appendTo("#keywordInsightSettings"); */
 	
 	// All cpc keywords table
-	var message = $('<br><br><h3><fmt:message key="keywordinsight.searchMessage"/></h3><br>');
+/* 	var message = $('<br><h4><fmt:message key="keywordinsight.searchMessage"/></h4><br>');
 	var table = $('<table><tbody>');
 	var tr = $('<tr>');
 	$('<th>Keywords</th>').appendTo(tr);
@@ -147,7 +197,7 @@ else { // else parse and display data
 	    tr.appendTo(table);
 	}
 	message.appendTo("#keywordInsightSettings");
-	table.appendTo("#keywordInsightSettings");
+	table.appendTo("#keywordInsightSettings"); */
 }
 
 </script>
@@ -155,7 +205,7 @@ else { // else parse and display data
 <div class="widget widget_wrapper widgetView keywordInsight">
 	<div class="widget_header">			
 		<div class="widget_title"><fmt:message key="keywordinsight.title" /></div>			
-	    <h4><fmt:message key="keywordinsight.removeSuggestion"/></h4>
+
 	</div>
 	<div class="widget-content">
 		<form id="keywordInsightSettings">

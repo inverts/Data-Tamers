@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import org.json.JSONArray;
@@ -243,6 +242,7 @@ public class KeywordInsightModel {
 			words.add(new WordCount(word, Collections.frequency(allWords, word))) ; 
 		}
 		
+		// add up multipage visits for each keyword with word
 		Iterator<WordCount> itwc = words.iterator();
 		while (itwc.hasNext()) {
 			WordCount wordCount = itwc.next();
@@ -255,24 +255,51 @@ public class KeywordInsightModel {
 			}
 		}
 		
-		// sort descending
+		// sort ascending
 		Collections.sort(words);
-		Collections.reverse(words);
+		// Pick off first worst words if they perform at 0
+		ArrayList<WordCount> worstWords = new ArrayList<WordCount>();
+	    itwc = words.iterator();
+	    while (itwc.hasNext()){
+	       WordCount wordCount = itwc.next();
+	       if (wordCount.multipageVisitsPercent < 1e-9) {
+	    	   worstWords.add(wordCount);
+	        }
+	        else {
+	        	break;
+	        }
+	    }
 		
-
+	    // sort descending
+		Collections.reverse(words);
+		// Pick off first best words if the perform well
+		ArrayList<WordCount> bestWords = new ArrayList<WordCount>();
+	    itwc = words.iterator();
+	    while (itwc.hasNext()){
+	        WordCount wordCount = itwc.next();
+	        if (wordCount.multipageVisitsPercent >= 5.0) {
+	        	bestWords.add(wordCount);
+	        }
+	        else{
+	        	break;
+	        }
+	    }
+		
+   
+		
 		// * * * * * * * * * * * * * * * * * * * * *
 		// "Consider adding these keywords to AdWords:"
 		// select organic keywords with high visits that are not cpc keywords.
 		
 		
 		// put data into the JSON Object member jsonData
-		this.createJson(removeKeywords, helpKeywords, bestKeywords, allCpcKeywords, words); 
+		this.createJson(removeKeywords, helpKeywords, bestKeywords, allCpcKeywords, words, worstWords, bestWords); 
 		
 	}
 	
 	// put data into JSON object to pass to the view website-performance.jsp 
 	
-	public void createJson(ArrayList<KeyData> rk, ArrayList<KeyData> hk, ArrayList<KeyData> bk, ArrayList<KeyData> ak, ArrayList<WordCount> wc)  {
+	public void createJson(ArrayList<KeyData> rk, ArrayList<KeyData> hk, ArrayList<KeyData> bk, ArrayList<KeyData> ak, ArrayList<WordCount> wc, ArrayList<WordCount> ww, ArrayList<WordCount> bw)  {
 		 try {	
 			 JSONArray removeKeywords = new JSONArray();
 			 JSONArray removeVisitsPercent = new JSONArray();
@@ -293,6 +320,12 @@ public class KeywordInsightModel {
 			 JSONArray words = new JSONArray();
 			 JSONArray wordCount = new JSONArray();
 			 JSONArray multipageVisitsPercent = new JSONArray();
+			 JSONArray worstWords = new JSONArray();
+			 JSONArray worstWordsCount = new JSONArray();
+			 JSONArray worstWordsMultipageVisitsPercent = new JSONArray();
+			 JSONArray bestWords = new JSONArray();
+			 JSONArray bestWordsCount = new JSONArray();
+			 JSONArray bestWordsMultipageVisitsPercent = new JSONArray();
 			 
 			 Iterator<KeyData> it = rk.iterator();
 			 while (it.hasNext()){
@@ -338,6 +371,22 @@ public class KeywordInsightModel {
 				 multipageVisitsPercent.put(d.multipageVisitsPercent);
 			 }
 			 
+			 itwc = ww.iterator();
+			 while (itwc.hasNext()){
+				 WordCount d = itwc.next();
+				 worstWords.put(d.word);
+				 worstWordsCount.put(d.count);
+				 worstWordsMultipageVisitsPercent.put(d.multipageVisitsPercent);
+			 }
+			 
+			 itwc = bw.iterator();
+			 while (itwc.hasNext()){
+				 WordCount d = itwc.next();
+				 bestWords.put(d.word);
+				 bestWordsCount.put(d.count);
+				 bestWordsMultipageVisitsPercent.put(d.multipageVisitsPercent);
+			 }
+			 
 			 this.jsonData.put("removeKeywords", removeKeywords);
 			 this.jsonData.put("removeVisitsPercent", removeVisitsPercent);
 			 this.jsonData.put("removeBounceRate", removeBounceRate);
@@ -357,6 +406,12 @@ public class KeywordInsightModel {
 			 this.jsonData.put("words", words);
 			 this.jsonData.put("wordCount", wordCount);
 			 this.jsonData.put("multipageVisitsPercent", multipageVisitsPercent);
+			 this.jsonData.put("worstWords", worstWords);
+			 this.jsonData.put("worstWordsCount", worstWordsCount);
+			 this.jsonData.put("worstWordsMultipageVisitsPercent", worstWordsMultipageVisitsPercent);
+			 this.jsonData.put("bestWords", bestWords);
+			 this.jsonData.put("bestWordsCount", bestWordsCount);
+			 this.jsonData.put("bestWordsMultipageVisitsPercent", bestWordsMultipageVisitsPercent);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
