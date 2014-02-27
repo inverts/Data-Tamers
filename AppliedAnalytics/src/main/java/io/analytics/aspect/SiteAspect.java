@@ -1,6 +1,13 @@
 package io.analytics.aspect;
 
+import io.analytics.domain.Dashboard;
+import io.analytics.service.interfaces.IDashboardService;
+import io.analytics.service.interfaces.ISessionService;
+import io.analytics.site.models.SessionModel.CorruptedSessionException;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -9,12 +16,13 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 
 @Aspect
 public class SiteAspect {
 	
-
+	
 	@Pointcut("execution(public * *(..))")
     public void publicMethod() {}
 	

@@ -1,1 +1,1 @@
-${ hfModel.getJSONSerialization() }
+${ model.getJSONSerialization() }

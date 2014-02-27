@@ -16,20 +16,40 @@ $(function() {
 });
 
 /**
+ * Clears the current dashboard and loads the provided dashboardId, if available.
+ * If the provided dashboardId does not exist, the dashboard will not be updated.
+ * 
+ * @param dashboardId
+ * @returns true if the dashboard successfully loaded, false otherwise.
+ */
+function loadDashboard(dashboardId) {
+	$.post(applicationRoot + "application/dashboards/" + dashboardId, 
+			{ },
+			function(result) {
+				var dashboard = $.parseJSON(result);
+				var widgetIdArray = dashboard.widgetIds;
+				var widgetTypeIdArray = dashboard.widgetTypeIds;
+				loadWidgets(widgetTypeIdArray);
+			});
+}
+
+
+/**
  * calls each widgets model and view and appends
  * the widget to the dashboard.
  * 
  * @param widgetIdArray - array of widgetIds
  * @returns
  */
-function loadWidgets(widgetIdArray) {
+//TODO: Accommodate widget specifics (like filter).
+function loadWidgets(widgetTypeIdArray) {
 	
-	for(var i = 0; i < widgetIdArray.length; i++) {
+	for(var i = 0; i < widgetTypeIdArray.length; i++) {
 		var $div = $('<div>').addClass('w_container')
 							 .prop('draggable', true)
 							 .appendTo($('.dashboard-content'));
 		
-		var widgetId = widgetIdArray[i];
+		var widgetId = widgetTypeIdArray[i];
 		
 		switch(widgetId)
 		{
@@ -38,12 +58,12 @@ function loadWidgets(widgetIdArray) {
 				loadDataForecast('dataForecast' + i);
 				break;
 				
-			case 2:
+			case 3:
 				$div.attr('id', 'websitePerformance' + i).data('widgetId', widgetId);
 				loadWebsitePerformance('websitePerformance' + i);
 				break;
 				
-			case 3:
+			case 2:
 				$div.attr('id', 'keyContributingFactors' + i).data('widgetId', widgetId);
 				loadKeyContributingFactors('keyContributingFactors' + i);
 				break;

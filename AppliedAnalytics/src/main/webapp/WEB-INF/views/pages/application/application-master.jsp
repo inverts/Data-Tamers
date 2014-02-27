@@ -28,7 +28,6 @@
 <script src="<c:url value="/cache/javascript/headerfooter.js" />"></script>
 <script src="<c:url value="/cache/javascript/application.js" />"></script>
 
-
 <title>${TITLE}</title>
 </head>
 

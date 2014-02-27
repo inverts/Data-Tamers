@@ -1,5 +1,6 @@
 package io.analytics.site.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -12,13 +13,17 @@ import javax.servlet.http.HttpSession;
 import io.analytics.aspect.HeaderFooter;
 import io.analytics.aspect.SidePanel;
 import io.analytics.domain.Account;
+import io.analytics.domain.Dashboard;
 import io.analytics.domain.User;
+import io.analytics.domain.Widget;
 import io.analytics.enums.HeaderType;
 import io.analytics.forms.DashboardForm;
 import io.analytics.service.interfaces.IAccountService;
 import io.analytics.service.interfaces.IDashboardService;
 import io.analytics.service.interfaces.ISessionService;
 import io.analytics.service.interfaces.IUserService;
+import io.analytics.service.interfaces.IWidgetService;
+import io.analytics.site.models.DashboardModel;
 import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SessionModel;
 import io.analytics.site.models.SessionModel.CorruptedSessionException;
@@ -35,6 +40,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,7 +49,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@SessionAttributes({"ACCOUNT_ID", "USER_ID", "DASHBOARD_ID"})
 public class DashboardController {
 	
 private static final Logger logger = LoggerFactory.getLogger(ApplicationController.class);
@@ -53,6 +58,7 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 	@Autowired private ISessionService SessionService;
 	@Autowired private IDashboardService DashboardService;
 	@Autowired private IUserService UserService;
+	@Autowired private IWidgetService WidgetService;
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -60,12 +66,13 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 	@HeaderFooter(HeaderType.APPLICATION)
 	@SidePanel(animate = true)
 	@RequestMapping(value = "/application", method = RequestMethod.GET)
-	public ModelAndView getDashboard(Locale locale, Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView getDashboardContainer(Locale locale, Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response,
+			   @RequestParam(value = "did", defaultValue = "-1") String dashboardId) {
 		
-		SessionModel sessionModel = new SessionModel(session);
 		
 		boolean success = SessionService.checkAuthorization(session);
-		
+
+		/* Getting the currrent settings. */
 		SettingsModel settings = null;
 		if (success) {
 			//If authorization succeeded, the following must succeed.
@@ -76,6 +83,8 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 		} else {
 			return new ModelAndView("unavailable");
 		}
+		
+		SessionModel sessionModel = new SessionModel(session);
 		
 		try {
 			if (sessionModel.getUser() == null) {
@@ -97,6 +106,37 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 			SessionService.redirectToLogin(session, request, response);
 		}
 		
+		try {
+			//Get a list of dashboards and make a list of ids.
+			List<Dashboard> dashboards = DashboardService.getAccountDashboards(sessionModel.getAccount().getId());
+			ArrayList<Integer> dashboardIds = new ArrayList<Integer>(dashboards.size());
+			for(Dashboard d : dashboards)
+				dashboardIds.add(d.getId());
+			
+			
+			if (dashboardIds.isEmpty()) {
+				//TODO: Create a dashboard if there aren't any, or display a "no dashboards" screen. I would vote for the latter.
+				System.err.println("No dashboards for this account.");
+			} else {
+				int dId = -1;
+				try {
+					dId = Integer.parseInt(dashboardId);
+				} catch (NumberFormatException e) {
+					System.err.println("Dashboard ID was not valid.");
+				}
+				//If the id provided is valid, pass this on - otherwise, pass on the default dashboard id.
+				if (dashboardIds.contains(dId))
+					model.addAttribute("dashboardId", dId);
+				else
+					model.addAttribute("dashboardId", dashboardIds.get(0));
+			}
+		} catch (CorruptedSessionException e1) {
+			e1.printStackTrace();
+			SessionService.redirectToLogin(session, request, response);
+		}
+		
+		
+		/* Getting the currrent filter. */
 		
 		FilterModel filter = null;
 		try {
@@ -111,9 +151,11 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 			session.setAttribute("filter", filter);
 		}
 		
-		request.setAttribute("state", "application");
-		
 		model.addAttribute("filter", filter);
+		
+		
+		//What is this?
+		request.setAttribute("state", "application");
 
 		SidePanelModel sidePanelModel = new SidePanelModel(this.DashboardService, sessionModel);
 		try {
@@ -134,15 +176,21 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 		return new ModelAndView("application/dashboard");
 	}
 	
+	
+	
 	@RequestMapping(value = "/addDashboard", method = RequestMethod.POST)
 	public ModelAndView showAddDashboardForm() {
 		return new ModelAndView("addDashboard");
 	}
 	
+	
+	
 	@ModelAttribute("dashboardForm")
 	public DashboardForm getDashboardForm() {
 		return new DashboardForm();
 	}
+	
+	
 	
 	/**
 	 * Create a new dashboard
@@ -186,6 +234,8 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 	}
 	
 	
+	
+	
 	/**
 	 * Delete a dashboard. Could delete any dashboard in account.
 	 * 
@@ -219,17 +269,6 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 		return result.toString();
 	}
 	
-	/* Spoof Attributes */
-	@ModelAttribute("USER_ID")
-	public int getUserId() {
-		return 111111;
-	}
-	
-	@ModelAttribute("ACCOUNT_ID")
-	public int getAccountId() {
-		return 1;
-	}
-	
 	/**
 	 * Update Widget Position on the Dashboard.
 	 * 
@@ -252,7 +291,27 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 			logger.info(e.getMessage());
 		}
 	}
-	
+
+	@RequestMapping(value = "/application/dashboards/{dashboardId}", method = {RequestMethod.POST, RequestMethod.GET})
+	public ModelAndView getDashboard(@PathVariable String dashboardId, Model model) {
+		int id;
+		try {
+			id = Integer.parseInt(dashboardId);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			return new ModelAndView("serialize");
+		}
+		//If the id does not match a valid dashboard, this list will be empty, but not null.
+		List<Widget> widgets = WidgetService.getDashboardWidgets(id);
+		if (widgets == null)
+			return new ModelAndView("serialize");
+		
+		DashboardModel d = new DashboardModel(id);
+		d.setWidgetIdsWithWidgets(widgets);
+		
+		model.addAttribute("model", d);
+		return new ModelAndView("serialize");
+	}
 	
 
 }

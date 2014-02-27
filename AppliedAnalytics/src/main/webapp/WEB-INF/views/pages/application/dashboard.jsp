@@ -9,7 +9,10 @@
 
 <script>
 var widgets = [1, 4];
-$(function() { loadWidgets(widgets); });
+//$(function() { loadWidgets(widgets); });
+var dashboardId = ${model.dashboardId};
+loadDashboard(dashboardId);
+
 </script>
 
 <div class="dashboard">
