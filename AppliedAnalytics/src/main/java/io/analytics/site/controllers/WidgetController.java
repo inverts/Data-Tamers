@@ -1,5 +1,5 @@
-package io.analytics.site.controllers;
 
+package io.analytics.site.controllers;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -78,14 +78,7 @@ public class WidgetController {
 		SessionService.saveModel(session, "hypotheticalFuture", dataForecast);
 		viewMap.addAttribute("hfModel", dataForecast);
 		viewMap.addAttribute("filterModel", filter);
-		/*
-		HypotheticalFutureModel hypotheticalFuture = new HypotheticalFutureModel(adjustBy, source);
 		
-		viewMap.addAttribute("hfModel", hypotheticalFuture);
-		viewMap.addAttribute("changeOptions", hypotheticalFuture.getChangePercentOptions());
-		viewMap.addAttribute("DATA", hypotheticalFuture.getVisualization());
-		 */
-		String sample = dataForecast.getJSONSerialization();
 		if (!serialize.equals("none")) {
 			viewMap.addAttribute("model", dataForecast);
 			return new ModelAndView("serialize");
@@ -129,6 +122,52 @@ public class WidgetController {
 		}
 
 		return new ModelAndView("RevenueSources");
+	}
+	
+	@RequestMapping(value = "/GrowingProblems", method = {RequestMethod.POST, RequestMethod.GET})
+	public ModelAndView growingProblemsView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+		Credential credential;
+		SettingsModel settings;
+		FilterModel filter;
+		if (SessionService.checkAuthorization(session)) {
+			credential = SessionService.getCredentials();
+			filter = SessionService.getFilter();
+			settings = SessionService.getUserSettings();
+		} else {
+			SessionService.redirectToLogin(session, request, response);
+			return new ModelAndView("unavailable");
+		}
+
+		if (settings.getActiveProfile() == null) {
+			//TODO: Make an informative view for when widgets don't have an active profile to get data from.
+			return new ModelAndView ("unavailable");
+		}
+
+		return new ModelAndView("GrowingProblems");
+	}
+	
+	@RequestMapping(value = "/BoostPerformance", method = {RequestMethod.POST, RequestMethod.GET})
+	public ModelAndView boostPerformanceView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+		Credential credential;
+		SettingsModel settings;
+		FilterModel filter;
+		if (SessionService.checkAuthorization(session)) {
+			credential = SessionService.getCredentials();
+			filter = SessionService.getFilter();
+			settings = SessionService.getUserSettings();
+		} else {
+			SessionService.redirectToLogin(session, request, response);
+			return new ModelAndView("unavailable");
+		}
+
+		if (settings.getActiveProfile() == null) {
+			//TODO: Make an informative view for when widgets don't have an active profile to get data from.
+			return new ModelAndView ("unavailable");
+		}
+
+		return new ModelAndView("BoostPerformance");
 	}
 
 
@@ -230,6 +269,7 @@ public class WidgetController {
 			viewMap.addAttribute("model", keyInsight);
 			return new ModelAndView("serialize");
 		}
+		
 		return new ModelAndView("KeywordInsight");
 	}
 }
