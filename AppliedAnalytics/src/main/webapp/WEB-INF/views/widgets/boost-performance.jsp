@@ -9,36 +9,35 @@
 </script>
 </head>
 <body>
-  
-<div class="widget widgetView boostPerformance">
-	<form id="boostPerformanceSettings">
-		<div class="widget_header">		
-			<div class="widget_title"><fmt:message key="boostperformance.title" /></div>
-		</div>
-		<div class = "widget-content">
-		<div id="boostPerformance-table" class="boostPerformanceChart">
-		<div class = "bp-background">
-		<div id="dropID" class="wrapper-dropdown">Source
-			<div class = "content-dropdown">
-		    <ul class="dropdown-ul">
-		        <li>conversion rate<br> <small>info1</small></li>
-		       	<li>value per visit<br> <small>info2</small></li>
-		       	<li>% of traffic<br> <small>info3</small></li>
-		    </ul>
-		    </div>
-		</div>	
-			
-			
-			 	
-			
-			 	
-			
-		<!-- end background div -->
-		</div>
-			
-		</div>				
-		</div>
-	</form>
-</div>
+
+	<div class="widget widgetView boostPerformance">
+		<form id="boostPerformanceSettings">
+			<div class="widget_header">
+				<div class="widget_title">
+					<fmt:message key="boostperformance.title" />
+				</div>
+			</div>
+			<div class="widget-content">
+				<div id="boostPerformance-table" class="boostPerformanceChart">
+					<div class="bp-background">
+						<div id="dropdown" class="bp-wrapper">
+						<input class="bp-box" id="source" type="checkbox" >
+						<label for="source">Google AdWords</label>
+							<div><ul id = bp-source>
+								<li> 5.3% conversion rate </li>
+									<ul><li>132.5% above site average</li></ul>
+								<li> $10.23 avg. value per visit </li>
+								<li> makes up only 10% of all traffic </li>
+							</ul></div>
+						</div>
+						
+
+					
+					</div>
+
+				</div>
+			</div>
+		</form>
+	</div>
 </body>
 

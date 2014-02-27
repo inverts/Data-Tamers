@@ -202,3 +202,148 @@ padding:8px;
 }
 
 
+
+/*****CSS for GROWING PROBLEMS WIDGET ****/
+
+.growingProblems { width:600px; height:350px; }
+
+.growingProblemsChart {
+	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;	
+	background-color:#D5D5D5;	
+	color:#505050;
+	padding:15px;
+	border-style:solid;
+	border-width:5px;
+	border-color:#D5D5D5;
+	width:100%;
+	height:285px; 	
+}
+
+#growingProblemsSettings th, #growingProblemsSettings td{
+	border-width:5px;
+	padding:8px;
+	width:100%;	
+}
+
+#growingProblems-table {
+    border-spacing: 1em;
+}
+#growingProblems-table th{
+	font:20px, 'Helvetica Neue';	
+}
+#growingProblems-table td{
+	border-style:solid;
+	border-width:5px;
+	border-color:#D5D5D5;
+}
+#growingProblems-table tr {
+	padding:10px;
+}
+
+#growingProblemsSettings th:hover{
+	background-color:#C0C0C0;		
+}
+#growingProblemsSettings td:hover{
+	background-color:#C0C0C0;	
+}
+
+#growingProblemsSettings tbody tr:last-child td {
+  border-bottom:none;
+  &:first-child {
+    @include border-bottom-left-radius(5px);
+  }
+  &:last-child {
+    @include border-bottom-right-radius(5px);
+  }
+}
+
+#growingProblemsSettings tbody:hover > tr:hover td {
+  @include text-shadow(none);
+  color:#2d2d2d;
+  @include opacity(0.5); 
+  font-weight:bold;
+}
+
+#trafficSource{
+	background-color: #33CCFF;
+}
+#conversionRate{
+	background-color: #33CCFF;
+}
+#visits {
+	background-color: #CC0066;
+	color: white;	
+}
+
+
+/*****CSS for BOOST PERFORMANCE WIDGET ****/
+.boostPerformance{ width:600px; height:350px;}
+
+#boostPerformance-table {
+	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;
+	height:285px;		
+	background-color:#D5D5D5;	
+	color:#505050;
+}
+
+.boostPerformanceChart{
+	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;	
+	background-color:#D5D5D5;	
+	color:#505050;
+	
+	border-style:solid;
+	border-width:5px;
+	border-color:#D5D5D5;
+	
+	padding:15px;
+}
+
+.bp-background{
+	width:100%;
+	height:100%;
+	background:#F0F0F0;
+	float:right;
+}
+
+.bp-wrapper{	
+	position: absolute;
+	width: 550px;
+	margin-top: 15px;
+	padding: 10px 15px;
+	
+	background: #fff;
+	border-left: 5px solid grey;	
+}
+
+.bp-box {
+  display: none;
+}
+
+.bp-box + label {
+  cursor: pointer;
+  display: block;
+  font-weight: bold;
+  line-height: 21px;
+  margin-bottom: 5px;
+}
+
+.bp-box + label + div {
+  display: none;
+  margin-bottom: 10px;
+}
+
+.bp-box:checked + label + div {
+  display: block;
+}
+
+.bp-box + label:before {
+  display: block;
+  float: left;
+  font-weight: bold;
+  height: 20px;
+  line-height: 20px;
+  margin-right: 5px;
+  text-align: center;
+  width: 100%;
+}
+

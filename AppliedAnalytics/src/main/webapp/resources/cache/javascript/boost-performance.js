@@ -2,42 +2,10 @@
  * boost-performance.js
  */
 
-(function($) {
-	$(document).ready(function() {
-		var divs = $('.wrapper-dropdown').hide();
-		var source = $('.content-dropdown').click(function() {
-			
-		})
-	});
-});
-
-
-
-
-var clicked = false;
-$('.wrapper-dropdown').click(function(e){
-	e.preventDefault();
-$(this).parent().next().find('.wrapper-dropdown').slideToggle();
-	return false;
-});
-
-$(document).ready(function() {
-	if(!clicked) {
-		$('.wrapper-dropdown').hide();
-		clicked = true;
-	}
-});
-
-$('.dropID').click(function(event) {
-	$(this).toggleClass('active');
-	event.stopPropagation();
-});
-
 
 $(function() {
 	// Temporary
 	GetBoostPerformanceWidget();
-	
 });
 
 

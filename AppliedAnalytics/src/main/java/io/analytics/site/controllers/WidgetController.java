@@ -122,6 +122,52 @@ public class WidgetController {
 
 		return new ModelAndView("RevenueSources");
 	}
+	
+	@RequestMapping(value = "/GrowingProblems", method = {RequestMethod.POST, RequestMethod.GET})
+	public ModelAndView growingProblemsView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+		Credential credential;
+		SettingsModel settings;
+		FilterModel filter;
+		if (SessionService.checkAuthorization(session)) {
+			credential = SessionService.getCredentials();
+			filter = SessionService.getFilter();
+			settings = SessionService.getUserSettings();
+		} else {
+			SessionService.redirectToLogin(session, request, response);
+			return new ModelAndView("unavailable");
+		}
+
+		if (settings.getActiveProfile() == null) {
+			//TODO: Make an informative view for when widgets don't have an active profile to get data from.
+			return new ModelAndView ("unavailable");
+		}
+
+		return new ModelAndView("GrowingProblems");
+	}
+	
+	@RequestMapping(value = "/BoostPerformance", method = {RequestMethod.POST, RequestMethod.GET})
+	public ModelAndView boostPerformanceView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+		Credential credential;
+		SettingsModel settings;
+		FilterModel filter;
+		if (SessionService.checkAuthorization(session)) {
+			credential = SessionService.getCredentials();
+			filter = SessionService.getFilter();
+			settings = SessionService.getUserSettings();
+		} else {
+			SessionService.redirectToLogin(session, request, response);
+			return new ModelAndView("unavailable");
+		}
+
+		if (settings.getActiveProfile() == null) {
+			//TODO: Make an informative view for when widgets don't have an active profile to get data from.
+			return new ModelAndView ("unavailable");
+		}
+
+		return new ModelAndView("BoostPerformance");
+	}
 
 
 	@RequestMapping(value = "/WebsitePerformance", method = {RequestMethod.POST, RequestMethod.GET})

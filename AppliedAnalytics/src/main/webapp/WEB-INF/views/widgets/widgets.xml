@@ -35,5 +35,15 @@
 	<bean id="KeyContributingFactors" class="org.springframework.web.servlet.view.JstlView">
 		<property name="url" value = "/WEB-INF/views/widgets/key-contributing-factors.jsp"/>
 	</bean>
+	
+	<!-- Boost Performance -->
+	<bean id="BoostPerformance" class="org.springframework.web.servlet.view.JstlView">
+		<property name="url" value = "/WEB-INF/views/widgets/boost-performance.jsp"/>
+	</bean>
+	
+	<!-- Growing Problems -->
+	<bean id="GrowingProblems" class="org.springframework.web.servlet.view.JstlView">
+		<property name="url" value = "/WEB-INF/views/widgets/growing-problems.jsp"/>
+	</bean>
 
 </beans>   

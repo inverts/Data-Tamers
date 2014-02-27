@@ -8,7 +8,6 @@
 
 </script> 
 </head> 
-  
  <body>
 <div id = "growingProblems-wrapper">
 <div class="widget widgetView growingProblems">
@@ -19,22 +18,22 @@
 		
 	<div class = "widget-content">
 	<div class = "gp-chart-background">	
-		<table class = "growingProblemsChart" id = growingProblems-table">
+		<table class = "growingProblemsChart" id = "growingProblems-table" >	
 		<!-- Sources -->
 		<thead>
-		<tr>
+		<tr class = "row">
 			<th align = "left" height = 45>Traffic Source </th>
 			<th align = "left" height = 45>Conversion Rate </th>
 			<th align = "left" height = 45>Visits </th>
 		</tr>
 		</thead>
 		<tbody>
-		<tr>
+		<tr class = "row">
 			<td id = "trafficSource" >Traffic Source1 </td>
 			<td id = "conversionRate" >Conversion Rate1 </td>
 			<td id = "visits" >Visits1 </td>
 		</tr>
-		<tr>
+		<tr class = "row">
 			<td id = "trafficSource" >Traffic Source2 </td>
 			<td id = "conversionRate">Conversion Rate2 </td>
 			<td id = "visits">Visits2 </td>
