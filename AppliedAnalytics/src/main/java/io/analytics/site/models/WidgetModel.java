@@ -6,9 +6,8 @@ package io.analytics.site.models;
  * @author Dave Wong
  *
  */
-public abstract class WidgetModel {
+public abstract class WidgetModel implements JSONSerializable {
 
-	// Note: A Widgets relation to its frame should be defined by the frame. (No positional data here)
 		
 	/**
 	 * Returns some String that informs the View what AJAX call it needs to make to update the model.
@@ -17,20 +16,6 @@ public abstract class WidgetModel {
 	 * @return
 	 */
 	public abstract String getUpdateApiCall();
-	
-	/**
-	 * Obtains the height, in units (not pixels) of the Widget.
-	 * 
-	 * @return The height of the Widget in units.
-	 */
-	public abstract int getUnitHeight();
-
-	/**
-	 * Obtains the width, in units (not pixels) of the Widget.
-	 * 
-	 * @return The width of the Widget in units.
-	 */
-	public abstract int getUnitWidth();
 
 	/**
 	 * A name to describe the widget to the user.
@@ -43,7 +28,17 @@ public abstract class WidgetModel {
 	 * @return
 	 */
 	public abstract String getDescription();
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public abstract int getPositionPriority();
 
+	@Override
+	public String getJSONSerialization() {
+		return "{error: \"unimplemented\"}";
+	}
 	//No setters; these should not change over the lifetime of the Widget.
 	
 }

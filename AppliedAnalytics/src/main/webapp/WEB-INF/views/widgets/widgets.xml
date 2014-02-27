@@ -40,5 +40,9 @@
 	<bean id="addDashboard" class="org.springframework.web.servlet.view.JstlView">
 		<property name="url" value="/WEB-INF/views/includes/add-dashboard.jsp" />
 	</bean>
+	
+	<bean id="serialize" class="org.springframework.web.servlet.view.JstlView">
+		<property name="url" value="/WEB-INF/views/includes/serialize.jsp" />
+	</bean>
 
 </beans>   
