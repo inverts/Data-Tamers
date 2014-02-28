@@ -1,5 +1,5 @@
-package io.analytics.site.controllers;
 
+package io.analytics.site.controllers;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -35,7 +35,8 @@ public class WidgetController {
 	@RequestMapping(value = "/DataForecast", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView DataForecastView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,	
 												@RequestParam(value = "change", defaultValue = "none") String changePercentage,
-												@RequestParam(value = "dimension", defaultValue = "none") String dimension) 
+												@RequestParam(value = "dimension", defaultValue = "none") String dimension,
+												@RequestParam(value = "serialize", defaultValue = "none") String serialize) 
 	{
 		Credential credential;
 		SettingsModel settings;
@@ -77,13 +78,11 @@ public class WidgetController {
 		SessionService.saveModel(session, "hypotheticalFuture", dataForecast);
 		viewMap.addAttribute("hfModel", dataForecast);
 		viewMap.addAttribute("filterModel", filter);
-		/*
-		HypotheticalFutureModel hypotheticalFuture = new HypotheticalFutureModel(adjustBy, source);
 		
-		viewMap.addAttribute("hfModel", hypotheticalFuture);
-		viewMap.addAttribute("changeOptions", hypotheticalFuture.getChangePercentOptions());
-		viewMap.addAttribute("DATA", hypotheticalFuture.getVisualization());
-		 */
+		if (!serialize.equals("none")) {
+			viewMap.addAttribute("model", dataForecast);
+			return new ModelAndView("serialize");
+		}
 		return new ModelAndView("DataForecast");
 
 	}
@@ -124,10 +123,57 @@ public class WidgetController {
 
 		return new ModelAndView("RevenueSources");
 	}
+	
+	@RequestMapping(value = "/GrowingProblems", method = {RequestMethod.POST, RequestMethod.GET})
+	public ModelAndView growingProblemsView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+		Credential credential;
+		SettingsModel settings;
+		FilterModel filter;
+		if (SessionService.checkAuthorization(session)) {
+			credential = SessionService.getCredentials();
+			filter = SessionService.getFilter();
+			settings = SessionService.getUserSettings();
+		} else {
+			SessionService.redirectToLogin(session, request, response);
+			return new ModelAndView("unavailable");
+		}
+
+		if (settings.getActiveProfile() == null) {
+			//TODO: Make an informative view for when widgets don't have an active profile to get data from.
+			return new ModelAndView ("unavailable");
+		}
+
+		return new ModelAndView("GrowingProblems");
+	}
+	
+	@RequestMapping(value = "/BoostPerformance", method = {RequestMethod.POST, RequestMethod.GET})
+	public ModelAndView boostPerformanceView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+		Credential credential;
+		SettingsModel settings;
+		FilterModel filter;
+		if (SessionService.checkAuthorization(session)) {
+			credential = SessionService.getCredentials();
+			filter = SessionService.getFilter();
+			settings = SessionService.getUserSettings();
+		} else {
+			SessionService.redirectToLogin(session, request, response);
+			return new ModelAndView("unavailable");
+		}
+
+		if (settings.getActiveProfile() == null) {
+			//TODO: Make an informative view for when widgets don't have an active profile to get data from.
+			return new ModelAndView ("unavailable");
+		}
+
+		return new ModelAndView("BoostPerformance");
+	}
 
 
 	@RequestMapping(value = "/WebsitePerformance", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView websitePerformanceView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+	public ModelAndView websitePerformanceView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,
+			@RequestParam(value = "serialize", defaultValue = "none") String serialize) {
 
 		Credential credential;
 		SettingsModel settings;
@@ -171,11 +217,16 @@ public class WidgetController {
 		viewMap.addAttribute("wpModel", webPerform);
 		//viewMap.addAttribute("filterModel", filter);
 
+		if (!serialize.equals("none")) {
+			viewMap.addAttribute("model", webPerform);
+			return new ModelAndView("serialize");
+		}
 		return new ModelAndView("WebsitePerformance");
 	}
 
 	@RequestMapping(value = "/KeywordInsight", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView keywordInsightView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+	public ModelAndView keywordInsightView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,
+			@RequestParam(value = "serialize", defaultValue = "none") String serialize) {
 		
 		Credential credential;
 		SettingsModel settings;
@@ -213,6 +264,11 @@ public class WidgetController {
 		SessionService.saveModel(session, "keywordInsight", keyInsight);
 		viewMap.addAttribute("kiModel", keyInsight);
 		//viewMap.addAttribute("filterModel", filter);
+
+		if (!serialize.equals("none")) {
+			viewMap.addAttribute("model", keyInsight);
+			return new ModelAndView("serialize");
+		}
 		
 		return new ModelAndView("KeywordInsight");
 	}

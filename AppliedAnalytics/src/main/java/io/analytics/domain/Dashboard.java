@@ -1,5 +1,6 @@
 package io.analytics.domain;
 
+
 /**
  * This represents a Dashboard in our application.
  * A Dashboard is defined as a particular set of ordered widgets. Every Dashboard
@@ -57,6 +58,5 @@ public class Dashboard {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
 	
 }

@@ -4,17 +4,8 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 
 
-public abstract class LineGraphWidgetModel extends WidgetModel implements IMetricDependent{
+public abstract class LineGraphWidgetModel extends WidgetModel implements IMetricDependent {
 	
-	//TODO: Possibly add in data for a map of colors and legend labels.
-	
-	public int getUnitHeight() {
-		return 2;
-	}
-
-	public int getUnitWidth() {
-		return 4;
-	}
 
 	public abstract SimpleEntry<Double, Double> getXRange();
 	

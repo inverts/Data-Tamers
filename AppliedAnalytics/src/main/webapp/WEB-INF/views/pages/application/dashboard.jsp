@@ -6,10 +6,15 @@
 <script src="<c:url value="/cache/javascript/revenue-sources.js" />"></script>
 <script src="<c:url value="/cache/javascript/keyword-insight.js" />"></script>
 <script src="<c:url value="/cache/javascript/dashboard.js" />"></script>
+<script src="<c:url value="/cache/javascript/growing-problems.js" />"></script>
+<script src="<c:url value="/cache/javascript/boost-performance.js" />"></script>
 
 <script>
 var widgets = [1, 4];
-$(function() { loadWidgets(widgets); });
+//$(function() { loadWidgets(widgets); });
+var dashboardId = ${model.dashboardId};
+loadDashboard(dashboardId);
+
 </script>
 
 <div class="dashboard">

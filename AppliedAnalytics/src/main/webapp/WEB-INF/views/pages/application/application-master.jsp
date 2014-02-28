@@ -22,12 +22,12 @@
 <script src="<c:url value="/cache/javascript/libs/jquery-ui-1.10.3.custom.min.js" />"></script>
 <script src="<c:url value="/cache/javascript/libs/processing-1.4.1.min.js" />"></script>
 <script src="<c:url value="/cache/javascript/libs/d3.v3.min.js" />"></script>
+<script src="<c:url value="/cache/javascript/plugins/jquery.tipsy.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/utilities.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/test.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/graph.js" />"></script>
 <script src="<c:url value="/cache/javascript/headerfooter.js" />"></script>
 <script src="<c:url value="/cache/javascript/application.js" />"></script>
-
 
 <title>${TITLE}</title>
 </head>

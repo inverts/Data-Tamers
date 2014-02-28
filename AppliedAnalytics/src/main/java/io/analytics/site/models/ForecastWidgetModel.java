@@ -88,6 +88,7 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
                 this.reportingService = reportingService;
                 
                 endDate = new Date();
+                endDateC = Calendar.getInstance();
                 startDate = new Date(endDate.getTime() - (MS_IN_DAY * 30L)); //30 days advance
                 startDateC = Calendar.getInstance();
                 startDateC.setTime(startDate);
@@ -448,6 +449,7 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
          */
         public void setEndDate(Date endDate) {
                 this.endDate = endDate;
+                this.endDateC.setTime(endDate);
                 updateFutureEndDate();
         }
 
@@ -477,7 +479,7 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
         
         private void updateFutureEndDate() {
                 timeSpan = endDate.getTime()-startDate.getTime();
-                futureEndDate = new Date(endDate.getTime() + (timeSpan / 3));
+                futureEndDate = new Date(endDate.getTime() + (timeSpan));
                 
         }
         
@@ -624,27 +626,45 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
          * @param startDateTime
          * @return
          */
-        public String getJSONPointsFormatted() {
+        public JSONArray getJSONPointsFormatted() {
         	long startDateTime = this.startDateC.getTime().getTime();
         	JSONArray points = new JSONArray();
         	int i;
-        	ArrayList<Double> smoothed = this.getDataSmoothed();
+
         	for (i=0; i < this.dataOriginal.size(); i++) {
         		try {
 					JSONObject point = new JSONObject().put("jsonDate", startDateTime)
 							.put("jsonHitCount", this.dataOriginal.get(i))
-							.put("smooth", smoothed.get(i))
+							.put("smooth", this.dataSmoothNormalized.get(i))
 							.put("normal", this.dataNormalized.get(i));
 	        		points.put(point);
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					return new JSONArray().toString();
+					return new JSONArray();
 				}
         		//Add one day.
         		startDateTime += 1000 * 60 * 60 * 24;
         	}
-        	return points.toString();
+        	
+        	
+        	for (i=0; i < this.dataForecast.size(); i++) {
+        		ArrayList<Double> forecastNormalizedSmoothed = this.getDataForecastNormalizedSmoothed();
+        		try {
+					JSONObject point = new JSONObject().put("jsonDate", startDateTime)
+							.put("jsonHitCount", this.dataForecast.get(i))
+							.put("smooth", forecastNormalizedSmoothed.get(i))
+							.put("normal", this.dataForecastNormalized.get(i));
+	        		points.put(point);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return new JSONArray();
+				}
+        		//Add one day.
+        		startDateTime += 1000 * 60 * 60 * 24;
+        	}
+        	return points;
         }
         
         
@@ -707,7 +727,28 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
                 // TODO Auto-generated method stub
                 return null;
         }
-        
+
+		@Override
+		public int getPositionPriority() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public String getJSONSerialization() {
+			JSONObject result = new JSONObject();
+			try {
+				result.put("name", this.getName());
+				result.put("description", this.getDescription());
+				result.put("metric", this.getMetric());
+				result.put("priority", this.getPositionPriority());
+				result.put("data", this.getJSONPointsFormatted());
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return result.toString();
+		}
 
 
 }

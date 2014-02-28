@@ -2,6 +2,7 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
  
 <script>
+/*
 var historicalData = JSON.parse('${ hfModel.getDataPoints() }');
 var futureData = JSON.parse('${ hfModel.getYValuesForecast() }');
 var historicalDataSize = ${ hfModel.getYValues().size() };
@@ -10,9 +11,9 @@ var Y_MAX = ${ hfModel.getYRange().getValue() + hfModel.getYRangePadding() };
 var startDate = '${ filterModel.getActiveStartDateString() }';
 var endDate = '${ filterModel.getActiveEndDateString() }';
 var futureEndDate = '${ hfModel.getFutureEndDate() }';
+*/
 
-
-window.newData = JSON.parse('${ hfModel.getJSONPointsFormatted() }');
+window.newData = JSON.parse('${ hfModel.getJSONPointsFormatted().toString() }');
 
 </script>  
  

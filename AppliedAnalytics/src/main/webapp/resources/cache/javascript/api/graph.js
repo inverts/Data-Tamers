@@ -147,8 +147,14 @@
 												  	max: graph.size.height - settings.databuffer
 												 }}});
 			// Zoom limits
-			var zoomOut = Math.round(graph.x.point(getDate(graph.data[graph.data.length - 1])) / graph.view.width),
+			/*
+			var zoomOut = Math.round(graph.x.point(getDate(graph.data[graph.data.length - 10])) / graph.view.width),
 				zoomIn = 0 - (graph.view.height / graph.size.height);
+			*/
+			
+			var zoomOut = 4,
+				zoomIn = 0.3;
+			
 			
 			graph.zoom = d3.behavior.zoom()
 									.x(graph.x.point)
