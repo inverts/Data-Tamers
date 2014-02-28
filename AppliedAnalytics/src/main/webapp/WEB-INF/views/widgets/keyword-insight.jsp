@@ -174,7 +174,7 @@ else { // else parse and display data
 	table.appendTo("#keywordInsightSettings"); */
 	
 	// All cpc keywords table
-/* 	var message = $('<br><h4><fmt:message key="keywordinsight.searchMessage"/></h4><br>');
+	var message = $('<br><h4><fmt:message key="keywordinsight.searchMessage"/></h4><br>');
 	var table = $('<table><tbody>');
 	var tr = $('<tr>');
 	$('<th>Keywords</th>').appendTo(tr);
@@ -197,7 +197,7 @@ else { // else parse and display data
 	    tr.appendTo(table);
 	}
 	message.appendTo("#keywordInsightSettings");
-	table.appendTo("#keywordInsightSettings"); */
+	table.appendTo("#keywordInsightSettings"); 
 }
 
 </script>
