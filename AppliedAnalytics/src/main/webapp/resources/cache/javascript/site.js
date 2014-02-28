@@ -49,33 +49,6 @@ $(document).ready(function() {
 			showSettingsPanel(550);
 			
 		});
-
-		/*$( ".settings" ).on( "change", "#select-account", function() {
-			$.post(applicationRoot + "settings", { account: $('#select-account option:selected').val() }, function( data ) {
-				  $(".settings").html( data );
-				});
-			});
-		$( ".settings" ).on( "change", "#select-property", function() {
-			$.post(applicationRoot + "settings", { account: $('#select-property option:selected').val() }, function( data ) {
-				  $(".settings").html( data );
-				});
-			});
-		$( ".settings" ).on( "change", "#select-profile", function() {
-			$.post(applicationRoot + "settings", { account: $('#select-profile option:selected').val() }, function( data ) {
-				  $(".settings").html( data );
-				});
-			});
-		
-		//TODO: we need to find a better way of updating widgets rather than
-		// calling the update function of each and every widget.
-		
-		// The solution is to have event listeners on the widgets.
-		$( "#update-button" ).on( "click", "#update-button", function() {
-			$.post(applicationRoot + "settings", { update: 1 }, function( data ) {
-				  $(".settings").html( data );
-					updateHypotheticalWidget('hypotheticalWidget');
-				});
-			});*/
 		
 	
 });

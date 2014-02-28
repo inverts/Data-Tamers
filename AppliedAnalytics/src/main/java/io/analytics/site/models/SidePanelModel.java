@@ -21,7 +21,7 @@ public class SidePanelModel {
 
 	private IDashboardService DashboardService;
 	private SessionModel sessionModel;
-	private JSONArray dashboardLinks;
+	private JSONArray dashboardsJSON;
 
 	
 	public SidePanelModel(IDashboardService dashboardService, SessionModel sessionModel)
@@ -30,12 +30,12 @@ public class SidePanelModel {
 			throw new IllegalArgumentException();
 		this.DashboardService = dashboardService;
 		this.sessionModel = sessionModel;
-		dashboardLinks = new JSONArray();
+		dashboardsJSON = new JSONArray();
 		
 	}
 
-	public JSONArray getDashboardLinks() {
-		return dashboardLinks;
+	public JSONArray getDashboards() {
+		return dashboardsJSON;
 	}
 	
 	/**
@@ -43,71 +43,24 @@ public class SidePanelModel {
 	 * @return
 	 * @throws CorruptedSessionException 
 	 */
-	public void generateDashboardLinks() throws CorruptedSessionException {
+	public void generateDashboardInfo() throws CorruptedSessionException {
 		
 		Account account = sessionModel.getAccount();
 		List<Dashboard> dashboards = DashboardService.getAccountDashboards(account.getId());
 		
 		for(Dashboard dashboard : dashboards) {
 			
-			JSONObject content = new JSONObject();
-			String url = "/application/" + dashboard.getId();
-			
 			try {
-				content.put("url", url);
-				content.put("id", dashboard.getId());
-				content.put("name", dashboard.getName());
+				dashboardsJSON.put(new JSONObject(dashboard.getJSONSerialization()));
 			} catch (JSONException e) {
-				//This only occurs if the key is null or the value being put is a non-finite number.
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			dashboardLinks.put(content);
 		}
 		
 		
 	}
 	
-	/* Dummy Data; Delete when live data is available */
-	public JSONArray getDashboardFakes() {
-		
-		JSONArray result = new JSONArray();
-		
-		Dashboard[] dashboardList = { new Dashboard(), new Dashboard(), new Dashboard(), new Dashboard(), new Dashboard() } ;
-		
-		dashboardList[0].setId(123456);
-		dashboardList[0].setName("123456");
-		
-		dashboardList[1].setId(057102);
-		dashboardList[1].setName("057102");
-		
-		dashboardList[2].setId(185395);
-		dashboardList[2].setName("185395");
-
-		dashboardList[3].setId(732059);
-		dashboardList[3].setName("732059");
-		
-		dashboardList[4].setId(873620);
-		dashboardList[4].setName("This dashboard has a long name");
-
-		for(Dashboard dashboard : dashboardList) {
-			
-			JSONObject content = new JSONObject();
-			
-			String url = "application/" + dashboard.getId();
-			try {
-				content.put("url", url);
-				content.put("id", dashboard.getId());
-				content.put("name", dashboard.getName());
-			} catch (Exception e) {
-				//TODO: handle this
-			}
-			
-			result.put(content);
-		}
-		
-		return result;
-	}
 	
 	
 }

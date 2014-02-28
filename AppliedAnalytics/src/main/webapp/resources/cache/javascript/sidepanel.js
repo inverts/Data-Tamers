@@ -61,7 +61,8 @@ function createDashboardLink(dashboard) {
 	var $dashlist = $("#dashlist");
 		
 	var $linkdiv = $("<div>").addClass("dashlink-cell");
-	var $link = $("<a>").attr("href", dashboard.url)
+	var $link = $("<a>").attr("href", "#")
+						.attr("onclick", "loadDashboard(" + dashboard.id + ");")
 						.html((dashboard.name)? dashboard.name : dashboard.id).appendTo($linkdiv);
 	var $delete = $("<div>").addClass("deleteDash").html("<span class='glyphicon glyphicon-remove-circle'></span>");
 	

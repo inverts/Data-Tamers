@@ -26,9 +26,12 @@ function loadDashboard(dashboardId) {
 	$.post(applicationRoot + "application/dashboards/" + dashboardId, 
 			{ },
 			function(result) {
+				
 				var dashboard = $.parseJSON(result);
 				var widgetIdArray = dashboard.widgetIds;
 				var widgetTypeIdArray = dashboard.widgetTypeIds;
+				
+				$('.dashboard-content').html("");
 				loadWidgets(widgetTypeIdArray);
 			});
 }

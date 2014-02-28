@@ -4,8 +4,8 @@
 <script src="<c:url value="/cache/javascript/sidepanel.js" />"></script>
 
 <script>
-var dashboardLinks = '${SIDEPANEL.model.getDashboardLinks()}';
-$(function(){ getDashboardList($.parseJSON(dashboardLinks)); });
+var dashboards = '${SIDEPANEL.model.getDashboards().toString()}';
+$(function(){ getDashboardList($.parseJSON(dashboards)); });
 </script>
 
 <nav id="sidepanel" class="sidepanel" data-animate="${SIDEPANEL.animate}">

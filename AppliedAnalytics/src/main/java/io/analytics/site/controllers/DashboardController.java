@@ -159,7 +159,7 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 
 		SidePanelModel sidePanelModel = new SidePanelModel(this.DashboardService, sessionModel);
 		try {
-			sidePanelModel.generateDashboardLinks();
+			sidePanelModel.generateDashboardInfo();
 		} catch (CorruptedSessionException e) {
 			SessionService.redirectToLogin(session, request, response);
 		}

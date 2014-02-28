@@ -1,5 +1,12 @@
 package io.analytics.domain;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.google.gson.Gson;
+
+import io.analytics.site.models.JSONSerializable;
+
 
 /**
  * This represents a Dashboard in our application.
@@ -9,7 +16,7 @@ package io.analytics.domain;
  * @author Dave Wong
  *
  */
-public class Dashboard {
+public class Dashboard implements JSONSerializable {
 	private int id;
 	//For now, the Account ID serves as the parent/owner account. But in the distant future we may 
 	//use dashboards in the same way that we use widgets.
@@ -57,6 +64,27 @@ public class Dashboard {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public String getJSONSerialization() {
+		/*
+		JSONObject arr = new JSONObject();
+		try {
+			arr.put("id", id);
+			arr.put("accountId", accountId);
+			arr.put("defaultFilterId", defaultFilterId);
+			arr.put("name", name);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return arr.toString();
+		*/
+		
+		Gson g = new Gson();
+		return g.toJson(this);
+		
 	}
 	
 }
