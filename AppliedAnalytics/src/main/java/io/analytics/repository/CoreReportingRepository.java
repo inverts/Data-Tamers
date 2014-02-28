@@ -35,7 +35,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 	 * 
 	 * TODO: Make sure we are respecting the rate limit (10 queries per second)
 	 * 
-	 * @author Gwen Knight
+	 * @author gak
 	 */
 		private final String APPLICATION_NAME = "datatamers-appliedanalytics-0.1";
 		//private final String ACCESS_TOKEN;

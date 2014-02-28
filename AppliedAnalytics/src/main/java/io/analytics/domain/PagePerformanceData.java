@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * 	 Contains all the Google Analytics data for the Page Performance 
  *   Model computations and for the display of the widget.
  *   
- * @author Gwen Knight
+ * @author gak
  *
  */
 public class PagePerformanceData {
