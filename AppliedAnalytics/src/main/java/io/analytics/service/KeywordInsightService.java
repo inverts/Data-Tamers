@@ -28,7 +28,7 @@ public class KeywordInsightService implements IKeywordInsightService {
 	 *  Input: credential, profileID, metric, startDate, endDate, number of results.
 	 *  Output: domain object PagePerformanceData.
 	 *  
-	 *  @author Gwen Knight
+	 *  @author gak
 	 */	
 	
 	@Autowired private ICoreReportingRepository REPOSITORY;

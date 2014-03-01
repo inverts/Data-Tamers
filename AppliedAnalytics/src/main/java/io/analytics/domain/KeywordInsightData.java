@@ -7,7 +7,7 @@ import java.util.ArrayList;
 	 *   Model computations and for the display of the Keywords Insight 
 	 *   widgets.
 	 *   
-	 * @author Gwen Knight
+	 * @author gak
 	 *
 	 */
 public class KeywordInsightData {

@@ -9,7 +9,7 @@ import com.google.api.client.auth.oauth2.Credential;
 /**
  * Interface for the Page Performance widget service class.
  * 
- * @author Gwen Knight
+ * @author gak
  *
  */
 public interface IPagePerfomanceService {
