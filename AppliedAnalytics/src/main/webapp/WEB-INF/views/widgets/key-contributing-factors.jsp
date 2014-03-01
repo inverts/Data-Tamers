@@ -50,7 +50,7 @@
 
 <div class="widget widgetView keyContributingFactors">
 	<div class="widget_header">
-		<div class="widget_title"><fmt:message key="revenuesources..title" /></div>	
+		<div class="widget_title"><fmt:message key="revenuesources.title" /></div>	
 	</div>
 	<div class="widget-content">
 	<div class = "keyContributingFactorsChart">	

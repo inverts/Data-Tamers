@@ -568,6 +568,11 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 					try {
 						//Increase the load, since we are making a query. Does Google count failed queries towards the QPS?
 						increaseLoad();
+						
+						//Set a timer to decrease the load in one second.
+						Timer t = new Timer();
+						t.schedule(new LoadReducer(), 1000);
+						
 						result = request.execute();
 						break;
 						
@@ -583,9 +588,6 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 				}
 				
 				
-				//Set a timer to decrease the load in one second.
-				Timer t = new Timer();
-				t.schedule(new LoadReducer(), 1000);
 				
 				return result;
 			}

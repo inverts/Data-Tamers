@@ -60,11 +60,6 @@ public class WidgetController {
 
 		DataForecastModel dataForecast = SessionService.getModel(session, "hypotheticalFuture", DataForecastModel.class);
 		
-		/* Did we just request data only? */
-		if(serialize) {
-			widgetData(dataForecast.getJSONSerialization());
-			return null;
-		}
 
 		//If there is no model available, or if the active profile changed, create a new model.
 		if ((dataForecast == null) || !(settings.getActiveProfile().equals(dataForecast.getActiveProfile()))) {
@@ -91,6 +86,12 @@ public class WidgetController {
 			viewMap.addAttribute("model", dataForecast);
 			return new ModelAndView("serialize");
 		}*/
+
+		/* Did we just request data only? */
+		if(serialize) {
+			viewMap.addAttribute("model",dataForecast);
+			return new ModelAndView("serialize");
+		}
 		
 		return new ModelAndView("DataForecast");
 
@@ -284,13 +285,4 @@ public class WidgetController {
 		return new ModelAndView("KeywordInsight");
 	}
 	
-	
-	
-	
-	
-	/* Leave this method at the bottom */
-	@ResponseBody
-	private String widgetData(String JSONSerializedData) {
-		return JSONSerializedData;
-	}
 }

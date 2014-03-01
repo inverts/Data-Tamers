@@ -77,6 +77,9 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
         private static final double DEFAULT_ALPHA = 0.45;
         private static final double DEFAULT_BETA = 0.3;
         
+        public ForecastWidgetModel() {
+        	super();
+        }
         /**
          * Creates a new ForecastWidgetModel.
          * 

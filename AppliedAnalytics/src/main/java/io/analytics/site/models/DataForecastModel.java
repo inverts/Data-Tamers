@@ -18,6 +18,10 @@ public class DataForecastModel extends ForecastWidgetModel implements Serializab
 	private ArrayList<Integer> changePercentageOptions; //Using ArrayList for future flexibility if necessary.
 	private String activeProfile;
 	
+	public DataForecastModel() {
+		super();
+	}
+	
 	/*
 	 * For use in JSP file:
 	 * 
