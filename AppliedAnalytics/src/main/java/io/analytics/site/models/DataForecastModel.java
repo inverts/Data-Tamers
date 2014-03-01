@@ -3,6 +3,7 @@ package io.analytics.site.models;
 import io.analytics.service.interfaces.ICoreReportingService;
 import io.analytics.service.interfaces.ISessionService;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -11,7 +12,7 @@ import org.json.*;
 import com.google.gson.Gson;
 
 
-public class DataForecastModel extends ForecastWidgetModel {
+public class DataForecastModel extends ForecastWidgetModel implements Serializable {
 	
 	private JSONObject dataPoints;
 	private Integer changePercentage;

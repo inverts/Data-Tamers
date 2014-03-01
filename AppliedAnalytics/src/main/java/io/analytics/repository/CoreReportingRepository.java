@@ -9,6 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -25,7 +28,6 @@ import com.google.api.services.analytics.Analytics;
 import com.google.api.services.analytics.Analytics.Data.Ga;
 import com.google.api.services.analytics.model.*;
 import com.google.api.services.analytics.model.GaData.ColumnHeaders;
-import com.google.api.services.analytics.model.GaData.Query;
 
 @Repository
 public class CoreReportingRepository implements ICoreReportingRepository {
@@ -43,6 +45,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		//private String profileID;
 		private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 		private static final JsonFactory JSON_FACTORY = new JacksonFactory();
+		private QueryDispatcher queryDispatcher = new QueryDispatcher();
 
 		private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");;
 		private ISessionService _sessionService;
@@ -142,17 +145,19 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 * @return
 		 */
 		public CoreReportingData getMetricForSingleDimension(Credential credential, String profileID, String metric, String dimension, String startDate, String endDate, int maxResults) {
-			GaData data = null;
+			GaData gaData = null;
 			try {
 
 				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build().data().ga();
-
-				data = reporting.get("ga:" + profileID, startDate, endDate, metric) // Metrics.
+				int i;
+				Ga.Get request = reporting.get("ga:" + profileID, startDate, endDate, metric) // Metrics.
 						.setDimensions(dimension)
 						.setSort(dimension)
-						.setMaxResults(maxResults)
-						.execute();
+						.setMaxResults(maxResults);
+				
+				gaData = queryDispatcher.execute(request);
+			
 			} catch (GoogleJsonResponseException e) {
 				handleGoogleJsonResponseException(e);
 			} catch (IOException e) {
@@ -160,7 +165,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 				e.printStackTrace();
 			}
 
-			return coreReportingMapper(data);
+			return coreReportingMapper(gaData);
 		}
 
 		
@@ -174,14 +179,14 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			try {
 				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build().data().ga();
-				gaData = reporting.get("ga:"+ profileID, // Table Id.
+				Ga.Get request = reporting.get("ga:"+ profileID, // Table Id.
 						startDate, // Start date.
 						endDate, // End date.
 						metric) // Metrics.
 						.setDimensions("ga:source")
 						.setSort("-" + metric)
-						.setMaxResults(n)
-						.execute();
+						.setMaxResults(n);
+				gaData = queryDispatcher.execute(request);
 			} catch (GoogleJsonResponseException e) {
 				handleGoogleJsonResponseException(e);
 			} catch (IOException e) {
@@ -214,11 +219,13 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build().data().ga();
 
-				gaData = reporting.get("ga:" + profileID, sDate, eDate, metric) // Metrics.
+				Ga.Get request = reporting.get("ga:" + profileID, sDate, eDate, metric) // Metrics.
 						.setDimensions(dimension)
 						.setSort(dimension)
-						.setMaxResults(maxResults)
-						.execute();
+						.setMaxResults(maxResults);
+				
+				gaData = queryDispatcher.execute(request);
+				
 			} catch (GoogleJsonResponseException e) {
 				handleGoogleJsonResponseException(e);
 			} catch (IOException e) {
@@ -249,14 +256,16 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			try {
 				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build().data().ga();
-				gaData = reporting.get("ga:"+ profileID, // Table Id.
+				Ga.Get request = reporting.get("ga:"+ profileID, // Table Id.
 						sDate, // Start date.
 						eDate, // End date.
 						metric) // Metrics.
 						.setDimensions("ga:source")
 						.setSort("-" + metric)
-						.setMaxResults(n)
-						.execute();
+						.setMaxResults(n);
+				
+				gaData = queryDispatcher.execute(request);
+				
 			} catch (GoogleJsonResponseException e) {
 				handleGoogleJsonResponseException(e);
 			} catch (IOException e) {
@@ -285,14 +294,16 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build().data().ga();
 
-				gaData = reporting.get("ga:"+ profileID, // profile id (table id).
+				Ga.Get request = reporting.get("ga:"+ profileID, // profile id (table id).
 						startDate, // Start date.
 						endDate, // End date.
 						"ga:visitBounceRate,ga:visits,ga:exitRate") // Metrics.
 						.setDimensions("ga:pagePath")
 						.setSort("-ga:visits")
-						.setMaxResults(maxResults)
-						.execute();
+						.setMaxResults(maxResults);
+				
+				gaData = queryDispatcher.execute(request);
+				
 			} catch (GoogleJsonResponseException e) {
 				handleGoogleJsonResponseException(e);
 			} catch (IOException e) {
@@ -323,11 +334,13 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build().data().ga();
 
-				gaData = reporting.get("ga:"+ profileID, // profile id (table id).
+				Ga.Get request = reporting.get("ga:"+ profileID, // profile id (table id).
 						startDate, // Start date.
 						endDate, // End date.
-						metric)  // Metric
-						.execute();
+						metric);  // Metric
+						
+				gaData = queryDispatcher.execute(request);
+						
 			} catch (GoogleJsonResponseException e) {
 				handleGoogleJsonResponseException(e);
 			} catch (IOException e) {
@@ -381,15 +394,17 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build().data().ga();
  
-				gaData = reporting.get("ga:"+ profileID, // profile id (table id).
+				Ga.Get request = reporting.get("ga:"+ profileID, // profile id (table id).
 						startDate, // Start date.
 						endDate, // End date.
 						"ga:visits,ga:visitBounceRate") // Metrics.
 						.setDimensions("ga:medium,ga:keyword")
 						.setFilters("ga:medium=="+medium+";ga:keyword!=(not provided)"+ searchKeyword)
 						.setSort("-ga:visits")
-						.setMaxResults(maxResults)
-						.execute();
+						.setMaxResults(maxResults);
+				
+				gaData = queryDispatcher.execute(request);
+				
 			} catch (GoogleJsonResponseException e) {
 				handleGoogleJsonResponseException(e);
 			} catch (IOException e) {
@@ -442,15 +457,16 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build().data().ga();
  
-				gaData = reporting.get("ga:"+ profileID, // profile id (table id).
+				Ga.Get request = reporting.get("ga:"+ profileID, // profile id (table id).
 						startDate, // Start date.
 						endDate, // End date.
 						"ga:visits") // Metrics.
 						.setDimensions("ga:medium")
-						.setFilters("ga:medium=="+medium+addFilter)
-						.execute();
-			} catch (GoogleJsonResponseException e) {
-				handleGoogleJsonResponseException(e);
+						.setFilters("ga:medium=="+medium+addFilter);
+
+				
+				gaData = queryDispatcher.execute(request);
+				
 			} catch (IOException e) {
 				// Catch general parsing network errors.
 				e.printStackTrace();
@@ -500,6 +516,91 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			 } else {
 			   System.out.println("No Results Found");
 			 }
+			 QueryDispatcher q = new QueryDispatcher();
+			 
+		}
+
+		private class QueryDispatcher {
+			private int load;
+			private static final int HEAVY_LOAD_WAIT_MS = 100;
+			private static final int MAX_ATTEMPTS = 5;
+			private static final int TIMEOUT_MS = 5000;
+			
+			private QueryDispatcher() {
+				load = 0;
+				System.out.println("A QueryDispatcher was created. (QD #" + this.hashCode() + ")");
+			}
+			
+			/**
+			 * Gets the approximate number of queries that have been made in the last second.
+			 * @return
+			 */
+			private int getLoad() {
+				return load;
+			}
+			
+			private void increaseLoad() {
+				this.load++;
+				System.out.println("Load increased for QD #" + this.hashCode() + ". Current load: " + QueryDispatcher.this.getLoad());
+			}
+			
+			/**
+			 * Executes the specified Ga.Get request, taking into account the current load,
+			 * and retrying the request upon failure up to a max amount of times.
+			 * 
+			 * @param request
+			 * @return null if the request failed to execute. Otherwise, a GaData response.
+			 */
+			private GaData execute(Ga.Get request) {
+				GaData result = null;
+				int attempts = 0;
+				long startTime = System.currentTimeMillis();
+				while (attempts < MAX_ATTEMPTS) {
+					
+					//If our load is high, wait until it is low or until we time out
+					while (this.load >= 10)
+						if (System.currentTimeMillis() - startTime < TIMEOUT_MS) 
+							try { Thread.sleep(HEAVY_LOAD_WAIT_MS); } catch (InterruptedException e) { e.printStackTrace(); }
+						else 
+							return null;
+					
+					//If the request succeeds, break out of the loop.
+					try {
+						//Increase the load, since we are making a query. Does Google count failed queries towards the QPS?
+						increaseLoad();
+						result = request.execute();
+						break;
+						
+					} catch (GoogleJsonResponseException e) {
+						handleGoogleJsonResponseException(e);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					
+					//Otherwise, increment the attempt counter.
+					attempts++;
+					System.out.println("Attempt #" + attempts + " failed.");
+				}
+				
+				
+				//Set a timer to decrease the load in one second.
+				Timer t = new Timer();
+				t.schedule(new LoadReducer(), 1000);
+				
+				return result;
+			}
+			
+			/**
+			 * Reduces the load by 1.
+			 */
+			private class LoadReducer extends TimerTask {
+				@Override
+				public void run() {
+					QueryDispatcher.this.load -= 1;
+					System.out.println("Load decreased for QD #" + QueryDispatcher.this.hashCode() + ". Current load: " + QueryDispatcher.this.getLoad());
+				}
+			}
+			
 		}
 
 }
