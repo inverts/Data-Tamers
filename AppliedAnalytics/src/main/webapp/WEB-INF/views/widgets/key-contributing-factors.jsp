@@ -49,7 +49,6 @@
 <body>
 
 <div class="widget widgetView keyContributingFactors">
-	<form id = "keyContributingFactorsSettings">
 	<div class="widget_header">
 		<div class="widget_title"><fmt:message key="revenuesources..title" /></div>	
 	</div>
@@ -106,7 +105,6 @@
 		</div>		
 	
 	</div>
-	</div>			
-	</form>
+	</div>		
 </div>
 </body>

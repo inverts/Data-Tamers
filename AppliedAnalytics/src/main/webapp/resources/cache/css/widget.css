@@ -189,8 +189,8 @@ line:hover { opacity: 0.5; }
 #tangent { stroke: black; stroke-width: 2; fill: none; }
 
 /*****CSS for PAGE PERFORMANCE WIDGET ****/
-
-.pagePerformance { width:600px; height:320px; }
+.pagePerformance{ width:600px;}
+.pagePerformance .widget-content{ width:590px; height:350px; }
 
 #websitePerformance-table {
 	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;	
@@ -243,14 +243,8 @@ padding:8px;
 
 /*****CSS for KEY CONTRIBUTING FACTORS WIDGET ****/
 
-.keyContributingFactors{ width:600px; height:350px;}
-
-#keyContributingFactors-table {
-	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;
-	height:350px;		
-	background-color:#D5D5D5;	
-	color:#505050;
-}
+.keyContributingFactors{ width:600px;}
+.keyContributingFactors .widget-content{ width:590px; height:350px; }
 
 .keyContributingFactorsChart{
 	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;	
@@ -338,20 +332,10 @@ padding:8px;
 
 
 
-#keyContributingFactors-wrapper{	
-	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;		
-	background-color:#D5D5D5;	
-	color:#505050;
-	border-style:solid;
-	border-width:5px;
-	border-color:#D5D5D5;
-}
-
-
 
 /*****CSS for GROWING PROBLEMS WIDGET ****/
-
-.growingProblems { width:600px; height:350px; }
+.growingProblems { width:600px; }
+.growingProblems .widget-content{ width:590px; height:350px; }
 
 .growingProblemsChart {
 	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;	
@@ -365,35 +349,35 @@ padding:8px;
 	height:285px; 	
 }
 
-#growingProblemsSettings th, #growingProblemsSettings td{
+.growingProblemsChart th, .growingProblemsChart  td{
 	border-width:5px;
 	padding:8px;
 	width:100%;	
 }
 
-#growingProblems-table {
+.growingProblemsChart  {
     border-spacing: 1em;
 }
-#growingProblems-table th{
+.growingProblemsChart  th{
 	font:20px, 'Helvetica Neue';	
 }
-#growingProblems-table td{
+.growingProblemsChart  td{
 	border-style:solid;
 	border-width:5px;
 	border-color:#D5D5D5;
 }
-#growingProblems-table tr {
+.growingProblemsChart  tr {
 	padding:10px;
 }
 
-#growingProblemsSettings th:hover{
+.growingProblemsChart  th:hover{
 	background-color:#C0C0C0;		
 }
-#growingProblemsSettings td:hover{
+.growingProblemsChart  td:hover{
 	background-color:#C0C0C0;	
 }
 
-#growingProblemsSettings tbody tr:last-child td {
+.growingProblemsChart  tbody tr:last-child td {
   border-bottom:none;
   &:first-child {
     @include border-bottom-left-radius(5px);
@@ -403,7 +387,7 @@ padding:8px;
   }
 }
 
-#growingProblemsSettings tbody:hover > tr:hover td {
+.growingProblemsChart  tbody:hover > tr:hover td {
   @include text-shadow(none);
   color:#2d2d2d;
   @include opacity(0.5); 
@@ -420,7 +404,6 @@ padding:8px;
 	background-color: #CC0066;
 	color: white;	
 }
-
 
 /*****CSS for BOOST PERFORMANCE WIDGET ****/
 .boostPerformance{ width:600px; height:350px;}
@@ -491,5 +474,4 @@ padding:8px;
   margin-right: 5px;
   text-align: center;
   width: 100%;
-  
 }

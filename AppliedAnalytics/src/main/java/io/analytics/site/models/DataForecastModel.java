@@ -9,8 +9,6 @@ import java.util.Arrays;
 
 import org.json.*;
 
-import com.google.gson.Gson;
-
 
 public class DataForecastModel extends ForecastWidgetModel implements Serializable {
 	
@@ -81,6 +79,8 @@ public class DataForecastModel extends ForecastWidgetModel implements Serializab
 	public void setDimension(String dimension) {
 		this.dimension = dimension;
 	}
+	
+	
 	
 	
 	

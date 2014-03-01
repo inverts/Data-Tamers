@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 public class KeywordInsightModel {
 	private JSONObject jsonData;
+	private JSONObject jsonScatterPlotData;
 	private IKeywordInsightService keywordInsightService;
 	private ISessionService sessionService;
 	private String activeProfile;
@@ -46,6 +47,7 @@ public class KeywordInsightModel {
 		this.sessionService = sessionService;
 		this.keywordInsightService = keywordInsightService;
 		this.jsonData = new JSONObject();
+		this.jsonScatterPlotData = new JSONObject();
 		this.activeProfile = this.keywordInsightService.getProfile();
 
 		// default dates
@@ -285,16 +287,14 @@ public class KeywordInsightModel {
 	        }
 	    }
 		
-   
-		
 		// * * * * * * * * * * * * * * * * * * * * *
 		// "Consider adding these keywords to AdWords:"
 		// select organic keywords with high visits that are not cpc keywords.
 		
 		
-		// put data into the JSON Object member jsonData
+		// put data into the JSON Object member jsonData and jsonScatterPlotData
+	    this.createScatterPlotJson(allCpcKeywords);
 		this.createJson(removeKeywords, helpKeywords, bestKeywords, allCpcKeywords, words, worstWords, bestWords); 
-		
 	}
 	
 	// put data into JSON object to pass to the view website-performance.jsp 
@@ -418,9 +418,39 @@ public class KeywordInsightModel {
 		}
 		 
 	} 
+	
+	public void createScatterPlotJson(ArrayList<KeyData> ak){
+		 JSONArray allKeywords = new JSONArray();
+		 JSONArray allVisitsPercent = new JSONArray();
+		 JSONArray allBounceRate = new JSONArray();
+		 JSONArray allMultipageVisitsPercent = new JSONArray();
+		 
+		 try {
+		 Iterator<KeyData> it = ak.iterator();
+		 while (it.hasNext()){
+			 KeyData d = it.next();
+			 allKeywords.put(d.keyword);			
+			 allVisitsPercent.put(d.visitsPercent);			
+			 allBounceRate.put(d.bounceRate);
+			 allMultipageVisitsPercent.put(Math.round(100.0*d.multipageVisitsPercent)/100.0);
+		 }
+		 
+		 this.jsonScatterPlotData.put("allKeywords", allKeywords);
+		 this.jsonScatterPlotData.put("allVisitsPercent", allVisitsPercent);
+		 this.jsonScatterPlotData.put("allBounceRate", allBounceRate);
+		 this.jsonScatterPlotData.put("allMultipageVisitsPercent", allMultipageVisitsPercent);
+		 } catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 		
 	public JSONObject getDataPoints() {
 		return this.jsonData;
+	}
+	
+	public JSONObject getScatterPlotDataPoints() {
+		return this.jsonScatterPlotData;
 	}
 }
 

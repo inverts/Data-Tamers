@@ -52,19 +52,26 @@ function addDashboardPage() {
 function removeDashboard(dashboardId) {
 	
 	$.post(applicationRoot + "application/deleteDashboard", {dashboardId: dashboardId}, function(result) {
-		alert("removed " + result);
+		result = $.parseJSON(result);
+		var $dash = $("#dashlist #" + result.dashboardId);
+		var name = $dash.children("a").html();
+		if (name != "Default Dashboard" && name != "Second Dashboard")
+			$dash.remove();
+		alert("removed " + name);
 	});
 }
 
 /* Creates a dashboard link */
 function createDashboardLink(dashboard) {
 	var $dashlist = $("#dashlist");
-		
-	var $linkdiv = $("<div>").addClass("dashlink-cell");
-	var $link = $("<a>").attr("href", "#")
-						.attr("onclick", "loadDashboard(" + dashboard.id + ");")
-						.html((dashboard.name)? dashboard.name : dashboard.id).appendTo($linkdiv);
-	var $delete = $("<div>").addClass("deleteDash").html("<span class='glyphicon glyphicon-remove-circle'></span>");
+	
+	var $li = $("<li>").attr("id", dashboard.id).appendTo($dashlist);
+
+	var $link = $("<a>").attr("onclick", "loadDashboard(" + dashboard.id + ");")
+						.html((dashboard.name)? dashboard.name : dashboard.id).appendTo($li);
+	var $delete = $("<span>").addClass("deleteDash glyphicon glyphicon-remove-circle")
+							 .attr("title", "remove " + $link.html())
+							 .appendTo($li);
 	
 	/* Set remove dashboard event */
 	$delete.click(function(e){
@@ -72,9 +79,10 @@ function createDashboardLink(dashboard) {
 		removeDashboard($(this).parent().attr("id"));
 	});
 	
-	var $removediv = $("<div>").attr("id", dashboard.id).append($linkdiv).append($delete);
+	$("#dashlist #" + dashboard.id).hover(function() {
+		$delete.toggle();
+	});
 	
-	var $li = $("<li>").addClass("dashlink").append($removediv).appendTo($dashlist); // add list item
 }
 
 /* Opens up right pane */
