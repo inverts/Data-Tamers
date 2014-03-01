@@ -2,6 +2,7 @@
  * boost-performance.js
  */
 
+
 function loadBoostPerformanceWidget(id) {
 	var $element = $('#' + id);
 	$.post(applicationRoot + "/BoostPerformance", null, 
@@ -19,6 +20,10 @@ function loadBoostPerformanceWidget(id) {
 			$('.boostPerformance .widget_title').click(function() {
 				$('.boostPerformance .widget-content').slideToggle('fast');
 			});
+			
+			$('.bp-box').click(function() {
+				$(this).children(".bp-content").toggle();
+			})
 	});	
 	
 	
