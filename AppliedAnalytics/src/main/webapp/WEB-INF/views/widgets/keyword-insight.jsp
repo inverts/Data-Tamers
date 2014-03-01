@@ -2,12 +2,14 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <style>
-table, th, td
+.keywordInsight {width: 600px;}
+.keywordInsight .widget-content{width: 590px;}
+.keywordInsight table, .keywordInsight th, .keywordInsight td, .keywordInsight tr
 {
 background-color:#DCDCDC;
 border:1px solid black;
 }
-th, td
+.keywordInsight th, .keywordInsight td
 {
 padding:3px;
 }
