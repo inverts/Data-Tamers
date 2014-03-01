@@ -68,6 +68,7 @@
 			 *		GRAPH PROPERTIES		*
 			 ********************************/
 			var graph = {
+							"id"		: this.id + "Graph",
 							"title"		: null,
 							"data"		: settings.data,
 							"view"		: {
@@ -102,8 +103,10 @@
 			if (!settings.endIndex)											
 				settings.endIndex = settings.data.length - 1;
 			
-			var from = getDate(graph.data[settings.startIndex]),		// static date range chosen.
-			  	  to = getDate(graph.data[settings.endIndex ]);
+			var from = new Date(graph.data[settings.startIndex][graph.x.key]),		// static date range chosen.
+			  	  to = new Date(graph.data[settings.endIndex ][graph.x.key]);
+			
+			$.extend(settings, {from: from, to: to});
 
 			/********************************
 			 *			BASE CASES			*
@@ -112,6 +115,7 @@
 					settings.endIndex < settings.startIndex || 
 					settings.endIndex - settings.startIndex < settings.rangeMin)
 				return;
+			
 
 			/********************************
 			 *			GRAPH SCALE			*
@@ -120,18 +124,18 @@
 			graph.y.point = d3.scale.linear().domain(graph.y.domain.reverse()).nice().range([0, graph.view.height]).nice();	// function to get data points at y
 
 			// create a buffer region for the dates
-			graph.x.domain = d3.time.scale().domain(graph.x.domain).nice().domain();
-
+			//graph.x.domain = d3.time.scale().domain(graph.x.domain).nice().domain();
+			
 			// Compute width of entire graph
 			graph.size.width  = graph.x.point(getDate(graph.data[graph.data.length - 1])),
-			graph.size.height =  graph.y.point(graph.data[getIndexBy(graph.data, graph.y.keys, Math.max)].jsonHitCount);
+			graph.size.height =  graph.y.point(0) - graph.y.point(graph.data[getIndexBy(graph.data, graph.y.keys, Math.max)].jsonHitCount);
 
 			// the graph SVG with all properties
 			var vis = d3.select(this).append("svg:svg")
 									 .attr({ 
 											"width": width, 
 											"height": height,
-											"id": this.id + "Graph"
+											"id": graph.id
 									 	   })
 									 .append("g")
 									 .attr("transform", "translate(" + padding.left + "," + padding.top + ")");
@@ -139,17 +143,11 @@
 			/********************************
 			 *		ZOOM BOUNDARIES			*
 			 ********************************/
-			$.extend(settings, {constraint: { x: {
-												  	min: graph.x.point(getDate(graph.data[0])) - settings.databuffer, 
-												  	max: graph.view.width - graph.size.width + 2
-												 }, 
-											  y: {	min: 0,
-												  	max: graph.size.height - settings.databuffer
-												 }}});
 			// Zoom limits
 			/*
 			var zoomOut = Math.round(graph.x.point(getDate(graph.data[graph.data.length - 10])) / graph.view.width),
-				zoomIn = 0 - (graph.view.height / graph.size.height);
+				//zoomIn = 0 - (graph.view.height / graph.size.height);
+			zoomIn = 0.3;
 			*/
 			
 			var zoomOut = 4,
@@ -161,22 +159,36 @@
 									.y(graph.y.point)
 									.scaleExtent([zoomIn, zoomOut])
 									.on("zoom", function() {
+										
+															d3.selectAll("#" + graph.id + " Circle").remove(); // remove plots
 															var t = graph.zoom.translate(),
 															tx = t[0],
 															ty = t[1];
 															
+															var diff = { "left": 0, "right": 0 };
+															
+															var yMax = graph.y.point(graph.data[getIndexBy(graph.data, graph.y.keys, Math.max)].jsonHitCount);
+															
+															//if (tx < )
+															diff.left = graph.x.point(new Date(graph.data[graph.data.length - 1][graph.x.key])) - graph.x.point(settings.from);
+															diff.right = -(graph.x.point(new Date(graph.data[0][graph.x.key]))) + graph.x.point(settings.to);
 															// x - boundaries
-															tx = Math.min(tx, 0 - settings.constraint.x.min);
-															tx = Math.max(tx, settings.constraint.x.max);
+															tx = Math.min(tx, graph.size.width - diff.left); // THIS IS CORRECT
+															tx = Math.max(tx, -(graph.size.width - diff.right));
+															
 															// y - boundaries
-															ty = Math.min(ty, 0 - settings.constraint.y.max);
-															ty = Math.max(ty, settings.constraint.y.min);
+															ty = Math.min(ty, graph.size.height);
+															ty = Math.max(ty, graph.size.height - graph.y.point(0));
 															
 															// move graph
 															graph.zoom.translate([tx, ty]);
 															
 															// redraw the graph that moved
 															drawGraph()();
+															
+															// get new graph size
+															graph.size.width  = graph.x.point(new Date(graph.data[graph.data.length - 1][graph.x.key])) - graph.x.point(new Date(graph.data[0][graph.x.key])),
+															graph.size.height =  graph.y.point(0) - graph.y.point(graph.data[getIndexBy(graph.data, graph.y.keys, Math.max)].jsonHitCount);
 														});
 			/********************************
 			 *	  CREATE GRAPH VIEW AREA	*
@@ -201,8 +213,7 @@
 												"left": 0,
 												"width": graph.view.width,
 												"height": graph.view.height,
-												"viewBox": "0 0 " + graph.view.width + " " + graph.view.height,
-												//"class": graph.line._class
+												"viewBox": "0 0 " + graph.view.width + " " + graph.view.height
 											});
 			
 			
@@ -252,13 +263,10 @@
 							         .attr({ "x": graph.view.width/2, "dy": "-0.8em" })
 							         .style("text-anchor","middle");
 			}
-			
-  
-			 d3.select(this) // event registration
-		       .on("mousemove.drag", mousemove())
-		       .on("mouseup.drag",   mouseup());
-			  
+
 			 drawGraph()(); // draw graph on DOM load
+			 
+			 d3.select(this).on("mouseup.drag",   function() { d3.select("body").style("cursor", "auto"); });
 			 
 			 function pan() {
 				 return function() {
@@ -281,6 +289,7 @@
 					 clip.width = graph.view.width - graph.x.point(dateLine);
 					 clip.show = graph.x.point(dateLine) < graph.view.width;
 				 }
+				 
 
 				/********************************
 				 *	 	  DRAW ALL LINES		*
@@ -294,8 +303,8 @@
 					  if($line.length) {
 						  classes = $line.attr("class");
 						  active = classes.indexOf("active") != -1;
-						  d3.select("." + graph.line._class[i] + ".plot").remove();
-						  d3.select("." + graph.line._class[i] + ".alternate" ).remove();
+						  d3.select("path." + graph.line._class[i] + ".plot").remove();
+						  d3.select("path." + graph.line._class[i] + ".alternate" ).remove();
 					  	  d3.select("#" + graph.line._class[i] + "clip").remove();
 					  }
 					  
@@ -314,16 +323,24 @@
 					  /********************************
 					   *		PLOT THE LINE		  *
 					   ********************************/
-					  graph.view.svg.data([graph.data])
-					  					  .append("path")
+					  graph.view.svg.data([graph.data]).append("path")
 					  					  .attr({
 													"d": d3.svg.line().interpolate(graph.line.type[i])
 																	  .x(function(d) { return graph.x.point(getDate(d)); })
 									  				  				  .y(function(d) { return graph.y.point(d[graph.y.keys[i]]); }),
 									  				"pointer-events": "all",
-									  				"class": classes || graph.line._class[i] + " plot"
+									  				"class": classes || graph.line._class[i] + " plot",
+									  				"id": graph.y.keys[i]
 					  					  		})
 					  					  .on("mousedown.drag", pan())
+					  					  .on("mouseover", function() {
+					  						  
+					  						 var key = d3.select(this).attr("id");
+					  						 var current = d3.select(this).attr("class");
+
+					  						 plotPoints(current, key);
+					  						  
+					  					  })
 					  					  .call(graph.zoom);
 					  
 					  /********************************
@@ -342,26 +359,10 @@
 					  				  				  .y(function(d) { return graph.y.point(d[graph.y.keys[i]]); }));
 					  }
 					  
+					  
+					  
 					  // apply the circles
-					 /*var circle = vis.select("svg").selectAll("circle")
-					      							.data(function(d) { return d; });
-					  
-					  
-					 
-					  circle.enter().append("circle")
-							        .attr("class", function(d) { return d === this.selected ? "selected" : null; })
-							        .attr("cx",    function(d) { return graph.x.point(new Date(d[graph.x.key])); })
-							        .attr("cy",    function(d) { return graph.y.point(d[graph.y.keys[i]]); })
-							        .attr("r", settings.pointSize)
-							        .attr("pointer-events", "all").on("mousedown.drag", pan())
-							        .call(graph.zoom);
-					 
-					  circle
-					      .attr("class", "circle")
-					      .attr("cx", function(d) { return graph.x.point(new Date(d.jsonDate)); })
-					      .attr("cy", function(d) { return graph.y.point(d[graph.y.keys[i]]); });
-					 
-					  circle.exit().remove();*/
+					
 				  } // end for
 				  
 				 /********************************
@@ -385,74 +386,62 @@
 				    d3.event.stopPropagation();
 				  }
 				};
-
 				
-				function mousemove() {
-					  return function() {
-					    var p = d3.mouse(vis[0][0]);
-					    
-					    if (this.dragged) {
-					    	this.dragged.y = y.invert(Math.max(0, Math.min(self.size.height, p[1])));
-					    	update(settings.callback);
-					    }
-					    
-					    if (!isNaN(graph.x.down)) {
-					      d3.select("body").style("cursor", "ew-resize");
-					      var rupx = graph.x.point.invert(p[0]),
-					          xaxis1 = graph.x.point.domain()[0],
-					          xaxis2 = graph.x.point.domain()[1],
-					          xextent = xaxis2 - xaxis1;
-					      if (rupx != 0) {
-					        var changex, new_domain;
-					        changex = downx / rupx;
-					        new_domain = [xaxis1, xaxis1 + (xextent * changex)];
-					        graph.x.point.domain(new_domain);
-					        drawGraph()();
-					      }
-					      d3.event.preventDefault();
-					      d3.event.stopPropagation();
-					    };
-					    
-					    if (!isNaN(graph.y.down)) {
-					      d3.select("body").style("cursor", "ns-resize");
-					      var rupy = graph.y.point.invert(p[1]),
-					          yaxis1 = graph.y.point.domain()[1],
-					          yaxis2 = graph.y.point.domain()[0],
-					          yextent = yaxis2 - yaxis1;
-					      if (rupy != 0) {
-					        var changey, new_domain;
-					        changey = downy / rupy;
-					        new_domain = [yaxis1 + (yextent * changey), yaxis1];
-					        graph.y.point.domain(new_domain);
-					        drawGraph()();
-					      }
-					      d3.event.preventDefault();
-					      d3.event.stopPropagation();
-					    }
-					  }
-					};
+				
+				function plotPoints(current, key) {
 					
-					function mouseup() {
-						  return function() {
-						    document.onselectstart = function() { return true; };
-						    d3.select("body").style("cursor", "auto");
-						    if (!isNaN(graph.x.down)) {
-						      drawGraph()();
-						      graph.x.down = Math.NaN;
-						      d3.event.preventDefault();
-						      d3.event.stopPropagation();
-						    };
-						    if (!isNaN(graph.y.down)) {
-						      drawGraph()();
-						      graph.y.down = Math.NaN;
-						      d3.event.preventDefault();
-						      d3.event.stopPropagation();
-						    }
-						    if (this.dragged) { 
-						      this.dragged = null; 
-						    }
-						  }
-						}
+					
+					d3.selectAll("#" + graph.id + " Circle").remove(); // remove old plots
+					
+					var circle = vis.select("svg").selectAll("circle").data(function(d) { return d; });
+					
+					circle.enter()
+						  .append("circle")
+						  .attr({
+							  "class": current,
+							  "cx": function(d) { return graph.x.point(new Date(d[graph.x.key])); },
+							  "cy": function(d) { return graph.y.point(d[key]); },
+							  "r": settings.pointSize,
+							  "title": function(d) { return d[key]; } // for tooltip
+						  });
+					
+					circle.exit();
+					
+					$("#" + graph.id + " circle").tipsy({
+						 gravity: "s",
+						 html: false,
+						 title: function() { return $(this).attr("original-title"); }
+					 });
+					
+					/*var circle = vis.select("svg").selectAll("circle").data(function(d) { return d; });
+						 
+						 
+
+					  circle.enter().append("circle")
+							        .attr("class", current)
+							        .attr("cx",    function(d) { return graph.x.point(new Date(d[graph.x.key])); })
+							        .attr("cy",    function(d) { return graph.y.point(d[key]); })
+							        .attr("r", settings.pointSize)
+							        .attr("pointer-events", "all")
+							        .on("mousedown.drag", pan());
+					 
+					  circle.append("circle")
+					      .attr("class", current)
+					      .attr("cx", function(d) { return graph.x.point(new Date(d.jsonDate)); })
+					      .attr("cy", function(d) { return graph.y.point(d[key]); })
+					 
+					  
+					      circle.exit().remove();
+					  /*$("#" + graph.id + " Circle").tipsy({
+							 gravity: "w",
+							 html: true,
+							 title: function() { return "test"; }
+						 });*/
+					  
+					  //graph.line.hover = key;
+					
+				}
+						
 					
 					function drawGraph() {
 						return function() {

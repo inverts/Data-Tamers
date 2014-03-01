@@ -8,8 +8,6 @@ import java.util.Arrays;
 
 import org.json.*;
 
-import com.google.gson.Gson;
-
 
 public class DataForecastModel extends ForecastWidgetModel {
 	
@@ -80,6 +78,8 @@ public class DataForecastModel extends ForecastWidgetModel {
 	public void setDimension(String dimension) {
 		this.dimension = dimension;
 	}
+	
+	
 	
 	
 	

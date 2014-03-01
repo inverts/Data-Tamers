@@ -21,22 +21,22 @@ $(document).ready(function() {
 		$('.profile-image').click(function() {
 			$('.right-pane')
 				.addClass('settings')
-				.on( "change", "#select-account", function() {
+				.on( "change.settings", "#select-account", function() {
 					$.post(applicationRoot + "settings", { account: $('#select-account option:selected').val() }, function( data ) {
 						  $(".settings").html( data );
 					});
 				})
-				.on( "change", "#select-property", function() {
+				.on( "change.settings", "#select-property", function() {
 					$.post(applicationRoot + "settings", { property: $('#select-property option:selected').val() }, function( data ) {
 						  $(".settings").html( data );
 					});
 				})
-				.on( "change", "#select-profile", function() {
+				.on( "change.settings", "#select-profile", function() {
 					$.post(applicationRoot + "settings", { profile: $('#select-profile option:selected').val() }, function( data ) {
 						  $(".settings").html( data );
 					});
 				})
-				.on( "click", "#update-button", function() {
+				.on( "click.settings", "#update-button", function() {
 					$.post(applicationRoot + "settings", { update: 1 }, function( data ) {
 						  $(".settings").html( data );
 						  updateWidgets();
@@ -102,7 +102,9 @@ function hideSettingsPanel() {
 		$(".settings").animate({width: 0}, 500, 'swing', function() {
 				$('.right-pane')
 					.removeClass('settings')
-					.hide();
+					.hide()
+				    .off('click.settings')
+				    .off('change.settings');
                 $(window).off('click.settings');
                 $('.settings-content').hide();
         });

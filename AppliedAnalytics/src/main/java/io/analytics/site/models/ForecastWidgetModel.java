@@ -722,11 +722,6 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
                 return this.metric;
         }
 
-        @Override
-        public String getUpdateApiCall() {
-                // TODO Auto-generated method stub
-                return null;
-        }
 
 		@Override
 		public int getPositionPriority() {

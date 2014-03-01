@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.api.client.auth.oauth2.Credential;
@@ -36,8 +37,9 @@ public class WidgetController {
 	public ModelAndView DataForecastView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,	
 												@RequestParam(value = "change", defaultValue = "none") String changePercentage,
 												@RequestParam(value = "dimension", defaultValue = "none") String dimension,
-												@RequestParam(value = "serialize", defaultValue = "none") String serialize) 
+												@RequestParam(value = "serialize", defaultValue = "0") boolean serialize) 
 	{
+
 		Credential credential;
 		SettingsModel settings;
 		FilterModel filter;
@@ -57,6 +59,12 @@ public class WidgetController {
 		}
 
 		DataForecastModel dataForecast = SessionService.getModel(session, "hypotheticalFuture", DataForecastModel.class);
+		
+		/* Did we just request data only? */
+		if(serialize) {
+			widgetData(dataForecast.getJSONSerialization());
+			return null;
+		}
 
 		//If there is no model available, or if the active profile changed, create a new model.
 		if ((dataForecast == null) || !(settings.getActiveProfile().equals(dataForecast.getActiveProfile()))) {
@@ -79,14 +87,17 @@ public class WidgetController {
 		viewMap.addAttribute("hfModel", dataForecast);
 		viewMap.addAttribute("filterModel", filter);
 		
-		if (!serialize.equals("none")) {
+		/*if (!serialize.equals("none")) {
 			viewMap.addAttribute("model", dataForecast);
 			return new ModelAndView("serialize");
-		}
+		}*/
+		
 		return new ModelAndView("DataForecast");
 
 	}
 	
+	
+
 	@RequestMapping(value = "/saveDataForecast", method = RequestMethod.POST)
 	private void saveDataForecastSettings(@RequestParam("widgetId") int widgetId, 
 										  @RequestParam("data") String inputData)
@@ -271,5 +282,15 @@ public class WidgetController {
 		}
 		
 		return new ModelAndView("KeywordInsight");
+	}
+	
+	
+	
+	
+	
+	/* Leave this method at the bottom */
+	@ResponseBody
+	private String widgetData(String JSONSerializedData) {
+		return JSONSerializedData;
 	}
 }

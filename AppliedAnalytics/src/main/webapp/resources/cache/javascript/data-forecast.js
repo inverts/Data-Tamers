@@ -25,31 +25,48 @@ function loadDataForecast(id) {
 		}
 		else
 			console.error('Could not append Data Forecast Widget to id: ' + id);
-	
-		$('#' + id + ' #dataForecastData').graph({
-													data: window.newData,
-													yKey: dataForecastDataKeys,
-													lineClass: lineclasses,
-													lineType: lineTypes,
-													startIndex: filterStartIndex, 
-													endIndex: window.newData.length-1, 
-													pointSize: 0,
-													dateLine: new Date().setHours(0,0,0,0) // todays date without time
-												});
 		
-		// Collapse Event
-		$('.dataForecast .widget_title').click(function() {
-			$('.dataForecast .widget-content').slideToggle('fast');
+		
+		
+		getDataForecastData(id, function() {
+			
+			// Collapse Event
+			$('.dataForecast .widget_title').click(function() {
+				$('.dataForecast .widget-content').slideToggle('fast');
+			});
+			
+			$('#rawBtn').on('click', function() { toggleLine('raw', this); });
+			$('#normBtn').on('click', function() { toggleLine('normal', this); });
+			$('#smoothBtn').on('click', function() { toggleLine('smooth', this); });
+			
+			createLegend(lineclasses);
+			
+			$('#rawBtn').click(); // initially turn on raw data.
+			
 		});
-		
-		$('#rawBtn').on('click', function() { toggleLine('raw', this); });
-		$('#normBtn').on('click', function() { toggleLine('normal', this); });
-		$('#smoothBtn').on('click', function() { toggleLine('smooth', this); });
-		
-		createLegend(lineclasses);
-		
-		$('#rawBtn').click(); // initially turn on raw data.
 
+	});
+}
+
+
+function getDataForecastData(id, callback) {
+	$.post(applicationRoot + "DataForecast", {"serialize": 1}, function(response) {
+		var d = $.parseJSON(response);
+		
+		$('#' + id + ' #dataForecastData').empty().graph({
+															data: d.data,
+															yKey: dataForecastDataKeys,
+															lineClass: lineclasses,
+															lineType: lineTypes,
+															startIndex: 17, 
+															endIndex: 26, 
+															pointSize: 4,
+															dateLine: new Date().setHours(0,0,0,0) // todays date without time
+														});
+		
+		if(callback)
+			callback();
+		
 	});
 }
 
@@ -63,22 +80,12 @@ function loadDataForecast(id) {
 function updateDataForecast(id) {
 	
 	var $buttons = $('#' + id + ' button.active').removeClass('active');
-
-	$('#' + id + ' #dataForecastData').empty()
-									  .graph({
-												data: window.newData,
-												yKey: dataForecastDataKeys,
-												lineClass: lineclasses,
-												lineType: lineTypes,
-												startIndex: filterStartIndex,
-												endIndex: window.newData.length-1,
-												pointSize: 0,
-												dateLine: new Date().setHours(0,0,0,0) // todays date without time
-											});
 	
-	$.each($buttons, function() {
-		$(this).click();
-	})
+	getDataForecastData(id, function() {
+		$.each($buttons, function() {
+			$(this).click();
+		});	
+	});
 }
 
 
@@ -89,7 +96,7 @@ function updateDataForecast(id) {
  * @param btn - id of the button clicked.
  */
 function toggleLine(className, btn) {
-	var line = d3.select('.' + className + '.plot');
+	var line = d3.selectAll('.' + className + '.plot');
 	var altLine = d3.select('.' + className + '.alternate');
 	var legend = d3.select('.' + className + '.graph-legend');
 	var current = line.attr('class');

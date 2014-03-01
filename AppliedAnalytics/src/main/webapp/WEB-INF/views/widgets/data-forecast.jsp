@@ -13,14 +13,10 @@ var endDate = '${ filterModel.getActiveEndDateString() }';
 var futureEndDate = '${ hfModel.getFutureEndDate() }';
 */
 
-window.newData = JSON.parse('${ hfModel.getJSONPointsFormatted().toString() }');
+//window.newData = JSON.parse('${ hfModel.getJSONPointsFormatted().toString() }');
 
 </script>  
- 
-<style>
-#top-controls { padding-bottom:5px; }
-circle { fill:blue; }
-</style>
+
 
 <div class="widget widgetView dataForecast">
 	<div class="widget_header">
