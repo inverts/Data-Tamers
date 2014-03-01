@@ -1,5 +1,9 @@
 package io.analytics.domain;
 
+import com.google.gson.Gson;
+
+import io.analytics.site.models.JSONSerializable;
+
 /**
  * Represents a single instance of a WidgetType that belongs to a Dashboard and can
  * be shown to the user.
@@ -7,7 +11,7 @@ package io.analytics.domain;
  * @author Dave
  *
  */
-public class Widget {
+public class Widget implements JSONSerializable {
 
 	private int id;
 	private int defaultFilterId;
@@ -44,6 +48,11 @@ public class Widget {
 	}
 	public void setPriority(int priority) {
 		this.priority = priority;
+	}
+	@Override
+	public String getJSONSerialization() {
+		Gson g = new Gson();
+		return g.toJson(this);
 	}
 	
 	

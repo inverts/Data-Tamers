@@ -201,9 +201,7 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/application/createDashboard", method = RequestMethod.POST)
-	private String createDashboard(@ModelAttribute("ACCOUNT_ID") int accountId,
-			  					   @ModelAttribute("USER_ID") int userId,
-			  					   @ModelAttribute("dashboardForm")DashboardForm form,
+	private String createDashboard(@ModelAttribute("dashboardForm")DashboardForm form,
 			  					   BindingResult result,
 			  					   @RequestParam(value = "name", defaultValue = "") String name) 
 	{ 
@@ -269,6 +267,8 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 		return result.toString();
 	}
 	
+	
+	//TODO: I'm not sure what this method is for
 	/**
 	 * Update Widget Position on the Dashboard.
 	 * 
@@ -276,10 +276,9 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 	 * @param userId - current User Id
 	 * @param dashboardId - current dashboard Id
 	 */
+	/*
 	@RequestMapping(value = "/application/layout", method = RequestMethod.POST)
-	private void updateWidgetPosition(@ModelAttribute("ACCOUNT_ID") int accountId,
-									  @ModelAttribute("USER_ID") int userId,
-									  @ModelAttribute("DASHBOARD_ID") int dashboardId) 
+	private void updateWidgetPosition() 
 	{
 		try {
 			// TODO: Need some data type representing Widget positions
@@ -291,6 +290,7 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 			logger.info(e.getMessage());
 		}
 	}
+	*/
 
 	@RequestMapping(value = "/application/dashboards/{dashboardId}", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView getDashboard(@PathVariable String dashboardId, Model model) {
@@ -307,7 +307,7 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 			return new ModelAndView("serialize");
 		
 		DashboardModel d = new DashboardModel(id);
-		d.setWidgetIdsWithWidgets(widgets);
+		d.setWidgets(widgets);
 		
 		model.addAttribute("model", d);
 		return new ModelAndView("serialize");

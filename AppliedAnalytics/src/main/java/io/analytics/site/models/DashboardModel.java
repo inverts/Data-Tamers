@@ -16,6 +16,7 @@ public class DashboardModel implements JSONSerializable {
 	private int filterId;
 	private List<Integer> widgetIds;
 	private List<Integer> widgetTypeIds;
+	private List<Widget> widgets;
 	
 	public DashboardModel() {
 		
@@ -88,6 +89,10 @@ public class DashboardModel implements JSONSerializable {
 			this.widgetTypeIds.add(w.getWidgetTypeId());
 		}
 	}
+	
+	public void setWidgets(List<Widget> widgets) {
+		this.widgets = new ArrayList<Widget>(widgets);
+	}
 
 
 	@Override
@@ -98,15 +103,11 @@ public class DashboardModel implements JSONSerializable {
 			result.put("filterId", this.filterId);
 			result.put("name", this.name);
 			
-			JSONArray widgetIds= new JSONArray();
-			for (Integer id : this.widgetIds)
-				widgetIds.put(id);
-			result.put("widgetIds", widgetIds);
+			JSONArray widgets = new JSONArray();
+			for (Widget w : this.widgets)
+				widgets.put(new JSONObject(w.getJSONSerialization()));
+			result.put("widgets", widgets);
 			
-			JSONArray widgetTypeIds= new JSONArray();
-			for (Integer id : this.widgetTypeIds)
-				widgetTypeIds.put(id);
-			result.put("widgetTypeIds", widgetTypeIds);
 			
 		} catch (JSONException e) {
 			e.printStackTrace();

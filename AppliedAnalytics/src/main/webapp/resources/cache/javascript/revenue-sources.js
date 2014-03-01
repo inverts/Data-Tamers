@@ -2,16 +2,11 @@
  * revenue-sources.js
  */
 
-$(function() {
-	// Temporary
-	GetRevenueSourcesWidget();
-});
 
-
-function GetRevenueSourcesWidget() {
+function loadRevenueSourcesWidget(id) {
 
 	
-	var $element = $('#revenueSource');
+	var $element = $('#' + id);
 	$.post(applicationRoot + "/RevenueSources", null, 
 		function(response) {
 			if ($element.length > 0)

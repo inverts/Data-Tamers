@@ -192,6 +192,11 @@ public class KeywordInsightService implements IKeywordInsightService {
 		ArrayList<Double> cpcVisitBounceRate = new ArrayList<Double>();
 			
 		dataRows = gaData.getRows();
+		
+		//TODO: Handle this appropriately - this is just a quick fix.
+		if (dataRows == null)
+			return null;
+		
 		try {
 		for(List<String> row : dataRows) {
 			cpcKeywords.add(row.get(keywordColumn));

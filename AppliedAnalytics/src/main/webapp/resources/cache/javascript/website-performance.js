@@ -2,16 +2,9 @@
  * website-performance.js
  */
 
-$(function() {
-	// Temporary
-	GetWebsitePerformanceWidget();
-
-});
-
-
-function GetWebsitePerformanceWidget() {
+function loadWebsitePerformanceWidget(id) {
 	
-	var $element = $('#websitePerformance');
+	var $element = $('#' + id);
 	
 	$.post(applicationRoot + "/WebsitePerformance", null, 
 		function(response) {

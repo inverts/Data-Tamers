@@ -30,12 +30,24 @@ function loadDashboard(dashboardId) {
 				var dashboard = $.parseJSON(result);
 				var widgetIdArray = dashboard.widgetIds;
 				var widgetTypeIdArray = dashboard.widgetTypeIds;
-				
+				var widgets = dashboard.widgets;
+				widgets = widgets.sort(compareWidgetPriority);
 				$('.dashboard-content').html("");
-				loadWidgets(widgetTypeIdArray);
+				loadWidgets(widgets);
 			});
 }
 
+/**
+ * Compares the priority of two Widget JSON objects. These objects should have 
+ * an integer priority property such that high priority widgets are to be
+ * placed prior to lower priority widgets.
+ * @param w1
+ * @param w2
+ * @returns 0 if the priorities are equal, < 0 if w1 has higher priority than w2, > 0 if vice versa.
+ */
+function compareWidgetPriority(w1, w2) {
+	return w2.priority - w1.priority;
+}
 
 /**
  * calls each widgets model and view and appends
@@ -45,36 +57,55 @@ function loadDashboard(dashboardId) {
  * @returns
  */
 //TODO: Accommodate widget specifics (like filter).
-function loadWidgets(widgetTypeIdArray) {
+function loadWidgets(widgets) {
 	
-	for(var i = 0; i < widgetTypeIdArray.length; i++) {
+	for(var i = 0; i < widgets.length; i++) {
+		//Create an empty widget div.
 		var $div = $('<div>').addClass('w_container')
 							 .prop('draggable', true)
 							 .appendTo($('.dashboard-content'));
 		
-		var widgetId = widgetTypeIdArray[i];
+		var widgetId = widgets[i].widgetTypeId;
 		
+		//Label and fill the div accordingly depending on the widget type.
+		//TODO: Create widget id to function mappings elsewhere and use them here.
 		switch(widgetId)
 		{
 			case 1: 
-				$div.attr('id', 'dataForecast' + i).data('widgetId', widgetId);
-				loadDataForecast('dataForecast' + i);
-				break;
-				
-			case 3:
-				$div.attr('id', 'websitePerformance' + i).data('widgetId', widgetId);
-				loadWebsitePerformance('websitePerformance' + i);
+				$div.attr('id', 'dataForecastWidget' + i).data('widgetId', widgetId);
+				loadDataForecast('dataForecastWidget' + i);
 				break;
 				
 			case 2:
-				$div.attr('id', 'keyContributingFactors' + i).data('widgetId', widgetId);
-				loadKeyContributingFactors('keyContributingFactors' + i);
+				$div.attr('id', 'websitePerformanceWidget' + i).data('widgetId', widgetId);
+				loadWebsitePerformanceWidget('websitePerformanceWidget' + i);
+				break;
+				
+			case 3:
+				$div.attr('id', 'keyContributingFactorsWidget' + i).data('widgetId', widgetId);
+				loadKeyContributingFactors('keyContributingFactorsWidget' + i);
 				break;
 			
 			case 4:
-				$div.attr('id', 'keywordInsight' + i).data('widgetId', widgetId);
-				loadKeywordInsight('keywordInsight' + i);
+				$div.attr('id', 'keywordInsightWidget' + i).data('widgetId', widgetId);
+				loadKeywordInsight('keywordInsightWidget' + i);
 				break;
+				
+			case 5: 
+				$div.attr('id', 'growingProblemsWidget' + i).data('widgetId', widgetId);
+				loadGrowingProblemsWidget('growingProblemsWidget' + i);
+				break;
+				
+			case 6: 
+				$div.attr('id', 'boostPerformanceWidget' + i).data('widgetId', widgetId);
+				loadBoostPerformanceWidget('boostPerformanceWidget' + i);
+				break;
+				
+			case 7: 
+				$div.attr('id', 'revenueSourcesWidget' + i).data('widgetId', widgetId);
+				loadRevenueSourcesWidget('revenueSourcesWidget' + i);
+				break;
+				
 		}
 	}
 	

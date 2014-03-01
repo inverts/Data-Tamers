@@ -2,17 +2,8 @@
  * boost-performance.js
  */
 
-
-$(function() {
-	// Temporary
-	GetBoostPerformanceWidget();
-});
-
-
-
-function GetBoostPerformanceWidget() {
-	
-	var $element = $('#boostPerformance');
+function loadBoostPerformanceWidget(id) {
+	var $element = $('#' + id);
 	$.post(applicationRoot + "/BoostPerformance", null, 
 		function(response) {
 			if ($element.length > 0)

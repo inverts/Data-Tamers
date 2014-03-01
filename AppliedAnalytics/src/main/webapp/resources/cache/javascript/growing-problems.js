@@ -2,15 +2,10 @@
  * growing-problems.js
  */
 
-$(function() {
-	// Temporary
-	GetGrowingProblemsWidget();
-});
 
+function loadGrowingProblemsWidget(id) {
 
-function GetGrowingProblemsWidget() {
-	
-	var $element = $('#growingProblems');
+	var $element = $('#' + id);
 	$.post(applicationRoot + "/GrowingProblems", null, 
 		function(response) {
 			if ($element.length > 0)
