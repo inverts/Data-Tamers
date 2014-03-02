@@ -1,9 +1,11 @@
 package io.analytics.site.models;
 
 import io.analytics.domain.Account;
+import io.analytics.domain.GoogleAccount;
 import io.analytics.domain.User;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -24,6 +26,8 @@ public class SessionModel {
 	private Credential credentials;
 	private User user;
 	private Account account;
+	private List<GoogleAccount> availableGoogleAccounts;
+	private GoogleAccount activeGoogleAccount;
 
 	private static final String ACCOUNT = "account";
 	private static final String USER = "user";
@@ -179,6 +183,34 @@ public class SessionModel {
 		attributes.put(name, value);
 	}
 	
+	/**
+	 * @return the availableGoogleAccounts
+	 */
+	public List<GoogleAccount> getAvailableGoogleAccounts() {
+		return availableGoogleAccounts;
+	}
+
+	/**
+	 * @param availableGoogleAccounts the availableGoogleAccounts to set
+	 */
+	public void setAvailableGoogleAccounts(List<GoogleAccount> availableGoogleAccounts) {
+		this.availableGoogleAccounts = availableGoogleAccounts;
+	}
+
+	/**
+	 * @return the activeGoogleAccount
+	 */
+	public GoogleAccount getActiveGoogleAccount() {
+		return activeGoogleAccount;
+	}
+
+	/**
+	 * @param activeGoogleAccount the activeGoogleAccount to set
+	 */
+	public void setActiveGoogleAccount(GoogleAccount activeGoogleAccount) {
+		this.activeGoogleAccount = activeGoogleAccount;
+	}
+
 	/**
 	 * Throws when a session is detected to be corrupted.
 	 * This can happen if the wrong type of object is stored in a known attribute.

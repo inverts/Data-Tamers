@@ -9,6 +9,7 @@ import io.analytics.service.interfaces.ISessionService;
 import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SettingsModel;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -18,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.ServletContextAware;
+import org.springframework.web.context.support.ServletContextFactoryBean;
 
 import com.google.api.client.auth.oauth2.Credential;
 
@@ -27,12 +30,13 @@ public class SessionService implements ISessionService {
 	private static final Logger logger = LoggerFactory.getLogger(SessionService.class);
 	
 	@Autowired private IManagementService ManagementService;
+	private ServletContext servletContext;
 	
 	private static SettingsModel userSettings = null;
 	private static FilterModel filter = null;
 	private static Credential credentials = null;
 	private static HashMap<String, Object> models = new HashMap<String, Object>();
-	
+
 	/**
 	 * Checks to see if the user's current session is authorized.
 	 * Also double-checks to make sure the user's settings are loaded into the session and
@@ -175,6 +179,7 @@ public class SessionService implements ISessionService {
 		}
 		return true;
 	}
+
 
 
 }

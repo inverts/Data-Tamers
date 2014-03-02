@@ -6,6 +6,7 @@ import io.analytics.repository.interfaces.IGoogleAccountRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -36,31 +38,31 @@ public class GoogleAccountRepository implements IGoogleAccountRepository {
 	public GoogleAccountRepository(DataSource dataSource) {
 		this.jdbc = new JdbcTemplate(dataSource);
 		//Must specify .usingGeneratedKeyColumns in order to use .executeAndReturnKey.
-		jdbcInsert = new SimpleJdbcInsert(this.jdbc).withTableName(GOOGLEACCOUNTS_TABLE).usingGeneratedKeyColumns(GoogleAccountsTable.GOOGLEACCOUNTS_ID);
+		jdbcInsert = new SimpleJdbcInsert(this.jdbc).withTableName(GOOGLEACCOUNTS_TABLE).usingGeneratedKeyColumns(GoogleAccountsTable.ID);
 	}
-	
+
 	public static final String GOOGLEACCOUNTS_TABLE = "GoogleAccounts";
+	public static final String GOOGLEACCOUNTSHASACCOUNTS_TABLE = "GoogleAccounts_has_Accounts";
+	
 	private static final class GoogleAccountsTable {
-		public static final String GOOGLEACCOUNTS_ID = "idGoogleAccounts";
+		public static final String ID = "idGoogleAccounts";
 		public static final String REFRESH_TOKEN = "refreshToken";
 		public static final String OWNER_ACCOUNT_ID = "ownerAccountId";
+	}
+	private static final class GoogleAccountsHasAccountsTable {
+		public static final String GOOGLEACCOUNTS_ID = "GoogleAccounts_idGoogleAccounts";
+		public static final String ACCOUNT_ID = "Accounts_idAccounts";
 	}
 	
 	private static final class GoogleAccountMapper implements RowMapper<GoogleAccount> {
 		@Override
 		public GoogleAccount mapRow(ResultSet rs, int row) throws SQLException {
-			GoogleAccount googleAccount = new GoogleAccount(rs.getInt(GoogleAccountsTable.GOOGLEACCOUNTS_ID));
+			GoogleAccount googleAccount = new GoogleAccount(rs.getInt(GoogleAccountsTable.ID));
 			googleAccount.setActiveRefreshToken(rs.getString(GoogleAccountsTable.REFRESH_TOKEN));
 			googleAccount.setOwnerAccountId(rs.getInt(GoogleAccountsTable.OWNER_ACCOUNT_ID));
-			
 			return googleAccount;
 		}	
 	}
-	
-	//TODO: Use a connection properties file.
-	private static DriverManagerDataSource DATASOURCE = 
-				new DriverManagerDataSource("jdbc:mysql://davidkainoa.com:3306/davidkai_analytics", 
-						"davidkai_data", "PNjO_#a40@wZPmh-Q");
 	
 	/**
 	 * Adds a new Google Account into the database. The GoogleAccount must have a refresh token 
@@ -95,16 +97,54 @@ public class GoogleAccountRepository implements IGoogleAccountRepository {
 	}
 	
 
-	/**
-	 * Retrieves a list of Google accounts owned by one particular user.
-	 * Note that this is different from a list of Google Accounts associated with
-	 * one particular Account.
-	 * @param ownerId The User id that you are trying to find Google Accounts for.
-	 * @return A List of GoogleAccounts, which may be empty if none are found.
-	 */
-	public List<GoogleAccount> getGoogleAccountsForOwner(int ownerId) {
+	public List<GoogleAccount> getGoogleAccountsForOwnerAccount(int accountId) {
 		//TODO: Method stub, implement.
 		return null;
+	}
+
+	
+	public List<GoogleAccount> getGoogleAccountsForAccount(int accountId) {
+
+		if (accountId < 0)
+			return null;
+		
+		String preStatement;
+		Object[] args;
+		int[] argTypes;
+		
+		String projection = String. format("%1$s.%2$s, %1$s.%3$s, %1$s.%4$s", 
+				this.GOOGLEACCOUNTS_TABLE, GoogleAccountsTable.ID, GoogleAccountsTable.REFRESH_TOKEN, GoogleAccountsTable.OWNER_ACCOUNT_ID);
+		
+		String joinedTables = String.format("%s, %s, %s", 
+				this.GOOGLEACCOUNTS_TABLE, this.GOOGLEACCOUNTSHASACCOUNTS_TABLE, AccountRepository.ACCOUNTS_TABLE);
+		
+		String googleAccountsCondition = String.format("%s.%s = %s.%s", 
+				this.GOOGLEACCOUNTS_TABLE, GoogleAccountsTable.ID, 
+				this.GOOGLEACCOUNTSHASACCOUNTS_TABLE, GoogleAccountsHasAccountsTable.GOOGLEACCOUNTS_ID);
+
+		String accountsCondition = String.format("%s.%s = %s.%s", 
+				AccountRepository.ACCOUNTS_TABLE, AccountRepository.AccountTable.ACCOUNT_ID, 
+				this.GOOGLEACCOUNTSHASACCOUNTS_TABLE, GoogleAccountsHasAccountsTable.ACCOUNT_ID);
+		
+		String accountCondition = String.format("%s.%s = ?", AccountRepository.ACCOUNTS_TABLE, AccountRepository.AccountTable.ACCOUNT_ID);
+		
+		
+		preStatement = String.format("select %s FROM %s WHERE %s AND %s AND %s;", projection, joinedTables,
+				googleAccountsCondition, accountsCondition, accountCondition);
+		
+		args = new Object[] { accountId };
+		argTypes = new int[] { Types.INTEGER };
+
+		try {
+			List<GoogleAccount> googleAccounts = jdbc.query(preStatement, args, argTypes, new GoogleAccountMapper());
+			
+			return googleAccounts; 
+			
+		} catch (DataAccessException e) {
+			//TODO: Standardize error handling for the database.
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 

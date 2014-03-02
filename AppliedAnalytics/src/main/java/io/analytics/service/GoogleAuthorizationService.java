@@ -4,7 +4,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.ServletContextAware;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.auth.oauth2.TokenResponse;
@@ -23,13 +26,23 @@ import com.google.api.client.json.jackson.JacksonFactory;
  *
  */
 @Service
-public class GoogleAuthorizationService {
+public class GoogleAuthorizationService implements ServletContextAware {
 
 	private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 	private static final JsonFactory JSON_FACTORY = new JacksonFactory();
-	private static final String CLIENT_SECRET_LOCATION = "src/main/resources/client_secrets.json";
+	private static String CLIENT_SECRET_LOCATION = "/resources/client_secrets.json";
 	private static GoogleClientSecrets clientSecrets = null;
+	private ServletContext servletContext;
 
+	public GoogleAuthorizationService() {
+	}
+	@Override
+	public void setServletContext(ServletContext sc) {
+		this.servletContext = sc;
+		String realPath = servletContext.getRealPath("/resources/client_secrets.json");
+		CLIENT_SECRET_LOCATION = realPath;
+		
+	}
 	// Request a new Access token using the refresh token.
 	public Credential getAccountCredentials(String refreshToken) {
 		Credential credential = createCredentialWithRefreshToken(HTTP_TRANSPORT, JSON_FACTORY,

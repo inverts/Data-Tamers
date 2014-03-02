@@ -43,7 +43,7 @@ public class AccountRepository implements IAccountRepository {
 	
 	
 	public static final String ACCOUNTS_TABLE = "Accounts";
-	private static final class AccountTable {
+	public static final class AccountTable {
 		public static final String ACCOUNT_ID = "idAccounts";
 		public static final String FILTER_ID = "defaultFilterId";
 		public static final String OWNER_USER_ID = "ownerUserId";

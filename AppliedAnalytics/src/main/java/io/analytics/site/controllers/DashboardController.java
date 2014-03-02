@@ -14,12 +14,15 @@ import io.analytics.aspect.HeaderFooter;
 import io.analytics.aspect.SidePanel;
 import io.analytics.domain.Account;
 import io.analytics.domain.Dashboard;
+import io.analytics.domain.GoogleAccount;
 import io.analytics.domain.User;
 import io.analytics.domain.Widget;
 import io.analytics.enums.HeaderType;
 import io.analytics.forms.DashboardForm;
+import io.analytics.service.GoogleAuthorizationService;
 import io.analytics.service.interfaces.IAccountService;
 import io.analytics.service.interfaces.IDashboardService;
+import io.analytics.service.interfaces.IGoogleAccountService;
 import io.analytics.service.interfaces.ISessionService;
 import io.analytics.service.interfaces.IUserService;
 import io.analytics.service.interfaces.IWidgetService;
@@ -59,6 +62,7 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 	@Autowired private IDashboardService DashboardService;
 	@Autowired private IUserService UserService;
 	@Autowired private IWidgetService WidgetService;
+	@Autowired private IGoogleAccountService GoogleAccountService;
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -69,21 +73,11 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 	public ModelAndView getDashboardContainer(Locale locale, Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response,
 			   @RequestParam(value = "did", defaultValue = "-1") String dashboardId) {
 		
-		
-		boolean success = SessionService.checkAuthorization(session);
+		/*
+		 * TODO: A lot of this code needs to go somewhere higher up in the calling hierarchy.
+		 * At this point, we should be able to assume that we have a full session of information.
+		 */
 
-		/* Getting the currrent settings. */
-		SettingsModel settings = null;
-		if (success) {
-			//If authorization succeeded, the following must succeed.
-			settings = (SettingsModel) session.getAttribute("settings");
-			model.addAttribute("settings", settings);
-		} else if (SessionService.redirectToLogin(session, request, response)) {
-			return null;
-		} else {
-			return new ModelAndView("unavailable");
-		}
-		
 		SessionModel sessionModel = new SessionModel(session);
 		
 		try {
@@ -97,7 +91,7 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 					SessionService.redirectToRegularLogin(session, "?errors=1&noaccount=1", response);
 					return null;
 				}
-				//Get the first account owned by the user - this could change in the future.
+				//TODO: Get the first account owned by the user - this could change in the future.
 				sessionModel.setAccount(accounts.get(0));
 			}
 			
@@ -105,6 +99,44 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 			e1.printStackTrace();
 			SessionService.redirectToLogin(session, request, response);
 		}
+		
+		
+		/* GOOGLE ACCOUNT CREDENTIALS */
+		
+		int accountId = -1;
+		try {
+			accountId = sessionModel.getAccount().getId();
+		} catch (CorruptedSessionException e) {
+			e.printStackTrace();
+			SessionService.redirectToLogin(session, request, response);
+		}
+		//Need to handle problems with the database connection a little better.
+		List<GoogleAccount> availableGoogleAccounts = GoogleAccountService.getGoogleAccountsForAccount(accountId);
+		sessionModel.setAvailableGoogleAccounts(availableGoogleAccounts);
+		if (availableGoogleAccounts != null && !availableGoogleAccounts.isEmpty()) {
+			
+			//By default, pick the first available GoogleAccount as the account that we want to set as active.
+			sessionModel.setActiveGoogleAccount(availableGoogleAccounts.get(0));
+		}
+		
+		if (session.getAttribute("credentials") == null) {
+			GoogleAuthorizationService gas = new GoogleAuthorizationService();
+			session.setAttribute("credentials", gas.getAccountCredentials(sessionModel.getActiveGoogleAccount().getActiveRefreshToken()));
+		}
+		
+		
+		
+		boolean success = SessionService.checkAuthorization(session);
+		/* Getting the current settings. */
+		SettingsModel settings = null;
+		if (success) {
+			settings = (SettingsModel) session.getAttribute("settings");
+		} else {
+			SessionService.redirectToLogin(session, request, response);
+			return null;
+		}
+		model.addAttribute("settings", settings);
+		
 		
 		try {
 			//Get a list of dashboards and make a list of ids.

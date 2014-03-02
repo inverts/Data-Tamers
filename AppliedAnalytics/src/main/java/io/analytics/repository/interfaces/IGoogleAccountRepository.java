@@ -15,15 +15,28 @@ public interface IGoogleAccountRepository {
 	 */
 	public GoogleAccount addGoogleAccount(GoogleAccount account);
 
+	
 	/**
-	 * Retrieves a list of Google accounts owned by one particular user.
-	 * Note that this is different from a list of Google Accounts associated with
+	 * Retrieves a list of Google accounts owned by one particular Account.
+	 * Note that this is different from a list of Google Accounts available to
 	 * one particular Account.
-	 * @param ownerId The User id that you are trying to find Google Accounts for.
-	 * @return A List of GoogleAccounts, which may be empty if none are found.
+	 * 
+	 * @param accountId The Account id
+	 * @return A List of GoogleAccounts, which may be empty if none are found, or null if there was a data access problem.
 	 */
-	public List<GoogleAccount> getGoogleAccountsForOwner(int ownerId);
+	public List<GoogleAccount> getGoogleAccountsForOwnerAccount(int accountId);
 
+	
+	/**
+	 * Retrieves a list of GoogleAccounts available to
+	 * one particular Account.
+	 * 
+	 * @param accountId The Account id
+	 * @return A List of GoogleAccounts, which may be empty if none are found, or null if there was a data access problem.
+	 */
+	public List<GoogleAccount> getGoogleAccountsForAccount(int accountId);
+	
+	
 	/**
 	 * Adds an access relationship between a Google Account and an Account.
 	 * The given Account will be given access to the provided Google Account.
