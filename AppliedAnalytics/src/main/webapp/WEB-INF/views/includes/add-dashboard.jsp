@@ -8,11 +8,11 @@
 		<table>
 			<tr>
 				<td><form:label path="dashboardName"><fmt:message key="dashboard.add.name" /></form:label></td>
-				<td><form:input path="dashboardName" id="dashboardName"/></td>
+				<td><form:input path="dashboardName" id="dashboardName" class="textbox" /></td>
 			</tr>
 			<tr>
 				<td></td>
-				<td><input type="button" class="btn btn-primary active" value="<fmt:message key='dashboard.add.submit' />" id="dash-submit" /></td>
+				<td><input type="button" class="btn btn-primary btn-sm active" value="<fmt:message key='dashboard.add.submit' />" id="dash-submit" /></td>
 			</tr>
 		</table>
 	</form:form>
