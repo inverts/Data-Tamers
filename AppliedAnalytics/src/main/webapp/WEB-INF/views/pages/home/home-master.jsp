@@ -8,20 +8,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <!-- HOME MASTER -->
 <!-- CSS -->
-<link href="<c:url value="/cache/css/site.css" />" rel="stylesheet">
-<link href="<c:url value="/cache/css/widget.css" />" rel="stylesheet">
-<link href="<c:url value="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />" rel="stylesheet">
+<link href="<c:url value="/cache/css/default.css" />" rel="stylesheet">
 
 <script type="text/javascript">
 	/* Set the application root directory for the javascript files. */
 	applicationRoot = "<c:url value="/" />";
 </script>
-<!-- JavaScript -->
-<script src="<c:url value="/cache/javascript/libs/jquery-1.10.2.min.js" />"></script>
-<script src="<c:url value="/cache/javascript/libs/jquery-ui-1.10.3.custom.min.js" />"></script>
-<script src="<c:url value="/cache/javascript/libs/processing-1.4.1.min.js" />"></script>
-<script src="<c:url value="/cache/javascript/headerfooter.js" />"></script>
-<script src="<c:url value="/cache/javascript/site.js" />"></script>
 
 
 <title>${TITLE}</title>
