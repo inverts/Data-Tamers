@@ -334,6 +334,7 @@ padding:8px;
 
 
 /*****CSS for GROWING PROBLEMS WIDGET ****/
+/*****CSS for GROWING PROBLEMS WIDGET ****/
 .growingProblems { width:600px; }
 .growingProblems .widget-content{ width:590px; height:350px; }
 
@@ -406,7 +407,8 @@ padding:8px;
 }
 
 /*****CSS for BOOST PERFORMANCE WIDGET ****/
-.boostPerformance{ width:600px; height:350px;}
+.boostPerformance { width:600px; }
+.boostPerformance .widget-content{ width:590px; height:350px; }
 
 #boostPerformance-table {
 	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;
@@ -419,34 +421,34 @@ padding:8px;
 	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;	
 	background-color:#D5D5D5;	
 	color:#505050;
-	
-	border-style:solid;
-	border-width:5px;
-	border-color:#D5D5D5;
-	
-	padding:15px;
 }
+
 
 .bp-background{
 	width:100%;
 	height:100%;
 	background:#F0F0F0;
-	float:right;
+	float:right;	
 }
 
-.bp-wrapper{	
+.bp-box{	
 	position: absolute;
-	width: 550px;
+	width: 300px;
 	margin-top: 15px;
-	padding: 10px 15px;
+	padding: 10px;
 	
 	background: #fff;
 	border-left: 5px solid grey;	
 }
 
-.bp-box {
-  display: none;
+.bp-content {
+  display: none;  
 }
+
+.bp-box {
+	padding-bottom: 10px;
+}
+
 
 .bp-box + label {
   cursor: pointer;
@@ -471,7 +473,7 @@ padding:8px;
   font-weight: bold;
   height: 20px;
   line-height: 20px;
-  margin-right: 5px;
   text-align: center;
   width: 100%;
 }
+
