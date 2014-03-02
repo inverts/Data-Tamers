@@ -89,7 +89,7 @@ public class GoogleAccountRepository implements IGoogleAccountRepository {
         	return null;
         }
 
-        GoogleAccount newGoogleAccount = new GoogleAccount(newGoogleAccountId.intValue()); //TODO: Replace with correct ID. This is wrong.
+        GoogleAccount newGoogleAccount = new GoogleAccount(newGoogleAccountId.intValue()); 
         newGoogleAccount.setActiveRefreshToken(account.getActiveRefreshToken());
         newGoogleAccount.setOwnerAccountId(account.getOwnerAccountId());
 		return newGoogleAccount;
@@ -150,8 +150,21 @@ public class GoogleAccountRepository implements IGoogleAccountRepository {
 
 	@Override
 	public boolean addRelationshipToAccount(int googleAccountId, int accountId) {
-		// TODO Auto-generated method stub
-		return false;
+        Map<String, Object> insertParams = new HashMap<String, Object>();
+        insertParams.put(GoogleAccountsHasAccountsTable.GOOGLEACCOUNTS_ID, googleAccountId);
+        insertParams.put(GoogleAccountsHasAccountsTable.ACCOUNT_ID, accountId);
+        Number key;
+        try {
+        	key = jdbcInsert.executeAndReturnKey(insertParams);
+        } catch (Exception e) {
+        	//Not sure what exceptions can be thrown, the documentation simply says:
+        	//"This method will always return a key or throw an exception if a key was not returned."
+        	//I would imagine we'll see SQLExceptions.
+        	e.printStackTrace();
+        	return false;
+        } 
+
+        return true;
 	}
 
 }

@@ -1,7 +1,6 @@
 package io.analytics.site.controllers;
 
 import java.io.IOException;
-
 import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,12 +9,19 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import io.analytics.aspect.HeaderFooter;
+import io.analytics.domain.Account;
+import io.analytics.domain.Filter;
+import io.analytics.domain.GoogleAccount;
 import io.analytics.domain.GoogleUserData;
 import io.analytics.domain.User;
 import io.analytics.enums.HeaderType;
 import io.analytics.forms.NewAccountForm;
+import io.analytics.service.interfaces.IAccountService;
+import io.analytics.service.interfaces.IFilterService;
+import io.analytics.service.interfaces.IGoogleAccountService;
 import io.analytics.service.interfaces.ISessionService;
 import io.analytics.service.interfaces.IUserService;
+import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SettingsModel;
 
 import org.slf4j.Logger;
@@ -34,6 +40,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.services.analytics.model.Profile;
+
 @Controller
 @SessionAttributes({"accountForm", "validation", "googleAuthorization"})
 public class AccountController {
@@ -42,6 +51,9 @@ public class AccountController {
 	
 	@Autowired ISessionService SessionService;
 	@Autowired IUserService UserService;
+	@Autowired IGoogleAccountService GoogleAccountService;
+	@Autowired IAccountService AccountService;
+	@Autowired IFilterService FilterService;
 	
 	// some kind of user service.
 	
@@ -167,7 +179,9 @@ public class AccountController {
 	}
 	
 	/**
-	 * Validates the 
+	 * Validates the new account information and creates several database entities
+	 * and relationships for this user.
+	 * 
 	 * @param model
 	 * @param response
 	 * @param session
@@ -188,6 +202,10 @@ public class AccountController {
 			return "redirect:/accounts/newaccount";
 		}
 		else {
+			
+			// TODO: Fill in with the user's specified goal metric.
+			String goalMetric = "ga:visits";
+			
 			// TODO: Send form data to service for upload
 			User u = new User(-1);
 			u.setUsername(form.getUsername());
@@ -197,8 +215,51 @@ public class AccountController {
 			u.setLastName(form.getLastname());
 			u.setJoinDate(Calendar.getInstance());
 			
-			boolean success = UserService.addNewUser(u) != null;
+			/* Add User to database. */
+			u = UserService.addNewUser(u);
 			
+			/* TODO: Handle more appropriately with messages to the user.
+			 * This indicates that the user details didn't meet the constraints of the DB (most likely),
+			 * or that there was a DB connection error.
+			 */
+			if (u == null)
+				return "redirect:/accounts/newaccount";
+			
+			/* Add Filter to database. */
+			Profile activeProfile = SessionService.getUserSettings().getActiveProfile();
+			Filter f = new Filter(0);
+			FilterModel fm = SessionService.getFilter();
+			Calendar start = Calendar.getInstance();
+			start.setTime(fm.getActiveStartDate());
+			Calendar end = Calendar.getInstance();
+			end.setTime(fm.getActiveEndDate());
+			f.setStartDate(start);
+			f.setEndDate(end);
+			f.setGoogleProfileId(activeProfile.getId());
+			f.setInterestMetric(goalMetric);
+			f = FilterService.addNewFilter(f);
+			if (f == null)
+				return "redirect:/accounts/newaccount";
+			int filterId = f.getId();
+			
+			/* Add Account to database. */
+			Account a = AccountService.createAndSaveAccount(u.getId(), filterId);
+			if (a == null)
+				return "redirect:/accounts/newaccount";
+			int accountId = a.getId();
+
+			/* Add GoogleAccount to database. */
+			Credential c = SessionService.getCredentials();
+			if (c == null || c.getRefreshToken() == null)
+				return "redirect:/accounts/newaccount";
+			GoogleAccount ga = new GoogleAccount(0);
+			ga.setActiveRefreshToken(c.getRefreshToken());
+			ga.setOwnerAccountId(accountId);
+			ga = GoogleAccountService.addNewGoogleAccount(ga);
+			GoogleAccountService.addGoogleAccountToAccount(ga.getId(), accountId);
+			
+			
+			/* We've made it! */
 			return "redirect:/application";
 			
 		}

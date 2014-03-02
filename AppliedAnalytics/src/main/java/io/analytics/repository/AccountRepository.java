@@ -103,7 +103,7 @@ public class AccountRepository implements IAccountRepository {
         	return null;
         }
 
-        Account newAccount = new Account(newAccountId.intValue()); //TODO: Replace with correct ID. This is wrong.
+        Account newAccount = new Account(newAccountId.intValue()); 
         newAccount.setCreationDate(a.getCreationDate());
         newAccount.setDefaultFilterId(a.getDefaultFilterId());
         newAccount.setOwnerId(a.getOwnerId());

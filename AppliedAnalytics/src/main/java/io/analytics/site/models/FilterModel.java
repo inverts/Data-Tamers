@@ -20,14 +20,15 @@ public class FilterModel {
 	
 	DateFormat presentationFormat = new SimpleDateFormat("MM/dd/yyyy");
 	
+	/**
+	 * Constructs a new FilterModel, automatically populating it with a default metric
+	 * of ga:visits, a default start date of 30 days ago, and a default end date of today.
+	 */
 	public FilterModel() {
 		activeMetric = "ga:visits";
 		Date now = new Date();
 		activeEndDate = now;
 		activeStartDate = new Date(now.getTime() - (MS_IN_DAY * 30L));
-		
-		//activeStartDate = dateFormat.format(now);
-		//activeEndDate = dateFormat.format(now);
 	}
 
 	public String getActiveMetric() {

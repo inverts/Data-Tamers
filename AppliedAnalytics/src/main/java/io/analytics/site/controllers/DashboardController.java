@@ -126,7 +126,11 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 		
 		
 		
+		/* This checks for the Google credentials and populates the "settings" attribute if it is empty */
 		boolean success = SessionService.checkAuthorization(session);
+		
+		
+		
 		/* Getting the current settings. */
 		SettingsModel settings = null;
 		if (success) {
