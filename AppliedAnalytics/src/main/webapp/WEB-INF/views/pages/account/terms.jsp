@@ -14,7 +14,7 @@
 			</div>
 			<div class="accept-div">
 				<input type="checkbox" class="checkbox" name="accept_terms" id="terms-check" />
-				<fmt:message key="account.terms.accept" />
+				<label style="font-weight: normal;" for="terms-check"><fmt:message key="account.terms.accept" /></label>
 			</div>
 			<div class="continue">
 				<input type="button" class="btn btn-default active" id="terms-cancel" value="<fmt:message key="account.terms.cancel" />" />

@@ -5,8 +5,10 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.sql.DataSource;
@@ -18,10 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.*;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
+import io.analytics.domain.Account;
 import io.analytics.domain.Filter;
 import io.analytics.domain.User;
+import io.analytics.repository.AccountRepository.AccountTable;
 import io.analytics.repository.interfaces.IUserRepository;
 import io.analytics.security.Role;
 
@@ -35,11 +40,15 @@ import io.analytics.security.Role;
 public class UserRepository implements IUserRepository {
 
 	private final JdbcTemplate jdbc;
+	private final SimpleJdbcInsert jdbcInsert;
 	
 	@Autowired
 	public UserRepository(DataSource dataSource) {
 		this.jdbc = new JdbcTemplate(dataSource);
+		//Must specify .usingGeneratedKeyColumns in order to use .executeAndReturnKey.
+		jdbcInsert = new SimpleJdbcInsert(this.jdbc).withTableName(USERS_TABLE).usingGeneratedKeyColumns(UserTable.USER_ID);
 	}
+	
 	
 	private static final class UserMapper implements RowMapper<User> {
 
@@ -93,6 +102,46 @@ public class UserRepository implements IUserRepository {
 	 */
 	public User addNewUser(User u) {
 
+		String joinDate;
+		if (u.getJoinDate() == null)
+			joinDate = null;
+		else
+			joinDate = formatter.format(u.getJoinDate().getTime());
+		
+        Map<String, Object> insertParams = new HashMap<String, Object>();
+        insertParams.put(UserTable.FIRST_NAME, u.getFirstName());
+        insertParams.put(UserTable.LAST_NAME, u.getLastName());
+        insertParams.put(UserTable.EMAIL_ADDRESS, u.getEmail());
+        insertParams.put(UserTable.USERNAME, u.getUsername());
+        insertParams.put(UserTable.PASSWORD_HASH, u.getPassword());
+        insertParams.put(UserTable.PASSWORD_SALT, u.getPasswordSalt());
+        insertParams.put(UserTable.PROFILE_IMAGE_URL, u.getProfileImageUrl());
+        insertParams.put(UserTable.JOIN_DATE, joinDate);
+        		
+        Number newUserId;
+        try {
+        	newUserId = jdbcInsert.executeAndReturnKey(insertParams);
+        } catch (Exception e) {
+        	//Not sure what exceptions can be thrown, the documentation simply says:
+        	//"This method will always return a key or throw an exception if a key was not returned."
+        	//I would imagine we'll see SQLExceptions.
+        	e.printStackTrace();
+        	return null;
+        }
+
+		User result = new User(newUserId.intValue());
+		result.setAuthorities(u.getAuthorities());
+		result.setEmail(u.getEmail());
+		result.setFirstName(u.getFirstName());
+		result.setJoinDate(u.getJoinDate());
+		result.setLastName(u.getLastName());
+		result.setPasswordHash(u.getPassword());
+		result.setPasswordSalt(u.getPasswordSalt());
+		result.setProfileImageUrl(u.getProfileImageUrl());
+		result.setUsername(u.getUsername());
+		
+		return result;
+		/*
 		//JdbcTemplate jdbc = new JdbcTemplate(DATASOURCE);
 		String preStatement;
 		Object[] args;
@@ -131,6 +180,7 @@ public class UserRepository implements IUserRepository {
 		
 		//Return true if the statement successfully affected one row.
 		return result;
+		*/
 	}
 
 

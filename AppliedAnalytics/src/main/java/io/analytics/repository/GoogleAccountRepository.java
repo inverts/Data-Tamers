@@ -33,12 +33,14 @@ public class GoogleAccountRepository implements IGoogleAccountRepository {
 
 	private final JdbcTemplate jdbc;
 	private final SimpleJdbcInsert jdbcInsert;
+	private final SimpleJdbcInsert jdbcInsertRelationship;
 	
 	@Autowired
 	public GoogleAccountRepository(DataSource dataSource) {
 		this.jdbc = new JdbcTemplate(dataSource);
 		//Must specify .usingGeneratedKeyColumns in order to use .executeAndReturnKey.
 		jdbcInsert = new SimpleJdbcInsert(this.jdbc).withTableName(GOOGLEACCOUNTS_TABLE).usingGeneratedKeyColumns(GoogleAccountsTable.ID);
+		jdbcInsertRelationship = new SimpleJdbcInsert(this.jdbc).withTableName(GOOGLEACCOUNTSHASACCOUNTS_TABLE);
 	}
 
 	public static final String GOOGLEACCOUNTS_TABLE = "GoogleAccounts";
@@ -153,9 +155,9 @@ public class GoogleAccountRepository implements IGoogleAccountRepository {
         Map<String, Object> insertParams = new HashMap<String, Object>();
         insertParams.put(GoogleAccountsHasAccountsTable.GOOGLEACCOUNTS_ID, googleAccountId);
         insertParams.put(GoogleAccountsHasAccountsTable.ACCOUNT_ID, accountId);
-        Number key;
+        int rowsAffected;
         try {
-        	key = jdbcInsert.executeAndReturnKey(insertParams);
+        	rowsAffected = jdbcInsertRelationship.execute(insertParams);
         } catch (Exception e) {
         	//Not sure what exceptions can be thrown, the documentation simply says:
         	//"This method will always return a key or throw an exception if a key was not returned."
@@ -164,7 +166,7 @@ public class GoogleAccountRepository implements IGoogleAccountRepository {
         	return false;
         } 
 
-        return true;
+        return (rowsAffected == 1);
 	}
 
 }

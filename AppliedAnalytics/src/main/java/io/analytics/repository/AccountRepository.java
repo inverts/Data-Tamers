@@ -89,7 +89,7 @@ public class AccountRepository implements IAccountRepository {
 		
         Map<String, Object> insertParams = new HashMap<String, Object>();
         insertParams.put(AccountTable.FILTER_ID, a.getDefaultFilterId());
-        insertParams.put(AccountTable.OWNER_USER_ID, a.getDefaultFilterId());
+        insertParams.put(AccountTable.OWNER_USER_ID, a.getOwnerId());
         insertParams.put(AccountTable.CREATION_DATE, creationDate);
         
         Number newAccountId;
