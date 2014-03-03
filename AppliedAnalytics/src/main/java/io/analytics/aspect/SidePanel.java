@@ -1,5 +1,7 @@
 package io.analytics.aspect;
 
+import io.analytics.enums.PageView;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -11,4 +13,5 @@ import java.lang.annotation.RetentionPolicy;
 @Documented
 public @interface SidePanel {
 	boolean animate() default false;
+	PageView page() default PageView.DASHBOARD;
 }

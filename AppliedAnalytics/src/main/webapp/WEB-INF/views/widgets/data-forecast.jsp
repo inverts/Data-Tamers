@@ -1,26 +1,10 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
- 
-<script>
-/*
-var historicalData = JSON.parse('${ hfModel.getDataPoints() }');
-var futureData = JSON.parse('${ hfModel.getYValuesForecast() }');
-var historicalDataSize = ${ hfModel.getYValues().size() };
-var Y_MIN = ${ hfModel.getYRange().getKey() - hfModel.getYRangePadding() };
-var Y_MAX = ${ hfModel.getYRange().getValue() + hfModel.getYRangePadding() };
-var startDate = '${ filterModel.getActiveStartDateString() }';
-var endDate = '${ filterModel.getActiveEndDateString() }';
-var futureEndDate = '${ hfModel.getFutureEndDate() }';
-*/
-
-//window.newData = JSON.parse('${ hfModel.getJSONPointsFormatted().toString() }');
-
-</script>  
-
 
 <div class="widget widgetView dataForecast">
 	<div class="widget_header">
 		<div class="widget_title"><fmt:message key="dataforecast.title" /></div>
+		<c:import url="../includes/widget-menu.jsp" />
 	</div>
 		<div class="widget-content">
             <div class="controls">

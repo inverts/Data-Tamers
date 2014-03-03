@@ -1,13 +1,6 @@
 package io.analytics.aspect;
 
-import io.analytics.domain.Dashboard;
-import io.analytics.service.interfaces.IDashboardService;
-import io.analytics.service.interfaces.ISessionService;
-import io.analytics.site.models.SessionModel.CorruptedSessionException;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -16,7 +9,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 
 @Aspect
@@ -51,7 +43,6 @@ public class SiteAspect {
 		return joinPoint.proceed();
 	}
 	
-/*
 	// @SidePanel
 	@Around("publicMethod() && @annotation(sidepanel)")
 	public Object SidePanelAdvice(ProceedingJoinPoint joinPoint, SidePanel sidepanel) throws Throwable
@@ -62,13 +53,13 @@ public class SiteAspect {
 		
 		Sidepanel.put("path", "/WEB-INF/views/includes/sidepanel.jsp");
 		Sidepanel.put("animate", sidepanel.animate());
-		Sidepanel.put("model", model.asMap().get("sidePanelModel"));
+		Sidepanel.put("page", sidepanel.page());
+		//Sidepanel.put("model", model.asMap().get("sidePanelModel"));
 
 		model.addAttribute("SIDEPANEL", Sidepanel);
 		
 		return joinPoint.proceed();
 	}
-	*/
 	
 	@Around("publicMethod() && @annotation(reset)")
 	public Object ResetAdvice(ProceedingJoinPoint joinPoint, Reset reset) throws Throwable

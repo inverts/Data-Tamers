@@ -4,8 +4,11 @@
 
 .widget { padding: 10px 5px 5px 5px; background:#d2d2d2 repeat; clear:both; /*border-radius: 8px; -webkit-border-radius: 8px; -moz-border-radius: 8px;*/ box-shadow: 0px 0px 6px 0px; 
 		  -webkit-box-shadow:0px 0px 6px 0px; -mozbox-shadow:0px 0px 6px 0px; margin:5px 0 5px 10px; }
-.widget .widget_header { padding:0 0 0 20px; }
-.widget .widget_title { font-size: 2em; color: #444; margin-bottom: 5px; font-weight: bold; text-shadow: 0px -1px 0px rgba(100,100,100,0.5); }
+.widget .widget_header { padding:0 20px; position:relative; height:40px; }
+.widget .widget_title { position:absolute; font-size:2em; color:#444; margin-bottom:5px; font-weight:bold; text-shadow: 0px -1px 0px rgba(100,100,100,0.5); }
+.widget .dropdown { position:absolute; right:20px; top:10px; }
+.widget .widget_menu { font-size:16px; color:#666; }
+.widget .widget_menu:hover { cursor:pointer; text-decoration:none; }
 .widget .widget_title:hover { cursor:pointer; }
 .widget .widget_collapse { float:left; width:20px; }
 .widget .widgetView { visibility:'hidden'; }

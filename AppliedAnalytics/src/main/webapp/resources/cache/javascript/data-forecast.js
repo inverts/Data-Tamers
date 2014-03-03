@@ -43,6 +43,8 @@ function loadDataForecast(id) {
 			
 			$('#rawBtn').click(); // initially turn on raw data.
 			
+			$('#' + id + ' .dropdown-menu').attr('id', id);
+			
 		});
 
 	});

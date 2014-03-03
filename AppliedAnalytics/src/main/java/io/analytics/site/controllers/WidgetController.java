@@ -4,12 +4,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import io.analytics.domain.Widget;
 import io.analytics.service.interfaces.ICoreReportingService;
 import io.analytics.service.interfaces.IKeywordInsightService;
 import io.analytics.service.interfaces.IPagePerfomanceService;
 import io.analytics.service.interfaces.ISessionService;
+import io.analytics.service.interfaces.IWidgetService;
 import io.analytics.site.models.*;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.api.client.auth.oauth2.Credential;
@@ -32,6 +36,7 @@ public class WidgetController {
 	@Autowired private ISessionService SessionService;
 	@Autowired private IPagePerfomanceService PagePerformanceService;
 	@Autowired private IKeywordInsightService KeywordInsightService;
+	@Autowired private IWidgetService WidgetService;
 	
 	@RequestMapping(value = "/DataForecast", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView DataForecastView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,	
@@ -82,11 +87,6 @@ public class WidgetController {
 		viewMap.addAttribute("hfModel", dataForecast);
 		viewMap.addAttribute("filterModel", filter);
 		
-		/*if (!serialize.equals("none")) {
-			viewMap.addAttribute("model", dataForecast);
-			return new ModelAndView("serialize");
-		}*/
-
 		/* Did we just request data only? */
 		if(serialize) {
 			viewMap.addAttribute("model",dataForecast);
@@ -95,21 +95,6 @@ public class WidgetController {
 		
 		return new ModelAndView("DataForecast");
 
-	}
-	
-	
-
-	@RequestMapping(value = "/saveDataForecast", method = RequestMethod.POST)
-	private void saveDataForecastSettings(@RequestParam("widgetId") int widgetId, 
-										  @RequestParam("data") String inputData)
-	{
-		try {
-			
-			
-		} catch(Exception e) {
-			logger.info("Could not save DataForecast data");
-			logger.info(e.getMessage());
-		}
 	}
 	
 
@@ -285,4 +270,61 @@ public class WidgetController {
 		return new ModelAndView("KeywordInsight");
 	}
 	
+	
+	
+		// This will probably be changed to be a generic widget save function
+		@RequestMapping(value = "/saveDataForecast", method = RequestMethod.POST)
+		private void saveDataForecastSettings(@RequestParam("widgetId") int widgetId, 
+											  @RequestParam("data") String inputData)
+		{
+			try {
+				
+				
+			} catch(Exception e) {
+				logger.info("Could not save DataForecast data");
+				logger.info(e.getMessage());
+			}
+		}
+		
+		
+		@ResponseBody
+		@RequestMapping(value = "/removeWidget", method = RequestMethod.POST)
+		private String removeWidget(@RequestParam("widgetId") int widgetId)
+		{
+			
+			try {
+				// Don't uncomment until we have a way to add Widgets
+				//WidgetService.deleteWidget(widgetId);
+				return "true";
+
+			} catch(Exception e) {
+				logger.info("Could not remove widget");
+				logger.info(e.getMessage());
+			}
+			
+			return null;
+		}
+	
+		
+		@ResponseBody
+		@RequestMapping(value = "/addWidget", method = RequestMethod.POST)
+		private String addWidget(@RequestParam("widgetTypeId") int widgetTypeId,
+								  @RequestParam("dashboardId") int dashboardId)
+		{
+			JSONObject result = new JSONObject();
+			
+			try {
+				Widget w = new Widget(widgetTypeId);
+				w.setDashboardId(dashboardId);
+				
+				int newId = WidgetService.addNewWidget(w);
+				result.put("widgetId", newId);
+				
+			} catch(Exception e) {
+				logger.info("Could not add new Widget");
+				logger.info(e.getMessage());
+			}
+			
+			return result.toString();
+		}
 }
