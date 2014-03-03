@@ -25,6 +25,10 @@ public class WidgetService implements IWidgetService {
 	}
 
 	@Override
+	public boolean updateWidget(Widget w) {
+		return WidgetRepository.updateWidget(w);
+	}
+	@Override
 	public void deleteWidget(int widgetId) {
 		WidgetRepository.deleteWidget(widgetId);
 	}
@@ -33,5 +37,6 @@ public class WidgetService implements IWidgetService {
 	public List<Widget> getDashboardWidgets(int dashboardId) {
 		return WidgetRepository.getDashboardWidgets(dashboardId);
 	}
+
 
 }

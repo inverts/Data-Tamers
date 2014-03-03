@@ -237,9 +237,7 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/application/createDashboard", method = RequestMethod.POST)
-	private String createDashboard(@ModelAttribute("dashboardForm")DashboardForm form,
-			  					   BindingResult result,
-			  					   @RequestParam(value = "name", defaultValue = "") String name) 
+	private String createDashboard(@ModelAttribute("dashboardForm")DashboardForm form, HttpSession session, BindingResult result, @RequestParam(value = "name", defaultValue = "") String name) 
 	{ 
 		
 		JSONObject dashboardData = new JSONObject();
@@ -249,9 +247,12 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 			if (result.hasErrors()) {
 				//TODO: Do something
 			}
-			
-			//TODO: Change account number to active account number.
-			int newDashboardId = this.DashboardService.addNewDashboard(1, null, name);
+
+			SessionModel sessionModel = new SessionModel(session);
+			Account currentAccount = sessionModel.getAccount();
+			if (currentAccount == null)
+				return dashboardData.toString();
+			int newDashboardId = this.DashboardService.addNewDashboard(currentAccount.getId(), null, name);
 			String url = "application/" + newDashboardId;
 			
 			dashboardData.put("id", newDashboardId);
@@ -264,6 +265,7 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 			logger.info(e.getMessage());
 		}
 		
+		// ?
 		return dashboardData.toString();
 	}
 	

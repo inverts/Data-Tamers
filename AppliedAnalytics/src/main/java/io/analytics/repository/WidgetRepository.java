@@ -102,6 +102,28 @@ public class WidgetRepository implements IWidgetRepository {
 	public int addNewWidget(Widget w) {
 		return addNewWidget(w.getDefaultFilterId(), w.getWidgetTypeId(), w.getDashboardId(), w.getPriority());
 	}
+	
+	public boolean updateWidget(Widget w) {
+		String preStatement;
+		Object[] args;
+		int[] argTypes;
+
+		preStatement = String.format("UPDATE `%s` SET `%s`=?, `%s`=?, `%s`=?, `%s`=? WHERE `%s`=?", WIDGET_TABLE, WidgetTable.DASHBOARD_ID, 
+				WidgetTable.DEFAULT_FILTER_ID, WidgetTable.PRIORITY, WidgetTable.WIDGET_TYPE_ID, WidgetTable.WIDGET_ID);
+		args = new Object[] { w.getDashboardId(), w.getDefaultFilterId(), w.getPriority(), w.getWidgetTypeId(), w.getId() };
+		argTypes = new int[] { Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER };
+		int rowsAffected = 0;
+		try {
+			rowsAffected = jdbc.update(preStatement, args, argTypes);
+		} catch (DataAccessException e) {
+			//TODO: Throw the exception upwards
+			e.printStackTrace();
+		}
+		if (rowsAffected !=1)
+			return false;
+		return true;
+		
+	}
 
 	@Override
 	public void deleteWidget(int widgetId) {

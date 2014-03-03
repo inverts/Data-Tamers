@@ -63,7 +63,7 @@ public class TestOf_UserRepository {
 				assert(userRepository.addNewUser(user) == null);
 				
 				Mockito.when(user.getJoinDate()).thenReturn(Calendar.getInstance());
-				assert(userRepository.addNewUser(user) == null);
+				assert(userRepository.addNewUser(user) != null);
 				
 				
 			} catch (Exception e) {

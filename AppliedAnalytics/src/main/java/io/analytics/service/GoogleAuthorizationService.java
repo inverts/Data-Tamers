@@ -30,18 +30,21 @@ public class GoogleAuthorizationService implements ServletContextAware {
 
 	private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 	private static final JsonFactory JSON_FACTORY = new JacksonFactory();
-	private static String CLIENT_SECRET_LOCATION = "/resources/client_secrets.json";
+	private static String clientSecretLocation;
+	private static final String defaultClientSecretLocation = "/resources/client_secrets.json";
 	private static GoogleClientSecrets clientSecrets = null;
 	private ServletContext servletContext;
 
-	public GoogleAuthorizationService() {
-	}
 	@Override
 	public void setServletContext(ServletContext sc) {
 		this.servletContext = sc;
-		String realPath = servletContext.getRealPath("/resources/client_secrets.json");
-		CLIENT_SECRET_LOCATION = realPath;
+		String realPath = servletContext.getRealPath(defaultClientSecretLocation);
+		clientSecretLocation = realPath;
 		
+	}
+	
+	public void setClientSecretLocation(String location) {
+		clientSecretLocation =servletContext.getRealPath(location);
 	}
 	// Request a new Access token using the refresh token.
 	public Credential getAccountCredentials(String refreshToken) {
@@ -69,7 +72,7 @@ public class GoogleAuthorizationService implements ServletContextAware {
 	 */
 	private static GoogleClientSecrets loadClientSecrets() {
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(CLIENT_SECRET_LOCATION));
+			BufferedReader reader = new BufferedReader(new FileReader(clientSecretLocation));
 			clientSecrets = GoogleClientSecrets.load(new JacksonFactory(), reader);
 			return clientSecrets;
 		} catch (Exception e) {

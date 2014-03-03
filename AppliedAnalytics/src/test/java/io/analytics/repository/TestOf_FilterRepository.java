@@ -44,10 +44,10 @@ public class TestOf_FilterRepository {
 				Mockito.when(filter.getEndDate()).thenReturn(Calendar.getInstance());
 				assert(filterRepository.addNewFilter(filter) == null);
 				
-				Mockito.when(filter.getInterestMetric()).thenReturn("ga:bogus");
-				assert(filterRepository.addNewFilter(filter) == null);
-				
 				//This is the last filter property we should need in order to successfully edit
+				Mockito.when(filter.getInterestMetric()).thenReturn("ga:bogus");
+				assert(filterRepository.addNewFilter(filter) != null);
+				
 				Mockito.when(filter.getGoogleProfileId()).thenReturn("bogusID");
 				Filter newFilter1 = filterRepository.addNewFilter(filter);
 				//System.out.println("ID: " + newFilter1.getId());
