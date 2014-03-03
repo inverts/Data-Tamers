@@ -6,6 +6,7 @@ import io.analytics.domain.Account;
 import io.analytics.domain.Dashboard;
 import io.analytics.domain.User;
 import io.analytics.enums.HeaderType;
+import io.analytics.enums.PageView;
 import io.analytics.forms.DashboardForm;
 import io.analytics.service.interfaces.IAccountService;
 import io.analytics.service.interfaces.IDashboardService;
@@ -52,23 +53,23 @@ public class ApplicationController {
 	
 	
 	@HeaderFooter(HeaderType.APPLICATION)
-	@SidePanel(animate = false)
+	@SidePanel(animate = false, page = PageView.TRENDS)
 	@RequestMapping(value = "/application/trends", method = RequestMethod.GET)
-	public ModelAndView trends(Model model) {
+	public ModelAndView trends(Model model, HttpSession session) {
 		return new ModelAndView("application/trends");
 	}
 
 	@HeaderFooter(HeaderType.APPLICATION)
-	@SidePanel(animate = false)
+	@SidePanel(animate = false, page = PageView.FORECAST )
 	@RequestMapping(value = "/application/forecast", method = RequestMethod.GET)
-	public ModelAndView forecast(Model model) {
+	public ModelAndView forecast(Model model, HttpSession session) {
 		return new ModelAndView("application/forecast");
 	}
 	
 	@HeaderFooter(HeaderType.APPLICATION)
-	@SidePanel(animate = false)
+	@SidePanel(animate = false, page = PageView.ALERTS)
 	@RequestMapping(value = "/application/alerts", method = RequestMethod.GET)
-	public ModelAndView suggestions(Model model) {
+	public ModelAndView suggestions(Model model, HttpSession session) {
 		return new ModelAndView("application/alerts");
 	}
 	

@@ -23,6 +23,7 @@
 <script src="<c:url value="/cache/javascript/libs/processing-1.4.1.min.js" />"></script>
 <script src="<c:url value="/cache/javascript/libs/d3.v3.min.js" />"></script>
 <script src="<c:url value="/cache/javascript/plugins/jquery.tipsy.js" />"></script>
+<script src="<c:url value="/cache/javascript/plugins/bootstrap.min.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/utilities.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/test.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/graph.js" />"></script>
@@ -42,8 +43,9 @@
 			<!-- Left side navigation panel -->
 			<jsp:include page="${SIDEPANEL.path}"/>
 			
-			<!--  Right side settings pane -->
+			<c:set var="pageview" scope="session" value="${SIDEPANEL.page}" />
 			
+			<!--  Right side settings pane -->
             <div class="right-pane">
 				<jsp:include page="${SETTINGS}"/>
 			</div>

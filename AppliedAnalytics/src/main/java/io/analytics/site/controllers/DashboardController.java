@@ -18,6 +18,7 @@ import io.analytics.domain.GoogleAccount;
 import io.analytics.domain.User;
 import io.analytics.domain.Widget;
 import io.analytics.enums.HeaderType;
+import io.analytics.enums.PageView;
 import io.analytics.forms.DashboardForm;
 import io.analytics.service.GoogleAuthorizationService;
 import io.analytics.service.interfaces.IAccountService;
@@ -68,7 +69,7 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@HeaderFooter(HeaderType.APPLICATION)
-	@SidePanel(animate = true)
+	@SidePanel(animate = true, page = PageView.DASHBOARD)
 	@RequestMapping(value = "/application", method = RequestMethod.GET)
 	public ModelAndView getDashboardContainer(Locale locale, Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response,
 			   @RequestParam(value = "did", defaultValue = "-1") String dashboardId) {
@@ -188,25 +189,20 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 		}
 		
 		model.addAttribute("filter", filter);
-		
-		
-		//What is this?
-		request.setAttribute("state", "application");
 
 		SidePanelModel sidePanelModel = new SidePanelModel(this.DashboardService, sessionModel);
+		
 		try {
 			sidePanelModel.generateDashboardInfo();
 		} catch (CorruptedSessionException e) {
 			SessionService.redirectToLogin(session, request, response);
 		}
 
+		Map<String, Object> Sidepanel = (Map<String, Object>) model.asMap().get("SIDEPANEL");
 		
-		Map<String, Object> Sidepanel = new HashMap<String, Object>();
-		
-		Sidepanel.put("path", "/WEB-INF/views/includes/sidepanel.jsp");
-		Sidepanel.put("animate", false);
+		//Sidepanel.put("path", "/WEB-INF/views/includes/sidepanel.jsp");
+		//Sidepanel.put("animate", false);
 		Sidepanel.put("model", sidePanelModel);
-
 		model.addAttribute("SIDEPANEL", Sidepanel);
 		
 		return new ModelAndView("application/dashboard");
@@ -285,9 +281,9 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 								  HttpSession session, HttpServletRequest request, HttpServletResponse response)
 	{
 		
-		SessionModel sessionModel = new SessionModel(session);
-		
+		SessionModel sessionModel = new SessionModel(session);	
 		JSONObject result = new JSONObject();
+		
 		try {
 			User user = sessionModel.getUser();
 			this.DashboardService.deleteDashboard(user, dashboardId);
@@ -305,30 +301,6 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 		return result.toString();
 	}
 	
-	
-	//TODO: I'm not sure what this method is for
-	/**
-	 * Update Widget Position on the Dashboard.
-	 * 
-	 * @param accountId - current account Id
-	 * @param userId - current User Id
-	 * @param dashboardId - current dashboard Id
-	 */
-	/*
-	@RequestMapping(value = "/application/layout", method = RequestMethod.POST)
-	private void updateWidgetPosition() 
-	{
-		try {
-			// TODO: Need some data type representing Widget positions
-			User user = this.UserService.getUserById(userId);
-			this.DashboardService.updateDashboardWidgetLayout(user, dashboardId);
-			
-		} catch(Exception e) {
-			logger.info("Could not update Widget Position");
-			logger.info(e.getMessage());
-		}
-	}
-	*/
 
 	@RequestMapping(value = "/application/dashboards/{dashboardId}", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView getDashboard(@PathVariable String dashboardId, Model model) {

@@ -12,7 +12,7 @@ $(function() {
 		containment: $(".content")
 	});
 	
-	
+
 });
 
 /**
@@ -60,58 +60,75 @@ function compareWidgetPriority(w1, w2) {
 function loadWidgets(widgets) {
 	
 	for(var i = 0; i < widgets.length; i++) {
-		//Create an empty widget div.
-		var $div = $('<div>').addClass('w_container')
-							 .prop('draggable', true)
-							 .appendTo($('.dashboard-content'));
-		
-		var widgetId = widgets[i].widgetTypeId;
+
+		var widgetTypeId = widgets[i].widgetTypeId;
+		var widgetId = widgets[i].id;
 		
 		//Label and fill the div accordingly depending on the widget type.
 		//TODO: Create widget id to function mappings elsewhere and use them here.
-		switch(widgetId)
-		{
-			case 1: 
-				$div.attr('id', 'dataForecastWidget' + i).data('widgetId', widgetId);
-				loadDataForecast('dataForecastWidget' + i);
-				break;
-				
-			case 2:
-				$div.attr('id', 'websitePerformanceWidget' + i).data('widgetId', widgetId);
-				loadWebsitePerformanceWidget('websitePerformanceWidget' + i);
-				break;
-				
-			case 3:
-				$div.attr('id', 'keyContributingFactorsWidget' + i).data('widgetId', widgetId);
-				loadKeyContributingFactors('keyContributingFactorsWidget' + i);
-				break;
-			
-			case 4:
-				$div.attr('id', 'keywordInsightWidget' + i).data('widgetId', widgetId);
-				loadKeywordInsight('keywordInsightWidget' + i);
-				break;
-				
-			case 5: 
-				$div.attr('id', 'growingProblemsWidget' + i).data('widgetId', widgetId);
-				loadGrowingProblemsWidget('growingProblemsWidget' + i);
-				break;
-				
-			case 6: 
-				$div.attr('id', 'boostPerformanceWidget' + i).data('widgetId', widgetId);
-				loadBoostPerformanceWidget('boostPerformanceWidget' + i);
-				break;
-				
-			case 7: 
-				$div.attr('id', 'revenueSourcesWidget' + i).data('widgetId', widgetId);
-				loadRevenueSourcesWidget('revenueSourcesWidget' + i);
-				break;
-				
-		}
+		loadWidget(widgetTypeId, widgetId, i);
+		
 	}
 	
+	// store number of widgets loaded
 	// widget will not be dragged while user clicks on content
-	$('.dashboard-content').sortable({ cancel: '.widget-content'});
+	$('.dashboard-content').data('n', widgets.length).sortable({ cancel: '.widget-content'});
 }
+
+
+function loadWidget(widgetTypeId, widgetId, i)
+{
+	//Create an empty widget div.
+	var $div = $('<div>').addClass('w_container')
+						 .prop('draggable', true)
+						 .data({
+							 	'widgetTypeId': widgetTypeId, 
+							 	'widgetId': widgetId 
+							   })
+						 .appendTo($('.dashboard-content'));
+	
+	switch(widgetTypeId)
+	{
+		case 1: 
+			$div.attr('id', 'dataForecastWidget' + i);
+			loadDataForecast('dataForecastWidget' + i);
+			break;
+			
+		case 2:
+			$div.attr('id', 'websitePerformanceWidget' + i);
+			loadWebsitePerformanceWidget('websitePerformanceWidget' + i);
+			break;
+			
+		case 3:
+			$div.attr('id', 'keyContributingFactorsWidget' + i);
+			loadKeyContributingFactors('keyContributingFactorsWidget' + i);
+			break;
+		
+		case 4:
+			$div.attr('id', 'keywordInsightWidget' + i);
+			loadKeywordInsight('keywordInsightWidget' + i);
+			break;
+			
+		case 5: 
+			$div.attr('id', 'growingProblemsWidget' + i);
+			loadGrowingProblemsWidget('growingProblemsWidget' + i);
+			break;
+			
+		case 6: 
+			$div.attr('id', 'boostPerformanceWidget' + i);
+			loadBoostPerformanceWidget('boostPerformanceWidget' + i);
+			break;
+			
+		case 7: 
+			$div.attr('id', 'revenueSourcesWidget' + i);
+			loadRevenueSourcesWidget('revenueSourcesWidget' + i);
+			break;	
+	}
+
+}
+
+
+
 
 /**
  * Updates each widget's visualization based on new data 
@@ -120,23 +137,70 @@ function loadWidgets(widgets) {
 function updateWidgets(){
 	
 	var widgets = $.map($('.w_container'), function(widget) {
-						return { 'id': widget.id, 'widgetId' : $(widget).data('widgetId') };
+						return { 'elementId': widget.id, 'widgetTypeId' : $(widget).data('widgetTypeId') };
 					});
 	
 	for(var i = 0; i < widgets.length; i++) {
 		
-		switch(widgets[i].widgetId)
+		switch(widgets[i].widgeTypeId)
 		{
 			case 1:
-				updateDataForecast(widgets[i].id);
+				updateDataForecast(widgets[i].elementId);
 				break;
 			
 		}
 	}
 		
-	
-	
-	
+}
+
+
+function addWidget(element, dashboardId) 
+{
+	if ($(element).length) {
+		var id = $(element).closest('ul').attr('id');
+		var widget = $('#' + id);
+		var widgetTypeId = widget.data('widgetTypeId');
+		var nWidgets = $('.dashboard-content').data('n');
+
+		$.post(applicationRoot + "addWidget", {widgetTypeId: widgetTypeId, dashboardId: dashboardId},
+				function(response) {
+					var result = $.parseJSON(response);
+					loadWidget(widgetTypeId, result.id, nWidgets++);
+					
+					// update the number of widgets
+					$('.dashbaord-content').data('n', nWidgets);
+				});
+
+	}
+
+}
+
+
+
+/**
+ * Removes a widget from the dashboard and deletes it from the database.
+ * @param element - the element of the menu item clicked.
+ */
+function removeWidget(element) {
+
+	if ($(element).length) {
+		
+		var id = $(element).closest('ul').attr('id');
+		var widget = $('#' + id);
+		var widgetId = widget.data('widgetId');
+		var nWidgets = $('.dashboard-content').data('n');
+
+		$.post(applicationRoot + "removeWidget", {widgetId: widgetId}, 
+				function(response) {
+					if (response)
+						widget.remove();
+					// decrement the number of widgets on the page.
+					$('.dashboard-content').data('n', --nWidgets);
+						console.warn('removed widget: ' + id);
+				});
+
+	}
+
 }
 
 
