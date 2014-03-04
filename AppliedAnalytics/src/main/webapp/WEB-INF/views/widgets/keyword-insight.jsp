@@ -204,19 +204,13 @@ else { // else parse and display data
 
 </script>
 
-<div class="widget widget_wrapper widgetView keywordInsight">
-	<div class="widget_header">			
-		<div class="widget_title"><fmt:message key="keywordinsight.title" /></div>			
 
-	</div>
-	<div class="widget-content">
-		<form id="keywordInsightSettings">
-			
-		</form>
+<form id="keywordInsightSettings">
 	
-	
-		<br>
-		<br>
-	</div>
-</div>
+</form>
+
+
+<br>
+<br>
+
 

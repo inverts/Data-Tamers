@@ -31,6 +31,19 @@ public abstract class WidgetModel implements JSONSerializable {
 	public String getJSONSerialization() {
 		return "{error: \"unimplemented\"}";
 	}*/
+	
+	/**
+	 * 
+	 * @return - class name for the Widget
+	 */
+	public abstract String getHTMLClass();
+	
+	/**
+	 * 
+	 * @return - string.properties path to the widget title.
+	 */
+	public abstract String getTitle();
+	
 	//No setters; these should not change over the lifetime of the Widget.
 	
 }

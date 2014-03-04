@@ -84,21 +84,22 @@ public class WidgetController {
 			dataForecast.setDimension(dimension);
 		dataForecast.updateData();
 		SessionService.saveModel(session, "hypotheticalFuture", dataForecast);
-		viewMap.addAttribute("hfModel", dataForecast);
+		//viewMap.addAttribute("hfModel", dataForecast);
+		viewMap.addAttribute("widget", dataForecast);
 		viewMap.addAttribute("filterModel", filter);
 		
 		/* Did we just request data only? */
 		if(serialize) {
-			viewMap.addAttribute("model",dataForecast);
+			viewMap.addAttribute("model", dataForecast);
 			return new ModelAndView("serialize");
 		}
 		
-		return new ModelAndView("DataForecast");
+		return new ModelAndView("widget", "view", "/WEB-INF/views/widgets/data-forecast.jsp");
 
 	}
 	
 
-	@RequestMapping(value = "/RevenueSources", method = {RequestMethod.POST, RequestMethod.GET})
+	/*@RequestMapping(value = "/RevenueSources", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView revenueSourcesView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		Credential credential;
@@ -119,7 +120,7 @@ public class WidgetController {
 		}
 
 		return new ModelAndView("RevenueSources");
-	}
+	} */
 	
 	@RequestMapping(value = "/GrowingProblems", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView growingProblemsView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
@@ -140,8 +141,24 @@ public class WidgetController {
 			//TODO: Make an informative view for when widgets don't have an active profile to get data from.
 			return new ModelAndView ("unavailable");
 		}
+		
+		GrowingProblemsModel growingProblems = SessionService.getModel(session, "growingProblems", GrowingProblemsModel.class);
+		
 
-		return new ModelAndView("GrowingProblems");
+		//If there is no model available, or if the active profile changed, create a new model.
+		if ((growingProblems == null) || !(settings.getActiveProfile().equals(growingProblems.getActiveProfile()))) {
+			growingProblems = new GrowingProblemsModel();
+		}
+
+		//TODO: We may need to make setStartDate and setEndDate abstract methods in the WidgetModel class.
+		/*if (filter != null) {
+			growingProblems.setStartDate(filter.getActiveStartDate());
+			growingProblems.setEndDate(filter.getActiveEndDate());
+		}*/
+		
+		viewMap.addAttribute("widget", growingProblems);
+
+		return new ModelAndView("widget", "view", "/WEB-INF/views/widgets/growing-problems.jsp");
 	}
 	
 	@RequestMapping(value = "/BoostPerformance", method = {RequestMethod.POST, RequestMethod.GET})
@@ -163,8 +180,22 @@ public class WidgetController {
 			//TODO: Make an informative view for when widgets don't have an active profile to get data from.
 			return new ModelAndView ("unavailable");
 		}
+		
+		BoostPerformanceModel boostPerformance = SessionService.getModel(session, "boostPerformance", BoostPerformanceModel.class);
 
-		return new ModelAndView("BoostPerformance");
+		//If there is no model available, or if the active profile changed, create a new model.
+		if ((boostPerformance == null) || !(settings.getActiveProfile().equals(boostPerformance.getActiveProfile()))) {
+			boostPerformance = new BoostPerformanceModel();
+		}
+
+		/*if (filter != null) {
+			boostPerformance.setStartDate(filter.getActiveStartDate());
+			boostPerformance.setEndDate(filter.getActiveEndDate());
+		}*/
+		
+		viewMap.addAttribute("widget", boostPerformance);
+
+		return new ModelAndView("widget", "view", "/WEB-INF/views/widgets/boost-performance.jsp");
 	}
 
 
@@ -212,13 +243,14 @@ public class WidgetController {
 
 		SessionService.saveModel(session, "websitePerformance", webPerform);
 		viewMap.addAttribute("wpModel", webPerform);
+		viewMap.addAttribute("widget", webPerform);
 		//viewMap.addAttribute("filterModel", filter);
 
 		if (!serialize.equals("none")) {
 			viewMap.addAttribute("model", webPerform);
 			return new ModelAndView("serialize");
 		}
-		return new ModelAndView("WebsitePerformance");
+		return new ModelAndView("widget", "view", "/WEB-INF/views/widgets/website-performance.jsp");
 	}
 
 	@RequestMapping(value = "/KeywordInsight", method = {RequestMethod.POST, RequestMethod.GET})
@@ -260,6 +292,7 @@ public class WidgetController {
 		// Save the updated model to the session and send it to the view.
 		SessionService.saveModel(session, "keywordInsight", keyInsight);
 		viewMap.addAttribute("kiModel", keyInsight);
+		viewMap.addAttribute("widget", keyInsight);
 		//viewMap.addAttribute("filterModel", filter);
 
 		if (!serialize.equals("none")) {
@@ -267,7 +300,7 @@ public class WidgetController {
 			return new ModelAndView("serialize");
 		}
 		
-		return new ModelAndView("KeywordInsight");
+		return new ModelAndView("widget", "view", "/WEB-INF/views/widgets/keyword-insight.jsp");
 	}
 	
 	

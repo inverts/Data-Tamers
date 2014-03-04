@@ -15,7 +15,7 @@ import io.analytics.domain.PagePerformanceData;
 import io.analytics.service.interfaces.IPagePerfomanceService;
 import io.analytics.service.interfaces.ISessionService;
 
-public class WebsitePerformanceModel {
+public class WebsitePerformanceModel extends WidgetModel {
 
 		private JSONObject jsonData;
 		private IPagePerfomanceService pagePerformanceService;
@@ -32,6 +32,9 @@ public class WebsitePerformanceModel {
 		private double[] visitsPercentResults;
 		private double[] bounceRateResults;
 		private double[] exitRateResults;
+		
+		private final String widgetClass = "pagePerformance";
+		private final String widgetTitle = "websiteperformance.title";
 
         DateFormat presentationFormat = new SimpleDateFormat("MM/dd/yyyy"); 
         
@@ -150,5 +153,27 @@ public class WebsitePerformanceModel {
 			}
 
 			 return this.jsonData;
+		}
+
+		@Override
+		public String getJSONSerialization() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public int getPositionPriority() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public String getHTMLClass() {
+			return this.widgetClass;
+		}
+
+		@Override
+		public String getTitle() {
+			return this.widgetTitle;
 		}
 }

@@ -20,7 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class KeywordInsightModel {
+public class KeywordInsightModel extends WidgetModel {
 	private JSONObject jsonData;
 	private JSONObject jsonScatterPlotData;
 	private IKeywordInsightService keywordInsightService;
@@ -40,6 +40,9 @@ public class KeywordInsightModel {
 	private ArrayList<KeyData> cpcData;
 	private ArrayList<KeyData> organicData;
     private String keywordSubstring;
+    
+    private final String widgetClass = "keywordInsight";
+    private final String widgetTitle = "keywordinsight.title";
 	
     DateFormat presentationFormat = new SimpleDateFormat("MM/dd/yyyy"); 
     
@@ -451,6 +454,28 @@ public class KeywordInsightModel {
 	
 	public JSONObject getScatterPlotDataPoints() {
 		return this.jsonScatterPlotData;
+	}
+
+	@Override
+	public String getJSONSerialization() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getPositionPriority() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String getHTMLClass() {
+		return this.widgetClass;
+	}
+
+	@Override
+	public String getTitle() {
+		return this.widgetTitle;
 	}
 }
 

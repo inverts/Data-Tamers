@@ -1,14 +1,8 @@
 package io.analytics.site.models;
 
-import io.analytics.service.interfaces.ICoreReportingService;
-import io.analytics.service.interfaces.ISessionService;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.json.*;
 
-public class BoostPerformanceModel {
+public class BoostPerformanceModel extends WidgetModel {
 
 	private JSONObject jsonData;
 	//private IBoostPerformanceService boostPerformanceService;
@@ -21,6 +15,9 @@ public class BoostPerformanceModel {
 	// avg. value per visit
 	
 	// percentage of traffic
+	
+	private final String widgetClass = "boostPerformance";
+	private final String widgetTitle = "boostperformance.title";
 	
 	
 	public BoostPerformanceModel() {
@@ -39,6 +36,28 @@ public class BoostPerformanceModel {
 	
 	public String getDescription() {
 		return "View sources that need a boost in traffic";
+	}
+
+	@Override
+	public String getJSONSerialization() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getPositionPriority() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String getHTMLClass() {
+		return this.widgetClass;
+	}
+
+	@Override
+	public String getTitle() {
+		return this.widgetTitle;
 	}
 	
 	

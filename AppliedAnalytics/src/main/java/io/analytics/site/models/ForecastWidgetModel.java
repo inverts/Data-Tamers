@@ -747,6 +747,17 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 			}
 			return result.toString();
 		}
+		
+		@Override
+		public String getHTMLClass() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		@Override
+		public String getTitle() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
 
 }

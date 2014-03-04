@@ -18,6 +18,9 @@ public class DataForecastModel extends ForecastWidgetModel implements Serializab
 	private ArrayList<Integer> changePercentageOptions; //Using ArrayList for future flexibility if necessary.
 	private String activeProfile;
 	
+	private final String widgetClass = "dataForecast";
+	private final String widgetTitle = "dataforecast.title";
+	
 	public DataForecastModel() {
 		super();
 	}
@@ -56,6 +59,16 @@ public class DataForecastModel extends ForecastWidgetModel implements Serializab
 	@Override
 	public String getDescription() {
 		return "View a forecast of your data depending on hypothetical conditions.";
+	}
+	
+	@Override
+	public String getHTMLClass() {
+		return this.widgetClass;
+	}
+	
+	@Override
+	public String getTitle() {
+		return this.widgetTitle;
 	}
 	
 	public Integer getChangePercentage() {
