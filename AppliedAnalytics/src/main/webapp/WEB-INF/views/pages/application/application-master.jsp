@@ -27,6 +27,7 @@
 <script src="<c:url value="/cache/javascript/api/utilities.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/test.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/graph.js" />"></script>
+<script src="<c:url value="/cache/javascript/api/scatter.js" />"></script>
 <script src="<c:url value="/cache/javascript/headerfooter.js" />"></script>
 <script src="<c:url value="/cache/javascript/application.js" />"></script>
 
