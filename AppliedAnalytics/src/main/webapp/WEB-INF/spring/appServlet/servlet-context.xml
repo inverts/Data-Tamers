@@ -18,7 +18,7 @@
 		<resources mapping="/cache/**" location="/resources/cache/" />
 		<resources mapping="/images/**" location="/resources/images/" />
 		
-	
+
 	<!-- Bundle for string properties -->
 		<beans:bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
 			<beans:property name="defaultLocale" value="en"/>
@@ -27,9 +27,9 @@
 	        <beans:property name="basename" value="strings"/>
 	    </beans:bean>
 	
-	<!-- XMLViewResolver for widgets.xml --> 
+	<!-- XMLViewResolver for partials.xml --> 
 		<beans:bean class="org.springframework.web.servlet.view.XmlViewResolver">
-		   <beans:property name="location" value="/WEB-INF/views/widgets/widgets.xml" />
+		   <beans:property name="location" value="/WEB-INF/views/partials.xml" />
 		   <beans:property name="order" value="1" />
 		</beans:bean>
 	
