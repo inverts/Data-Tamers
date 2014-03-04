@@ -3,7 +3,7 @@
 
 <script src="<c:url value="/cache/javascript/data-forecast.js" />"></script>
 <script src="<c:url value="/cache/javascript/website-performance.js" />"></script>
-<script src="<c:url value="/cache/javascript/revenue-sources.js" />"></script>
+<script src="<c:url value="/cache/javascript/key-contributing-factors.js" />"></script>
 <script src="<c:url value="/cache/javascript/keyword-insight.js" />"></script>
 <script src="<c:url value="/cache/javascript/dashboard.js" />"></script>
 <script src="<c:url value="/cache/javascript/growing-problems.js" />"></script>

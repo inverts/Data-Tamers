@@ -99,9 +99,9 @@ function loadWidget(widgetTypeId, widgetId, i)
 			loadWebsitePerformanceWidget('websitePerformanceWidget' + i);
 			break;
 			
-		case 3:
+		case 7:
 			$div.attr('id', 'keyContributingFactorsWidget' + i);
-			loadKeyContributingFactors('keyContributingFactorsWidget' + i);
+			loadKeyContributingFactorsWidget('keyContributingFactorsWidget' + i);
 			break;
 		
 		case 4:
@@ -119,10 +119,7 @@ function loadWidget(widgetTypeId, widgetId, i)
 			loadBoostPerformanceWidget('boostPerformanceWidget' + i);
 			break;
 			
-		case 7: 
-			$div.attr('id', 'revenueSourcesWidget' + i);
-			loadRevenueSourcesWidget('revenueSourcesWidget' + i);
-			break;	
+		
 	}
 
 }

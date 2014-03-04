@@ -99,8 +99,8 @@ public class WidgetController {
 	}
 	
 
-	/*@RequestMapping(value = "/RevenueSources", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView revenueSourcesView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+	@RequestMapping(value = "/KeyContributingFactors", method = {RequestMethod.POST, RequestMethod.GET})
+	public ModelAndView keyContributingFactorsView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		Credential credential;
 		SettingsModel settings;
@@ -118,9 +118,26 @@ public class WidgetController {
 			//TODO: Make an informative view for when widgets don't have an active profile to get data from.
 			return new ModelAndView ("unavailable");
 		}
+		KeyContributingFactorsModel keyContributingFactors = SessionService.getModel(session, "keyContributingFactors", KeyContributingFactorsModel.class);
+		
 
-		return new ModelAndView("RevenueSources");
-	} */
+		//If there is no model available, or if the active profile changed, create a new model.
+		if ((keyContributingFactors == null) || !(settings.getActiveProfile().equals(keyContributingFactors.getActiveProfile()))) {
+			keyContributingFactors = new KeyContributingFactorsModel();
+		}
+
+		//TODO: We may need to make setStartDate and setEndDate abstract methods in the WidgetModel class.
+		/*if (filter != null) {
+			growingProblems.setStartDate(filter.getActiveStartDate());
+			growingProblems.setEndDate(filter.getActiveEndDate());
+		}*/
+		
+		viewMap.addAttribute("widget", keyContributingFactors);
+
+
+		return new ModelAndView("widget", "view", "/WEB-INF/views/widgets/key-contributing-factors.jsp");
+		
+	} 
 	
 	@RequestMapping(value = "/GrowingProblems", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView growingProblemsView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
