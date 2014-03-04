@@ -458,8 +458,18 @@ public class KeywordInsightModel extends WidgetModel {
 
 	@Override
 	public String getJSONSerialization() {
-		// TODO Auto-generated method stub
-		return null;
+		JSONObject result = new JSONObject();
+		try {
+			result.put("name", this.getName());
+			result.put("description", this.getDescription());
+			//result.put("metric", this.getMetric());
+			result.put("priority", this.getPositionPriority());
+			result.put("data", this.getDataPoints());
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result.toString();
 	}
 
 	@Override

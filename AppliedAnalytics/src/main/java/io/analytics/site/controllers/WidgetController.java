@@ -272,7 +272,7 @@ public class WidgetController {
 
 	@RequestMapping(value = "/KeywordInsight", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView keywordInsightView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,
-			@RequestParam(value = "serialize", defaultValue = "none") String serialize) {
+			@RequestParam(value = "serialize", defaultValue = "0") boolean serialize) {
 		
 		Credential credential;
 		SettingsModel settings;
@@ -312,7 +312,7 @@ public class WidgetController {
 		viewMap.addAttribute("widget", keyInsight);
 		//viewMap.addAttribute("filterModel", filter);
 
-		if (!serialize.equals("none")) {
+		if (serialize) {
 			viewMap.addAttribute("model", keyInsight);
 			return new ModelAndView("serialize");
 		}

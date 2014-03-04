@@ -2,21 +2,11 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <style>
-.keywordInsight {width: 600px;}
-.keywordInsight .widget-content{width: 590px;}
-.keywordInsight table, .keywordInsight th, .keywordInsight td, .keywordInsight tr
-{
-background-color:#DCDCDC;
-border:1px solid black;
-}
-.keywordInsight th, .keywordInsight td
-{
-padding:3px;
-}
+
 </style>
 
 <script>
-var dataPoints = ('${ kiModel.getDataPoints() }');
+/*var dataPoints = ('${ kiModel.getDataPoints() }');
 
 // if no data display error message
 if (dataPoints == null) {
@@ -176,7 +166,7 @@ else { // else parse and display data
 	table.appendTo("#keywordInsightSettings"); */
 	
 	// All cpc keywords table
-	var message = $('<br><h4><fmt:message key="keywordinsight.searchMessage"/></h4><br>');
+/*	var message = $('<br><h4><fmt:message key="keywordinsight.searchMessage"/></h4><br>');
 	var table = $('<table><tbody>');
 	var tr = $('<tr>');
 	$('<th>Keywords</th>').appendTo(tr);
@@ -200,13 +190,14 @@ else { // else parse and display data
 	}
 	message.appendTo("#keywordInsightSettings");
 	table.appendTo("#keywordInsightSettings"); 
-}
+}*/
 
 </script>
 
 
 <form id="keywordInsightSettings">
-	
+<div id = "keywordInsightData">
+</div>
 </form>
 
 
