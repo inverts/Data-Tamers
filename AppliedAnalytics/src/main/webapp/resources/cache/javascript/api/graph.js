@@ -98,7 +98,7 @@
 			 ********************************/
 			graph.x.domain = [d3.min(graph.data, function(d) { return getDate(d[graph.x.key]); }), 
 			                  d3.max(graph.data, function(d) { return getDate(d[graph.x.key]); })];
-			graph.y.domain = [0, getValueBy(graph.data, graph.y.keys, Math.max)];
+			graph.y.domain = [getValueBy(graph.data, graph.y.keys, Math.min) - 15, getValueBy(graph.data, graph.y.keys, Math.max) + 15];
 			
 			if (!settings.endIndex)											
 				settings.endIndex = settings.data.length - 1;
@@ -150,31 +150,30 @@
 			zoomIn = 0.3;
 			*/
 			
-			var zoomOut = 4,
-				zoomIn = 0.3;
+			var maximumZ = 16, //Zoom in; you can make something look this many times bigger
+				minimumZ = 1; //Zoom out; same as above, you're scaling the image by this number.
 			
 			
 			graph.zoom = d3.behavior.zoom()
 									.x(graph.x.point)
-									.y(graph.y.point)
-									.scaleExtent([zoomIn, zoomOut])
+									.scaleExtent([minimumZ, maximumZ])
 									.on("zoom", function() {
 										
 															d3.selectAll("#" + graph.id + " Circle").remove(); // remove plots
 															var t = graph.zoom.translate(),
-															tx = t[0],
+															tx = t[0], 
 															ty = t[1];
 															
 															var diff = { "left": 0, "right": 0 };
 															
 															var yMax = graph.y.point(graph.data[getIndexBy(graph.data, graph.y.keys, Math.max)].jsonHitCount);
-															
-															//if (tx < )
-															diff.left = graph.x.point(new Date(graph.data[graph.data.length - 1][graph.x.key])) - graph.x.point(settings.from);
-															diff.right = -(graph.x.point(new Date(graph.data[0][graph.x.key]))) + graph.x.point(settings.to);
-															// x - boundaries
-															tx = Math.min(tx, graph.size.width - diff.left); // THIS IS CORRECT
-															tx = Math.max(tx, -(graph.size.width - diff.right));
+
+															//tx is the amount of pixels to the right the beginning of the graph is from the starting point.
+															viewMinusGraphWidth = graph.view.width - graph.size.width;
+															if (tx > 0)
+																tx = 0;
+															if (tx < viewMinusGraphWidth)
+																tx = viewMinusGraphWidth;
 															
 															// y - boundaries
 															ty = Math.min(ty, graph.size.height);
@@ -402,7 +401,7 @@
 							  "cx": function(d) { return graph.x.point(new Date(d[graph.x.key])); },
 							  "cy": function(d) { return graph.y.point(d[key]); },
 							  "r": settings.pointSize,
-							  "title": function(d) { return d[key]; } // for tooltip
+							  "title": function(d) { return Math.round(d[key]) + " visits"; } // for tooltip
 						  });
 					
 					circle.exit();

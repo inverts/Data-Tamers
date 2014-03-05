@@ -139,7 +139,7 @@ function updateWidgets(){
 	
 	for(var i = 0; i < widgets.length; i++) {
 		
-		switch(widgets[i].widgeTypeId)
+		switch(widgets[i].widgetTypeId)
 		{
 			case 1:
 				updateDataForecast(widgets[i].elementId);
