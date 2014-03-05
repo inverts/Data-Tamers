@@ -1,4 +1,6 @@
-package io.analytics.site.models;
+package io.analytics.site.models.widgits;
+
+import io.analytics.site.models.IMetricDependent;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;

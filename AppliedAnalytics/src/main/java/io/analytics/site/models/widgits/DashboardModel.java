@@ -1,6 +1,7 @@
-package io.analytics.site.models;
+package io.analytics.site.models.widgits;
 
 import io.analytics.domain.Widget;
+import io.analytics.site.models.JSONSerializable;
 
 import java.util.ArrayList;
 import java.util.List;

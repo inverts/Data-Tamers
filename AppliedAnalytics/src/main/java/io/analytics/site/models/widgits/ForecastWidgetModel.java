@@ -1,4 +1,4 @@
-package io.analytics.site.models;
+package io.analytics.site.models.widgits;
 
 import io.analytics.domain.CoreReportingData;
 import io.analytics.repository.CoreReportingRepository;

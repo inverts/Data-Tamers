@@ -1,4 +1,4 @@
-package io.analytics.site.models;
+package io.analytics.site.models.widgits;
 
 import io.analytics.service.interfaces.ICoreReportingService;
 import io.analytics.service.interfaces.ISessionService;
