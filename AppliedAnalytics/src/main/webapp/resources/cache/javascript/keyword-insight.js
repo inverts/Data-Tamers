@@ -31,7 +31,7 @@ function loadKeywordInsight(id) {
 		$li = $('<li>').append($a);
 		$('#' + id + ' .dropdown-menu').append($li);
 		
-		getKeywordInsightData(id, false, function() {
+		getKeywordInsightData(id, true, function() {
 			// Collapse Event
 			$('.keywordInsight .widget_title').click(function() {
 				$('.keywordInsight .widget-content').slideToggle('fast');
@@ -75,10 +75,12 @@ function viewScatter(id) {
 
 function viewTable(id) {
 	var dataPoints = dataset;
+	console.log(dataset);
 	// if no data display error message
 	if (dataPoints == null) {
-		("#keywordInsightSettings")
-				.append('<h2><fmt:message key="keywordinsight.gaOverQuotaError"/></h2>');
+	     console.log("keyword insight data is null.")
+		//("#keywordInsightSettings")
+		//		.append('<h2><fmt:message key="keywordinsight.gaOverQuotaError"/></h2>');
 	} else { // else parse and display data
 		var data = dataset;
 		console.log(data);
@@ -249,8 +251,14 @@ function viewTable(id) {
 
 function getKeywordInsightData(id, tableView, callback) {
 	$.post(applicationRoot + "KeywordInsight", {"serialize": 1}, function(response) {
-		//var d = $.parseJSON(response);
-		//dataset = d.data;
+		// if no data display error message
+		if (response == null) {
+			console.log("Data from Keyword Insight model is null");
+			return;
+			//("#keywordInsightSettings").append('<h2><fmt:message key="keywordinsight.gaOverQuotaError"/></h2>');
+		}
+		var d = $.parseJSON(response);
+		dataset = d.data;
 		if(!tableView) {
 			viewScatter(id);
 		}
@@ -267,6 +275,6 @@ function getKeywordInsightData(id, tableView, callback) {
 
 function updateKeywordInsight(id) {
 	//TODO: determine what state we are in
-	// call getKeywordInsightData with appropriate flag
+	// getKeywordInsightData()    //with appropriate flag
 	
 }
