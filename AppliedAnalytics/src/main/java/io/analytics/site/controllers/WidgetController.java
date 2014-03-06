@@ -18,6 +18,7 @@ import io.analytics.site.models.widgets.KeyContributingFactorsModel;
 import io.analytics.site.models.widgets.KeywordInsightModel;
 import io.analytics.site.models.widgets.WebsitePerformanceModel;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -365,7 +366,7 @@ public class WidgetController {
 		@ResponseBody
 		@RequestMapping(value = "/addWidget", method = RequestMethod.POST)
 		private String addWidget(@RequestParam("widgetTypeId") int widgetTypeId,
-								  @RequestParam("dashboardId") int dashboardId)
+								 @RequestParam("dashboardId") int dashboardId)
 		{
 			JSONObject result = new JSONObject();
 			
@@ -382,5 +383,33 @@ public class WidgetController {
 			}
 			
 			return result.toString();
+		}
+		
+		
+		@ResponseBody
+		@RequestMapping(value = "/updateWidgetPosition", method= RequestMethod.POST)
+		private String updateWidget(@RequestParam(value = "widgets", defaultValue = "") String widgetsJSON)
+		{
+			try {
+				
+				if (!widgetsJSON.isEmpty()) {
+					//TODO: DeStringify widgetsJSON and traverse it, 
+					//create a widget object for each instance and call the service.
+					JSONArray widgets = new JSONArray(widgetsJSON);
+					
+					for(int i = 0; i < widgets.length(); i++) {
+						JSONObject o = widgets.getJSONObject(i);
+						Widget w = WidgetService.getWidgetById((Integer)o.get("widgetId"));
+						w.setPriority((Integer)o.get("pos"));
+						WidgetService.updateWidget(w);
+					}
+				}
+				
+			} catch(Exception e) {
+				logger.info("Could not update Widget");
+				logger.info(e.getMessage());
+			}
+			
+			return null;
 		}
 }
