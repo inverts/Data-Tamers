@@ -128,7 +128,7 @@ function viewTable(id) {
 		table.appendTo("#keywordInsightSettings");
 */
 		// Help keywords table
-		var message = $('<br><h4><b>Improve website for the following keywords:</h4><br>');
+		var message = $('<br><h4><b>Improve website performance for the following keywords:</h4><br>');
 		var table = $('<table><tbody>');
 		var tr = $('<tr>');
 		$('<th>Keywords</th>').appendTo(tr);
