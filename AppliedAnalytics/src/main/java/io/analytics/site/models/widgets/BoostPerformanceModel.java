@@ -1,4 +1,4 @@
-package io.analytics.site.models.widgits;
+package io.analytics.site.models.widgets;
 
 import org.json.*;
 

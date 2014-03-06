@@ -11,12 +11,12 @@ import io.analytics.service.interfaces.IPagePerfomanceService;
 import io.analytics.service.interfaces.ISessionService;
 import io.analytics.service.interfaces.IWidgetService;
 import io.analytics.site.models.*;
-import io.analytics.site.models.widgits.BoostPerformanceModel;
-import io.analytics.site.models.widgits.DataForecastModel;
-import io.analytics.site.models.widgits.GrowingProblemsModel;
-import io.analytics.site.models.widgits.KeyContributingFactorsModel;
-import io.analytics.site.models.widgits.KeywordInsightModel;
-import io.analytics.site.models.widgits.WebsitePerformanceModel;
+import io.analytics.site.models.widgets.BoostPerformanceModel;
+import io.analytics.site.models.widgets.DataForecastModel;
+import io.analytics.site.models.widgets.GrowingProblemsModel;
+import io.analytics.site.models.widgets.KeyContributingFactorsModel;
+import io.analytics.site.models.widgets.KeywordInsightModel;
+import io.analytics.site.models.widgets.WebsitePerformanceModel;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
