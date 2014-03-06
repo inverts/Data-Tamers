@@ -5,6 +5,7 @@
 /* Global Variables */
 var visits = [];
 var bounceRate = [];
+var sdata;
 var dataset = [
                [5, 20], [480, 90], [250, 50], [100, 33], [330, 95],
                [410, 12], [475, 44], [25, 67], [85, 21], [220, 88]
@@ -46,15 +47,31 @@ function loadKeywordInsight(id) {
 
 
 function viewScatter(id) {
+	var data = dataset;
+	console.log(data);
+	// if no data display error message
+	if (data == null) {
+	     console.log("keyword insight data is null.")
+		//("#keywordInsightSettings")
+		//		.append('<h2><fmt:message key="keywordinsight.gaOverQuotaError"/></h2>');
+	} else { // else parse and display data
 	
-	/*var data =JSON.parse('${ kiModel.getScatterPlotDataPoints() }');
-	for(var r = 0; r < data.allKeywords.length; r++)
-		{
-		  data.allKeywords[r];   // keywords
-		  data.allVisitsPercent[r];  // visits in percent
-		  data.allBounceRate[r];    // bounce rate in percent
-		  data.allMultipageVisitsPercent[r]; // multipage visits in percent
-	    }*/
+	sdata = new Array(2);
+	//var n = data.allCpcKeywords.length;
+	var n = 10;
+	for (var i = 0; i < 2 ; i++) {
+		sdata[i] = new Array(n);
+	}
+		
+	for(var r = 0; r < n; r++)
+		data.allCpcKeywords[r];   // keywords
+		sdata[1][r] =  data.allCpcVisitsPercent[r];  // visits in percent
+		sdata[0][r] =  data.allCpcBounceRate[r];    // bounce rate in percent
+	}
+
+	
+	console.log(sdata[0][3]);
+	console.log(sdata);
 	
 	$('#' + id + ' #keywordInsightData').empty().scatter({
 		'id'	: 'keywordInsightData',
@@ -62,7 +79,7 @@ function viewScatter(id) {
 		'yLabel': 'Percentage of Webpage Visits',
 		'xKey' 	: 'bounceRates',
 		'yKey'	: 'visits',
-		'data'	: dataset
+		'data'	: sdata
 	});
 	
 	$('#' + id + ' .viewOption').addClass('table')
@@ -74,16 +91,14 @@ function viewScatter(id) {
 }
 
 function viewTable(id) {
-	var dataPoints = dataset;
-	console.log(dataset);
+	var data = dataset;
+	console.log(data);
 	// if no data display error message
-	if (dataPoints == null) {
+	if (data == null) {
 	     console.log("keyword insight data is null.")
 		//("#keywordInsightSettings")
 		//		.append('<h2><fmt:message key="keywordinsight.gaOverQuotaError"/></h2>');
 	} else { // else parse and display data
-		var data = dataset;
-		console.log(data);
 
 	/*	// Remove keywords table
 		var message = $('<h4><fmt:message key="keywordinsight.removeSuggestion"/></h4><br>');
@@ -113,7 +128,7 @@ function viewTable(id) {
 		table.appendTo("#keywordInsightSettings");
 */
 		// Help keywords table
-		var message = $('<br><h4><fmt:message key="keywordinsight.changeSuggestion"/></h4><br>');
+		var message = $('<br><h4><b>Improve the website to better meet the needs of the following keywords:</h4><br>');
 		var table = $('<table><tbody>');
 		var tr = $('<tr>');
 		$('<th>Keywords</th>').appendTo(tr);
@@ -140,7 +155,7 @@ function viewTable(id) {
 		table.appendTo("#keywordInsightSettings");
 
 		// Best keywords table
-		var message = $('<br><h4><fmt:message key="keywordinsight.bestMessage"/></h4><br>');
+		var message = $('<br><h4><b>The best performing keywords:</b></h4><br>');
 		var table = $('<table><tbody>');
 		var tr = $('<tr>');
 		$('<th>Keywords</th>').appendTo(tr);
@@ -167,7 +182,7 @@ function viewTable(id) {
 		table.appendTo("#keywordInsightSettings");
 
 		// Best keyword substring performance table
-		var message = $('<br><h4><fmt:message key="keywordinsight.bestWordsMessage"/></h4><br>');
+		var message = $('<br><h4><b>The best performing keyword substrings:</b></h4><br>');
 		var table = $('<table><tbody>');
 		var tr = $('<tr>');
 		$('<th>Word Substring</th>').appendTo(tr);
@@ -191,7 +206,7 @@ function viewTable(id) {
 		table.appendTo("#keywordInsightSettings");
 
 		// Worst keyword substring performance table
-		var message = $('<br><h4><fmt:message key="keywordinsight.worstWordsMessage"/></h4><br>');
+		var message = $('<br><h4><b>The worst performing keyword substrings:</b></h4><br>');
 		var table = $('<table><tbody>');
 		var tr = $('<tr>');
 		$('<th>Word Substring</th>').appendTo(tr);
@@ -216,7 +231,7 @@ function viewTable(id) {
 		table.appendTo("#keywordInsightSettings");
 
 		// All cpc keywords table
-		var message = $('<br><h4><fmt:message key="keywordinsight.searchMessage"/></h4><br>');
+		var message = $('<br><h4><b>All paid keywords:</b></h4><br>');
 		var table = $('<table><tbody>');
 		var tr = $('<tr>');
 		$('<th>Keywords</th>').appendTo(tr);
