@@ -46,7 +46,7 @@ function loadDashboard(dashboardId) {
  * @returns 0 if the priorities are equal, < 0 if w1 has higher priority than w2, > 0 if vice versa.
  */
 function compareWidgetPriority(w1, w2) {
-	return w2.priority - w1.priority;
+	return w1.priority - w2.priority;
 }
 
 /**

@@ -3,9 +3,18 @@ package io.analytics.repository.interfaces;
 import java.util.List;
 
 import io.analytics.domain.Widget;
+import io.analytics.domain.WidgetType;
 
 public interface IWidgetRepository {
-
+	
+	/**
+	 * Gets a Widget object by its ID.
+	 * 
+	 * @param widgetId
+	 * @return
+	 */
+	public Widget getWidgetById(int widgetId);
+	
 	/**
 	 * Adds a new Widget to the database, returning the id of the newly added Widget.
 	 * @param accountId
@@ -13,7 +22,7 @@ public interface IWidgetRepository {
 	 * @param dashboardName
 	 * @return The id of the new Dashboard.
 	 */
-	public int addNewWidget(int defaultFilterId, int widgetTypeId, int dashboardId, int priority);
+	public int addNewWidget(Integer defaultFilterId, int widgetTypeId, int dashboardId, int priority);
 
 	/**
 	 * Adds a new Widget to the database, returning the id of the newly added Widget.
@@ -45,4 +54,10 @@ public interface IWidgetRepository {
 	 */
 	public List<Widget> getDashboardWidgets(int dashboardId);
 	
+	/**
+	 * Gets all the widget types available in the database.
+	 * 
+	 * @return
+	 */
+	public List<WidgetType> getAllWidgetTypes();
 }

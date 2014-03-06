@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.analytics.domain.Widget;
+import io.analytics.domain.WidgetType;
 import io.analytics.repository.interfaces.IWidgetRepository;
 import io.analytics.service.interfaces.IWidgetService;
 
@@ -13,9 +14,15 @@ import io.analytics.service.interfaces.IWidgetService;
 public class WidgetService implements IWidgetService {
 
 	@Autowired IWidgetRepository WidgetRepository;
+
+
+	@Override
+	public Widget getWidgetById(int widgetId) {
+		return WidgetRepository.getWidgetById(widgetId);
+	}
 	
 	@Override
-	public int addNewWidget(int defaultFilterId, int widgetTypeId, int dashboardId, int priority) {
+	public int addNewWidget(Integer defaultFilterId, int widgetTypeId, int dashboardId, int priority) {
 		return WidgetRepository.addNewWidget(defaultFilterId, widgetTypeId, dashboardId, priority);
 	}
 
@@ -36,6 +43,11 @@ public class WidgetService implements IWidgetService {
 	@Override
 	public List<Widget> getDashboardWidgets(int dashboardId) {
 		return WidgetRepository.getDashboardWidgets(dashboardId);
+	}
+
+	@Override
+	public List<WidgetType> getAllWidgetTypes() {
+		return WidgetRepository.getAllWidgetTypes();
 	}
 
 

@@ -1,11 +1,20 @@
 package io.analytics.service.interfaces;
 
 import io.analytics.domain.Widget;
+import io.analytics.domain.WidgetType;
 
 import java.util.List;
 
 public interface IWidgetService {
 
+	/**
+	 * Gets a Widget object by its ID.
+	 * 
+	 * @param widgetId
+	 * @return
+	 */
+	public Widget getWidgetById(int widgetId);
+	
 	/**
 	 * Adds a new Widget to the database, returning the id of the newly added Widget.
 	 * @param accountId
@@ -13,7 +22,7 @@ public interface IWidgetService {
 	 * @param dashboardName
 	 * @return The id of the new Dashboard.
 	 */
-	public int addNewWidget(int defaultFilterId, int widgetTypeId, int dashboardId, int priority);
+	public int addNewWidget(Integer defaultFilterId, int widgetTypeId, int dashboardId, int priority);
 
 	/**
 	 * Adds a new Widget to the database, returning the id of the newly added Widget.
@@ -45,5 +54,11 @@ public interface IWidgetService {
 	 * or if there was a problem accessing the data.
 	 */
 	public List<Widget> getDashboardWidgets(int dashboardId);
-	
+
+	/**
+	 * Gets all the widget types available in the database.
+	 * 
+	 * @return
+	 */
+	public List<WidgetType> getAllWidgetTypes();
 }

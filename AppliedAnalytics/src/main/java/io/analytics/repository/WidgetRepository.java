@@ -13,6 +13,7 @@ import io.analytics.domain.Account;
 import io.analytics.domain.Dashboard;
 import io.analytics.domain.User;
 import io.analytics.domain.Widget;
+import io.analytics.domain.WidgetType;
 import io.analytics.repository.interfaces.IDashboardRepository;
 import io.analytics.repository.interfaces.IWidgetRepository;
 
@@ -62,8 +63,14 @@ public class WidgetRepository implements IWidgetRepository {
 		public static final String PRIORITY = "widgetPriority";
 	}
 	
-	private static final class WidgetMapper implements RowMapper<Widget> {
+	public static final String WIDGET_TYPES_TABLE = "WidgetTypes";
+	private static final class WidgetTypesTable {
+		public static final String WIDGET_TYPES_ID = "idWidgetTypes";
+		public static final String WIDGET_NAME = "widgetName";
+		public static final String WIDGET_DESCRIPTION = "widgetDescription";
+	}
 
+	private static final class WidgetMapper implements RowMapper<Widget> {
 		@Override
 		public Widget mapRow(ResultSet rs, int row) throws SQLException {
 			Widget w = new Widget(rs.getInt(WidgetTable.WIDGET_ID));
@@ -75,10 +82,38 @@ public class WidgetRepository implements IWidgetRepository {
 		}
 	}
 	
+	private static final class WidgetTypeMapper implements RowMapper<WidgetType> {
+		@Override
+		public WidgetType mapRow(ResultSet rs, int row) throws SQLException {
+			WidgetType wt = new WidgetType(rs.getInt(WidgetTypesTable.WIDGET_TYPES_ID));
+			wt.setName(rs.getString(WidgetTypesTable.WIDGET_NAME));
+			wt.setDescription(rs.getString(WidgetTypesTable.WIDGET_DESCRIPTION));
+			return wt;
+		}
+	}
+	
+	public Widget getWidgetById(int widgetId) {
+		String preStatement = String.format("SELECT * FROM `%s` WHERE `%s`=?;", WIDGET_TABLE, WidgetTable.WIDGET_ID);
+		Object[] args = new Object[] { widgetId };
+		int[] argTypes = new int[] { Types.INTEGER };
+		try {
+			List<Widget> widgets = jdbc.query(preStatement, args, argTypes, new WidgetMapper());
+			if (widgets == null || widgets.isEmpty())
+				return null;
+			return widgets.get(0); 
+		} catch (DataAccessException e) {
+			//TODO: Standardize error handling for the database.
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	
 	@Override
-	public int addNewWidget(int defaultFilterId, int widgetTypeId, int dashboardId, int priority) {
+	public int addNewWidget(Integer defaultFilterId, int widgetTypeId, int dashboardId, int priority) {
 
-		if (defaultFilterId < 0 || widgetTypeId < 0 || dashboardId < 0)
+		if (widgetTypeId < 0 || dashboardId < 0)
 			return -1;
 		Map<String, Object> insertParams = new HashMap<String, Object>();
         insertParams.put(WidgetTable.WIDGET_TYPE_ID, widgetTypeId);
@@ -111,7 +146,7 @@ public class WidgetRepository implements IWidgetRepository {
 		preStatement = String.format("UPDATE `%s` SET `%s`=?, `%s`=?, `%s`=?, `%s`=? WHERE `%s`=?", WIDGET_TABLE, WidgetTable.DASHBOARD_ID, 
 				WidgetTable.DEFAULT_FILTER_ID, WidgetTable.PRIORITY, WidgetTable.WIDGET_TYPE_ID, WidgetTable.WIDGET_ID);
 		args = new Object[] { w.getDashboardId(), w.getDefaultFilterId(), w.getPriority(), w.getWidgetTypeId(), w.getId() };
-		argTypes = new int[] { Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER };
+		argTypes = new int[] { Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER};
 		int rowsAffected = 0;
 		try {
 			rowsAffected = jdbc.update(preStatement, args, argTypes);
@@ -169,6 +204,24 @@ public class WidgetRepository implements IWidgetRepository {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	public List<WidgetType> getAllWidgetTypes() {
+
+		String preStatement = String.format("SELECT * FROM `%s`;", WIDGET_TYPES_TABLE);
+
+		try {
+			List<WidgetType> widgetTypes = jdbc.query(preStatement, new WidgetTypeMapper());
+			
+			return widgetTypes; 
+			
+		} catch (DataAccessException e) {
+			//TODO: Standardize error handling for the database.
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 	
 }

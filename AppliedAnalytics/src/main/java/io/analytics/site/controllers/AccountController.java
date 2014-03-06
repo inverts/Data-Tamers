@@ -2,6 +2,7 @@ package io.analytics.site.controllers;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,17 +11,21 @@ import javax.validation.Valid;
 
 import io.analytics.aspect.HeaderFooter;
 import io.analytics.domain.Account;
+import io.analytics.domain.Dashboard;
 import io.analytics.domain.Filter;
 import io.analytics.domain.GoogleAccount;
 import io.analytics.domain.GoogleUserData;
 import io.analytics.domain.User;
+import io.analytics.domain.WidgetType;
 import io.analytics.enums.HeaderType;
 import io.analytics.forms.NewAccountForm;
 import io.analytics.service.interfaces.IAccountService;
+import io.analytics.service.interfaces.IDashboardService;
 import io.analytics.service.interfaces.IFilterService;
 import io.analytics.service.interfaces.IGoogleAccountService;
 import io.analytics.service.interfaces.ISessionService;
 import io.analytics.service.interfaces.IUserService;
+import io.analytics.service.interfaces.IWidgetService;
 import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SettingsModel;
 
@@ -54,6 +59,8 @@ public class AccountController {
 	@Autowired IGoogleAccountService GoogleAccountService;
 	@Autowired IAccountService AccountService;
 	@Autowired IFilterService FilterService;
+	@Autowired IDashboardService DashboardService;
+	@Autowired IWidgetService WidgetService;
 	
 	// some kind of user service.
 	
@@ -258,6 +265,12 @@ public class AccountController {
 			ga = GoogleAccountService.addNewGoogleAccount(ga);
 			GoogleAccountService.addGoogleAccountToAccount(ga.getId(), accountId);
 			
+			/* Add a default dashboard. */
+			int dashboardId = DashboardService.addNewDashboard(accountId, null, "Default Dashboard");
+			List<WidgetType> widgetTypes = WidgetService.getAllWidgetTypes();
+			for (WidgetType wt : widgetTypes) {
+				WidgetService.addNewWidget(null, wt.getId(), dashboardId, 0);
+			}
 			
 			/* We've made it! */
 			return "redirect:/application";

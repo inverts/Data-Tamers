@@ -2,7 +2,7 @@
 
 /*** GENERAL WIDGET STYLING ***/
 
-.widget { padding:10px 5px 5px 5px; background:#d2d2d2 repeat; height:auto !important; clear:both; box-shadow:0px 0px 6px 0px; 
+.widget { padding:10px 5px 5px 5px; background:#d2d2d2 repeat; height: 400px; clear:both; box-shadow:0px 0px 6px 0px; 
 		  -webkit-box-shadow:0px 0px 6px 0px; -mozbox-shadow:0px 0px 6px 0px; margin:5px 0 5px 10px; }
 .widget .widget_header { padding:0 20px; position:relative; height:40px; }
 .widget .widget_title { position:absolute; font-size:1.7em; color:#444; margin-bottom:5px; font-weight:bold; text-shadow:0px -1px 0px rgba(100,100,100,0.5); }
