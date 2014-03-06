@@ -60,8 +60,8 @@ function getDataForecastData(id, callback) {
 															yKey: dataForecastDataKeys,
 															lineClass: lineclasses,
 															lineType: lineTypes,
-															startIndex: 17, 
-															endIndex: 26, 
+															startIndex: 0, 
+															endIndex: d.data.length - 1, 
 															pointSize: 4,
 															dateLine: new Date().setHours(0,0,0,0) // todays date without time
 														});

@@ -41,8 +41,7 @@ public class PageRenderer extends InternalResourceView {
         	request.setAttribute(DASHBOARD_FORM, model.get(DASHBOARD_FORM));
         
         request.setAttribute("model", model);
-        
-        
+
         String uri = dispatcherPath.substring(0, dispatcherPath.lastIndexOf("/"));
         String page = uri.substring(uri.lastIndexOf("/") + 1);
 

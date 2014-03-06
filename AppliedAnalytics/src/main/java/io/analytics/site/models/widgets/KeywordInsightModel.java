@@ -1,4 +1,4 @@
-package io.analytics.site.models;
+package io.analytics.site.models.widgets;
 
 import io.analytics.domain.KeywordInsightData;
 import io.analytics.service.interfaces.IKeywordInsightService;

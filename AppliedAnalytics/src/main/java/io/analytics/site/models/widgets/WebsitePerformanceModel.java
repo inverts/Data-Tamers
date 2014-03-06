@@ -1,4 +1,4 @@
-package io.analytics.site.models;
+package io.analytics.site.models.widgets;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

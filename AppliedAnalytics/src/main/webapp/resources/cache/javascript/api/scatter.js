@@ -81,7 +81,7 @@
 			          tooltip.transition()
 			               .duration(200)
 			               .style("opacity", .9);
-			          tooltip.html("(" + d[0]
+			          tooltip.html("place word data here "+ "(" + d[0]
 				        + ", " + d[1] + ")")
 			               .style("left", (d3.event.pageX + 5) + "px")
 			               .style("top", (d3.event.pageY - 28) + "px");

@@ -27,10 +27,10 @@ import io.analytics.service.interfaces.IGoogleAccountService;
 import io.analytics.service.interfaces.ISessionService;
 import io.analytics.service.interfaces.IUserService;
 import io.analytics.service.interfaces.IWidgetService;
-import io.analytics.site.models.DashboardModel;
 import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SessionModel;
 import io.analytics.site.models.SessionModel.CorruptedSessionException;
+import io.analytics.site.models.widgets.DashboardModel;
 import io.analytics.site.models.SettingsModel;
 import io.analytics.site.models.SidePanelModel;
 

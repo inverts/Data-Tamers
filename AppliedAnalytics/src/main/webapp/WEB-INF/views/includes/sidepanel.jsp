@@ -11,7 +11,7 @@ $(function(){ getDashboardList($.parseJSON(dashboards)); });
 <nav id="sidepanel" class="sidepanel" data-animate="${SIDEPANEL.animate}">
 	<div class="sidepanel-content" >
 		<div class="sidepanel-header">
-			<img src="<c:url value="/cache/images/logo-280.png" />" />
+			<img src="<c:url value="/cache/images/logo-280.png" />" width=100%/>
 		</div>
 		<div class="sidepanel-nav">
 			<div id="dashboard" class="nav-cell">

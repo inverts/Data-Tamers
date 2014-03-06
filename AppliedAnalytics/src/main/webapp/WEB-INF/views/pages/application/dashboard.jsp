@@ -10,8 +10,6 @@
 <script src="<c:url value="/cache/javascript/boost-performance.js" />"></script>
 
 <script>
-var widgets = [1, 4];
-//$(function() { loadWidgets(widgets); });
 var dashboardId = ${model.dashboardId};
 loadDashboard(dashboardId);
 

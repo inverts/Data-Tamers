@@ -23,7 +23,11 @@ function loadBoostPerformanceWidget(id) {
 			
 			$('.bp-box').click(function() {
 				$(this).children(".bp-content").toggle();
-			})
+			});
+			
+			// add option to menu for table view toggle
+			$tableMode = $('<li>').html('Show as table').on();
+			$('#' + id + ' .dropdown-menu').attr('id', id).append($tableMode);
 	});	
 	
 	

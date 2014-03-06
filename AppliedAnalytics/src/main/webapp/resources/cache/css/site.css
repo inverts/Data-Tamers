@@ -28,7 +28,7 @@ input[type="checkbox"] { margin:0; }
 
 .page { margin:0 auto; position:relative; background:#fff; }
 .page .wrapper { float:left; width:100%; position:relative; min-height:800px;}
-.page .content { min-height: 900px; margin: 60px 0px 0px 310px; }
+.page .content { min-height: 900px; margin: 60px 0px 0px 270px; }
 
 
 
@@ -100,16 +100,16 @@ input { font: inherit; }
 
 
 /******SIDE PANEL******/
-.page .sidepanel-background { left:-500px; background:#444; position:absolute; top:0; z-index:4; box-shadow:0 1px 5px #000; width:310px; }
+.page .sidepanel-background { left:-500px; background:#444; position:absolute; top:0; z-index:4; box-shadow:0 1px 5px #000; width:270px; }
 .page #sidepanel { display:none; float:left; left:-500px; background:#444; position:absolute; top:0; z-index:4; box-shadow:0 1px 5px #000; height: 100%; }
 .sidepanel a  { text-decoration:none; }
 .sidepanel li { list-style-type:none; }
-.sidepanel .sidepanel-content { padding:5px; width:310px; position:relative; z-index:4;}
+.sidepanel .sidepanel-content { padding:5px; width:270px; position:relative; z-index:4;}
 .sidepanel .sidepanel-header { height:110px; padding:20px 10px; }
 .sidepanel .sidepanel-nav { padding:10px; }
 .sidepanel .sidepanel-nav .nav-cell { height:20px; margin:20px 0; padding:20px; background:inherit; }
 .sidepanel .sidepanel-nav .nav-cell:hover { cursor:pointer; }
-.sidepanel .sidepanel-nav .nav-txt { font-size: 20px; color:#fff; line-height:0px; margin-left:10px; }
+.sidepanel .sidepanel-nav .nav-txt { font-size: 18px; color:#fff; line-height:0px; margin-left:10px; }
 .sidepanel .addNewDash { color:#fff; margin:0 0 10px 15px; font-size:15px; clear:both; }
 .sidepanel .addNewDash:hover { cursor:pointer; }
 .sidepanel .addNewDash .glyphicon { color:green; }
@@ -188,3 +188,4 @@ input { font: inherit; }
 .dashboard .dashboard-content, .dashboard .w_container { float:left;}
 .dashboard .dashboard-content { padding:5px 0; }
 
+.dashboard .btn.active { z-index: 0; }

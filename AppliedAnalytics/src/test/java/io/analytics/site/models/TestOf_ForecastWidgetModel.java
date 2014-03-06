@@ -10,9 +10,12 @@ import java.util.List;
 import java.util.Random;
 
 
+
+
 import io.analytics.domain.CoreReportingData;
 import io.analytics.service.interfaces.ICoreReportingService;
 import io.analytics.service.interfaces.ISessionService;
+import io.analytics.site.models.widgets.ForecastWidgetModel;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
