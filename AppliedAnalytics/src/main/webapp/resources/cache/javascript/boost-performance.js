@@ -17,7 +17,7 @@ function loadBoostPerformanceWidget(id) {
 				 					 .append(response);
 			}
 			
-			$('.boostPerformance .widget_title').click(function() {
+			$('.boostPerformance .widget_title').dblclick(function() {
 				$('.boostPerformance .widget-content').slideToggle('fast');
 			});
 			
