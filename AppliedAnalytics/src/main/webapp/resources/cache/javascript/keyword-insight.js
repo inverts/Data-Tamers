@@ -68,7 +68,6 @@ function viewScatter(id) {
 		sdata[1][r] =  data.allCpcVisitsPercent[r];  // visits in percent
 		sdata[0][r] =  data.allCpcBounceRate[r];    // bounce rate in percent
 	}
-
 	
 	console.log(sdata[0][3]);
 	console.log(sdata);
@@ -92,6 +91,7 @@ function viewScatter(id) {
 
 function viewTable(id) {
 	var data = dataset;
+	var n;
 	console.log(data);
 	// if no data display error message
 	if (data == null) {
@@ -128,15 +128,21 @@ function viewTable(id) {
 		table.appendTo("#keywordInsightSettings");
 */
 		// Help keywords table
-		var message = $('<br><h4><b>Improve the website to better meet the needs of the following keywords:</h4><br>');
+		var message = $('<br><h4><b>Improve website for the following keywords:</h4><br>');
 		var table = $('<table><tbody>');
 		var tr = $('<tr>');
 		$('<th>Keywords</th>').appendTo(tr);
 		$('<th>Visits (%)</th>').appendTo(tr);
 		$('<th>Bounce Rate (%)</th>').appendTo(tr);
 		$('<th>Multipage Visits (%)</th>').appendTo(tr);
+		
+		if (data.helpKeywords.length < 5)
+				n = data.helpKeywords.length;
+		else
+				n = 5;
+		
 		tr.appendTo(table);
-		for (var r = 0; r < data.helpKeywords.length; r++) {
+		for (var r = 0; r < n; r++) {
 			var tr = $('<tr>');
 			var key = '<td>' + data.helpKeywords[r] + '</td>';
 			var visits = '<td>' + data.helpVisitsPercent[r] + '</td>';
@@ -162,8 +168,14 @@ function viewTable(id) {
 		$('<th>Visits (%)</th>').appendTo(tr);
 		$('<th>Bounce Rate (%)</th>').appendTo(tr);
 		$('<th>Multipage Visits (%)</th>').appendTo(tr);
+		
+		if (data.bestKeywords.length < 5)
+				n = data.bestKeywords.length;
+		else
+				n = 5;
+		
 		tr.appendTo(table);
-		for (var r = 0; r < data.bestKeywords.length; r++) {
+		for (var r = 0; r < n; r++) {
 			var tr = $('<tr>');
 			var key = '<td>' + data.bestKeywords[r] + '</td>';
 			var visits = '<td>' + data.bestVisitsPercent[r] + '</td>';
@@ -185,11 +197,17 @@ function viewTable(id) {
 		var message = $('<br><h4><b>The best performing keyword substrings:</b></h4><br>');
 		var table = $('<table><tbody>');
 		var tr = $('<tr>');
+		
+		if (data.bestWords.length < 5)
+				n = data.bestWords.length;
+		else
+				n = 5;
+		
 		$('<th>Word Substring</th>').appendTo(tr);
 		$('<th>Keyword Count</th>').appendTo(tr);
 		$('<th>Multipage Visits (%)</th>').appendTo(tr);
 		tr.appendTo(table);
-		for (var r = 0; r < data.bestWords.length; r++) {
+		for (var r = 0; r < n; r++) {
 			var tr = $('<tr>');
 			var word = '<td>' + data.bestWords[r] + '</td>';
 			var keywordCount = '<td>' + data.bestWordsCount[r] + '</td>';
@@ -212,8 +230,14 @@ function viewTable(id) {
 		$('<th>Word Substring</th>').appendTo(tr);
 		$('<th>Keyword Count</th>').appendTo(tr);
 		$('<th>Multipage Visits (%)</th>').appendTo(tr);
+		
+		if (data.worstWords.length < 5)
+				n = data.worstWords.length;
+		else
+				n = 5;
+		
 		tr.appendTo(table);
-		for (var r = 0; r < data.worstWords.length; r++) {
+		for (var r = 0; r < n; r++) {
 			var tr = $('<tr>');
 			var word = '<td>' + data.worstWords[r] + '</td>';
 			var keywordCount = '<td>' + data.worstWordsCount[r] + '</td>';
@@ -230,6 +254,7 @@ function viewTable(id) {
 		message.appendTo("#keywordInsightSettings");
 		table.appendTo("#keywordInsightSettings");
 
+/*
 		// All cpc keywords table
 		var message = $('<br><h4><b>All paid keywords:</b></h4><br>');
 		var table = $('<table><tbody>');
@@ -238,8 +263,14 @@ function viewTable(id) {
 		$('<th>Visits (%)</th>').appendTo(tr);
 		$('<th>Bounce Rate (%)</th>').appendTo(tr);
 		$('<th>Multipage Visits (%)</th>').appendTo(tr);
+		
+		if (data.allCpcKeywords.length < 5)
+				n = allCpcKeywords.length;
+		else
+				n = 5;
+		
 		tr.appendTo(table);
-		for (var r = 0; r < data.allCpcKeywords.length; r++) {
+		for (var r = 0; r < n; r++) {
 			var tr = $('<tr>');
 			var key = '<td>' + data.allCpcKeywords[r] + '</td>';
 			var visits = '<td>' + data.allCpcVisitsPercent[r] + '</td>';
@@ -256,7 +287,7 @@ function viewTable(id) {
 		}
 		message.appendTo("#keywordInsightSettings");
 		table.appendTo("#keywordInsightSettings");
-
+*/
 		$('#' + id + ' .viewOption').removeClass('table').html('option name2')
 				.click(function() {
 					viewScatter(id);
