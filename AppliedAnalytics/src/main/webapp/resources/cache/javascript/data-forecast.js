@@ -31,7 +31,7 @@ function loadDataForecast(id) {
 		getDataForecastData(id, function() {
 			
 			// Collapse Event
-			$('.dataForecast .widget_title').click(function() {
+			$('.dataForecast .widget_title').dblclick(function() {
 				$('.dataForecast .widget-content').slideToggle('fast');
 			});
 			

@@ -33,7 +33,7 @@ function loadKeywordInsight(id) {
 		
 		getKeywordInsightData(id, true, function() {
 			// Collapse Event
-			$('.keywordInsight .widget_title').click(function() {
+			$('.keywordInsight .widget_title').dblclick(function() {
 				$('.keywordInsight .widget-content').slideToggle('fast');
 			});
 			
