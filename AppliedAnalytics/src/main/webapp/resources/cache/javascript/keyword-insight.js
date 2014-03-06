@@ -85,7 +85,7 @@ function viewTable(id) {
 		var data = dataset;
 		console.log(data);
 
-		// Remove keywords table
+	/*	// Remove keywords table
 		var message = $('<h4><fmt:message key="keywordinsight.removeSuggestion"/></h4><br>');
 		var table = $('<table><tbody>');
 		var tr = $('<tr>');
@@ -111,7 +111,7 @@ function viewTable(id) {
 		}
 		message.appendTo("#keywordInsightSettings");
 		table.appendTo("#keywordInsightSettings");
-
+*/
 		// Help keywords table
 		var message = $('<br><h4><fmt:message key="keywordinsight.changeSuggestion"/></h4><br>');
 		var table = $('<table><tbody>');

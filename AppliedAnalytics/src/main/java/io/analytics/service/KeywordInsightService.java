@@ -44,8 +44,8 @@ public class KeywordInsightService implements IKeywordInsightService {
 		/* * * * * * * * * * * * * * * * * * * * *
 		/* GA query organic keywords, visits, visitBounceRate
 		/* * * * * * * * * * * * * * * * * * * * */
-		GaData gaData = REPOSITORY.getKeywords(credential, profileID, startDate, endDate, maxResults, "organic", subString);
-
+		
+		GaData gaData =null;
 		//printColumnHeaders(gaData);
 		//printDataTable(gaData);
 
@@ -53,13 +53,16 @@ public class KeywordInsightService implements IKeywordInsightService {
 		ArrayList<String> dataTypes = new ArrayList<String>();
 		// Create the domain class and add data
 		KeywordInsightData dataObject = new KeywordInsightData();
-
-		// get Organic keyword data
+		
 		int keywordColumn = -1; 
 		int visitsColumn = -1; 
 		int visitBounceRateColumn = -1; 
 		int column = -1;
 		boolean hasData = false;
+
+/*		// get Organic keyword data
+		
+		gaData = REPOSITORY.getKeywords(credential, profileID, startDate, endDate, maxResults, "organic", subString);
 
 		if (gaData!=null) {
 
@@ -103,10 +106,11 @@ public class KeywordInsightService implements IKeywordInsightService {
 			
 			hasData = true;
 		}
+		*/
 		/* * * * * * * * * * * * * * * * * * * * *
 		/* GA query organic private search visits total (use filter keyword==(not provided)
 		/* * * * * * * * * * * * * * * * * * * * */
-
+/*
 		gaData = REPOSITORY.getMediumVisitsTotal(credential, profileID, startDate, endDate, CoreReportingRepository.ORGANIC_MEDIUM, CoreReportingRepository.KEYWORD_NOT_PROVIDED_FILTER);
 
 		if (gaData!=null) {
@@ -135,10 +139,11 @@ public class KeywordInsightService implements IKeywordInsightService {
 			dataObject.setPrivateOrganicVisitsTotal(datum);
 			hasData = true;
 		}
+		*/
 		/* * * * * * * * * * * * * * * * * * * * *
 		/* GA query organic search visits total
 		/* * * * * * * * * * * * * * * * * * * * */
-		gaData = REPOSITORY.getMediumVisitsTotal(credential, profileID, startDate, endDate, CoreReportingRepository.ORGANIC_MEDIUM);
+/*		gaData = REPOSITORY.getMediumVisitsTotal(credential, profileID, startDate, endDate, CoreReportingRepository.ORGANIC_MEDIUM);
 		if (gaData!=null){
 			//printColumnHeaders(gaData);
 			//printDataTable(gaData);
@@ -165,7 +170,7 @@ public class KeywordInsightService implements IKeywordInsightService {
 			dataObject.setOrganicVisitsTotal(datum);
 			hasData = true;
 		}
-
+*/
 		/* * * * * * * * * * * * * * * * * * * * *
 		/* GA query CPC (paid) keywords, visits, visitBounceRate
 		/* * * * * * * * * * * * * * * * * * * * */
