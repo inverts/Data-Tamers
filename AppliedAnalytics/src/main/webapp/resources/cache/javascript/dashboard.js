@@ -9,11 +9,38 @@ $(function() {
 	$(".dashboard-content").sortable({ 
 		revert: true, 
 		tolerance: "pointer", 
-		containment: $(".content")
+		containment: $(".content"),
+		stop: updateWidgetPosition
 	});
 	
 
 });
+
+
+function updateWidgetPosition() {
+	
+	var result = [];
+	var widgets = $('.w_container');
+	
+	// look for the widgets that have changed positions
+	$.each(widgets, function() {
+		var $widget = $(this);
+		var idx = $widget.index();
+		if (idx == parseInt($widget.data('pos')))
+			return;
+		
+		var obj = {'widgetId': $widget.data('widgetId'), 'pos': idx};
+		result.push(obj);
+		$widget.data('pos', idx);
+	});
+	
+	if(result.length > 0) {
+		$.post(applicationRoot + "updateWidgetPosition", {"widgets": JSON.stringify(result) },
+				function() {
+		});
+	}
+}
+
 
 /**
  * Clears the current dashboard and loads the provided dashboardId, if available.
@@ -78,6 +105,7 @@ function loadWidgets(widgets) {
 
 function loadWidget(widgetTypeId, widgetId, i)
 {
+	var $dashboard = $('.dashboard-content')
 	//Create an empty widget div.
 	var $div = $('<div>').addClass('w_container')
 						 .prop('draggable', true)
@@ -85,7 +113,9 @@ function loadWidget(widgetTypeId, widgetId, i)
 							 	'widgetTypeId': widgetTypeId, 
 							 	'widgetId': widgetId 
 							   })
-						 .appendTo($('.dashboard-content'));
+						 .appendTo($dashboard);
+	
+	$div.data('pos', $div.index());
 	
 	switch(widgetTypeId)
 	{
@@ -118,9 +148,9 @@ function loadWidget(widgetTypeId, widgetId, i)
 			$div.attr('id', 'boostPerformanceWidget' + i);
 			loadBoostPerformanceWidget('boostPerformanceWidget' + i);
 			break;
-			
 		
 	}
+	
 
 }
 
