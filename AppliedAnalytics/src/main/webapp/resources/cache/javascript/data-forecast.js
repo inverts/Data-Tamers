@@ -3,7 +3,6 @@
  */
 
 /* Global Variables */
-//var dataForecastData = window.newData;
 var lineTypes = ['', 'cardinal', ''];
 var lineclasses = ['raw', 'smooth', 'normal'];
 var dataForecastDataKeys = ['jsonHitCount', 'smooth', 'normal'];
@@ -29,21 +28,19 @@ function loadDataForecast(id) {
 		
 		
 		getDataForecastData(id, function() {
-			
-			// Collapse Event
-			/*$('.dataForecast .widget_title').dblclick(function() {
-				$('.dataForecast .widget-content').slideToggle('fast');
-			});*/
-			
+
+			// Setup forecast buttons
 			$('#rawBtn').on('click', function() { toggleLine('raw', this); });
 			$('#normBtn').on('click', function() { toggleLine('normal', this); });
 			$('#smoothBtn').on('click', function() { toggleLine('smooth', this); });
 			
+			// legend
 			createLegend(lineclasses);
 			
+			// initially turn on RAW
 			$('#rawBtn').click(); // initially turn on raw data.
 			
-			$('#' + id + ' .dropdown-menu').attr('id', id);
+			//$('#' + id + ' .dropdown-menu').attr('id', id);
 			
 		});
 

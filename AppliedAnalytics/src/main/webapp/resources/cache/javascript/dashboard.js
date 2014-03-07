@@ -2,22 +2,6 @@
  *  dashboard.js
  */
 
-
-$(function() {
-	
-	// Dragging Feature
-	$(".dashboard-content").sortable({ 
-		revert: true, 
-		tolerance: "pointer", 
-		containment: $(".content"),
-		stop: updateWidgetPosition
-	});
-
-});
-
-
-
-
 /**
  * Clears the current dashboard and loads the provided dashboardId, if available.
  * If the provided dashboardId does not exist, the dashboard will not be updated.
@@ -38,10 +22,13 @@ function loadDashboard(dashboardId) {
 				$('.dashboard-content').html("");
 				loadWidgets(widgets);
 				
-				$('.w_container').on('dblclick', '.widget_title', function() {
-					$(this).parent().siblings('.widget-content').slideToggle('fast');
+				$(".dashboard-content").sortable({ 
+					revert: true, 
+					tolerance: "pointer", 
+					containment: $(".content"),
+					stop: updateWidgetPosition
 				});
-				
+	
 			});
 }
 
@@ -74,7 +61,6 @@ function loadWidgets(widgets) {
 		
 		// after widgets load, set widget events
 		loadWidget(widgetTypeId, widgetId, i);
-
 		
 	}
 	
@@ -99,39 +85,60 @@ function loadWidget(widgetTypeId, widgetId, i)
 	
 	$div.data('pos', $div.index());
 	
+	var elementId;
+	
 	switch(widgetTypeId)
 	{
 		case 1: 
-			$div.attr('id', 'dataForecastWidget' + i);
-			loadDataForecast('dataForecastWidget' + i);
+			elementId = 'dataForecastWidget' + i;
+			$div.attr('id', elementId);
+			loadDataForecast(elementId);
 			break;
 			
 		case 2:
-			$div.attr('id', 'websitePerformanceWidget' + i);
+			elementId = 'websitePerformanceWidget' + i;
+			$div.attr('id', elementId);
 			loadWebsitePerformanceWidget('websitePerformanceWidget' + i);
 			break;
 			
 		case 7:
-			$div.attr('id', 'keyContributingFactorsWidget' + i);
-			loadKeyContributingFactorsWidget('keyContributingFactorsWidget' + i);
+			elementId = 'keyContributingFactorsWidget' + i;
+			$div.attr('id', elementId);
+			loadKeyContributingFactorsWidget(elementId);
 			break;
 		
 		case 4:
-			$div.attr('id', 'keywordInsightWidget' + i);
-			loadKeywordInsight('keywordInsightWidget' + i);
+			elementId = 'keywordInsightWidget' + i;
+			$div.attr('id', elementId);
+			loadKeywordInsight(elementId);
 			break;
 			
-		case 5: 
-			$div.attr('id', 'growingProblemsWidget' + i);
-			loadGrowingProblemsWidget('growingProblemsWidget' + i);
+		case 5:
+			elementId = 'growingProblemsWidget' + i;
+			$div.attr('id', elementId);
+			loadGrowingProblemsWidget(elementId);
 			break;
 			
 		case 6: 
-			$div.attr('id', 'boostPerformanceWidget' + i);
-			loadBoostPerformanceWidget('boostPerformanceWidget' + i);
+			elementId = 'boostPerformanceWidget' + i;
+			$div.attr('id', elementId);
+			loadBoostPerformanceWidget(elementId);
 			break;
 		
 	}
+	
+	/*** GENERAL WIDGET EVENTS ***/
+
+	$div.on('dblclick', '.widget_title', function() { // add collapse event to widget
+			$(this).parent().siblings('.widget-content').slideToggle('fast');
+		}) 
+		.on('click', ' .dropdown-menu a.removeWidget', function() { // remove menu event
+			Modal.call({
+				'title' : 'Remove Widget',
+				'content': 'Remove ' + $('#' + elementId + ' .widget_title').html() + ' widget?',
+				'action': function() { removeWidget(elementId); }
+			});
+		});
 	
 }
 
@@ -189,14 +196,13 @@ function addWidget(element, dashboardId)
  * Removes a widget from the dashboard and deletes it from the database.
  * @param element - the element of the menu item clicked.
  */
-function removeWidget(element) {
+function removeWidget(id) {
 
-	if ($(element).length) {
-		
-		var id = $(element).closest('ul').attr('id');
+	if (id) {
 		var widget = $('#' + id);
 		var widgetId = widget.data('widgetId');
 		var nWidgets = $('.dashboard-content').data('n');
+		var widgetName = $('#' + id + ' .widget_title').html();
 
 		$.post(applicationRoot + "removeWidget", {widgetId: widgetId}, 
 				function(response) {
@@ -205,6 +211,12 @@ function removeWidget(element) {
 					// decrement the number of widgets on the page.
 					$('.dashboard-content').data('n', --nWidgets);
 						console.warn('removed widget: ' + id);
+						
+						//TODO: Make the JSON response the title and content so we can use string properties.
+						Modal.prompt({
+							'title' : 'Remove Widget',
+							'content': widgetName + ' has been removed!'
+						});
 				});
 
 	}
