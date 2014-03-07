@@ -12,34 +12,10 @@ $(function() {
 		containment: $(".content"),
 		stop: updateWidgetPosition
 	});
-	
 
 });
 
 
-function updateWidgetPosition() {
-	
-	var result = [];
-	var widgets = $('.w_container');
-	
-	// look for the widgets that have changed positions
-	$.each(widgets, function() {
-		var $widget = $(this);
-		var idx = $widget.index();
-		if (idx == parseInt($widget.data('pos')))
-			return;
-		
-		var obj = {'widgetId': $widget.data('widgetId'), 'pos': idx};
-		result.push(obj);
-		$widget.data('pos', idx);
-	});
-	
-	if(result.length > 0) {
-		$.post(applicationRoot + "updateWidgetPosition", {"widgets": JSON.stringify(result) },
-				function() {
-		});
-	}
-}
 
 
 /**
@@ -61,6 +37,11 @@ function loadDashboard(dashboardId) {
 				widgets = widgets.sort(compareWidgetPriority);
 				$('.dashboard-content').html("");
 				loadWidgets(widgets);
+				
+				$('.w_container').on('dblclick', '.widget_title', function() {
+					$(this).parent().siblings('.widget-content').slideToggle('fast');
+				});
+				
 			});
 }
 
@@ -91,15 +72,16 @@ function loadWidgets(widgets) {
 		var widgetTypeId = widgets[i].widgetTypeId;
 		var widgetId = widgets[i].id;
 		
-		//Label and fill the div accordingly depending on the widget type.
-		//TODO: Create widget id to function mappings elsewhere and use them here.
+		// after widgets load, set widget events
 		loadWidget(widgetTypeId, widgetId, i);
+
 		
 	}
 	
 	// store number of widgets loaded
 	// widget will not be dragged while user clicks on content
 	$('.dashboard-content').data('n', widgets.length).sortable({ cancel: '.widget-content'});
+
 }
 
 
@@ -151,7 +133,6 @@ function loadWidget(widgetTypeId, widgetId, i)
 		
 	}
 	
-
 }
 
 
@@ -228,6 +209,35 @@ function removeWidget(element) {
 
 	}
 
+}
+
+/**
+ * Updates the database of the new position of the widgets.
+ * Checks all widgets to see if its index() is different than
+ * its original position.
+ */
+function updateWidgetPosition() {
+	
+	var result = [];
+	var widgets = $('.w_container');
+	
+	// look for the widgets that have changed positions
+	$.each(widgets, function() {
+		var $widget = $(this);
+		var idx = $widget.index();
+		if (idx == parseInt($widget.data('pos')))
+			return;
+		
+		var obj = {'widgetId': $widget.data('widgetId'), 'pos': idx};
+		result.push(obj);
+		$widget.data('pos', idx);
+	});
+	
+	if(result.length > 0) {
+		$.post(applicationRoot + "updateWidgetPosition", {"widgets": JSON.stringify(result) },
+				function() {
+		});
+	}
 }
 
 

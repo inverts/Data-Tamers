@@ -21,9 +21,9 @@ function loadWebsitePerformanceWidget(id) {
 		//	var p = new Processing(canvas, performanceSketch);
 			
 		// Collapse Event
-		$('.pagePerformance .widget_title').dblclick(function() {
+		/*$('.pagePerformance .widget_title').dblclick(function() {
 			$('.pagePerformance .widget-content').slideToggle('fast');
-		});
+		});*/
 
 	});		
 }

@@ -31,9 +31,9 @@ function loadDataForecast(id) {
 		getDataForecastData(id, function() {
 			
 			// Collapse Event
-			$('.dataForecast .widget_title').dblclick(function() {
+			/*$('.dataForecast .widget_title').dblclick(function() {
 				$('.dataForecast .widget-content').slideToggle('fast');
-			});
+			});*/
 			
 			$('#rawBtn').on('click', function() { toggleLine('raw', this); });
 			$('#normBtn').on('click', function() { toggleLine('normal', this); });

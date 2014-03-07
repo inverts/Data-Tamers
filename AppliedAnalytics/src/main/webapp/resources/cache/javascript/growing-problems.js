@@ -18,8 +18,8 @@ function loadGrowingProblemsWidget(id) {
 				 					 .append(response);
 			}
 			
-			$('.growingProblems .widget_title').click(function() {
+			/*$('.growingProblems .widget_title').click(function() {
 				$('.growingProblems .widget-header').slideToggle('fast');
-			});
+			});*/
 	});	
 }
