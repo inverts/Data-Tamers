@@ -32,7 +32,7 @@ function loadKeywordInsight(id) {
 		$li = $('<li>').append($a);
 		$('#' + id + ' .dropdown-menu').append($li);
 		
-		getKeywordInsightData(id, true, function() {
+		getKeywordInsightData(id,true, function() {
 			// Collapse Event
 			$('.keywordInsight .widget_title').dblclick(function() {
 				$('.keywordInsight .widget-content').slideToggle('fast');
@@ -56,17 +56,17 @@ function viewScatter(id) {
 		//		.append('<h2><fmt:message key="keywordinsight.gaOverQuotaError"/></h2>');
 	} else { // else parse and display data
 	
-	sdata = new Array(2);
+/*	sdata = new Array(2);
 	//var n = data.allCpcKeywords.length;
 	var n = 10;
 	for (var i = 0; i < 2 ; i++) {
 		sdata[i] = new Array(n);
-	}
-		
+	} */
+	var sdata;	
 	for(var r = 0; r < n; r++)
-		data.allCpcKeywords[r];   // keywords
-		sdata[1][r] =  data.allCpcVisitsPercent[r];  // visits in percent
+		//data.allCpcKeywords[r];   // keywords
 		sdata[0][r] =  data.allCpcBounceRate[r];    // bounce rate in percent
+		sdata[1][r] =  data.allCpcVisitsPercent[r];  // visits in percent
 	}
 	
 	console.log(sdata[0][3]);
