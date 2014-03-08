@@ -24,6 +24,7 @@
 <script src="<c:url value="/cache/javascript/libs/d3.v3.min.js" />"></script>
 <script src="<c:url value="/cache/javascript/libs/bootstrap.min.js" />"></script>
 <script src="<c:url value="/cache/javascript/plugins/jquery.tipsy.js" />"></script>
+<script src="<c:url value="/cache/javascript/modal.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/utilities.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/test.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/graph.js" />"></script>
@@ -61,6 +62,9 @@
 		<jsp:include page="${FOOTER.path}"/>
 		
 	</div>
+	
+	<!-- Site Modal to be used whenever -->
+	<jsp:include page="/WEB-INF/views/includes/modal.jsp"/>
 	
 </body>
 </html>

@@ -33,7 +33,7 @@
 	/* function declaration */
 	$.fn.graph = function (params) { // params is the javascript object of all of the parameters
 		return this.each(function() {
-			var $this = $(this).sortable({ cancel: '.widget-content'}); 	// disable widget drag on graph
+			var $this = $(this);	// disable widget drag on graph
 			var settings = $.extend({}, defaults, params); 					// we are integrating our default values into our params.
 			
 			var padding = {

@@ -40,8 +40,12 @@ input { font: inherit; }
 .textbox { height:45px; padding:5px; width:320px; }
 .disabled { opacity:0.5; }
 .checkbox { width:18px; height:18px; vertical-align:middle; display:inline; min-height:auto; margin-top:0;}
+.btn { min-width:75px; }
 
 #ui-datepicker-div { font-size: 15px; }
+
+/* Modal */
+#modal .prompt { text-align:center; }
 
 /* Standard page size and position */
 .login, .start, .terms, .personal-info, .main-goal { margin-left:340px; padding-top:30px;}
@@ -113,8 +117,8 @@ input { font: inherit; }
 .sidepanel .addNewDash { color:#fff; margin:0 0 10px 15px; font-size:15px; clear:both; }
 .sidepanel .addNewDash:hover { cursor:pointer; }
 .sidepanel .addNewDash .glyphicon { color:green; }
-.sidepanel .dashlist { vertical-align:middle; margin:0 0 -10px 0; font-size:11px; width:97%; display:none; }
-.sidepanel #dashlist.dashlist { overflow:auto; max-height:200px; margin-bottom:25px; }
+.sidepanel .dashlist { vertical-align:middle; font-size:11px; width:97%; display:none; }
+.sidepanel #dashlist { overflow:auto; max-height:200px; margin-bottom:25px; }
 
 .sidepanel .dashlist li { color:#fffffe; height:30px; padding-left:15px; position:relative; background:none; }
 .sidepanel .dashlist li:hover { background:rgb(128, 128, 128); color:#fff; }

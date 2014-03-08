@@ -15,8 +15,11 @@ $(function() {
 	});
 	
 	/* dashboard Navigation action */
-	$("#dashboard").click(function() {
-		$(".dashlist").slideToggle();
+	$("#dashboard").hover(function() {
+		$(".dashlist").slideDown('fast');
+		$('.sidepanel-content').hover(null, function() {
+								$(".dashlist").slideUp('fast');
+							});
 	});
 	
 	/* add new dashboard */
@@ -51,13 +54,18 @@ function addDashboardPage() {
 /* Removes a dashboard */
 function removeDashboard(dashboardId) {
 	
-	$.post(applicationRoot + "application/deleteDashboard", {dashboardId: dashboardId}, function(result) {
-		result = $.parseJSON(result);
-		var $dash = $("#dashlist #" + result.dashboardId);
-		var name = $dash.children("a").html();
-		if (name != "Default Dashboard" && name != "Second Dashboard")
-			$dash.remove();
-		alert("removed " + name);
+	$.post(applicationRoot + "application/deleteDashboard", {dashboardId: dashboardId}, 
+			function(result) {
+				result = $.parseJSON(result);
+				var $dash = $("#dashlist #" + result.dashboardId);
+				var name = $dash.children("a").html();
+				if (name != "Default Dashboard" && name != "Second Dashboard")
+					$dash.remove();
+				
+				Modal.alert({
+					"title": "Remove Dashboard",
+					"content": "Dashboard \"" + name + "\" has been successfully removed!",
+				});
 	});
 }
 
@@ -76,7 +84,14 @@ function createDashboardLink(dashboard) {
 	/* Set remove dashboard event */
 	$delete.click(function(e){
 		e.preventDefault();
-		removeDashboard($(this).parent().attr("id"));
+		var name = $(this).siblings("a").html();
+		var id = $(this).parent().attr("id");
+		Modal.call({
+			"title": "Remove Dashboard",
+			"content": "Delete dashboard \"" + name + "\"?",
+			"action": function(e) { e.preventDefault(); removeDashboard(id); }
+		});
+		
 	});
 	
 	$("#dashlist #" + dashboard.id).hover(function() {
@@ -91,21 +106,36 @@ function showAddDashboardPanel(width, showPage) {
     	addDashboardPage();
     	$(".addDashboard")
     		.show()
-    		.animate({width: width}, 500, 'swing', function() {
-                    $('.addDashboard-content').show();                        
-                    $(window).on('click.dashboard', function() {
+    		.animate({width: width}, 500, "swing", function() {
+                    $(".addDashboard-content").show();                        
+                    $(window).on("click.dashboard", function() {
                     	hideAddDashboardPanel();
                     });        
                     
                     /* Create dashboard submission */
                 	$("#dash-submit").on("click", function(e) {
                 		e.preventDefault();
-                		$.post(applicationRoot + "application/createDashboard", 
-                				{ name: $("#dashboardName").val() },
-                				function(result) {
-                						createDashboardLink($.parseJSON(result));
-                						hideAddDashboardPanel();
-                				});
+                		
+                		var name = $("#dashboardName").val();
+                		
+                		Modal.call({
+                			"title": "Create Dashboard",
+                			"content": "Create new dashboard \"" + name + "\"?",
+                			"action": function(e) { 
+                				e.preventDefault();
+                				$.post(applicationRoot + "application/createDashboard", { name: name },
+                        				function(result) {
+                        						createDashboardLink($.parseJSON(result));
+                        						Modal.alert({
+                        							"title": "Create Dashboard",
+                        							"content": name + " has been successfully created!",
+                        						})
+                        						hideAddDashboardPanel();
+                        				});
+                			}
+                		
+                		});
+                		
                 	});
                     
                     
@@ -115,12 +145,12 @@ function showAddDashboardPanel(width, showPage) {
 
 /* Hides right pane */
 function hideAddDashboardPanel() {
-	$(".addDashboard").animate({width: 0}, 500, 'swing', function() {
-			$('.right-pane')
-				.removeClass('addDashboard')
+	$(".addDashboard").animate({width: 0}, 500, "swing", function() {
+			$(".right-pane")
+				.removeClass("addDashboard")
 				.hide();
-            $(window).off('click.dashboard');
-            $('.addDashboard-content').hide(); 
+            $(window).off("click.dashboard");
+            $(".addDashboard-content").hide(); 
     });
 }
 
