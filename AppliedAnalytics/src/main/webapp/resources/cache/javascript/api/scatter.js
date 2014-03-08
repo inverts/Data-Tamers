@@ -19,9 +19,7 @@
 	/* function declaration */
 	$.fn.scatter = function (params) {
 		return this.each(function() {
-			var $this = $(this).sortable({
-				cancel : '.widget-content'
-			}); // disable widget drag on graph
+			var $this = $(this);
 			var settings = $.extend({}, defaults, params);
 			if(settings.data == null){
 				return;

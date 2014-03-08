@@ -69,7 +69,7 @@ var Modal = {
 				/********************************
 				 * Simply One button modal prompt
 				 ********************************/
-				prompt: function(params) {
+				alert: function(params) {
 					
 						var $modal = $('#modal');
 						var defaults = {

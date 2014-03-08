@@ -62,7 +62,7 @@ function removeDashboard(dashboardId) {
 				if (name != "Default Dashboard" && name != "Second Dashboard")
 					$dash.remove();
 				
-				Modal.prompt({
+				Modal.alert({
 					"title": "Remove Dashboard",
 					"content": "Dashboard \"" + name + "\" has been successfully removed!",
 				});
@@ -126,7 +126,7 @@ function showAddDashboardPanel(width, showPage) {
                 				$.post(applicationRoot + "application/createDashboard", { name: name },
                         				function(result) {
                         						createDashboardLink($.parseJSON(result));
-                        						Modal.prompt({
+                        						Modal.alert({
                         							"title": "Create Dashboard",
                         							"content": name + " has been successfully created!",
                         						})

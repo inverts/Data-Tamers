@@ -25,7 +25,7 @@ function loadDashboard(dashboardId) {
 				$(".dashboard-content").sortable({ 
 					revert: true, 
 					tolerance: "pointer", 
-					containment: $(".content"),
+					zIndex: 100,
 					stop: updateWidgetPosition
 				});
 	
@@ -66,7 +66,7 @@ function loadWidgets(widgets) {
 	
 	// store number of widgets loaded
 	// widget will not be dragged while user clicks on content
-	$('.dashboard-content').data('n', widgets.length).sortable({ cancel: '.widget-content'});
+	$('.dashboard-content').data('n', widgets.length);
 
 }
 
@@ -76,7 +76,7 @@ function loadWidget(widgetTypeId, widgetId, i)
 	var $dashboard = $('.dashboard-content')
 	//Create an empty widget div.
 	var $div = $('<div>').addClass('w_container')
-						 .prop('draggable', true)
+						 //.prop('draggable', true)
 						 .data({
 							 	'widgetTypeId': widgetTypeId, 
 							 	'widgetId': widgetId 
@@ -213,7 +213,7 @@ function removeWidget(id) {
 						console.warn('removed widget: ' + id);
 						
 						//TODO: Make the JSON response the title and content so we can use string properties.
-						Modal.prompt({
+						Modal.alert({
 							'title' : 'Remove Widget',
 							'content': widgetName + ' has been removed!'
 						});
