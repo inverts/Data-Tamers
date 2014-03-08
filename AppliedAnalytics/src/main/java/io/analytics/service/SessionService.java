@@ -59,8 +59,10 @@ public class SessionService implements ISessionService {
 		}
 		if (credentials == null) {
 			return false;
-		} else if (settings == null) {
-			
+		} else if (credentials.getAccessToken() == null) {
+			return false;
+		}
+		else if (settings == null) {
 			this.credentials = credentials;
 			settings = new SettingsModel(this, ManagementService);
 			session.setAttribute("settings", settings);

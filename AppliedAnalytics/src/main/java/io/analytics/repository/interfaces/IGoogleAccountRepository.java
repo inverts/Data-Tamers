@@ -47,4 +47,11 @@ public interface IGoogleAccountRepository {
 	 */
 	public boolean addRelationshipToAccount(int googleAccountId, int accountId);
 	
+	/**
+	 * Updates a Google Account in the database. 
+	 * 
+	 * @param ga The Google Account with a valid id whose attributes have changed and need to be updated.
+	 * @return A boolean indicating whether a matching Google Account was found in the database.
+	 */
+	public boolean updateGoogleAccount(GoogleAccount ga);
 }
