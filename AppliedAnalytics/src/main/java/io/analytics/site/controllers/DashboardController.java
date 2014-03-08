@@ -118,13 +118,33 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 			
 			//By default, pick the first available GoogleAccount as the account that we want to set as active.
 			sessionModel.setActiveGoogleAccount(availableGoogleAccounts.get(0));
+		} else {
+			//For now, we will return to login if we couldn't find any Google Account
+			SessionService.redirectToLogin(session, request, response);
 		}
+
 		
 		if (session.getAttribute("credentials") == null) {
 			GoogleAuthorizationService gas = new GoogleAuthorizationService();
 			session.setAttribute("credentials", gas.getAccountCredentials(sessionModel.getActiveGoogleAccount().getActiveRefreshToken()));
+		} else {
+			//Check to see if the credentials in the session are different than the active google account.
+			GoogleAccount googleAccount = sessionModel.getActiveGoogleAccount();
+			String sessionRefreshToken;
+			try {
+				sessionRefreshToken = sessionModel.getCredentials().getRefreshToken();
+				if (!googleAccount.getActiveRefreshToken().equals(sessionRefreshToken)) {
+					//If they are different, use the session credentials and update the database, 
+					//since the Auth servlet updates the session credentials.
+					googleAccount.setActiveRefreshToken(sessionRefreshToken);
+					GoogleAccountService.updateGoogleAccount(googleAccount);
+				}
+	
+			} catch (CorruptedSessionException e) {
+				e.printStackTrace();
+				SessionService.redirectToLogin(session, request, response);
+			}
 		}
-		
 		
 		
 		/* This checks for the Google credentials and populates the "settings" attribute if it is empty */

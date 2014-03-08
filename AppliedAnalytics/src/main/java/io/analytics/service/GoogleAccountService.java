@@ -34,4 +34,9 @@ public class GoogleAccountService implements IGoogleAccountService {
 	public List<GoogleAccount> getGoogleAccountsForAccount(int accountId) {
 		return GoogleAccountRepository.getGoogleAccountsForAccount(accountId);
 	}
+
+	@Override
+	public boolean updateGoogleAccount(GoogleAccount ga) {
+		return GoogleAccountRepository.updateGoogleAccount(ga);
+	}
 }

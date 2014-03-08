@@ -46,7 +46,15 @@ public class GoogleAuthorizationService implements ServletContextAware {
 	public void setClientSecretLocation(String location) {
 		clientSecretLocation =servletContext.getRealPath(location);
 	}
-	// Request a new Access token using the refresh token.
+	/**
+	 * Requests a new Access token using the refresh token and packages it into a 
+	 * Credential object. Note that even if the refresh token is invalid, this
+	 * will still return a Credential object - but there won't be any access token set.
+	 * 
+	 * @param refreshToken The Google OAuth refresh token.
+	 * @return A Credential containing the access token if the refresh token was valid,
+	 * otherwise a Credential with a null access token, but the refresh token set.
+	 */
 	public Credential getAccountCredentials(String refreshToken) {
 		Credential credential = createCredentialWithRefreshToken(HTTP_TRANSPORT, JSON_FACTORY,
 				new TokenResponse().setRefreshToken(refreshToken));

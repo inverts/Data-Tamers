@@ -168,5 +168,26 @@ public class GoogleAccountRepository implements IGoogleAccountRepository {
 
         return (rowsAffected == 1);
 	}
+	
+	public boolean updateGoogleAccount(GoogleAccount ga) {
+
+		String preStatement;
+		Object[] args;
+		int[] argTypes;
+
+		preStatement = String.format("UPDATE `%s` SET `%s`=?, `%s`=? WHERE `%s`=?", GOOGLEACCOUNTS_TABLE, GoogleAccountsTable.REFRESH_TOKEN, GoogleAccountsTable.OWNER_ACCOUNT_ID, GoogleAccountsTable.ID);
+		args = new Object[] { ga.getActiveRefreshToken(), ga.getOwnerAccountId(), ga.getId() };
+		argTypes = new int[] { Types.VARCHAR, Types.INTEGER, Types.INTEGER};
+		int rowsAffected = 0;
+		try {
+			rowsAffected = jdbc.update(preStatement, args, argTypes);
+		} catch (DataAccessException e) {
+			//TODO: Throw the exception upwards
+			e.printStackTrace();
+		}
+		if (rowsAffected !=1)
+			return false;
+		return true;
+	}
 
 }
