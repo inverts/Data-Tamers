@@ -26,7 +26,7 @@ function loadKeywordInsight(id) {
 		$li = $('<li>').append($a);
 		$('#' + id + ' .dropdown-menu').append($li);
 
-		getKeywordInsightData(id,true, function() {
+		getKeywordInsightData(id,false, function() {
 			// Collapse Event
 			/*$('.keywordInsight .widget_title').dblclick(function() {
 				$('.keywordInsight .widget-content').slideToggle('fast');
