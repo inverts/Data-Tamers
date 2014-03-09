@@ -26,7 +26,7 @@ function loadKeywordInsight(id) {
 		$li = $('<li>').append($a);
 		$('#' + id + ' .dropdown-menu').append($li);
 
-		getKeywordInsightData(id,false, function() {
+		getKeywordInsightData(id,true, function() {
 			// Collapse Event
 			/*$('.keywordInsight .widget_title').dblclick(function() {
 				$('.keywordInsight .widget-content').slideToggle('fast');
@@ -46,7 +46,7 @@ function viewScatter(id) {
 	// if no data display error message
 	if (data == null) {
 		console.log("keyword insight data is null.");
-		$('<h4>"Keyword Insight data is returning a null."</h4>').appendTo("#keywordInsightSettings")
+		$('<h4>"Keyword Insight data is returning a null."</h4>').appendTo("#keywordInsightSettings");
 		sdata = null;
 		
 	} else { // else parse and display data
@@ -82,8 +82,8 @@ function viewTable(id) {
 	// if no data display error message
 	if (data == null) {
 		console.log("keyword insight data is null.")
-		//("#keywordInsightSettings")
-		//		.append('<h2><fmt:message key="keywordinsight.gaOverQuotaError"/></h2>');
+		$('<h4>"Keyword Insight data is returning a null."</h4>').appendTo("#keywordInsightSettings");
+
 	} else { // else parse and display data
 
 		/*	// Remove keywords table
