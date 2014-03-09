@@ -49,10 +49,10 @@
 				.style("stroke", "#666").style("stroke-width", 1);
 			var padding = 40; //padding for scale values
 
-			var maxdataX = d3.max(dataset, function(d) {
+			var maxdataX = d3.max(sdata, function(d) {
 				return d[0];
 			});
-			var maxdataY = d3.max(dataset, function(d){
+			var maxdataY = d3.max(sdata, function(d){
 				return d[1];
 			});
 
@@ -66,7 +66,7 @@
 
 
 			// make circles for each data point
-			svg.selectAll("circle").data(dataset).enter()
+			svg.selectAll("circle").data(sdata).enter()
 				.append("circle")
 					.attr("cx", function(d) {
 						return xScale(d[0]);
@@ -74,13 +74,15 @@
 					.attr("cy", function(d) {
 						return yScale(d[1]);
 					})
+					.attr("ke", function(d) {
+						return yScale(d[2]);
+					})
 					.attr("r", 5)
 					.on("mouseover", function(d) {
 			          tooltip.transition()
 			               .duration(200)
 			               .style("opacity", .9);
-			          tooltip.html("place word data here "+ "(" + d[0]
-				        + ", " + d[1] + ")")
+			          tooltip.html(d[2]) //+ "(" + d[0] + ", " + d[1] + ")")
 			               .style("left", (d3.event.pageX + 5) + "px")
 			               .style("top", (d3.event.pageY - 28) + "px");
 			      })
@@ -116,7 +118,7 @@
 			    .attr("text-anchor", "middle")
 			    .attr("x", (width-padding)/2)
 			    .attr("y", height-10)  
-			    .text("Percentage of Bounce Rates");
+			    .text("Bounce Rate (%)");    //("Percentage of Bounce Rates");
 
 			// y axis
 			svg.append("text")
@@ -125,7 +127,7 @@
 			    .attr("x", -1 * (height/2))
 			    .attr("y", 15)
 			    .attr("transform", "rotate(-90)")
-			    .text("Percentage of Webpage Visits");
+			    .text("Webpage Visits (%)"); //("Percentage of Webpage Visits");
 
 		});
 	};
