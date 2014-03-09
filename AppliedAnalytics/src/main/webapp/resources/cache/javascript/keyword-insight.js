@@ -45,16 +45,16 @@ function viewScatter(id) {
 	console.log(data);
 	// if no data display error message
 	if (data == null) {
-		console.log("keyword insight data is null.")
-		//("#keywordInsightSettings")
-		//		.append('<h2><fmt:message key="keywordinsight.gaOverQuotaError"/></h2>');
+		console.log("keyword insight data is null.");
+		$('<h4>"Keyword Insight data is returning a null."</h4>').appendTo("#keywordInsightSettings")
+		sdata = null;
+		
 	} else { // else parse and display data
 
 		for(var r = 0; r < data.allCpcKeywords.length; r++){
 			sdata.push([data.allCpcBounceRate[r], data.allCpcVisitsPercent[r], data.allCpcKeywords[r]]);
 		}
 	}
-
 
 	console.log(sdata);
 
