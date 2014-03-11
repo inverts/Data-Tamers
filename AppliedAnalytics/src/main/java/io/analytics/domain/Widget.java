@@ -21,9 +21,16 @@ public class Widget implements JSONSerializable {
 	
 	public Widget(int id) {
 		this.id = id;
+	}	
+	public Widget(int id, int typeId) {
+		this.id = id;
+		this.widgetTypeId = typeId;
 	}
 	public int getId() {
 		return this.id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	public int getDefaultFilterId() {
 		return defaultFilterId;

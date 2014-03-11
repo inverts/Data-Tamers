@@ -121,7 +121,9 @@ input { font: inherit; }
 .sidepanel #dashlist { overflow:auto; max-height:200px; margin-bottom:25px; }
 
 .sidepanel .dashlist li { color:#fffffe; height:30px; padding-left:15px; position:relative; background:none; }
-.sidepanel .dashlist li:hover { background:rgb(128, 128, 128); color:#fff; }
+.sidepanel .dashlist li.hover, 
+.sidepanel .dashlist li:hover { background:rgb(128, 128, 128); color:#fff; } { background:rgb(128, 128, 128); color:#fff; }
+
 .sidepanel .dashlist li.selected { color:#00aeef; }
 
 .sidepanel .dashlist a, .sidepanel .dashlist .deleteDash { display:inline-block; position:absolute; }
@@ -189,7 +191,9 @@ input { font: inherit; }
 
 /* Dashboard */
 
-.dashboard .dashboard-content, .dashboard .w_container { float:left;}
-.dashboard .dashboard-content { padding:5px 0; }
+.page .w_container { float:left;}
+
+.dashboard .dashboard-content, .trends .trends-content, 
+.forecast .forecast-content { padding:5px 0; }
 
 .dashboard .btn.active { z-index: 0; }

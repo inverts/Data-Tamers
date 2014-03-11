@@ -15,7 +15,7 @@ loadDashboard(dashboardId);
 
 </script>
 
-<div class="dashboard">
+<div id="application-page" class="dashboard">
 	<div class="dashboard-content">
 		
 	</div>

@@ -31,6 +31,7 @@
 <script src="<c:url value="/cache/javascript/api/scatter.js" />"></script>
 <script src="<c:url value="/cache/javascript/headerfooter.js" />"></script>
 <script src="<c:url value="/cache/javascript/application.js" />"></script>
+<script src="<c:url value="/cache/javascript/widget.js" />"></script>
 
 <title>${TITLE}</title>
 </head>

@@ -330,7 +330,7 @@ public class WidgetController {
 	
 	
 		// This will probably be changed to be a generic widget save function
-		@RequestMapping(value = "/saveDataForecast", method = RequestMethod.POST)
+		/*@RequestMapping(value = "/saveDataForecast", method = RequestMethod.POST)
 		private void saveDataForecastSettings(@RequestParam("widgetId") int widgetId, 
 											  @RequestParam("data") String inputData)
 		{
@@ -341,7 +341,7 @@ public class WidgetController {
 				logger.info("Could not save DataForecast data");
 				logger.info(e.getMessage());
 			}
-		}
+		}*/
 		
 		
 		@ResponseBody
@@ -350,8 +350,7 @@ public class WidgetController {
 		{
 			
 			try {
-				// Don't uncomment until we have a way to add Widgets
-				//WidgetService.deleteWidget(widgetId);
+				WidgetService.deleteWidget(widgetId);
 				return "true";
 
 			} catch(Exception e) {
@@ -371,7 +370,7 @@ public class WidgetController {
 			JSONObject result = new JSONObject();
 			
 			try {
-				Widget w = new Widget(widgetTypeId);
+				Widget w = new Widget(-1, widgetTypeId);
 				w.setDashboardId(dashboardId);
 				
 				int newId = WidgetService.addNewWidget(w);

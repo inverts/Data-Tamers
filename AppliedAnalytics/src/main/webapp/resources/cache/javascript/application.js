@@ -10,7 +10,7 @@ if (typeof applicationRoot == 'undefined' || !applicationRoot) {
 		console.warn("Application root was not defined. Currently set as " + applicationRoot);
 }
 
-$(document).ready(function() {
+$(function() {
 	
 	// $header is obtained through header.js
 	var $footer = $('#footer');
@@ -18,40 +18,42 @@ $(document).ready(function() {
 
 	displaySidePanel();
 	/* Settings Event Handlers */
-		$('.profile-image').click(function() {
-			$('.right-pane')
-				.addClass('settings')
-				.on( "change.settings", "#select-account", function() {
-					$.post(applicationRoot + "settings", { account: $('#select-account option:selected').val() }, function( data ) {
-						  $(".settings").html( data );
-					});
-				})
-				.on( "change.settings", "#select-property", function() {
-					$.post(applicationRoot + "settings", { property: $('#select-property option:selected').val() }, function( data ) {
-						  $(".settings").html( data );
-					});
-				})
-				.on( "change.settings", "#select-profile", function() {
-					$.post(applicationRoot + "settings", { profile: $('#select-profile option:selected').val() }, function( data ) {
-						  $(".settings").html( data );
-					});
-				})
-				.on( "click.settings", "#update-button", function() {
-					$.post(applicationRoot + "settings", { update: 1 }, function( data ) {
-						  $(".settings").html( data );
-						  updateWidgets();
-					});
+	$('.profile-image').click(function() {
+		$('.right-pane')
+			.addClass('settings')
+			.on( "change.settings", "#select-account", function() {
+				$.post(applicationRoot + "settings", { account: $('#select-account option:selected').val() }, function( data ) {
+					  $(".settings").html( data );
 				});
-
-			$.post(applicationRoot + "settings", {}, function( data ) {
-				  $(".settings").html( data );
+			})
+			.on( "change.settings", "#select-property", function() {
+				$.post(applicationRoot + "settings", { property: $('#select-property option:selected').val() }, function( data ) {
+					  $(".settings").html( data );
+				});
+			})
+			.on( "change.settings", "#select-profile", function() {
+				$.post(applicationRoot + "settings", { profile: $('#select-profile option:selected').val() }, function( data ) {
+					  $(".settings").html( data );
+				});
+			})
+			.on( "click.settings", "#update-button", function() {
+				$.post(applicationRoot + "settings", { update: 1 }, function( data ) {
+					  $(".settings").html( data );
+					  updateWidgets();
+				});
 			});
-			showSettingsPanel(550);
-			
+
+		$.post(applicationRoot + "settings", {}, function( data ) {
+			  $(".settings").html( data );
 		});
+		showSettingsPanel(550);
 		
-	
+	});
+		
 });
+
+
+
 
 
 /* Animates the side panel (if toggled) */
@@ -108,4 +110,14 @@ function hideSettingsPanel() {
                 $(window).off('click.settings');
                 $('.settings-content').hide();
         });
+}
+
+// Creates a new page layout with a wrapper class and a content div.
+// Used to differentiate between dashboard and other application pages.
+//
+// Returns the jQuery object of the content div.
+function newPage(pageclass) {
+	var $wrapper = $("#application-page").attr("class", pageclass)
+										 .empty();
+	return $('<div>').addClass(pageclass + '-content').appendTo($wrapper);
 }
