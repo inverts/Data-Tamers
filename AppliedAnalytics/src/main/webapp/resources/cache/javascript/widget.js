@@ -120,7 +120,9 @@ function updateWidgets(){
 			case 1:
 				updateDataForecast(widgets[i].elementId);
 				break;
-			
+			case 4:
+				updateKeywordInsight(widgets[i].elementId);
+				break;
 		}
 	}
 		

@@ -480,22 +480,20 @@ padding:8px;
 
 /*****CSS for KEYWORD INSIGHT WIDGET ****/
 
-.keywordInsight .body {
-  font: 11px sans-serif;
-}
-
-#keywordInsightData {
-	margin:auto;
-}
-
-.keywordInsight .main text {
-    font: 10px sans-serif;  
-}
-    
-.keywordInsight .text {
-    font: 10px sans-serif;  
-    fill:black;
-}
+.keywordInsight {width: 600px;}
+.keywordInsight .widget-content{width: 590px;}
+.keywordInsight h4 { text-align:center; margin-bottom:10px; }
+.keywordInsight #keywordInsightData { margin:auto; }
+.keywordInsight .main text { font: 10px sans-serif; }
+.keywordInsight .keywordVisual { width:inherit; height:305px; display:none; overflow:auto; margin-bottom:10px; }
+.keywordInsight .keywordVisual th { color:#2a6496; border-left:1px solid #666; }
+.keywordInsight .keywordVisual .columnHeader th{ background:#ddd; color:#333; border:1px solid #666; }
+.keywordInsight .keywordVisual .columnHeader th:hover{ background:#00aeff; color:#fffffe; cursor:pointer; }
+.keywordInsight .keywordVisual tr:hover { background:rgb(153, 255, 255); color:#fff; }
+.keywordInsight .active { display:block; }
+.keywordInsight .controls { width:100%; height:35px; position:relative; }
+.keywordInsight .controls ul { display:block; margin:auto; position:absolute; left:65px; }
+.keywordInsight .keywordTable { width:550px; margin:0 auto; background:#eee;}
 
 .keywordInsight .scatter-axis line, .scatter-axis path {
     shape-rendering: crispEdges;
@@ -525,12 +523,12 @@ padding:8px;
 }
 
 
-.keywordInsight {width: 600px;}
-.keywordInsight .widget-content{width: 590px;}
-.keywordInsight table, .keywordInsight th, .keywordInsight td, .keywordInsight tr
+
+
+.keywordInsight table
 {
-background-color:#DCDCDC;
-border:1px solid black;
+/*background-color:#DCDCDC;*/
+border:1px solid #666;
 }
 .keywordInsight th, .keywordInsight td
 {
