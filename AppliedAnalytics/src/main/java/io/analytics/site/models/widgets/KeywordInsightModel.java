@@ -46,7 +46,8 @@ public class KeywordInsightModel extends WidgetModel {
 	
     DateFormat presentationFormat = new SimpleDateFormat("MM/dd/yyyy"); 
     
-	public KeywordInsightModel(ISessionService sessionService, IKeywordInsightService keywordInsightService) {	
+	public KeywordInsightModel(ISessionService sessionService, IKeywordInsightService keywordInsightService) {
+		
 		this.sessionService = sessionService;
 		this.keywordInsightService = keywordInsightService;
 		this.jsonData = new JSONObject();
@@ -303,7 +304,8 @@ public class KeywordInsightModel extends WidgetModel {
 	// put data into JSON object to pass to the view website-performance.jsp 
 	
 	public void createJson(ArrayList<KeyData> rk, ArrayList<KeyData> hk, ArrayList<KeyData> bk, ArrayList<KeyData> ak, ArrayList<WordCount> wc, ArrayList<WordCount> ww, ArrayList<WordCount> bw)  {
-		 try {	
+		 try {
+			 
 			 JSONArray removeKeywords = new JSONArray();
 			 JSONArray removeVisitsPercent = new JSONArray();
 			 JSONArray removeBounceRate = new JSONArray();
@@ -390,6 +392,60 @@ public class KeywordInsightModel extends WidgetModel {
 				 bestWordsMultipageVisitsPercent.put(d.multipageVisitsPercent);
 			 }
 			 
+			 //JSONArray keys1 = new JSONArray();
+			 //JSONArray keys2 = new JSONArray();
+			 
+			 String[] keys1 = new String[]{"Keywords", "Visits (%)", "Bounce Rate (%)", "Multipage Visits (%)"};
+			 String[] keys2 = new String[]{"Word Substring", "Keyword Count", "Multipage Visits (%)"};
+			 
+			 //keys1.put()
+			 
+			 /* Improve Words */
+				 JSONObject improve = new JSONObject();
+				 
+				 // title
+				 improve.put("title", "Improve website performance for the following keywords:");
+				 
+				 // I put the JSON key as the row category so I can use it in the Javascript
+				 improve.put(keys1[0], helpKeywords);
+				 improve.put(keys1[1], helpVisitsPercent);
+				 improve.put(keys1[2], helpBounceRate);
+				 improve.put(keys1[3], multipageVisitsPercent);
+				 improve.put("keys", keys1);
+			 
+			/* Best Words */
+				 JSONObject best = new JSONObject();
+			 
+				 best.put("title", "The best performing keywords:");
+				 
+				 best.put(keys1[0], bestKeywords);
+				 best.put(keys1[1], bestVisitsPercent);
+				 best.put(keys1[2], bestBounceRate);
+				 best.put(keys1[3], bestMultipageVisitsPercent);
+				 best.put("keys", keys1);
+			 
+			/* Best Words Substrings */
+				 JSONObject bestSubStr = new JSONObject();
+				 
+				 bestSubStr.put("title", "The best performing keyword substrings:");
+				 
+				 bestSubStr.put(keys2[0], bestWords);
+				 bestSubStr.put(keys2[1], bestWordsCount);
+				 bestSubStr.put(keys2[2], bestWordsMultipageVisitsPercent);
+				 bestSubStr.put("keys", keys2);
+				 
+			/* Worst Words Substrings */
+				 JSONObject worstSubStr = new JSONObject();
+				 
+				 worstSubStr.put("title", "The worst performing keyword substrings:");
+				 
+				 worstSubStr.put(keys2[0], worstWords);
+				 worstSubStr.put(keys2[1], worstWordsCount);
+				 worstSubStr.put(keys2[2], worstWordsMultipageVisitsPercent);
+				 worstSubStr.put("keys", keys2);
+			 
+			 
+			 /*
 			 this.jsonData.put("removeKeywords", removeKeywords);
 			 this.jsonData.put("removeVisitsPercent", removeVisitsPercent);
 			 this.jsonData.put("removeBounceRate", removeBounceRate);
@@ -415,6 +471,14 @@ public class KeywordInsightModel extends WidgetModel {
 			 this.jsonData.put("bestWords", bestWords);
 			 this.jsonData.put("bestWordsCount", bestWordsCount);
 			 this.jsonData.put("bestWordsMultipageVisitsPercent", bestWordsMultipageVisitsPercent);
+			 */
+			 
+			 //this.jsonData.put("scatter", "");
+			 this.jsonData.put("improve", improve);
+			 this.jsonData.put("best", best);
+			 this.jsonData.put("bestsubstr", bestSubStr);
+			 this.jsonData.put("worstsubstr", worstSubStr);
+			 
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

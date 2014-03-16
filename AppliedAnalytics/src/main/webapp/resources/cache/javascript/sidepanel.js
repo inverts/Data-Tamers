@@ -2,11 +2,21 @@
  * Sidepanel.js
  */
 
+var active;
 
 $(function() {
 	
 	$(".sidepanel-background").css("width", $(".sidepanel").width());
 	
+	/*$(".sidepanel-nav").droppable({
+		 tolerance: "touch",
+		 greedy: false,
+		 over: function(event, ui) { 
+			 dashLinkHover();
+		 },
+		 out: function() { $(".dashlist").slideUp('fast'); }
+	});*/
+
 	/* Navigation hover effect */
 	$(".nav-cell").hover(function(){
 		$(this).animate({ backgroundColor: "gray" }, 100, "swing");
@@ -14,12 +24,22 @@ $(function() {
 		$(this).animate({ backgroundColor: "transparent" }, 0, "swing");
 	});
 	
-	/* dashboard Navigation action */
-	$("#dashboard").hover(function() {
-		$(".dashlist").slideDown('fast');
-		$('.sidepanel-content').hover(null, function() {
-								$(".dashlist").slideUp('fast');
-							});
+	// dashboard list open on hover
+	//$("#dashboard").hover(dashLinkHover);
+	
+	// dashboard list open on click
+	$("#dashboard").click(function() { $(".dashlist").slideToggle('fast'); });
+	
+	$("#trends").click(function() {
+		loadTrendsWidgets(2);
+		active.css("color", "#fff");
+		active = $("#trends .nav-txt").css("color", "#00aeef");
+	});
+	
+	$("#forecast").click(function() { 
+		loadForecastWidgets(2); 
+		active.css("color", "#fff");
+		active = $("#forecast .nav-txt").css("color", "#00aeef");
 	});
 	
 	/* add new dashboard */
@@ -29,9 +49,18 @@ $(function() {
 			
 		showAddDashboardPanel(550, addDashboardPage);
 	});
-
 	
+	active = $("#dashboard .nav-txt").css("color", "#00aeef");
+
 });
+
+
+function dashLinkHover() {
+	$(".dashlist").slideDown('fast');
+	$('.sidepanel-content').hover(null, function() {
+							$(".dashlist").slideUp('fast');
+						});
+}
 
 
 function getDashboardList(list) {
@@ -73,10 +102,43 @@ function removeDashboard(dashboardId) {
 function createDashboardLink(dashboard) {
 	var $dashlist = $("#dashlist");
 	
-	var $li = $("<li>").attr("id", dashboard.id).appendTo($dashlist);
+	var $li = $("<li>").attr("id", dashboard.id)
+					   .appendTo($dashlist);
 
-	var $link = $("<a>").attr("onclick", "loadDashboard(" + dashboard.id + ");")
-						.html((dashboard.name)? dashboard.name : dashboard.id).appendTo($li);
+	
+	var $link = $("<a>").click(function() {
+							loadDashboard(dashboard.id);
+							active.css("color", "#fff");
+							active = $("#dashboard .nav-txt").css("color", "#00aeef");
+				})
+				.html((dashboard.name)? dashboard.name : dashboard.id).appendTo($li);
+	
+	/* Creates the droppable action that will add a widget */
+	$link.droppable({
+		accept: ".w_container",
+		tolerance: "touch",
+		over: function(event) {
+			$dashlist.children().removeClass("hover");
+			$li.addClass("hover");
+		},
+		out: function(event) {
+			$li.removeClass("hover");
+		},
+		drop: function(e, ui) {
+			if ($li.hasClass("hover")) {
+				Modal.call({
+					"title": "Add Widget",
+					"content": "Would you like to add " + ui.draggable.find(".widget_title").html() + " to dashboard \"" + $(this).html() + "\"?",
+					"action" : function() {
+						addWidget(ui.draggable, $(e.target).parent());
+					}
+				});
+			}
+			
+			$li.removeClass("hover");
+		}
+	});
+	
 	var $delete = $("<span>").addClass("deleteDash glyphicon glyphicon-remove-circle")
 							 .attr("title", "remove " + $link.html())
 							 .appendTo($li);
@@ -129,7 +191,7 @@ function showAddDashboardPanel(width, showPage) {
                         						Modal.alert({
                         							"title": "Create Dashboard",
                         							"content": name + " has been successfully created!",
-                        						})
+                        						});
                         						hideAddDashboardPanel();
                         				});
                 			}
@@ -152,6 +214,77 @@ function hideAddDashboardPanel() {
             $(window).off("click.dashboard");
             $(".addDashboard-content").hide(); 
     });
+}
+
+//TODO: I will probably combine these two functions into one when we hook
+// up data on the back end. For now keep them separate.
+function loadTrendsWidgets(trendsId) {
+	/*$.post(applicationRoot + "application/trends/" + trendsId, 
+			{ },
+			function(result) {*/
+				var $content = newPage("trends");
+				//var library = $.parseJSON(result);
+				//var widgetIdArray = library.widgetIds;
+				//var widgetTypeIdArray = library.widgetTypeIds;
+				//var widgets = library.widgets;
+				
+				// for now spoof the library
+				var widgets = [
+				               {"widgetTypeId": 2, "id": 235},
+				               {"widgetTypeId": 4, "id": 237},
+				               {"widgetTypeId": 5, "id": 239},
+				               {"widgetTypeId": 7, "id": 241}, 
+				              ];
+				
+				loadWidgets($content, widgets, function() { });
+				
+				$content.sortable({
+					helper: "clone",
+					revert: true, 
+					tolerance: "pointer", 
+					zIndex: 100,
+					cancel: "div.widget-content",
+					over: function(event, ui) { 
+						if (event.target == $("#dashboard").get(0)) 
+							$("#dashboard").hover();
+						
+					}
+				});
+				
+	
+			//});
+}
+
+function loadForecastWidgets(forecastId) {
+	
+	/*$.post(applicationRoot + "application/forecast/" + forecastId, 
+	{ },
+	function(result) {*/
+		var $content = newPage("forecast");
+		//var library = $.parseJSON(result);
+		//var widgetIdArray = library.widgetIds;
+		//var widgetTypeIdArray = library.widgetTypeIds;
+		//var widgets = library.widgets;
+		
+		// for now spoof the library
+		var widgets = [
+		               {"widgetTypeId": 1, "id": 234},
+		               {"widgetTypeId": 6, "id": 236}, 
+		              ];
+		
+		loadWidgets($content, widgets, function() { });
+		
+		$content.sortable({
+			helper: "clone",
+			revert: true, 
+			tolerance: "pointer", 
+			zIndex: 100,
+			cancel: "div.widget-content"
+		});
+		
+
+	//});
+	
 }
 
 

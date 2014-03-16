@@ -27,15 +27,15 @@ $(function(){ getDashboardList($.parseJSON(dashboards)); });
 			</div>
 			<div id="trends"class="nav-cell">
 				<div class="nav-icon" style="background-position:0 -30px;"></div>
-				<a href="/appliedanalytics/application/trends" class="nav-txt"><fmt:message key="trends" /></a>
+				<a class="nav-txt"><fmt:message key="trends" /></a>
 			</div>
 			<div id="forecast" class="nav-cell">
 				<div class="nav-icon" style="background-position:0 -60px;"></div>
-				<a href="/appliedanalytics/application/forecast" class="nav-txt"><fmt:message key="forecast" /></a>
+				<a class="nav-txt"><fmt:message key="forecast" /></a>
 			</div>
 			<div id="suggestions" class="nav-cell">
 				<div class="nav-icon" style="background-position:0 -90px;"></div>
-				<a href="/appliedanalytics/application/alerts" class="nav-txt"><fmt:message key="alerts" /></a>
+				<a class="nav-txt"><fmt:message key="alerts" /></a>
 			</div>
 		</div>	
 	</div>
