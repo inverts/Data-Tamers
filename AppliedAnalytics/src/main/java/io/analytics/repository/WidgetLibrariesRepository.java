@@ -3,7 +3,9 @@ package io.analytics.repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -80,11 +82,11 @@ public class WidgetLibrariesRepository implements IWidgetLibrariesRepository {
 	public List<WidgetLibraryType> getTypesInLibrary(int widgetLibraryId) throws DataAccessException {
 		Object[] args;
 		int[] argTypes;
-		String whereClause = String.format("WHERE '%s'.`%s`='%s'.`%s`", 
+		String whereClause = String.format("WHERE `%s`.`%s`=`%s`.`%s`", 
 				WIDGET_TYPES_IN_LIBRARIES_TABLE, WidgetTypesInLibrariesTable.WIDGET_TYPE_ID,
 				WIDGET_TYPES_TABLE, WidgetTypesTable.WIDGET_TYPES_ID);
 		
-		String preStatement = String.format("SELECT * FROM `%s`, '%s' %s AND '%s'.'%s'=?;", 
+		String preStatement = String.format("SELECT * FROM `%s`, `%s` %s AND `%s`.`%s`=?;", 
 				WIDGET_TYPES_IN_LIBRARIES_TABLE, WIDGET_TYPES_TABLE, 
 				whereClause,
 				WIDGET_TYPES_IN_LIBRARIES_TABLE, WidgetTypesInLibrariesTable.LIBRARY_ID);
@@ -120,14 +122,24 @@ public class WidgetLibrariesRepository implements IWidgetLibrariesRepository {
 
 	@Override
 	public boolean addWidgetTypeToLibrary(WidgetLibraryType widgetLibraryType, int widgetLibraryId) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return false;
+		Map<String, Object> insertParams = new HashMap<String, Object>();
+        insertParams.put(WidgetTypesInLibrariesTable.LIBRARY_ID, widgetLibraryId);
+        insertParams.put(WidgetTypesInLibrariesTable.WIDGET_TYPE_ID, widgetLibraryType.getId());
+        insertParams.put(WidgetTypesInLibrariesTable.PRIORITY, widgetLibraryType.getPriority());
+        insertParams.put(WidgetTypesInLibrariesTable.IS_FEATURED, widgetLibraryType.getIsFeatured());
+        int rowsAffected = jdbcInsertLibraries.execute(insertParams);
+        return rowsAffected == 1;
 	}
 
 	@Override
 	public void addWidgetLibrary(WidgetLibrary widgetLibrary) throws DataAccessException {
-		// TODO Auto-generated method stub
-		
+		Map<String, Object> insertParams = new HashMap<String, Object>();
+        insertParams.put(WidgetLibrariesTable.LIBRARY_ID, widgetLibrary.getId());
+        insertParams.put(WidgetLibrariesTable.NAME, widgetLibrary.getName());
+        insertParams.put(WidgetLibrariesTable.DESCRIPTION, widgetLibrary.getDescription());
+        int rowsAffected = jdbcInsertLibraries.execute(insertParams);
+        
+		//TODO: Not sure if rowsAffected will ever be 0 without throwing an exception with this query.
 	}
 
 }

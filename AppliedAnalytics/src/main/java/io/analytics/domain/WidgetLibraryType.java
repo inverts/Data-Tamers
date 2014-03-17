@@ -1,6 +1,10 @@
 package io.analytics.domain;
 
-public class WidgetLibraryType extends WidgetType {
+import com.google.gson.Gson;
+
+import io.analytics.site.models.JSONSerializable;
+
+public class WidgetLibraryType extends WidgetType implements JSONSerializable {
 	
 	private int priority;
 	private int isFeatured;
@@ -32,6 +36,12 @@ public class WidgetLibraryType extends WidgetType {
 	 */
 	public void setIsFeatured(int isFeatured) {
 		this.isFeatured = isFeatured;
+	}
+
+	@Override
+	public String getJSONSerialization() {
+		Gson g = new Gson();
+		return g.toJson(this);
 	}
 	
 }

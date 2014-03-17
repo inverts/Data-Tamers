@@ -36,17 +36,6 @@ public class Dashboard implements JSONSerializable {
 		return id;
 	}
 	
-	/**
-	 * Do not use.
-	 * 
-	 * @deprecated When a Dashboard is created, its identity should not change from that point. 
-	 * You can create a Dashboard and do things to it, but you can't create one and then turn it into another.
-	 * A clone() method may be one appropriate addition to accommodate for this.
-	 * @param id
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
 	public int getAccountId() {
 		return accountId;
 	}
@@ -68,19 +57,6 @@ public class Dashboard implements JSONSerializable {
 
 	@Override
 	public String getJSONSerialization() {
-		/*
-		JSONObject arr = new JSONObject();
-		try {
-			arr.put("id", id);
-			arr.put("accountId", accountId);
-			arr.put("defaultFilterId", defaultFilterId);
-			arr.put("name", name);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return arr.toString();
-		*/
 		
 		Gson g = new Gson();
 		return g.toJson(this);
