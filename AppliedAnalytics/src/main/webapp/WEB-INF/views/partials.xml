@@ -22,6 +22,11 @@
 		<property name="url" value="/WEB-INF/views/includes/serialize.jsp" />
 	</bean>
 	
+	<!-- Plaintext -->
+	<bean id="plaintext" class="org.springframework.web.servlet.view.JstlView">
+		<property name="url" value="/WEB-INF/views/includes/plaintext.jsp" />
+	</bean>
+	
 	<!--  Widget -->
 	 <bean id="widget" class="org.springframework.web.servlet.view.JstlView">
 		<property name="url" value="/WEB-INF/views/widgets/widget.jsp" />

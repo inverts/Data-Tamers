@@ -227,31 +227,41 @@ function loadTrendsWidgets(trendsId) {
 				//var widgetIdArray = library.widgetIds;
 				//var widgetTypeIdArray = library.widgetTypeIds;
 				//var widgets = library.widgets;
-				
-				// for now spoof the library
-				var widgets = [
-				               {"widgetTypeId": 2, "id": 235},
-				               {"widgetTypeId": 4, "id": 237},
-				               {"widgetTypeId": 5, "id": 239},
-				               {"widgetTypeId": 7, "id": 241}, 
-				              ];
-				
-				loadWidgets($content, widgets, function() { });
-				
-				$content.sortable({
-					helper: "clone",
-					revert: true, 
-					tolerance: "pointer", 
-					zIndex: 100,
-					cancel: "div.widget-content",
-					over: function(event, ui) { 
-						if (event.target == $("#dashboard").get(0)) 
-							$("#dashboard").hover();
-						
+				trendsWidgetLibraryId = 1;
+				$.post(applicationRoot + "widgetLibraries/" + trendsWidgetLibraryId + "/widgetTypes", function(data) {
+					
+					widgetLibraryTypes = $.parseJSON(data);
+					widgets = new Array();
+					for (index in widgetLibraryTypes) {
+						widgets.push({"widgetTypeId": widgetLibraryTypes[index].id, "id": 0})
 					}
+					/*
+					var widgets = [
+					               {"widgetTypeId": 2, "id": 235},
+					               {"widgetTypeId": 4, "id": 237},
+					               {"widgetTypeId": 5, "id": 239},
+					               {"widgetTypeId": 7, "id": 241}, 
+					              ];
+					*/
+					
+					loadWidgets($content, widgets, function() { });
+					
+					$content.sortable({
+						helper: "clone",
+						revert: true, 
+						tolerance: "pointer", 
+						zIndex: 100,
+						cancel: "div.widget-content",
+						over: function(event, ui) { 
+							if (event.target == $("#dashboard").get(0)) 
+								$("#dashboard").hover();
+							
+						}
+					});
+				
+
 				});
 				
-	
 			//});
 }
 
@@ -266,22 +276,30 @@ function loadForecastWidgets(forecastId) {
 		//var widgetTypeIdArray = library.widgetTypeIds;
 		//var widgets = library.widgets;
 		
-		// for now spoof the library
-		var widgets = [
-		               {"widgetTypeId": 1, "id": 234},
-		               {"widgetTypeId": 6, "id": 236}, 
-		              ];
-		
-		loadWidgets($content, widgets, function() { });
-		
-		$content.sortable({
-			helper: "clone",
-			revert: true, 
-			tolerance: "pointer", 
-			zIndex: 100,
-			cancel: "div.widget-content"
+		trendsWidgetLibraryId = 2;
+		$.post(applicationRoot + "widgetLibraries/" + trendsWidgetLibraryId + "/widgetTypes", function(data) {
+			
+			widgetLibraryTypes = $.parseJSON(data);
+			widgets = new Array();
+			for (index in widgetLibraryTypes) {
+				widgets.push({"widgetTypeId": widgetLibraryTypes[index].id, "id": 0})
+			}
+			/*
+			var widgets = [
+			               {"widgetTypeId": 1, "id": 234},
+			               {"widgetTypeId": 6, "id": 236}, 
+			              ];
+			*/
+			loadWidgets($content, widgets, function() { });
+			
+			$content.sortable({
+				helper: "clone",
+				revert: true, 
+				tolerance: "pointer", 
+				zIndex: 100,
+				cancel: "div.widget-content"
+			});
 		});
-		
 
 	//});
 	
