@@ -253,7 +253,7 @@ var performanceSketch =
 	        var dist = plotWidth / 6;
 			x1 = plotX1 + dist - (1.5*w);
 			
-			for (i = 0; i < 5; i++) {
+			for (var i = 0; i < 5; i++) {
 				h1 = $p.map(exitRates[i], 0, 200, plotY2 - topMargin, plotY2 - topMargin - plotHeight);
 				$p.fill(c1);
 				$p.strokeWeight(0.5);

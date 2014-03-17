@@ -3,7 +3,7 @@
  */
 
 /* Global Variables */
-var sdata = [];  // 2-D array x, y datapoints for scatterplot
+var sdata = [];  // 3-D array x, y, and keywords for
 
 function loadKeywordInsight(id) {
 
@@ -55,6 +55,8 @@ function loadKeywordInsight(id) {
 			$("#" + id + " a.scatter").click(function(e) { switchView(id, $parent, "keywordInsightScatter"); });
 			$("#" + id + " a.improve").click(function(e) { switchView(id, $parent, "keywordInsightImprove"); });
 			$("#" + id + " a.best").click(function(e) { switchView(id, $parent, "keywordInsightBest"); });
+			$("#" + id + " a.worst").click(function(e) { switchView(id, $parent, "keywordInsightWorst"); });
+			$("#" + id + " a.all").click(function(e) { switchView(id, $parent, "keywordInsightAll"); });
 			$("#" + id + " a.bestsub").click(function(e) { switchView(id, $parent, "keywordInsightBestSub"); });
 			$("#" + id + " a.worstsub").click(function(e) { switchView(id, $parent, "keywordInsightWorstSub"); });
 		});
@@ -68,10 +70,76 @@ function switchView(id, $parent, $view) {
 	
 }
 
+function createTableView(id, data) {
+	var $view = $("#" + id).empty();
+	
+	// add sub-title
+	$("<h4>").html("<b>" + data.title + "</b>").appendTo($view);
+	
+	var $table = $("<table>").addClass("keywordTable").appendTo($view);
+	
+	var $trlabel = $("<tr>").addClass("columnHeader").appendTo($table);
+	// setup column headers
+	for (var i = 0; i < data.keys.length; i++)
+		$("<th>").html(data.keys[i]).appendTo($trlabel);
+	
+	// access data via column headers as key names
+	for (var i = 0; i < data[data.keys[0]].length; i++) {
+		var $tr = $("<tr>").appendTo($table);
+		for (var j = 0; j < data.keys.length; j++)
+			$("<th>").html(data[data.keys[j]][i]).appendTo($tr);
+	}
+}
 
+function getKeywordInsightData(id, callback) {
+	$.post(applicationRoot + "KeywordInsight", {"serialize": 1}, function(response) {
+		// if no data display error message
+		if (response == null) {
+			console.log("Data from Keyword Insight model is null");
+			return;
+		}
+			
+		var d = $.parseJSON(response);
+		
+		for(var r = 0; r < d.data.all[d.data.all.keys[0]].length; r++){
+			sdata.push([d.data.all[d.data.all.keys[2]][r], d.data.all[d.data.all.keys[1]][r], d.data.all[d.data.all.keys[0]][r]]);
+		}
+		// scatter view
+		$("#" + id + " #keywordInsightScatter").empty().scatter({
+			"id"	: "keywordInsightScatter",
+			"xLabel": "Percentage of Bounce Rates",
+			"yLabel": "Percentage of Webpage Visits",
+			"xKey" 	: "bounceRates",
+			"yKey"	: "visits",
+			"data"	: sdata
+		});
+		
+		createTableView("keywordInsightImprove", d.data.improve);
+		createTableView("keywordInsightBest", d.data.best);
+		createTableView("keywordInsightWorst", d.data.worst);
+		createTableView("keywordInsightAll", d.data.all);
+		createTableView("keywordInsightBestSub", d.data.bestsubstr);
+		createTableView("keywordInsightWorstSub", d.data.worstsubstr);
 
-/*function viewScatter(id) {
-	var data = dataset;
+		if(callback)
+			callback();
+
+	});
+
+}
+
+function updateKeywordInsight(id) {
+	
+	//var $currentView = $("#" + id + " keywordInsightData").children(".active");
+	
+	getKeywordInsightData(id); 
+
+}
+
+//------------------------------------------------------------------
+// Not currently used
+function viewScatter(id, data) {
+	//var data = dataset;
 	console.log(data);
 	// if no data display error message
 	if (data == null) {
@@ -97,9 +165,7 @@ function switchView(id, $parent, $view) {
 		"data"	: sdata
 	});
 	
-}*/
-
-
+}
 
 
 
@@ -112,13 +178,8 @@ function keywordImproveView(id) {
 	$("<th>Bounce Rate (%)</th>").appendTo(tr);
 	$("<th>Multipage Visits (%)</th>").appendTo(tr);
 
-	if (data.helpKeywords.length < 5)
-		n = data.helpKeywords.length;
-	else
-		n = 5;
-
 	tr.appendTo(table);
-	for (var r = 0; r < n; r++) {
+	for (var r = 0; r < data.helpKeywords.length; r++) {
 		var tr = $("<tr>");
 		var key = "<td>" + data.helpKeywords[r] + "</td>";
 		var visits = "<td>" + data.helpVisitsPercent[r] + "</td>";
@@ -138,28 +199,9 @@ function keywordImproveView(id) {
 }
 
 
-function createTableView(id, data) {
-	var $view = $("#" + id).empty();
-	
-	// add sub-title
-	$("<h4>").html("<b>" + data.title + "</b>").appendTo($view);
-	
-	var $table = $("<table>").addClass("keywordTable").appendTo($view);
-	
-	var $trlabel = $("<tr>").addClass("columnHeader").appendTo($table);
-	// setup column headers
-	for (var i = 0; i < data.keys.length; i++)
-		$("<th>").html(data.keys[i]).appendTo($trlabel);
-	
-	// access data via column headers as key names
-	for (var i = 0; i < data[data.keys[0]].length; i++) {
-		var $tr = $("<tr>").appendTo($table);
-		for (var j = 0; j < data.keys.length; j++)
-			$("<th>").html(data[data.keys[j]][i]).appendTo($tr);
-	}
-}
 
-function keywordBestView(id) {
+
+function keywordBestView(id,data) {
 	
 	var message = $("<br><h4><b>The best performing keywords:</b></h4><br>");
 	var table = $("<table><tbody>");
@@ -169,13 +211,8 @@ function keywordBestView(id) {
 	$("<th>Bounce Rate (%)</th>").appendTo(tr);
 	$("<th>Multipage Visits (%)</th>").appendTo(tr);
 
-	if (data.bestKeywords.length < 5)
-		n = data.bestKeywords.length;
-	else
-		n = 5;
-
 	tr.appendTo(table);
-	for (var r = 0; r < n; r++) {
+	for (var r = 0; r < data.bestKeywords.length; r++) {
 		var tr = $("<tr>");
 		var key = "<td>" + data.bestKeywords[r] + "</td>";
 		var visits = "<td>" + data.bestVisitsPercent[r] + "</td>";
@@ -200,16 +237,11 @@ function keywordBestSubStringView(id) {
 	var table = $("<table><tbody>");
 	var tr = $("<tr>");
 
-	if (data.bestWords.length < 5)
-		n = data.bestWords.length;
-	else
-		n = 5;
-
 	$("<th>Word Substring</th>").appendTo(tr);
 	$("<th>Keyword Count</th>").appendTo(tr);
 	$("<th>Multipage Visits (%)</th>").appendTo(tr);
 	tr.appendTo(table);
-	for (var r = 0; r < n; r++) {
+	for (var r = 0; r < data.bestWords.length; r++) {
 		var tr = $("<tr>");
 		var word = "<td>" + data.bestWords[r] + "</td>";
 		var keywordCount = "<td>" + data.bestWordsCount[r] + "</td>";
@@ -234,13 +266,8 @@ function keywordWorstView() {
 	$("<th>Keyword Count</th>").appendTo(tr);
 	$("<th>Multipage Visits (%)</th>").appendTo(tr);
 
-	if (data.worstWords.length < 5)
-		n = data.worstWords.length;
-	else
-		n = 5;
-
 	tr.appendTo(table);
-	for (var r = 0; r < n; r++) {
+	for (var r = 0; r < data.worstWords.length; r++) {
 		var tr = $("<tr>");
 		var word = "<td>" + data.worstWords[r] + "</td>";
 		var keywordCount = "<td>" + data.worstWordsCount[r] + "</td>";
@@ -259,10 +286,7 @@ function keywordWorstView() {
 }
 
 
-function viewTable(id) {
-    
-	
-	
+function viewTable(id) {	
 	var data = dataset;
 	var n;
 	console.log(data);
@@ -320,13 +344,8 @@ function viewTable(id) {
 		$("<th>Bounce Rate (%)</th>").appendTo(tr);
 		$("<th>Multipage Visits (%)</th>").appendTo(tr);
 
-		if (data.allCpcKeywords.length < 5)
-				n = allCpcKeywords.length;
-		else
-				n = 5;
-
 		tr.appendTo(table);
-		for (var r = 0; r < n; r++) {
+		for (var r = 0; r < data.allCpcKeywords.length; r++) {
 			var tr = $("<tr>");
 			var key = "<td>" + data.allCpcKeywords[r] + "</td>";
 			var visits = "<td>" + data.allCpcVisitsPercent[r] + "</td>";
@@ -346,43 +365,4 @@ function viewTable(id) {
 	}
 }
 
-function getKeywordInsightData(id, callback) {
-	$.post(applicationRoot + "KeywordInsight", {"serialize": 1}, function(response) {
-		// if no data display error message
-		if (response == null) {
-			console.log("Data from Keyword Insight model is null");
-			return;
-		}
-		
-		var d = $.parseJSON(response);
-		
-		// scatter view
-		//TODO: Bug in Scatter where its appending the SVG to the keywordInsightData div.
-		/*$("#" + id + " #keywordInsightData #keywordInsightScatter").empty().scatter({
-			"id"	: "keywordInsightData",
-			"xLabel": "Percentage of Bounce Rates",
-			"yLabel": "Percentage of Webpage Visits",
-			"xKey" 	: "bounceRates",
-			"yKey"	: "visits",
-			"data"	: d.data
-		});*/
-		
-		createTableView("keywordInsightImprove", d.data.improve);
-		createTableView("keywordInsightBest", d.data.best);
-		createTableView("keywordInsightBestSub", d.data.bestsubstr);
-		createTableView("keywordInsightWorstSub", d.data.worstsubstr);
 
-		if(callback)
-			callback();
-
-	});
-
-}
-
-function updateKeywordInsight(id) {
-	
-	//var $currentView = $("#" + id + " keywordInsightData").children(".active");
-	
-	getKeywordInsightData(id); 
-
-}
