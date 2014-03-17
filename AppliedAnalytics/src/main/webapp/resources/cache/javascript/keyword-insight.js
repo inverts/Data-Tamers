@@ -101,6 +101,12 @@ function getKeywordInsightData(id, callback) {
 			
 		var d = $.parseJSON(response);
 		
+		if (d.data === undefined) {
+			console.log("Data from Keyword Insight model is undefined");
+			console.log(d);
+			return;
+		}
+		
 		for(var r = 0; r < d.data.all[d.data.all.keys[0]].length; r++){
 			sdata.push([d.data.all[d.data.all.keys[2]][r], d.data.all[d.data.all.keys[1]][r], d.data.all[d.data.all.keys[0]][r]]);
 		}
