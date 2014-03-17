@@ -400,20 +400,22 @@ public class KeywordInsightModel extends WidgetModel {
 			 
 			 //keys1.put()
 			 
-			 /* Improve Words */
+			 
+			 
+			 /* Improve Keywords */
 				 JSONObject improve = new JSONObject();
 				 
 				 // title
 				 improve.put("title", "Improve website performance for the following keywords:");
 				 
-				 // I put the JSON key as the row category so I can use it in the Javascript
+				 // JSON key is the row category for use in Javascript
 				 improve.put(keys1[0], helpKeywords);
 				 improve.put(keys1[1], helpVisitsPercent);
 				 improve.put(keys1[2], helpBounceRate);
 				 improve.put(keys1[3], multipageVisitsPercent);
 				 improve.put("keys", keys1);
 			 
-			/* Best Words */
+			/* Best Keywords */
 				 JSONObject best = new JSONObject();
 			 
 				 best.put("title", "The best performing keywords:");
@@ -423,8 +425,31 @@ public class KeywordInsightModel extends WidgetModel {
 				 best.put(keys1[2], bestBounceRate);
 				 best.put(keys1[3], bestMultipageVisitsPercent);
 				 best.put("keys", keys1);
+				 
+			 /* Remove Keywords */
+				 JSONObject worst = new JSONObject();
+				 
+				 worst.put("title", "Consider removing the following keywords from Adwords:");
+				 
+				 worst.put(keys1[0], removeKeywords);
+				 worst.put(keys1[1], removeVisitsPercent);
+				 worst.put(keys1[2], removeBounceRate);
+				 worst.put(keys1[3], removeMultipageVisitsPercent);
+				 worst.put("keys", keys1);
+				 
+			/* All Keywords */
+				 JSONObject all = new JSONObject();
+				 
+				 // title
+				 all.put("title", "All paid keywords:");
+				 
+				 all.put(keys1[0], allCpcKeywords);
+				 all.put(keys1[1], allCpcVisitsPercent);
+				 all.put(keys1[2], allCpcBounceRate);
+				 all.put(keys1[3], allCpcMultipageVisitsPercent);
+				 all.put("keys", keys1);
 			 
-			/* Best Words Substrings */
+			/* Best Keyword Substrings */
 				 JSONObject bestSubStr = new JSONObject();
 				 
 				 bestSubStr.put("title", "The best performing keyword substrings:");
@@ -434,7 +459,7 @@ public class KeywordInsightModel extends WidgetModel {
 				 bestSubStr.put(keys2[2], bestWordsMultipageVisitsPercent);
 				 bestSubStr.put("keys", keys2);
 				 
-			/* Worst Words Substrings */
+			/* Worst Keyword Substrings */
 				 JSONObject worstSubStr = new JSONObject();
 				 
 				 worstSubStr.put("title", "The worst performing keyword substrings:");
@@ -476,6 +501,8 @@ public class KeywordInsightModel extends WidgetModel {
 			 //this.jsonData.put("scatter", "");
 			 this.jsonData.put("improve", improve);
 			 this.jsonData.put("best", best);
+			 this.jsonData.put("worst", worst);
+			 this.jsonData.put("all", all);
 			 this.jsonData.put("bestsubstr", bestSubStr);
 			 this.jsonData.put("worstsubstr", worstSubStr);
 			 
