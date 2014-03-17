@@ -130,7 +130,7 @@ public class KeywordInsightModel extends WidgetModel {
 		while (it.hasNext()){
 			KeyData kd = it.next();
 			kd.visitsPercent = Math.round(10000.0*kd.visits/(this.organicVisitsTotal-this.privateOrganicVisitsTotal))/100.0;
-			kd.multipageVisitsPercent= kd.visitsPercent*(1.0-kd.bounceRate/100.0);
+			kd.multipageVisitsPercent= Math.round(100.0*kd.visitsPercent*(1.0-kd.bounceRate/100.0))/100.0;
 			}
 		Collections.sort(organicData);
 		
@@ -147,7 +147,7 @@ public class KeywordInsightModel extends WidgetModel {
 		while (it.hasNext()){
 			KeyData kd = it.next();
 			kd.visitsPercent = Math.round(10000.0*kd.visits/this.cpcVisitsTotal)/100.0;
-			kd.multipageVisitsPercent= kd.visitsPercent*(1.0-kd.bounceRate/100.0);
+			kd.multipageVisitsPercent= Math.round(100.0*kd.visitsPercent*(1.0-kd.bounceRate/100.0))/100.0;
 		}
 		// order ascending
 		Collections.sort(cpcData);
@@ -193,6 +193,7 @@ public class KeywordInsightModel extends WidgetModel {
 		while (it.hasNext()){
 			KeyData kd = it.next();
 			if (kd.multipageVisitsPercent>=1.0 && kd.bounceRate>=50){
+				kd.multipageVisitsPercent = Math.round(100.0*kd.multipageVisitsPercent)/100.0;
 				helpKeywords.add(kd);
 			}
 		}
@@ -210,6 +211,7 @@ public class KeywordInsightModel extends WidgetModel {
 		while (it.hasNext()){
 			KeyData kd = it.next();
 			if (kd.multipageVisitsPercent>=1.0 && kd.bounceRate<50){
+				kd.multipageVisitsPercent = Math.round(100.0*kd.multipageVisitsPercent)/100.0;
 				bestKeywords.add(kd);
 			}
 		}
@@ -259,6 +261,7 @@ public class KeywordInsightModel extends WidgetModel {
 					wordCount.multipageVisitsPercent += kd.multipageVisitsPercent;
 				}
 			}
+			wordCount.multipageVisitsPercent = Math.round(100.0*wordCount.multipageVisitsPercent)/100.0;
 		}
 		
 		// sort ascending
@@ -284,6 +287,7 @@ public class KeywordInsightModel extends WidgetModel {
 	    while (itwc.hasNext()){
 	        WordCount wordCount = itwc.next();
 	        if (wordCount.multipageVisitsPercent >= 5.0) {
+	        	wordCount.multipageVisitsPercent = Math.round(100.0*wordCount.multipageVisitsPercent)/100.0;
 	        	bestWords.add(wordCount);
 	        }
 	        else{
@@ -338,7 +342,7 @@ public class KeywordInsightModel extends WidgetModel {
 				 removeKeywords.put(d.keyword);
 				 removeVisitsPercent.put(d.visitsPercent);
 				 removeBounceRate.put(d.bounceRate);
-				 removeMultipageVisitsPercent.put(d.multipageVisitsPercent);
+				 removeMultipageVisitsPercent.put(Math.round(100.0*d.multipageVisitsPercent)/100.0);
 			 }
 			
 			 it = hk.iterator();
