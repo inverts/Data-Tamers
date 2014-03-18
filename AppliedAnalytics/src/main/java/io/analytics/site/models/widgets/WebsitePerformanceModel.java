@@ -169,12 +169,17 @@ public class WebsitePerformanceModel extends WidgetModel {
 				 JSONArray arr5 = new JSONArray();
 				 JSONArray arr6 = new JSONArray();
 				 
-				 this.jsonData.put("pagePath", arr1.put(pagePathResults));
-				 this.jsonData.put("visitsPercent", arr2.put(visitsPercentResults));
-				 this.jsonData.put("bounceRate", arr3.put(bounceRateResults));
-				 this.jsonData.put("exitRate", arr4.put(exitRateResults));
-				 this.jsonData.put("pageTitle", arr5.put(pageTitleResults));
-				 this.jsonData.put("pageLink", arr6.put(pageLinkResults));
+				 String[] keys1 = new String[]{"Webpath Path", "Visits (%)", "Bounce Rate (%)", "Exit Rate (%)"};
+				 
+				 this.jsonData.put(keys1[0], pagePathResults);
+				 this.jsonData.put(keys1[1], visitsPercentResults);
+				 this.jsonData.put(keys1[2], bounceRateResults);
+				 this.jsonData.put(keys1[3], exitRateResults);
+				 this.jsonData.put("title", pageTitleResults);
+				 this.jsonData.put("url", pageLinkResults);
+				 this.jsonData.put("keys", keys1);
+				 
+				 
 				 
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -186,8 +191,18 @@ public class WebsitePerformanceModel extends WidgetModel {
 
 		@Override
 		public String getJSONSerialization() {
-			// TODO Auto-generated method stub
-			return null;
+			JSONObject result = new JSONObject();
+			try {
+				result.put("name", this.getName());
+				result.put("description", this.getDescription());
+				//result.put("metric", this.getMetric());
+				result.put("priority", this.getPositionPriority());
+				result.put("data", this.getDataPoints());
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return result.toString();
 		}
 
 		@Override
