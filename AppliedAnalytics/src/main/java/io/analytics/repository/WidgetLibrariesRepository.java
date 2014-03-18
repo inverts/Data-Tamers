@@ -142,4 +142,16 @@ public class WidgetLibrariesRepository implements IWidgetLibrariesRepository {
 		//TODO: Not sure if rowsAffected will ever be 0 without throwing an exception with this query.
 	}
 
+	@Override
+	public List<WidgetLibraryType> getAllWidgetLibraryTypes() throws DataAccessException {
+
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public WidgetLibraryType getWidgetLibraryType(int widgetLibraryTypeId) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+	}
+
 }

@@ -2,8 +2,8 @@
 
 /*** GENERAL WIDGET STYLING ***/
 
-.widget { padding:10px 5px 5px 5px; background:#d2d2d2 repeat; height:auto !important; clear:both; box-shadow:0px 0px 6px 0px; 
-		  -webkit-box-shadow:0px 0px 6px 0px; -mozbox-shadow:0px 0px 6px 0px; margin:5px 0 5px 10px; }
+.widget { padding:10px 5px 5px 5px; background:#eee repeat; height:auto !important; clear:both; box-shadow:0px 0px 6px 0px; 
+		  -webkit-box-shadow:0px 0px 6px 0px; -mozbox-shadow:0px 0px 6px 0px; margin:5px 0 5px 10px; border-radius: 3px; }
 .widget .widget_header { padding:0 20px; position:relative; height:40px; }
 .widget .widget_title { position:absolute; font-size:1.7em; color:#444; margin-bottom:5px; font-weight:bold; text-shadow:0px -1px 0px rgba(100,100,100,0.5); }
 .widget .widget_title:hover { cursor:pointer; }
@@ -24,7 +24,7 @@ svg path.domain { stroke:#333; stroke-width:2; }
 /*****CSS for DATA FORECAST WIDGET*****/
 .dataForecast { width:1000px; }
 .dataForecast .widget-content { width:990px;}
-.dataForecast #dataForecastData { width:inherit; height:280px; background:#d2d2d2; }
+.dataForecast #dataForecastData { width:inherit; height:280px; background:transparent; }
 .dataForecast .controls { padding: 0 30px 5px 45px; }
 .dataForecast div.graph-legend { width:500px; height:20px; clear:both; }
 .dataForecast div.graph-legend ul { margin-left:6px; list-style:none; }
@@ -197,32 +197,27 @@ line:hover { opacity: 0.5; }
 
 #websitePerformance-table {
 	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;	
-	background-color:#D5D5D5;	
+	background-color:transparent;	
 	//background: -webkit-gradient(linear, center bottom, center top, from(#D0D0D0), to(#CCC));
 	color:#505050;
 	padding:5px;
-	border-style:solid;
-	border-width:5px;
-	border-color:#D5D5D5;
+	border-spacing: 2px;
+	border-collapse: separate;
 }
 #websitePerformanceSettings th, #websitePerformanceSettings td
 {
-border-width:5px;
-padding:8px;
+	padding:8px;
 }
-#websitePerformance-table th{
+#websitePerformance-table th {
 	font:20px, 'Helvetica Neue';	
 }
-#websitePerformance-table td{
-	border-style:solid;
-	border-width:1px;
-	border-color:#D5D5D5;	
+#websitePerformance-table td {
 }
 #websitePerformanceSettings th:hover{
-	background-color:#C0C0C0;		
+	background-color:#ccc;		
 }
 #websitePerformanceSettings td:hover{
-	background-color:#C0C0C0;	
+	background-color:#ccc;	
 }
 
 #websitePerformanceSettings tbody tr:last-child td {
@@ -251,12 +246,10 @@ padding:8px;
 
 .keyContributingFactorsChart{
 	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;	
-	background-color:#D5D5D5;	
+	background-color:transparent;	
 	color:#505050;
 	
-	border-style:solid;
-	border-width:5px;
-	border-color:#D5D5D5;
+	border: none;
 	
 	padding:15px;
 	height:285px;
@@ -340,32 +333,25 @@ padding:8px;
 
 .growingProblemsChart {
 	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;	
-	background-color:#D5D5D5;	
+	background-color:transparent;	
 	color:#505050;
 	padding:15px;
-	border-style:solid;
-	border-width:5px;
-	border-color:#D5D5D5;
 	width:100%;
 	height:285px; 	
+	border-spacing: 5px;
+	border-collapse: separate;
 }
 
 .growingProblemsChart th, .growingProblemsChart  td{
-	border-width:5px;
 	padding:8px;
 	width:100%;	
 }
 
-.growingProblemsChart  {
-    border-spacing: 1em;
-}
 .growingProblemsChart  th{
 	font:20px, 'Helvetica Neue';	
 }
 .growingProblemsChart  td{
-	border-style:solid;
-	border-width:5px;
-	border-color:#D5D5D5;
+	
 }
 .growingProblemsChart  tr {
 	padding:10px;
@@ -413,13 +399,13 @@ padding:8px;
 #boostPerformance-table {
 	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;
 	height:285px;		
-	background-color:#D5D5D5;	
+	background-color:transparent;	
 	color:#505050;
 }
 
 .boostPerformanceChart{
 	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;	
-	background-color:#D5D5D5;	
+	background-color:transparent;	
 	color:#505050;
 }
 

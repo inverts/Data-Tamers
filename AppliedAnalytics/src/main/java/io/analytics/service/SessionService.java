@@ -7,6 +7,7 @@ import io.analytics.repository.ManagementRepository.CredentialException;
 import io.analytics.service.interfaces.IManagementService;
 import io.analytics.service.interfaces.ISessionService;
 import io.analytics.site.models.FilterModel;
+import io.analytics.site.models.SessionModel;
 import io.analytics.site.models.SettingsModel;
 
 import javax.servlet.ServletContext;
@@ -108,6 +109,10 @@ public class SessionService implements ISessionService {
 
 	public Credential getCredentials() {
 		return credentials;
+	}
+	
+	public SessionModel getSessionModel(HttpSession session) {
+		return new SessionModel(session);
 	}
 	
 	public HashMap<String, Object> getModels(HttpSession session) {

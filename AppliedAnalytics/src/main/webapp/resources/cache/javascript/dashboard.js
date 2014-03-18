@@ -19,22 +19,34 @@ function loadDashboard(dashboardId) {
 				var widgetTypeIdArray = dashboard.widgetTypeIds;
 				var widgets = dashboard.widgets;
 				widgets = widgets.sort(compareWidgetPriority);
-				
-				// since the remove event is only specific to the dashboard, 
-				// we create a callback method to set it up. This is so we
-				// do not create the remove event for the widgets on the
-				// Trends and Forecast pages.
-				loadWidgets($content, widgets, function() {
-													var $last = $content.children().last();
-													var elementId = $last.attr("id");
-													$last.on("click", ".dropdown-menu a.removeWidget", function() { // remove menu event
-														Modal.call({
-															"title" : "Remove Widget",
-															"content": "Remove " + $("#" + elementId + " .widget_title").html() + " widget?",
-															"action": function() { removeWidget(elementId); }
-														});
-													});
-												});
+					
+					// since the remove event is only specific to the dashboard, 
+					// we create a callback method to set it up. This is so we
+					// do not create the remove event for the widgets on the
+					// Trends and Forecast pages.
+					loadWidgets($content, widgets, function() {
+						var $last = $content.children().last();
+						var elementId = $last.attr("id");
+						$last.on("click", ".dropdown-menu a.removeWidget", function() { // remove menu event
+							Modal.call({
+								"title" : "Remove Widget",
+								"content": "Remove " + $("#" + elementId + " .widget_title").html() + " widget?",
+								"action": function() { removeWidget(elementId); }
+							});
+						});
+
+					});
+
+					/*
+					 * This will not work as-is but may be a useful code snippet for loading in the list of dashboards.
+				$.post(applicationRoot + "application/dashboards", function(data) {
+						dashboards = $.parseJSON(data);
+						dashboardList = $last.find('.dropdown-menu ul#dashboard-list');
+						for (index in dashboards) {
+							dashboardList.append('<li><a href="#">' + dashboards[index].name + '</a></li>');
+						}
+				});
+				*/
 				
 				$content.sortable({ 
 					revert: true, 

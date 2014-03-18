@@ -12,7 +12,7 @@
  */
 //TODO: Accommodate widget specifics (like filter).
 function loadWidgets($content, widgets, callback) {
-	
+	//TODO: Allow custom options for how widgets should be displayed. (Should the have a remove option, for example)
 	for(var i = 0; i < widgets.length; i++) {
 
 		var widgetTypeId = widgets[i].widgetTypeId;
@@ -27,6 +27,7 @@ function loadWidgets($content, widgets, callback) {
 	// widget will not be dragged while user clicks on content
 	$content.data("n", widgets.length);
 }
+
 
 /**
  * Loads in the specified widget

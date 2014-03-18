@@ -52,4 +52,20 @@ public interface IWidgetLibrariesRepository {
 	 * @param widgetLibrary
 	 */
 	public void addWidgetLibrary(WidgetLibrary widgetLibrary) throws DataAccessException;
+	
+	/**
+	 * Retrieves all the WidgetLibraryTypes that exist.
+	 * 
+	 * @return A list of all the available WidgetLibraryTypes.
+	 * @throws DataAccessException
+	 */
+	public List<WidgetLibraryType> getAllWidgetLibraryTypes() throws DataAccessException;
+	
+	/**
+	 * Retrieves a particular WidgetLibraryType identified by ID.
+	 * 
+	 * @param widgetLibraryTypeId
+	 * @return The matching WidgetLibraryType, or null if none matches the provided Id.
+	 */
+	public WidgetLibraryType getWidgetLibraryType(int widgetLibraryTypeId);
 }
