@@ -172,11 +172,12 @@ public class WebsitePerformanceModel extends WidgetModel {
 				 
 				 String[] keys1 = new String[]{"Webpath Path", "Visits (%)", "Bounce Rate (%)", "Exit Rate (%)"};
 				 
-				 this.jsonData.put(keys1[0], pagePathResults);
+				 //this.jsonData.put(keys1[0], pagePathResults);
+				 this.jsonData.put(keys1[0], pageTitleResults);
 				 this.jsonData.put(keys1[1], visitsPercentResults);
 				 this.jsonData.put(keys1[2], bounceRateResults);
 				 this.jsonData.put(keys1[3], exitRateResults);
-				 //this.jsonData.put("title", pageTitleResults);
+				 //this.jsonData.put("domain", pageTitleResults);
 				 this.jsonData.put("url", pageLinkResults);
 				 this.jsonData.put("keys", keys1);
 				 
