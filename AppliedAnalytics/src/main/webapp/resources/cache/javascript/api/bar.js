@@ -30,6 +30,9 @@
 
 			//var numGroups = 5;
 			//var numSeries = 3;
+			
+			// tooltip
+			var tooltip = d3.select("#" + this.id).append("div").attr("class", "tooltip").style("opacity", 0);
 
 			  var x0 = d3.scale.ordinal()
 			      .rangeBands([0, width], 0.2);
@@ -61,14 +64,32 @@
 			      .attr("class", "g")
 			      .attr("transform", function(d) { return "translate(" + x0(d.page) + ",0)"; });
 
-			  pageP.selectAll("rect")
-			      .data(function(d) { return d.vals; })
-			    .enter().append("rect")
-			      .attr("width", x1.rangeBand())
-			      .attr("x", function(d) { return x1(d.name); })
-			      .attr("y", function(d) { return y(d.value); })
-			      .attr("height", function(d) { return height - y(d.value); })
-			      .style("fill", function(d) { return color(d.name); });
+			pageP.selectAll("rect").data(function(d) {
+				return d.vals;
+			}).enter().append("rect").attr("width", x1.rangeBand()).attr("x",
+					function(d) {
+						return x1(d.name);
+					}).attr("y", function(d) {
+				return y(d.value);
+			}).attr("height", function(d) {
+				return height - y(d.value);
+			}).style("fill", function(d) {
+				return color(d.name);
+			})
+					.on(
+							"mouseover",
+							function(d) {
+								tooltip.transition().duration(200).style(
+										"opacity", .9);
+								tooltip.html("(" + d.value + "%" + ")")
+										.style("font-size","15px")
+										.style("left",
+												(d3.event.pageX + 5) + "px")
+										.style("top",
+												(d3.event.pageY - 28) + "px");
+							}).on("mouseout", function(d) {
+						tooltip.transition().duration(500).style("opacity", 0);
+					});
 
 			// Add y axis
 			var yMax = 100;
@@ -104,6 +125,7 @@
 			      .attr("x", width - 24)
 			      .attr("y", 9)
 			      .attr("dy", ".35em")
+			      .style("font-size","15px")
 			      .style("text-anchor", "end")
 			      .text(function(d) { return d; });
 
@@ -114,6 +136,7 @@
 			      .attr("y",30)
 			      .attr("x", -50)
 			      .attr("dy", ".71em")
+			      .style("font-size","15px")
 			      .style("text-anchor", "end")
 			      .text("Percentage");
 

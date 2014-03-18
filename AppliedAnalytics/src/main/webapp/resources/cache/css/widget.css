@@ -571,3 +571,13 @@ padding:3px;
 	background-color:#F0F0F0;
 }
 
+.pagePerformance .tooltip {
+  position: absolute;
+  width: 50px;
+  height: 28px;
+  pointer-events: none;
+}
+
+
+
+
