@@ -24,6 +24,8 @@
 			if(settings.data == null){
 				return;
 			}
+			
+			var sdata = settings.data;
 
 			var margin = {
 				"top" : 20,
@@ -31,8 +33,9 @@
 				"bottom" : 50,
 				"left" : 60
 			};
-			var width = 620 - margin.left - margin.right;
-			var height = 370 - margin.top - margin.bottom;
+			var width = $this.width();
+			var height = $this.height();
+			
 			// tooltip
 			var tooltip = d3.select("#" + settings.id).append("div")
 					.attr("class", "tooltip").style("opacity", 0);

@@ -2,7 +2,7 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <div id = "keywordInsightData">
-	<div id="keywordInsightScatter" class="keywordVisual"></div>
+	<div id="keywordInsightScatter" class="keywordVisual active"></div>
 	<div id="keywordInsightImprove" class="keywordVisual"></div>
 	<div id="keywordInsightBest" class="keywordVisual"></div>
 	<div id="keywordInsightWorst" class="keywordVisual"></div>
