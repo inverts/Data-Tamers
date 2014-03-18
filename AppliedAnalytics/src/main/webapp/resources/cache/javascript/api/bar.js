@@ -81,7 +81,7 @@
 							function(d) {
 								tooltip.transition().duration(200).style(
 										"opacity", .9);
-								tooltip.html("(" + d.value + "%" + ")")
+								tooltip.html("(" + d.name +"%" + ")")
 										.style("font-size","15px")
 										.style("left",
 												(d3.event.pageX + 5) + "px")
