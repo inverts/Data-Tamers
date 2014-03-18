@@ -101,7 +101,7 @@ public class KeywordInsightModel extends WidgetModel {
 	 */
 	public void updateData() {
 	
-		KeywordInsightData dataObject = this.keywordInsightService.getKeywordInsightData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate, 500, this.keywordSubstring);
+		KeywordInsightData dataObject = this.keywordInsightService.getKeywordInsightData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate, 1500);
 		// over quota error returns no data, try again
 		if (dataObject==null){
 			this.jsonData=null;

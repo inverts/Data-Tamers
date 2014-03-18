@@ -28,11 +28,9 @@ public interface ICoreReportingRepository {
 	
 	public GaData getKeywords(Credential credential, String profileID, Date startDate, Date endDate, int maxResults, String medium);
 
-	public GaData getKeywords(Credential credential, String profileID, Date startDate, Date endDate, int maxResults, String medium, String substring);
-	
 	public GaData getMediumVisitsTotal(Credential credential, String profileID, Date startDate, Date endDate, String medium);
 	
-	public GaData getMediumVisitsTotal(Credential credential, String profileID, Date startDate, Date endDate, String medium, String filter);
+//	public GaData getMediumVisitsTotal(Credential credential, String profileID, Date startDate, Date endDate, String medium, String filter);
 }
 
 

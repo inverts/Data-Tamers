@@ -403,10 +403,11 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 * @param medium
 		 * @return
 		 */
-
+/*
 		public GaData getKeywords(Credential credential, String profileID, Date sDate, Date eDate, int maxResults, String medium) {
 			return getKeywords(credential, profileID, sDate, eDate,maxResults, medium, "");
 		}	
+		*/
 
 		/**
 		 * Get the "cpc" or "organic" keywords that contain the substring and are not "(not provided)"
@@ -422,14 +423,10 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 * @return
 		 */
 
-		public GaData getKeywords(Credential credential, String profileID, Date sDate, Date eDate, int maxResults, String medium, String substring) {
+		public GaData getKeywords(Credential credential, String profileID, Date sDate, Date eDate, int maxResults, String medium) {
 			GaData gaData = null;
 			String startDate = dateFormat.format(sDate);
 			String endDate = dateFormat.format(eDate);
-			String searchKeyword = "";
-			if (!substring.isEmpty()) {
-				searchKeyword = ";ga:keyword=@"+substring;
-			}
 
 			try {
 				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
@@ -440,7 +437,8 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 						endDate, // End date.
 						"ga:visits,ga:visitBounceRate") // Metrics.
 						.setDimensions("ga:medium,ga:keyword")
-						.setFilters("ga:medium=="+medium+";ga:keyword!=(not provided)"+ searchKeyword)
+						//.setFilters("ga:medium=="+medium+";ga:keyword!=(not provided)")
+						.setFilters("ga:keyword!=(not provided)")
 						.setSort("-ga:visits")
 						.setMaxResults(maxResults);
 				
@@ -455,6 +453,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			return gaData;
 		}	
 	
+		
 		/*
 		 *  getMediumVisitsTotal:
 		 *  	Get the total number of visits for the GA dimension medium 
@@ -466,9 +465,9 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 * @param medium
 		 * @return
 		 */
-		public GaData getMediumVisitsTotal(Credential credential, String profileID, Date sDate, Date eDate, String medium) {
+/*		public GaData getMediumVisitsTotal(Credential credential, String profileID, Date sDate, Date eDate, String medium) {
 			return getMediumVisitsTotal(credential, profileID, sDate, eDate, medium, "");
-		}
+		} */
 		
 		/*
 		 *  getMediumVisitsTotal:
@@ -483,16 +482,10 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 * @param filter
 		 * @return
 		 */
-		public GaData getMediumVisitsTotal(Credential credential, String profileID, Date sDate, Date eDate, String medium, String filter) {
+		public GaData getMediumVisitsTotal(Credential credential, String profileID, Date sDate, Date eDate, String medium) {
 			GaData gaData = null;
 			String startDate = dateFormat.format(sDate);
-			String endDate = dateFormat.format(eDate);
-
-			String addFilter = "";
-			// Add to filter if provided
-			if (!filter.isEmpty()) {
-				addFilter = ";"+filter;
-			}
+			String endDate = dateFormat.format(eDate);		
 			
 			try {
 				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
@@ -503,7 +496,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 						endDate, // End date.
 						"ga:visits") // Metrics.
 						.setDimensions("ga:medium")
-						.setFilters("ga:medium=="+medium+addFilter);
+						.setFilters("ga:medium=="+medium);
 
 				
 				gaData = queryDispatcher.execute(request);
