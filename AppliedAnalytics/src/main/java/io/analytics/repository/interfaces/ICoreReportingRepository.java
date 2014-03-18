@@ -18,6 +18,8 @@ public interface ICoreReportingRepository {
 
 	public GaData getPagePerformance(Credential credential, String profileID, Date startDate, Date endDate, int maxResults) ;
 
+	public GaData getPageTitle(Credential credential, String profileID, Date startDate, Date endDate, int maxResults) ;
+
 	public GaData getTotalMetric(Credential credential, String profileID, String metric, Date startDate, Date endDate);
 
 	public GaData getMetricForGaDimension(Credential credential, String profileID, String metric, String gaDimension, Date startDate, Date endDate, int maxResults);

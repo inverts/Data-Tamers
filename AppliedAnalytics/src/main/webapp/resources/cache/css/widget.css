@@ -529,3 +529,41 @@ line:hover { opacity: 0.5; }
 {
 padding:3px;
 }
+
+/*****CSS for PAGE PERFORMANCE - BAR CHART WIDGET ****/
+.pagePerformance{
+	width:600px;
+}
+.pagePerformance #pagePerformanceData {
+	height:300px;
+	width:inherit;
+}
+.pagePerformance .pagePerformanceVisual {
+	height:inherit;
+	width:inherit;
+}
+.pagePerformanceVisual .axis line {
+    shape-rendering: crispEdges;
+    stroke: black;
+    fill: none;
+}
+.pagePerformanceVisual .axis path {
+    shape-rendering: crispEdges;
+    stroke: black;
+    fill: none;
+}
+
+.pagePerformance #pagePerformanceBar {
+	background-color:#F0F0F0;
+}
+
+.pagePerformance .tooltip {
+  position: absolute;
+  width: 50px;
+  height: 28px;
+  pointer-events: none;
+}
+
+
+
+

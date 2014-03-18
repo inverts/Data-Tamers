@@ -298,7 +298,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 						startDate, // Start date.
 						endDate, // End date.
 						"ga:visitBounceRate,ga:visits,ga:exitRate") // Metrics.
-						.setDimensions("ga:pagePath")
+						.setDimensions("ga:pagePath,ga:hostname")
 						.setSort("-ga:visits")
 						.setMaxResults(maxResults);
 				
@@ -314,6 +314,47 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			return gaData;
 		}	
 
+		/**
+		 * Get page title data for Web Performance widget
+		 * 
+		 * @param startDate
+		 * @param endDate
+		 * @param maxResults
+		 * @return
+		 */
+
+		public GaData getPageTitle(Credential credential, String profileID, Date sDate, Date eDate, int maxResults) {
+			GaData gaData = null;
+			String startDate = dateFormat.format(sDate);
+			String endDate = dateFormat.format(eDate);
+
+			try {
+				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build().data().ga();
+
+				Ga.Get request = reporting.get("ga:"+ profileID, // profile id (table id).
+						startDate, // Start date.
+						endDate, // End date.
+						"ga:visits") // Metrics.
+						.setDimensions("ga:pagePath,ga:pageTitle")
+						.setFilters("ga:pageTitle!=(not set)")
+						.setSort("-ga:visits")
+						.setMaxResults(maxResults);
+				
+				gaData = queryDispatcher.execute(request);
+				
+			} catch (GoogleJsonResponseException e) {
+				handleGoogleJsonResponseException(e);
+			} catch (IOException e) {
+				// Catch general parsing network errors.
+				e.printStackTrace();
+			}
+
+			return gaData;
+		}	
+		
+		
+	
 		/**
 		 *  Get the total metric for the website, e.g. visits, a single integer.
 		 *  Widgets where used:
