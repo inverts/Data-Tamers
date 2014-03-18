@@ -301,7 +301,7 @@ public class KeywordInsightModel extends WidgetModel {
 		
 		
 		// put data into the JSON Object member jsonData and jsonScatterPlotData
-	    this.createScatterPlotJson(allCpcKeywords);
+	    //this.createScatterPlotJson(allCpcKeywords);
 		this.createJson(removeKeywords, helpKeywords, bestKeywords, allCpcKeywords, words, worstWords, bestWords); 
 	}
 	
@@ -335,6 +335,10 @@ public class KeywordInsightModel extends WidgetModel {
 			 JSONArray bestWords = new JSONArray();
 			 JSONArray bestWordsCount = new JSONArray();
 			 JSONArray bestWordsMultipageVisitsPercent = new JSONArray();
+			 JSONArray allKeywords = new JSONArray();
+			 JSONArray allVisitsPercent = new JSONArray();
+			 JSONArray allBounceRate = new JSONArray();
+			 JSONArray allMultipageVisitsPercent = new JSONArray();
 			 
 			 Iterator<KeyData> it = rk.iterator();
 			 while (it.hasNext()){
@@ -396,15 +400,35 @@ public class KeywordInsightModel extends WidgetModel {
 				 bestWordsMultipageVisitsPercent.put(d.multipageVisitsPercent);
 			 }
 			 
-			 //JSONArray keys1 = new JSONArray();
-			 //JSONArray keys2 = new JSONArray();
+			 // Scatter plot data
+			 it = ak.iterator();
+			 while (it.hasNext()){
+				 KeyData d = it.next();
+				 allKeywords.put(d.keyword);			
+				 allVisitsPercent.put(d.visitsPercent);			
+				 allBounceRate.put(d.bounceRate);
+				 allMultipageVisitsPercent.put(Math.round(100.0*d.multipageVisitsPercent)/100.0);
+			 }
+
 			 
 			 String[] keys1 = new String[]{"Keywords", "Visits (%)", "Bounce Rate (%)", "Multipage Visits (%)"};
 			 String[] keys2 = new String[]{"Word Substring", "Keyword Count", "Multipage Visits (%)"};
+			 String[] scatterKeys = new String[]{"allBounceRate", "allVisitsPercent"};
 			 
-			 //keys1.put()
+			 String[] scatterAxisLabels = new String[]{"Percentage of Bounce Rates", "Percentage of Webpage Visits"};
 			 
 			 
+			 /* Scatterplot */
+			 	JSONObject scatter = new JSONObject();
+			 	
+			 	scatter.put("title", "Keyword Insight Plot");
+			 	scatter.put("label", scatterAxisLabels);
+
+			 	scatter.put("allKeywords", allKeywords);
+			 	scatter.put("allVisitsPercent", allVisitsPercent);
+			 	scatter.put("allBounceRate", allBounceRate);
+			 	scatter.put("allMultipageVisitsPercent", allMultipageVisitsPercent);
+			 	scatter.put("keys", scatterKeys);
 			 
 			 /* Improve Keywords */
 				 JSONObject improve = new JSONObject();
@@ -502,7 +526,7 @@ public class KeywordInsightModel extends WidgetModel {
 			 this.jsonData.put("bestWordsMultipageVisitsPercent", bestWordsMultipageVisitsPercent);
 			 */
 			 
-			 //this.jsonData.put("scatter", "");
+			 this.jsonData.put("scatter", scatter);
 			 this.jsonData.put("improve", improve);
 			 this.jsonData.put("best", best);
 			 this.jsonData.put("worst", worst);
@@ -517,21 +541,11 @@ public class KeywordInsightModel extends WidgetModel {
 		 
 	} 
 	
-	public void createScatterPlotJson(ArrayList<KeyData> ak){
-		 JSONArray allKeywords = new JSONArray();
-		 JSONArray allVisitsPercent = new JSONArray();
-		 JSONArray allBounceRate = new JSONArray();
-		 JSONArray allMultipageVisitsPercent = new JSONArray();
+	/*public void createScatterPlotJson(ArrayList<KeyData> ak){
+		 
 		 
 		 try {
-		 Iterator<KeyData> it = ak.iterator();
-		 while (it.hasNext()){
-			 KeyData d = it.next();
-			 allKeywords.put(d.keyword);			
-			 allVisitsPercent.put(d.visitsPercent);			
-			 allBounceRate.put(d.bounceRate);
-			 allMultipageVisitsPercent.put(Math.round(100.0*d.multipageVisitsPercent)/100.0);
-		 }
+		 
 		 
 		 this.jsonScatterPlotData.put("allKeywords", allKeywords);
 		 this.jsonScatterPlotData.put("allVisitsPercent", allVisitsPercent);
@@ -541,15 +555,15 @@ public class KeywordInsightModel extends WidgetModel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+	}*/
 		
 	public JSONObject getDataPoints() {
 		return this.jsonData;
 	}
 	
-	public JSONObject getScatterPlotDataPoints() {
+	/*public JSONObject getScatterPlotDataPoints() {
 		return this.jsonScatterPlotData;
-	}
+	}*/
 
 	@Override
 	public String getJSONSerialization() {
