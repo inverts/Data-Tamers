@@ -1,6 +1,8 @@
 package io.analytics.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * PagePerformanceData: Domain class for the Page Performance widget.
@@ -16,6 +18,8 @@ public class PagePerformanceData {
 	private ArrayList<Double> visitsBounceRate;
 	private ArrayList<Double> exitRate;
 	private int visitsTotal;
+	private Map<String, String> urlToTitle;
+	private String hostname;
 	
 	public PagePerformanceData(){
 		pagePath = new ArrayList<String>();
@@ -23,6 +27,8 @@ public class PagePerformanceData {
 		visitsBounceRate = new ArrayList<Double>();
 		exitRate = new ArrayList<Double>();
 		visitsTotal = -1;
+		urlToTitle = new HashMap<String, String>();
+		hostname="";
 	}
 	
 	public void setPagePathData(ArrayList<String> data) {
@@ -71,8 +77,23 @@ public class PagePerformanceData {
 	
 	public int getVisitsTotal() {
 		return this.visitsTotal;
+	}	
+	
+	public void setUrlToTitle(Map<String,String> data) {
+		this.urlToTitle.clear();
+		this.urlToTitle.putAll(data);
 	}
 	
-
+	public Map<String,String> getUrlToTitle() {
+		Map<String,String> data = new HashMap<String,String>(this.urlToTitle);
+		return data;
+	}
 	
+	public void setHostname(String datum) {
+		this.hostname = datum;
+	}
+	
+	public String getHostname() {
+		return this.hostname;
+	}
 }

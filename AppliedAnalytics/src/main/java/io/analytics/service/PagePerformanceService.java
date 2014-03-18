@@ -4,10 +4,14 @@ import io.analytics.repository.interfaces.ICoreReportingRepository;
 import io.analytics.repository.CoreReportingRepository;
 import io.analytics.service.interfaces.IPagePerfomanceService;
 import io.analytics.service.interfaces.ISessionService;
+//import io.analytics.site.models.widgets.KeyData;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +53,7 @@ public class PagePerformanceService implements IPagePerfomanceService{
 		ArrayList<String> dataTypes = new ArrayList<String>();
 	
 		int pagePathColumn = -1; 
+		int hostnameColumn = -1;
 		int visitsColumn = -1; 
 		int visitBounceRateColumn = -1; 
 		int exitRateColumn = -1; 
@@ -58,6 +63,8 @@ public class PagePerformanceService implements IPagePerfomanceService{
 			String name = header.getName();
 			if (name.equals("ga:pagePath"))
 				pagePathColumn = column;
+			if (name.equals("ga:hostname"))
+				hostnameColumn = column;
 		    if (name.equals("ga:visits"))
 				visitsColumn = column;
 			if (name.equals("ga:visitBounceRate"))
@@ -72,14 +79,25 @@ public class PagePerformanceService implements IPagePerfomanceService{
 		ArrayList<Integer> visits= new ArrayList<Integer>();
 		ArrayList<Double> visitBounceRate = new ArrayList<Double>();
 		ArrayList<Double> exitRate = new ArrayList<Double>();
+		String hostname = "";
 		
 		List<List<String>> dataRows = gaData.getRows();
+		boolean hostFound = false;
+		String temp;
 		try {
 		for(List<String> row : dataRows) {
 			String one = row.get(pagePathColumn);
 			int two = Integer.parseInt(row.get(visitsColumn));
 			double three = Double.parseDouble(row.get(visitBounceRateColumn));
 			double four = Double.parseDouble(row.get(exitRateColumn));
+			if (!hostFound){
+				//temp = row.get(hostnameColumn);
+				//if (temp.matches("^[wW][wW][wW].")) { // TODO remove from loop, do a single access
+					hostname = row.get(hostnameColumn);
+					System.out.println("Hostname = "+ hostname);
+					hostFound = true;
+				//}
+			}
 			pagePath.add(one);
 			visits.add(two);
 			visitBounceRate.add(three);
@@ -101,6 +119,60 @@ public class PagePerformanceService implements IPagePerfomanceService{
 		dataObject.setVisitsData(visits);
 		dataObject.setVisitsBounceRateData(visitBounceRate);
 		dataObject.setExitRateData(exitRate);
+		dataObject.setHostname(hostname);
+		
+		// ********************
+		// GA query page title 
+		
+		gaData = REPOSITORY.getPageTitle(credential, profileID, startDate, endDate, maxResults);
+		
+		//printColumnHeaders(gaData);
+		//printDataTable(gaData);
+		
+		pagePathColumn = -1; 
+		int pageTitleColumn = -1; 
+		column = -1;
+		for (ColumnHeaders header : gaData.getColumnHeaders()) {
+			column++;
+			String name = header.getName();
+			if (name.equals("ga:pagePath"))
+				pagePathColumn = column;		   
+			if (name.equals("ga:pageTitle"))
+				pageTitleColumn = column;
+				
+		}
+		
+		pagePath = new ArrayList<String>();
+		ArrayList<String> pageTitle = new ArrayList<String>();
+		
+		dataRows = gaData.getRows();
+		try {
+		for(List<String> row : dataRows) {
+			String one = row.get(pagePathColumn);
+			String two = row.get(pageTitleColumn);
+			pagePath.add(one);
+			pageTitle.add(two);
+		}
+		} catch (NumberFormatException e) {
+			//The metric we are retrieving is not numeric.
+			return null;
+		}
+		
+		pagePath.trimToSize();
+		pageTitle.trimToSize();
+		
+		Map<String, String> urlToTitle = new HashMap<String, String>();
+        // add url and titles to map
+		Iterator<String> itu = pagePath.iterator();
+		Iterator<String> itt = pageTitle.iterator();
+	
+		while(itu.hasNext()) {
+			urlToTitle.put(itu.next(), itt.next());
+		}
+		
+		// add page path and  data
+		dataObject.setUrlToTitle(urlToTitle);
+
 
 		// ********************
 		// GA query visits (total)
@@ -133,6 +205,8 @@ public class PagePerformanceService implements IPagePerfomanceService{
 		// domain dataObject, add visits total
 		dataObject.setVisitsTotal(datum);
 		return dataObject;
+		
+
 	}		
 
 }
