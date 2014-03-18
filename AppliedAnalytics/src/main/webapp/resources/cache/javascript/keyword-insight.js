@@ -26,94 +26,22 @@ function loadKeywordInsight(id) {
 		
 		// Get the data and setup widget functions after data has been retrieved.
 		getKeywordInsightData(id, function() {
-			
-			//$("#" + id + " .keywordVisual").hide();
-			
-			var $parent = $("#" + id + " #keywordInsightData");
-			
-			// previous button
-			$("#" + id + " .prev").click(function(e) {
-				var $prev = $parent.children(".active").prev();
-				$parent.children(".active").removeClass("active").hide("slide", {direction: "right"}, "fast", function() {
-					($prev.length) ? $prev.addClass("active").show("slide", {direction: "left" }, "fast")
-							       : $parent.children(".keywordVisual:last").show("slide", {direction: "left"}, "fast")
-							       										     .addClass("active");
-				});
-				
-			});
-			
-			// next button
-			$("#" + id + " .next").click(function(e) {
-				var $next = $parent.children(".active").next();
-				$parent.children(".active").removeClass("active").hide("slide", {direction: "left"}, "fast", function() {
-					($next.length) ? $next.addClass("active").show("slide", {direction: "right"}, "fast")
-							       : $parent.children(".keywordVisual:first").show("slide", {direction: "right"}, "fast")
-							       										     .addClass("active");
-				});
-			});	
+
+			nextPreviousControls(id, "keywordVisual");
 
 			// direct view buttons
-			$("#" + id + " a.scatter").click(function(e) { switchView(id, $parent, "keywordInsightScatter"); });
-			$("#" + id + " a.improve").click(function(e) { switchView(id, $parent, "keywordInsightImprove"); });
-			$("#" + id + " a.best").click(function(e) { switchView(id, $parent, "keywordInsightBest"); });
-			$("#" + id + " a.worst").click(function(e) { switchView(id, $parent, "keywordInsightWorst"); });
-			$("#" + id + " a.all").click(function(e) { switchView(id, $parent, "keywordInsightAll"); });
-			$("#" + id + " a.bestsub").click(function(e) { switchView(id, $parent, "keywordInsightBestSub"); });
-			$("#" + id + " a.worstsub").click(function(e) { switchView(id, $parent, "keywordInsightWorstSub"); });
+			$("#" + id + " a.scatter").click(function(e) { changeViewBtn(id, "keywordInsightScatter"); });
+			$("#" + id + " a.improve").click(function(e) { changeViewBtn(id, "keywordInsightImprove"); });
+			$("#" + id + " a.best").click(function(e) { changeViewBtn(id, "keywordInsightBest"); });
+			$("#" + id + " a.worst").click(function(e) { changeViewBtn(id, "keywordInsightWorst"); });
+			$("#" + id + " a.all").click(function(e) { changeViewBtn(id, "keywordInsightAll"); });
+			$("#" + id + " a.bestsub").click(function(e) { changeViewBtn(id, "keywordInsightBestSub"); });
+			$("#" + id + " a.worstsub").click(function(e) { changeViewBtn(id, "keywordInsightWorstSub"); });
 		});
 
 	});		
 }
 
-/* Directly switches a view within this widget */
-function switchView(id, $parent, view) {
-	$parent.children(".active").removeClass("active").hide();
-	$("#" + id + " #" + view).show().addClass("active");
-	
-}
-
-/* Generic method for constructing keyword tables with data */
-function createTableView(id, data) {
-	var $view = $("#" + id).empty().attr("style", "display:none;");
-	
-	// add sub-title
-	$("<h4>").html("<b>" + data.title + "</b>").appendTo($view);
-	
-	var $table = $("<table>").addClass("view").appendTo($view);
-	var $thead = $("<thead>").addClass("data-header").appendTo($table);
-	var $tbody = $("<tbody>").addClass("data-body").appendTo($table);
-
-	// setup column headers
-	for (var i = 0; i < data.keys.length; i++) {
-		var $th = $("<th>").html("<div>" + data.keys[i] + "</div>").appendTo($thead);
-		if (i == 0)
-			$th.addClass("words");
-		else if (i == data.keys.length - 1)
-			$th.addClass("last");
-		else
-			$th.css("width", (100 - 32) / (data.keys.length - 1) + "%");
-	}
-
-	var $tr = $("<tr>").appendTo($tbody);
-	var $td = $("<td>").attr("colspan", data.keys.length).appendTo($tr);
-	
-	var $overflow = $("<div>").addClass("keywordTable").appendTo($td);
-	var $tableData = $("<table>").addClass("data-table").appendTo($overflow);
-	
-	// access data via column headers as key names
-	for (var i = 0; i < data[data.keys[0]].length; i++) {
-		var tr = $("<tr>").appendTo($tableData);
-		for (var j = 0; j < data.keys.length; j++) {
-			var td = $("<td>").html("<div>" + data[data.keys[j]][i] + "</div>").appendTo(tr);
-			if (j == 0)
-				td.addClass("words");
-			else if (j == data.keys.length - 1)
-				td.addClass("last");
-			else
-				td.css("width", (100 - 32) / (data.keys.length - 1) + "%");
-		}
-	}
-}
 
 function getKeywordInsightData(id, callback) {
 	$.post(applicationRoot + "KeywordInsight", {"serialize": 1}, function(response) {
@@ -130,7 +58,7 @@ function getKeywordInsightData(id, callback) {
 			// TODO: Handle null data scenario.
 			console.log("No data for keywordInsight");
 			
-			// Even though there is not data, we still need to fire off 
+			// Even though there is no data, we still need to fire off 
 			// the callback if its in place otherwise when we change to an
 			// account with data. We don't have our controls.
 			if (callback)

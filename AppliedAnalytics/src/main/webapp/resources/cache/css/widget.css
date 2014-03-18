@@ -13,12 +13,34 @@
 .widget .widget_collapse { float:left; width:20px; }
 .widget .widgetView { visibility:'hidden'; }
 
+
 /*** GENERAL GRAPHING ***/
 svg { font: 10px sans-serif; }
 svg path { fill:none; stroke:blue; stroke-width:3; }
 svg line { stroke:black; }
 svg .axis path { display: none; }
 svg path.domain { stroke:#333; stroke-width:2; }
+
+/*** TABLE STYLING ***/
+.widget .widget-content th { background:#ddd; color:#333; width:20%; }
+.widget .widget-content th:hover{ background:#00aeff; color:#fffffe; cursor:pointer; }
+.widget .widget-content .data-table tr:hover { background:rgb(153, 255, 255); }
+.widget .widget-content table { width:100%; border-collapse:collapse; background:#eee; table-layout:fixed; }
+.widget .widget-content table.view { border:1px solid #666; }
+.widget .widget-content thead { border-bottom:1px solid #666; }
+.widget .widget-content table th.long { width:32%; } 
+.widget .widget-content table td.long { width:37%; }
+.widget .widget-content table td { border:none; padding:0; text-align:left; }
+.widget .widget-content table th.last,
+.widget .widget-content table td.last { width:auto; word-wrap:break-word; }
+.widget .widget-content table th > a,
+.widget .widget-content table td > a { padding:3px; word=wrap:break-word; }
+.widget .widget-content a:hover { text-decoration:none; }
+.widget .widget-content .overflow { max-height:220px; overflow:auto; }
+
+/*** WIDGET CONTROLS ***/
+.widget .widget-content .controls { width:100%; height:35px; position:relative; }
+.widget .widget-content ul { display:block; margin:auto; position:absolute; left:40px; }
 
 
 /*****CSS for DATA FORECAST WIDGET*****/
@@ -471,77 +493,35 @@ line:hover { opacity: 0.5; }
 .keywordInsight h4 { text-align:center; margin-bottom:10px; color:#333; }
 .keywordInsight #keywordInsightData { margin:auto; height:315px; }
 .keywordInsight .main text { font: 10px sans-serif; }
-.keywordInsight .controls { width:100%; height:35px; position:relative; }
-.keywordInsight .controls ul { display:block; margin:auto; position:absolute; left:40px; }
 .keywordInsight .keywordVisual { width:inherit; height:305px; display:none; margin-bottom:10px; margin:0 auto; }
 .keywordInsight .keywordVisual.active { display:block; }
-.keywordInsight .keywordVisual th { background:#ddd; color:#333; width:20%; }
-.keywordInsight .keywordVisual th:hover{ background:#00aeff; color:#fffffe; cursor:pointer; }
-.keywordInsight .keywordVisual .data-table tr:hover { background:rgb(153, 255, 255); }
-.keywordInsight .keywordVisual table { width:100%; border-collapse:collapse; background:#eee; table-layout:fixed; }
-.keywordInsight .keywordVisual table.view { border:1px solid #666; }
-.keywordInsight .keywordVisual thead { border-bottom:1px solid #666; }
-.keywordInsight .keywordVisual table th.words { width:32%; } 
-.keywordInsight .keywordVisual table td.words { width:37%; }
-.keywordInsight .keywordVisual table td { border:none; padding:0; text-align:left; }
-.keywordInsight .keywordVisual table th.last,
-.keywordInsight .keywordVisual table td.last { width:auto; word-wrap:break-word; }
-.keywordInsight .keywordVisual table th > div,
-.keywordInsight .keywordVisual table td > div { padding:3px; word=wrap:break-word; }
-.keywordInsight .keywordVisual .keywordTable { max-height:220px; overflow:auto; }
+.keywordInsight .scatter-axis line, .scatter-axis path { shape-rendering: crispEdges; stroke: black; fill: none; }
+.keywordInsight .scatter-axis text { font-family: sans-serif; font-size: 11px; }
+.keywordInsight circle { fill: steelblue; } 
+.keywordInsight .dot { stroke: #000; }
+.keywordInsight .tooltip { position: absolute; width: 200px; height: 28px; pointer-events: none; }
+.keywordInsight th, .keywordInsight td { padding:3px; }
 
-.keywordInsight .scatter-axis line, .scatter-axis path {
-    shape-rendering: crispEdges;
-    stroke: black;
-    fill: none;
-}
-    
-.keywordInsight .scatter-axis text {
-    font-family: sans-serif;
-    font-size: 11px;
-}
-    
-
-.keywordInsight circle {
-    fill: steelblue;
-}
-    
-.keywordInsight .dot {
-    stroke: #000;
-}
-
-.keywordInsight .tooltip {
-  position: absolute;
-  width: 200px;
-  height: 28px;
-  pointer-events: none;
-}
-
-
-
-
-.keywordInsight table
-{
-/*background-color:#DCDCDC;*/
-
-}
-.keywordInsight th, .keywordInsight td
-{
-padding:3px;
-}
 
 /*****CSS for PAGE PERFORMANCE - BAR CHART WIDGET ****/
 .pagePerformance{
 	width:600px;
 }
 .pagePerformance #pagePerformanceData {
-	height:300px;
+	height:315px;
 	width:inherit;
+	margin:auto;
 }
 .pagePerformance .pagePerformanceVisual {
-	height:inherit;
+	height:305px;
 	width:inherit;
+	display:none; 
+	margin-bottom:10px; 
+	margin:0 auto;
 }
+
+.pagePerformance .pagePerformanceVisual.active { display:block; }
+
 .pagePerformanceVisual .axis line {
     shape-rendering: crispEdges;
     stroke: black;
@@ -563,7 +543,3 @@ padding:3px;
   height: 28px;
   pointer-events: none;
 }
-
-
-
-

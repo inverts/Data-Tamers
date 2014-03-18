@@ -16,8 +16,11 @@ function loadWebsitePerformanceWidget(id) {
 				console.log("Could not append PagePerformance");
 			}
 			
-			getPagePerformanceData(id, function() {
+			getPagePerformanceData(id, function(e) {
+				nextPreviousControls(id, "pagePerformanceVisual");
 				
+				$("#" + id + " a.bar").click(function(e) { changeViewBtn(id, "pagePerformanceBar"); });
+				$("#" + id + " a.pp-table").click(function(e) { changeViewBtn(id, "pagePerformanceTable"); });
 			});
 
 	});		
@@ -76,9 +79,11 @@ function getPagePerformanceData(id, callback){
 		});
 		
 		// create table
-		createTableView("pagePerformanceTable", d.data);
+		createTableView("pagePerformanceTable", d.data, 38, 0);
 		
-		
+		if (callback)
+			callback();
+
 	});
 }
 

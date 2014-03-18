@@ -221,3 +221,50 @@ function updateWidgetPosition() {
 	}
 }
 
+
+/**
+ * Next and Previous buttons for pagination controls.
+ * @param id
+ * @param viewClass
+ */
+function nextPreviousControls(id, viewClass) {
+	
+	var $parent = $("#" + id + " ." + viewClass).parent();
+	
+	// previous button
+	$("#" + id + " .prev").click(function(e) {
+		var $prev = $parent.children(".active").prev();
+		$parent.children(".active").removeClass("active").hide("slide", {direction: "right"}, "fast", function() {
+			($prev.length) ? $prev.addClass("active").show("slide", {direction: "left" }, "fast")
+					       : $parent.children("." + viewClass + ":last").show("slide", {direction: "left"}, "fast")
+					       										     .addClass("active");
+		});
+		
+	});
+	
+	// next button
+	$("#" + id + " .next").click(function(e) {
+		var $next = $parent.children(".active").next();
+		$parent.children(".active").removeClass("active").hide("slide", {direction: "left"}, "fast", function() {
+			($next.length) ? $next.addClass("active").show("slide", {direction: "right"}, "fast")
+					       : $parent.children("." + viewClass + ":first").show("slide", {direction: "right"}, "fast")
+					       										     .addClass("active");
+		});
+	});	
+	
+}
+
+/**
+ * Direct view button event.
+ * @param id
+ * @param view
+ */
+function changeViewBtn(id, view) {
+	
+	var $parent = $("#" + id + " #" + view).parent();
+	
+	$parent.children(".active").removeClass("active").hide();
+	$("#" + id + " #" + view).show().addClass("active");
+}
+
+

@@ -24,11 +24,15 @@ function checkKeys(obj, idx, keys, value) {
 
 
 /* Generic method for constructing tables with data */
-function createTableView(id, data) {
+function createTableView(id, data, wPct, urlIndex) {
 	var $view = $("#" + id).empty().attr("style", "display:none;");
 	
-	// add sub-title
-	$("<h4>").html("<b>" + data.title + "</b>").appendTo($view);
+	if (!wPct)
+		wPct = 32;
+	
+	// add sub-title if applicable
+	if (data.title)
+		$("<h4>").html("<b>" + data.title + "</b>").appendTo($view);
 	
 	var $table = $("<table>").addClass("view").appendTo($view);
 	var $thead = $("<thead>").addClass("data-header").appendTo($table);
@@ -38,30 +42,35 @@ function createTableView(id, data) {
 	for (var i = 0; i < data.keys.length; i++) {
 		var $th = $("<th>").html("<div>" + data.keys[i] + "</div>").appendTo($thead);
 		if (i == 0)
-			$th.addClass("words");
+			$th.addClass("long");
 		else if (i == data.keys.length - 1)
 			$th.addClass("last");
 		else
-			$th.css("width", (100 - 32) / (data.keys.length - 1) + "%");
+			$th.css("width", (100 - wPct) / (data.keys.length - 1) + "%");
 	}
 
 	var $tr = $("<tr>").appendTo($tbody);
 	var $td = $("<td>").attr("colspan", data.keys.length).appendTo($tr);
 	
-	var $overflow = $("<div>").addClass("keywordTable").appendTo($td);
+	var $overflow = $("<div>").addClass("overflow").appendTo($td);
 	var $tableData = $("<table>").addClass("data-table").appendTo($overflow);
 	
 	// access data via column headers as key names
 	for (var i = 0; i < data[data.keys[0]].length; i++) {
 		var tr = $("<tr>").appendTo($tableData);
 		for (var j = 0; j < data.keys.length; j++) {
-			var td = $("<td>").html("<div>" + data[data.keys[j]][i] + "</div>").appendTo(tr);
+			var $a = $("<a>").html(data[data.keys[j]][i]);
+			// add url if available
+			if (urlIndex != "undefined" && data.url && j == urlIndex)
+				$a.attr("href", data.url[i]);
+			
+			var td = $("<td>").append($a).appendTo(tr);
 			if (j == 0)
-				td.addClass("words");
+				td.addClass("long");
 			else if (j == data.keys.length - 1)
 				td.addClass("last");
 			else
-				td.css("width", (100 - 32) / (data.keys.length - 1) + "%");
+				td.css("width", (100 - wPct) / (data.keys.length - 1) + "%");
 		}
 	}
 }

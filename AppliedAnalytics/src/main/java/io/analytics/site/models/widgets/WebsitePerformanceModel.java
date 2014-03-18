@@ -161,13 +161,14 @@ public class WebsitePerformanceModel extends WidgetModel {
 		// put data into JSON object to pass to the view website-performance.jsp 
 
 		public JSONObject getDataPoints()  {
-			 try {	
-				 JSONArray arr1 = new JSONArray();
+			 try {
+				 
+				 /*JSONArray arr1 = new JSONArray();
 				 JSONArray arr2 = new JSONArray();
 				 JSONArray arr3 = new JSONArray();
 				 JSONArray arr4 = new JSONArray();
 				 JSONArray arr5 = new JSONArray();
-				 JSONArray arr6 = new JSONArray();
+				 JSONArray arr6 = new JSONArray();*/
 				 
 				 String[] keys1 = new String[]{"Webpath Path", "Visits (%)", "Bounce Rate (%)", "Exit Rate (%)"};
 				 
@@ -175,7 +176,7 @@ public class WebsitePerformanceModel extends WidgetModel {
 				 this.jsonData.put(keys1[1], visitsPercentResults);
 				 this.jsonData.put(keys1[2], bounceRateResults);
 				 this.jsonData.put(keys1[3], exitRateResults);
-				 this.jsonData.put("title", pageTitleResults);
+				 //this.jsonData.put("title", pageTitleResults);
 				 this.jsonData.put("url", pageLinkResults);
 				 this.jsonData.put("keys", keys1);
 				 
