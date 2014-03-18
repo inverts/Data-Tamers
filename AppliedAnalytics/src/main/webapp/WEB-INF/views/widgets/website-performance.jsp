@@ -35,7 +35,7 @@ document.getElementById("exit4").innerHTML=data.exitRate[0][4];
 </script> 
 
 <form id="websitePerformanceSettings">
-<h4><b>Improve these high impact webpages:</h4>
+<h4><b><center>Improve these high impact webpages:</center></h4>
 	<table class = "websitePerformanceClass" id = "websitePerformance-table">		
 	<thead>
 	<tr>
