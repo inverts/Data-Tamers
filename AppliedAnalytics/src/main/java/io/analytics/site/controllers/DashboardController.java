@@ -34,6 +34,7 @@ import io.analytics.site.models.widgets.DashboardModel;
 import io.analytics.site.models.SettingsModel;
 import io.analytics.site.models.SidePanelModel;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -341,6 +342,29 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 		
 		model.addAttribute("model", d);
 		return new ModelAndView("serialize");
+	}
+	
+	@RequestMapping(value = "/application/dashboards", method = {RequestMethod.POST, RequestMethod.GET})
+	public ModelAndView getDashboards(Model model, HttpSession session) {
+		int accountId;
+		try {
+			accountId = SessionService.getSessionModel(session).getAccount().getId();
+		} catch (CorruptedSessionException e) {
+			e.printStackTrace();
+			return new ModelAndView("plaintext");
+		}
+		List<Dashboard> dashboards = DashboardService.getAccountDashboards(accountId);
+		JSONArray arr = new JSONArray();
+		for (Dashboard d : dashboards) {
+			try {
+				arr.put(new JSONObject(d.getJSONSerialization()));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		model.addAttribute("data", arr.toString());
+		return new ModelAndView("plaintext");
 	}
 	
 

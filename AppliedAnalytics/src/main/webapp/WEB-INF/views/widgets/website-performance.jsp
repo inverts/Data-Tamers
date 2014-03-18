@@ -1,8 +1,22 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
+<div id = "pagePerformanceData">
+	<div id="pagePerformanceBar" class="pagePerformanceVisual active"></div>
+	<div id="pagePerformanceTable" class="pagePerformanceVisual"></div>
+</div>
+<div class="controls">
+	<ul class="pagination">
+	  <li><a class="prev">&laquo;</a></li>
+	  <li><a class="bar">Bar</a></li>
+	  <li><a class="pp-table">Table</a></li>
+	  <li><a class="next">&raquo;</a></li>
+	</ul>
+</div>
 
+<%--
 <script> 
+
 var data =JSON.parse('${ wpModel.getDataPoints() }');
 //var obj = eval ("(" + data + ")");
 console.log(data);
@@ -32,11 +46,10 @@ document.getElementById("url4").innerHTML=data.pageTitle[0][4];
 document.getElementById("url4").setAttribute("href",data.pageLink[0][4]);
 document.getElementById("bounce4").innerHTML=data.bounceRate[0][4];
 document.getElementById("exit4").innerHTML=data.exitRate[0][4];
-</script> 
-
+</script> --%>
+<%-- 
 <form id="websitePerformanceSettings">
-<h4><b><center>Improve these high impact webpages:</center></h4>
-	<table class = "websitePerformanceClass" id = "websitePerformance-table">		
+<h4><b><center>Improve these high impact webpages:</center></h4>	<table class = "websitePerformanceClass" id = "websitePerformance-table">		
 	<thead>
 	<tr>
 		<th align="left">Webpage Title (link)</th>
@@ -84,5 +97,5 @@ document.getElementById("exit4").innerHTML=data.exitRate[0][4];
 	<!--</div> -->
 	
 </form>
-
+--%>
 

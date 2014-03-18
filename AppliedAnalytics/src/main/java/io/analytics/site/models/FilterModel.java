@@ -27,8 +27,8 @@ public class FilterModel {
 	public FilterModel() {
 		activeMetric = "ga:visits";
 		Date now = new Date();
-		activeEndDate = now;
-		activeStartDate = new Date(now.getTime() - (MS_IN_DAY * 30L));
+		activeEndDate = new Date(now.getTime() - MS_IN_DAY); //Yesterday
+		activeStartDate = new Date(activeEndDate.getTime() - (MS_IN_DAY * 30L)); //30 days from yesterday
 	}
 
 	public String getActiveMetric() {

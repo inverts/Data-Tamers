@@ -1,6 +1,7 @@
 package io.analytics.service.interfaces;
 
 import io.analytics.site.models.FilterModel;
+import io.analytics.site.models.SessionModel;
 import io.analytics.site.models.SettingsModel;
 
 import java.io.Serializable;
@@ -26,6 +27,8 @@ boolean checkAuthorization(HttpSession session);
 	
 	Credential getCredentials();
 	
+	public SessionModel getSessionModel(HttpSession session);
+	
 	HashMap<String, Object> getModels(HttpSession session);
 	
 	<T> T getModel(HttpSession session, String s, Class<T> c);
@@ -33,7 +36,6 @@ boolean checkAuthorization(HttpSession session);
 	void saveModel(HttpSession session, String s, Object model);
 
 	boolean redirectToLogin(HttpSession session, HttpServletRequest request, HttpServletResponse response);
-	
 	
 	boolean redirectToRegularLogin(HttpSession session, String queryString, HttpServletResponse response);
 	
