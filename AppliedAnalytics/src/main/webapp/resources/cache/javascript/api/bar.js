@@ -20,9 +20,9 @@
 			var sdata = settings.data;		
 			
 			var padding = 40; //padding for scale values
-			var margin = {top: -10, right: 0, bottom: 0, left: 0};
+			var margin = {top: -10, right: 0, bottom: 20, left: 0};
 			var width = $this.width();
-			var height = $this.height();
+			var height = $this.height()-margin.bottom;
 
 			var svg = d3.select("#" + this.id).append("svg").attr("height", height).attr("width", width);
 			var color = d3.scale.ordinal().range(["#a6cee3", "#1f78b4", "#b2df8a"]);
@@ -81,12 +81,10 @@
 							function(d) {
 								tooltip.transition().duration(200).style(
 										"opacity", .9);
-								tooltip.html("(" + d.name +"%" + ")")
-										.style("font-size","15px")
-										.style("left",
-												(d3.event.pageX + 5) + "px")
-										.style("top",
-												(d3.event.pageY - 28) + "px");
+								tooltip.html("(" + d.name + "%" + ")").style(
+										"font-size", "15px").style("left",
+										(d3.event.pageX + 5) + "px").style(
+										"top", (d3.event.pageY - 28) + "px");
 							}).on("mouseout", function(d) {
 						tooltip.transition().duration(500).style("opacity", 0);
 					});
@@ -104,10 +102,16 @@
 			  .call(yAxis);
 
 			// Add x axis
-			var xAxis = d3.svg.axis().scale(x0).orient("bottom");
+			var xAxis = d3.svg.axis()
+				.scale(x0)
+				.tickSize(5,1)
+				.tickValues(settings.data.map(function(d) { return d.page; }))
+				.orient("bottom");
+			
 			svg.append("g").attr("class", "axis")
-			  .attr("transform", "translate(25," + (height-5) + ")")
+			  .attr("transform", "translate(25," + (height-margin.bottom) + ")")
 			  .call(xAxis);
+			
 			// Legend
 			var legend = svg.selectAll(".legend")
 			      .data(pageNames)
