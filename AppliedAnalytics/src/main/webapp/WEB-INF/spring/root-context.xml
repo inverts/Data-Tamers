@@ -18,13 +18,21 @@
 	
 	<beans:bean id="customAuthenticationUserService" class="io.analytics.service.UserService" />
 	<beans:bean id="customAuthenticationProvider" class="io.analytics.security.SiteAuthenticationProvider" />
-	
+	<!--  
 	<beans:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<beans:property name="url" value="jdbc:mysql://davidkainoa.com:3306/davidkai_analytics" />
 		<beans:property name="username" value="davidkai_data" />
 		<beans:property name="password" value="PNjO_#a40@wZPmh-Q" />
 	</beans:bean>
+	-->
+	<beans:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<beans:property name="url" value="jdbc:mysql://localhost:3306/davidkai_analytics" />
+		<beans:property name="username" value="analyticsuser" />
+		<beans:property name="password" value="dGLnLlf4CXYCOrWYc7Vn" />
+	</beans:bean>
+	
 	<beans:bean id="transactionManager"
 	  class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
 	  scope="singleton">
