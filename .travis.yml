@@ -15,3 +15,9 @@ notifications:
     - tesiagao@gmail.com
     - htnywg@gmail.com
     - u0530964@gmail.com
+
+after_success:
+  - chmod 600 .travis/deploy_key.pem # this key should have push access
+  - ssh-add .travis/deploy_key.pem
+  - git remote add deploy git@ec2-54-186-75-23.us-west-2.compute.amazonaws.com:/opt/git/Data-Tamers.git
+  - git push deploy
