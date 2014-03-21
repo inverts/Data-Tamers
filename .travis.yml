@@ -24,6 +24,6 @@ after_success:
   - cat ~/.ssh/config
   - chmod 600 .travis/deploy_key.pem # this key should have push access
   - eval $(ssh-agent)
-  - ssh-add .travis/deploy_key.pem
+  - ssh-add .travis/deploy_key
   - git remote add deploy git@ec2-54-186-75-23.us-west-2.compute.amazonaws.com:/opt/git/Data-Tamers.git
   - git push deploy
