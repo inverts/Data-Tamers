@@ -16,6 +16,11 @@ notifications:
     - htnywg@gmail.com
     - u0530964@gmail.com
 
+# This serves to avoid having an "Are you sure you want to continue connecting (yes/no)?"
+# prompt occur during continuous deployment to EC2.
+before_script: 
+  - echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+
 after_success:
   - chmod 600 .travis/deploy_key.pem # this key should have push access
   - ssh-add .travis/deploy_key.pem
