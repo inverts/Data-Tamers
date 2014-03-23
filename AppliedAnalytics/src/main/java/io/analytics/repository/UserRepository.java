@@ -125,7 +125,7 @@ public class UserRepository implements IUserRepository {
         	//Not sure what exceptions can be thrown, the documentation simply says:
         	//"This method will always return a key or throw an exception if a key was not returned."
         	//I would imagine we'll see SQLExceptions.
-        	e.printStackTrace();
+        	System.out.println("Database error.");
         	return null;
         }
 
@@ -141,46 +141,6 @@ public class UserRepository implements IUserRepository {
 		result.setUsername(u.getUsername());
 		
 		return result;
-		/*
-		//JdbcTemplate jdbc = new JdbcTemplate(DATASOURCE);
-		String preStatement;
-		Object[] args;
-		int[] argTypes;
-		
-		String joinDate;
-		if (u.getJoinDate() == null)
-			joinDate = null;
-		else
-			joinDate = formatter.format(u.getJoinDate().getTime());
-		preStatement = String.format("INSERT INTO `%s` (`%s`, `%s`, `%s`, `%s`, `%s`, `%s`, `%s`, `%s`) "
-											+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?);", 
-											USERS_TABLE, UserTable.FIRST_NAME, UserTable.LAST_NAME, UserTable.EMAIL_ADDRESS, UserTable.USERNAME,
-				UserTable.PASSWORD_HASH, UserTable.PASSWORD_SALT, UserTable.PROFILE_IMAGE_URL, UserTable.JOIN_DATE);
-		
-		args = new Object[]{ u.getFirstName(), u.getLastName(), u.getEmail(), u.getUsername(), u.getPassword(), 
-				u.getPasswordSalt(), u.getProfileImageUrl(), joinDate };
-		
-		argTypes = new int[]{ Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR , Types.VARCHAR, Types.VARCHAR, Types.DATE };
-		
-		
-		int userId = insertUser(preStatement, args, argTypes);
-		if (userId <= 0)
-			return null;
-		
-		User result = new User(userId);
-		result.setAuthorities(u.getAuthorities());
-		result.setEmail(u.getEmail());
-		result.setFirstName(u.getFirstName());
-		result.setJoinDate(u.getJoinDate());
-		result.setLastName(u.getLastName());
-		result.setPasswordHash(u.getPassword());
-		result.setPasswordSalt(u.getPasswordSalt());
-		result.setProfileImageUrl(u.getProfileImageUrl());
-		result.setUsername(u.getUsername());
-		
-		//Return true if the statement successfully affected one row.
-		return result;
-		*/
 	}
 
 
@@ -193,7 +153,7 @@ public class UserRepository implements IUserRepository {
 			userId = this.jdbc.queryForInt("SELECT LAST_INSERT_ID();");
 		} catch (DataAccessException e) {
 			//TODO: Standardize error handling for the database.
-			//e.printStackTrace();
+        	System.out.println("Database error.");
 			return -1;
 		}
 		
@@ -233,7 +193,7 @@ public class UserRepository implements IUserRepository {
 			
 		} catch (DataAccessException e) {
 			//TODO: Standardize error handling for the database.
-			//e.printStackTrace();
+        	System.out.println("Database error.");
 			return null;
 		}
 		

@@ -5,6 +5,7 @@ import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.analytics.model.GaData;
 
 import java.util.Date;
+import java.util.List;
 
 
 
@@ -13,6 +14,8 @@ public interface ICoreReportingRepository {
 	public CoreReportingData getMetricByDay(Credential credential, String profileID, String metric, String startDate, String endDate, int maxResult); 
 	
 	public CoreReportingData getMetricByDayOfWeek(Credential credential, String profileID, String metric, String startDate, String endDate, int maxResults);
+
+	public CoreReportingData getDimensionsByDay(Credential credential, String profileID, String metric, String dimension, List<String> dimensions, String startDate, String endDate, int maxResults);
 
 	public CoreReportingData getTopTrafficSources(Credential credential, String profileID, String metric, String startDate, String endDate, int maxResults);
 

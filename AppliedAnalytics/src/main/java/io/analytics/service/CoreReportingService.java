@@ -2,6 +2,7 @@ package io.analytics.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,14 @@ public class CoreReportingService implements ICoreReportingService {
 	public ForecastData getForecastData(Credential credential, String profileID) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public CoreReportingData getDimensionsByDay(Credential credential, String profileID, String metric,
+			String dimension, List<String> dimensions, Date startDate, Date endDate, int maxResults) {
+
+		return REPOSITORY.getDimensionsByDay(credential, profileID, metric, dimension, dimensions, dateFormat.format(startDate), dateFormat.format(endDate), maxResults);
+
 	}
 	
 

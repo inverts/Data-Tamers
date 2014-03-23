@@ -1,9 +1,14 @@
 
 package io.analytics.site.controllers;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import io.analytics.domain.CoreReportingData;
 import io.analytics.domain.Widget;
 import io.analytics.service.interfaces.ICoreReportingService;
 import io.analytics.service.interfaces.IKeywordInsightService;
@@ -19,6 +24,7 @@ import io.analytics.site.models.widgets.KeywordInsightModel;
 import io.analytics.site.models.widgets.WebsitePerformanceModel;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +39,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.services.analytics.model.GaData;
 
 @Controller
 public class WidgetController {
@@ -411,4 +418,67 @@ public class WidgetController {
 			
 			return null;
 		}
+		
+
+		@RequestMapping(value = "/growing-problems", method = {RequestMethod.POST, RequestMethod.GET})
+		public ModelAndView growingProblems(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,
+				@RequestParam(value = "serialize", defaultValue = "0") boolean serialize) {
+			Credential credential;
+			SettingsModel settings;
+			FilterModel filter;
+			if (SessionService.checkAuthorization(session)) {
+				credential = SessionService.getCredentials();
+				filter = SessionService.getFilter();
+				settings = SessionService.getUserSettings();
+			} else {
+				SessionService.redirectToLogin(session, request, response);
+				return new ModelAndView("unavailable");
+			}
+			Date startDate = filter.getActiveStartDate();
+			Date endDate = filter.getActiveEndDate();
+			String profileId = settings.getActiveProfile().getId();
+			String metric = filter.getActiveMetric();
+			CoreReportingData reportingData = CoreReportingService.getTopTrafficSources(credential, profileId, metric, startDate, endDate, 25);
+			GaData gaData = reportingData.getData();
+			JSONObject dataDump = new JSONObject();
+			JSONArray table = new JSONArray();
+			List<String> dimensions = new ArrayList<String>();
+			for (List<String> row : gaData.getRows()) {
+				table.put(row);
+				dimensions.add(row.get(0));
+			}
+			try {
+				dataDump.put("Top Traffic Sources", table);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			CoreReportingData reportingData2 = CoreReportingService.getDimensionsByDay(credential, profileId, metric, "ga:source", dimensions, startDate, endDate, 1000);
+			GaData gaData2 = reportingData2.getData();
+			JSONArray table2 = new JSONArray();
+			for (List<String> row : gaData2.getRows()) {
+				table2.put(row);
+			}
+
+			try {
+				dataDump.put("Dimensions By Day", table2);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			String data = null;
+			
+			try {
+				data = dataDump.toString(4);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			viewMap.addAttribute("data", data);
+			return new ModelAndView("plaintext");
+		}
+			
 }

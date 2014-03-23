@@ -102,7 +102,7 @@ public class FilterRepository implements IFilterRepository {
         	//Not sure what exceptions can be thrown, the documentation simply says:
         	//"This method will always return a key or throw an exception if a key was not returned."
         	//I would imagine we'll see SQLExceptions.
-        	e.printStackTrace();
+        	System.out.println("Database error.");
         	return null;
         }
 

@@ -40,9 +40,6 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 	 * @author gak
 	 */
 		private final String APPLICATION_NAME = "datatamers-appliedanalytics-0.1";
-		//private final String ACCESS_TOKEN;
-		//private Credential CREDENTIAL;
-		//private String profileID;
 		private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 		private static final JsonFactory JSON_FACTORY = new JacksonFactory();
 		private QueryDispatcher queryDispatcher = new QueryDispatcher();
@@ -91,28 +88,6 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			}
 		}
 
-		/*public CoreReportingRepository(Credential credential, String profileId) throws CredentialException {
-			if (credential == null)
-				throw new CredentialException("Null credential object passed.");
-			this.ACCESS_TOKEN = credential.getAccessToken();
-			this.CREDENTIAL = credential;
-			this.PROFILE_ID = profileId;
-			this.CORE_REPORTING = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, CREDENTIAL)
-					.setApplicationName(APPLICATION_NAME).build().data().ga();
-
-			// Refresh the access token if it is about to expire.
-			if (CREDENTIAL.getExpiresInSeconds() < 10) {
-				boolean success = false;
-				try {
-					success = CREDENTIAL.refreshToken();
-				} catch (IOException e) {
-					throw new CredentialException("4xx error occured while refreshing token.");
-				}
-				if (!success)
-					throw new CredentialException("Token refresh failed. There may not be a refresh token.");
-			}
-		}*/
-
 
 		/**
 		 * Get metric data vs. days (2 dimensional data) 
@@ -154,6 +129,51 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 				Ga.Get request = reporting.get("ga:" + profileID, startDate, endDate, metric) // Metrics.
 						.setDimensions(dimension)
 						.setSort(dimension)
+						.setMaxResults(maxResults);
+				
+				gaData = queryDispatcher.execute(request);
+			
+			} catch (GoogleJsonResponseException e) {
+				handleGoogleJsonResponseException(e);
+			} catch (IOException e) {
+				// Catch general parsing network errors.
+				e.printStackTrace();
+			}
+
+			return coreReportingMapper(gaData);
+		}
+
+		
+		/**
+		 * 
+		 * @param credential
+		 * @param profileID The profile ID of the account we're interested in.
+		 * @param metric The metric we're interested in.
+		 * @param dimension The dimension we're interested in.
+		 * @param dimensions A list of values for <code>dimension</code> to limit the results to.
+		 * @param startDate
+		 * @param endDate
+		 * @param maxResults
+		 * @return
+		 */
+		public CoreReportingData getDimensionsByDay(Credential credential, String profileID, String metric, String dimension, List<String> dimensions, String startDate, String endDate, int maxResults) {
+			GaData gaData = null;
+			try {
+				
+				String filterString = "";
+				for (String d : dimensions) {
+					if ( !filterString.equals("") )
+						filterString += ",";
+					filterString += dimension + "==" + d;
+				}
+
+				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build().data().ga();
+
+				Ga.Get request = reporting.get("ga:" + profileID, startDate, endDate, metric) // Metrics.
+						.setDimensions(dimension + ",ga:nthDay")
+						.setFilters(filterString)
+						.setSort(dimension + ",ga:nthDay") //Sort by dimension and then day
 						.setMaxResults(maxResults);
 				
 				gaData = queryDispatcher.execute(request);
