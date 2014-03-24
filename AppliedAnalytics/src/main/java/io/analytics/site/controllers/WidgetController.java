@@ -178,7 +178,7 @@ public class WidgetController {
 
 		//If there is no model available, or if the active profile changed, create a new model.
 		if ((growingProblems == null) || !(settings.getActiveProfile().equals(growingProblems.getActiveProfile()))) {
-			growingProblems = new GrowingProblemsModel();
+			growingProblems = new GrowingProblemsModel(SessionService, CoreReportingService);
 		}
 
 		//TODO: We may need to make setStartDate and setEndDate abstract methods in the WidgetModel class.
@@ -423,6 +423,13 @@ public class WidgetController {
 		@RequestMapping(value = "/growing-problems", method = {RequestMethod.POST, RequestMethod.GET})
 		public ModelAndView growingProblems(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,
 				@RequestParam(value = "serialize", defaultValue = "0") boolean serialize) {
+			
+			
+			GrowingProblemsModel model = new GrowingProblemsModel(SessionService, CoreReportingService);
+			model.getTrafficSourceDataList();
+			viewMap.addAttribute("data", model.getJSONSerialization());
+			return new ModelAndView("plaintext");
+			/*
 			Credential credential;
 			SettingsModel settings;
 			FilterModel filter;
@@ -479,6 +486,7 @@ public class WidgetController {
 
 			viewMap.addAttribute("data", data);
 			return new ModelAndView("plaintext");
+			*/
 		}
 			
 }
