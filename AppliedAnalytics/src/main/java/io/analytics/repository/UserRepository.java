@@ -21,12 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-import io.analytics.domain.Account;
-import io.analytics.domain.Filter;
 import io.analytics.domain.User;
-import io.analytics.repository.AccountRepository.AccountTable;
 import io.analytics.repository.interfaces.IUserRepository;
 import io.analytics.security.Role;
 
@@ -86,11 +82,7 @@ public class UserRepository implements IUserRepository {
 		public static final String PROFILE_IMAGE_URL = "profileImageUrl";
 		public static final String JOIN_DATE = "joinDate";
 	}
-	//TODO: Use a connection properties file.
-	private static DriverManagerDataSource DATASOURCE = 
-				new DriverManagerDataSource("jdbc:mysql://davidkainoa.com:3306/davidkai_analytics", 
-						"davidkai_data", "PNjO_#a40@wZPmh-Q");
-
+	
 	//TODO: Maybe we can autowire this up too, since it's a database standard for the DATE type
 	private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 	
@@ -185,7 +177,7 @@ public class UserRepository implements IUserRepository {
 			User user = users.get(0);
 			
 			//TODO: What is this and how should we properly incorporate it?
-			Set roles = new HashSet<GrantedAuthority>();
+			Set<GrantedAuthority> roles = new HashSet<GrantedAuthority>();
 			roles.add(new Role("ROLE_USER"));
 			user.setAuthorities(roles);
 			

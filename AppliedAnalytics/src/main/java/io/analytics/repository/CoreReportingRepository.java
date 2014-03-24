@@ -1,21 +1,16 @@
 package io.analytics.repository;
+
 import io.analytics.domain.CoreReportingData;
-import io.analytics.domain.CoreReportingTypedData;
 import io.analytics.repository.interfaces.ICoreReportingRepository;
 import io.analytics.service.interfaces.ISessionService;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
 
 import com.google.api.client.auth.oauth2.Credential;
@@ -125,7 +120,6 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 
 				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build().data().ga();
-				int i;
 				Ga.Get request = reporting.get("ga:" + profileID, startDate, endDate, metric) // Metrics.
 						.setDimensions(dimension)
 						.setSort(dimension)
