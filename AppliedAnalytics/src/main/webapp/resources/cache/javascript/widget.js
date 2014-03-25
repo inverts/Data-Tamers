@@ -98,6 +98,7 @@ function loadWidget($content, widgetTypeId, widgetId, i, callback)
 		$(this).parent().siblings(".widget-content").slideToggle("fast");
 	});
 	
+	
 	if (callback)
 		callback(elementId);
 
@@ -232,7 +233,7 @@ function nextPreviousControls(id, viewClass) {
 	var $parent = $("#" + id + " ." + viewClass).parent();
 	
 	// previous button
-	$("#" + id + " .prev").click(function(e) {
+	$("#" + id + " .w-prev").click(function(e) {
 		var $prev = $parent.children(".active").prev();
 		$parent.children(".active").removeClass("active").hide("slide", {direction: "right"}, "fast", function() {
 			($prev.length) ? $prev.addClass("active").show("slide", {direction: "left" }, "fast")
@@ -243,7 +244,7 @@ function nextPreviousControls(id, viewClass) {
 	});
 	
 	// next button
-	$("#" + id + " .next").click(function(e) {
+	$("#" + id + " .w-next").click(function(e) {
 		var $next = $parent.children(".active").next();
 		$parent.children(".active").removeClass("active").hide("slide", {direction: "left"}, "fast", function() {
 			($next.length) ? $next.addClass("active").show("slide", {direction: "right"}, "fast")

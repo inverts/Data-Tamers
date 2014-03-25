@@ -84,9 +84,54 @@ function getKeywordInsightData(id, callback) {
 		});
 		
 		// Create each table view
-		createTableView("keywordInsightImprove", d.data.improve);
-		createTableView("keywordInsightBest", d.data.best);
-		createTableView("keywordInsightWorst", d.data.worst);
+		//createTableView("keywordInsightImprove", d.data.improve);
+		
+		$("#" + id + " #keywordInsightImprove").table({
+			"data": d.data.improve,
+			"columnHeaders" : [
+			                   {"name" : d.data.improve.keys[0], "width": "45%"}, 
+			                   {"name" : d.data.improve.keys[1]},
+			                   {"name" : d.data.improve.keys[2]},
+			                   {"name" : d.data.improve.keys[3]}
+			                  ],
+			"m"				: {"length": d.data.improve.keys.length, "keys": d.data.improve.keys, "url": {"links": null, "key": 0}}, // columns
+			"n"				: {"length": d.data.improve[d.data.improve.keys[0]].length, "keys": null}, // rows
+			"title"			: d.data.improve.title,
+			"search"		: $("#" + id + " .w-text")
+		});
+		
+		//createTableView("keywordInsightBest", d.data.best);
+		
+		$("#" + id + " #keywordInsightBest").table({
+			"data": d.data.best,
+			"columnHeaders" : [
+			                   {"name" : d.data.best.keys[0], "width": "45%"}, 
+			                   {"name" : d.data.best.keys[1]},
+			                   {"name" : d.data.best.keys[2]},
+			                   {"name" : d.data.best.keys[3]}
+			                  ],
+			"m"				: {"length": d.data.best.keys.length, "keys": d.data.best.keys, "url": {"links": null, "key": 0}}, // columns
+			"n"				: {"length": d.data.best[d.data.best.keys[0]].length, "keys": null}, // rows
+			"title"			: d.data.best.title,
+			"search"		: false
+		});
+		
+		//createTableView("keywordInsightWorst", d.data.worst);
+		
+		$("#" + id + " #keywordInsightWorst").table({
+			"data": d.data.worst,
+			"columnHeaders" : [
+			                   {"name" : d.data.worst.keys[0], "width": "45%"}, 
+			                   {"name" : d.data.worst.keys[1]},
+			                   {"name" : d.data.worst.keys[2]},
+			                   {"name" : d.data.worst.keys[3]}
+			                  ],
+			"m"				: {"length": d.data.worst.keys.length, "keys": d.data.worst.keys, "url": {"links": null, "key": 0}}, // columns
+			"n"				: {"length": d.data.worst[d.data.worst.keys[0]].length, "keys": null}, // rows
+			"title"			: d.data.worst.title,
+			"search"		: true
+		});
+		
 		createTableView("keywordInsightAll", d.data.all);
 		createTableView("keywordInsightBestSub", d.data.bestsubstr);
 		createTableView("keywordInsightWorstSub", d.data.worstsubstr);
