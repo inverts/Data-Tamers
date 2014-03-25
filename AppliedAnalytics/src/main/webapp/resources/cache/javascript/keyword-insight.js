@@ -132,9 +132,52 @@ function getKeywordInsightData(id, callback) {
 			"search"		: true
 		});
 		
-		createTableView("keywordInsightAll", d.data.all);
-		createTableView("keywordInsightBestSub", d.data.bestsubstr);
-		createTableView("keywordInsightWorstSub", d.data.worstsubstr);
+		//createTableView("keywordInsightAll", d.data.all);
+		
+		$("#" + id + " #keywordInsightAll").table({
+			"data": d.data.all,
+			"columnHeaders" : [
+			                   {"name" : d.data.all.keys[0]}, 
+			                   {"name" : d.data.all.keys[1]},
+			                   {"name" : d.data.all.keys[2]},
+			                   {"name" : d.data.all.keys[3]}
+			                  ],
+			"m"				: {"length": d.data.all.keys.length, "keys": d.data.all.keys, "url": {"links": null, "key": 0}}, // columns
+			"n"				: {"length": d.data.all[d.data.all.keys[0]].length, "keys": null}, // rows
+			"title"			: d.data.all.title,
+			"search"		: true,
+			"show"			: 0
+		});
+		
+		//createTableView("keywordInsightBestSub", d.data.bestsubstr);
+		
+		$("#" + id + " #keywordInsightBestSub").table({
+			"data": d.data.bestsubstr,
+			"columnHeaders" : [
+			                   {"name" : d.data.bestsubstr.keys[0], "width": "45%"}, 
+			                   {"name" : d.data.bestsubstr.keys[1]},
+			                   {"name" : d.data.bestsubstr.keys[2]}
+			                  ],
+			"m"				: {"length": d.data.bestsubstr.keys.length, "keys": d.data.bestsubstr.keys, "url": {"links": null, "key": 0}}, // columns
+			"n"				: {"length": d.data.bestsubstr[d.data.bestsubstr.keys[0]].length, "keys": null}, // rows
+			"title"			: d.data.bestsubstr.title,
+			"search"		: true
+		});
+		
+		//createTableView("keywordInsightWorstSub", d.data.worstsubstr);
+		
+		$("#" + id + " #keywordInsightWorstSub").table({
+			"data": d.data.worstsubstr,
+			"columnHeaders" : [
+			                   {"name" : d.data.worstsubstr.keys[0], "width": "45%"}, 
+			                   {"name" : d.data.worstsubstr.keys[1]},
+			                   {"name" : d.data.worstsubstr.keys[2]}
+			                  ],
+			"m"				: {"length": d.data.worstsubstr.keys.length, "keys": d.data.worstsubstr.keys, "url": {"links": null, "key": 0}}, // columns
+			"n"				: {"length": d.data.worstsubstr[d.data.bestsubstr.keys[0]].length, "keys": null}, // rows
+			"title"			: d.data.worstsubstr.title,
+			"search"		: true
+		});
 
 		if(callback)
 			callback();

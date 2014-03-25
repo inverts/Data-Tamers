@@ -72,11 +72,14 @@
 										bInfo: false,
 										sScrollXInner: "100%",
 										sScrollYInner: "100%",
+										"sDom": '<"tableTitle">frtip',
 										aaData: getData(),
 										aoColumns: getHeaders(),
 										aoColumnDefs: getDefinitions(),
 										iDisplayLength: settings.show,
 									});
+			if (table.title)
+				$("div.tableTitle").html(table.title);
 				
 				
 			if (settings.search && settings.search.length) {

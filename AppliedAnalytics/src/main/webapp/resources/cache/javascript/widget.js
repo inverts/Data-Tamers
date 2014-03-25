@@ -149,6 +149,8 @@ function addWidget(widget, li)
 						"content": widgetName + " has been added to dashboard \"" + li.children("a").html()  + "\"!"
 					});
 					
+					//loadWidget($content, widgetTypeId, widgetId, i, callback);
+					
 					// update the number of widgets <-- no longer needed
 					//$(".dashbaord-content").data("n", nWidgets);
 				});

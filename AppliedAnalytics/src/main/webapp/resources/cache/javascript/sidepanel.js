@@ -126,13 +126,7 @@ function createDashboardLink(dashboard) {
 		},
 		drop: function(e, ui) {
 			if ($li.hasClass("hover")) {
-				Modal.call({
-					"title": "Add Widget",
-					"content": "Would you like to add " + ui.draggable.find(".widget_title").html() + " to dashboard \"" + $(this).html() + "\"?",
-					"action" : function() {
-						addWidget(ui.draggable, $(e.target).parent());
-					}
-				});
+				addWidget(ui.draggable, $(e.target).parent());
 			}
 			
 			$li.removeClass("hover");
