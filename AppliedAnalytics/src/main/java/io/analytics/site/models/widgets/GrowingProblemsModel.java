@@ -105,11 +105,12 @@ public class GrowingProblemsModel extends WidgetModel {
 		//Rows should follow this format: [source, day number, metric]
 		for (List<String> row : gaData.getRows()) {
 			if (!row.get(0).equals(currentDimension)) {
-				Double proportion = metricValue / totalMetricValue;
+				//This has been deemed irrelevant/redundant.
+				//Double proportion = metricValue / totalMetricValue;
 				Double slope = stats.getSlope();
 				Double confidence = stats.getSlopeConfidenceInterval();
 				if (!Double.isNaN(slope) && !Double.isNaN(confidence))
-					newData.add(new TrafficSourceData(currentDimension, slope, confidence, proportion));
+					newData.add(new TrafficSourceData(currentDimension, slope, confidence));
 				dayCounter = 0.0;
 				metricValue = 0.0;
 				currentDimension = row.get(0);
@@ -180,13 +181,11 @@ public class GrowingProblemsModel extends WidgetModel {
 		private String sourceName;
 		private Double slope;
 		private Double confidenceHalfWidth;
-		private Double percentageOfTotal;
 		
-		public TrafficSourceData(String sourceName, Double slope, Double confidenceHalfWidth, Double percentageOfTotal) {
+		public TrafficSourceData(String sourceName, Double slope, Double confidenceHalfWidth) {
 			this.sourceName = sourceName;
 			this.slope = slope;
 			this.confidenceHalfWidth = confidenceHalfWidth;
-			this.percentageOfTotal = percentageOfTotal;
 		}
 
 		public String getSourceName() {
@@ -208,16 +207,6 @@ public class GrowingProblemsModel extends WidgetModel {
 			return confidenceHalfWidth;
 		}
 
-		/**
-		 * This should represent how important this traffic source is, represented as a
-		 * proportion of a whole. For example, if we are determining the slope of the visits,
-		 * this would represent proportion of visits this traffic source accounted for on the
-		 * entire site.
-		 * @return
-		 */
-		public Double getPercentageOfTotal() {
-			return percentageOfTotal;
-		}
 		
 	}
 	
