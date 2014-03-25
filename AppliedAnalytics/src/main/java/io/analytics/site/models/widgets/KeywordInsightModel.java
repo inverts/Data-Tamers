@@ -64,6 +64,8 @@ public class KeywordInsightModel extends WidgetModel {
         this.cpcData = new ArrayList<KeyData>();
         this.organicData = new ArrayList<KeyData>();
         
+        this.viewCount = 3;
+        
         updateData();
 		
 	}

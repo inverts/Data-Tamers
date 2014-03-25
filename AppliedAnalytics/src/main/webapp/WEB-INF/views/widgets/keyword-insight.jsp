@@ -12,7 +12,6 @@
 </div>
 <div class="controls">
 	<ul class="pagination">
-	  <li><a class="prev">&laquo;</a></li>
 	  <li><a class="scatter">Plot</a></li>
 	  <li><a class="improve">Improve</a></li>
 	  <li><a class="best">Best</a></li>
@@ -20,6 +19,5 @@
 	  <li><a class="all">All</a></li>
 	  <li><a class="bestsub">BestStr</a></li>
 	  <li><a class="worstsub">WorstStr</a></li>
-	  <li><a class="next">&raquo;</a></li>
 	</ul>
 </div>

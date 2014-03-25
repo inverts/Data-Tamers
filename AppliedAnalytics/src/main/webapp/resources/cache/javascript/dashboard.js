@@ -53,7 +53,7 @@ function loadDashboard(dashboardId) {
 					tolerance: "pointer", 
 					zIndex: 100,
 					stop: updateWidgetPosition,
-					cancel: "div.widget-content"
+					cancel: "div.widget-content, header.w-header .w-text"
 				});
 				
 	
