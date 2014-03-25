@@ -39,6 +39,7 @@ svg path.domain { stroke:#333; stroke-width:2; }
 .widget .widget-content table td.last { width:auto; word-wrap:break-word; }
 .widget .widget-content table th > a,
 .widget .widget-content table td > a { padding:3px; word=wrap:break-word; }
+.widget .widget-content .tableTitle { float:left; font-size:18px; font-weight:500; }
 .widget .widget-content a:hover { text-decoration:none; }
 .widget .widget-content .overflow { max-height:220px; overflow:auto; }
 

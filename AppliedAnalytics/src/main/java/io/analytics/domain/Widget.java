@@ -14,7 +14,7 @@ import io.analytics.site.models.JSONSerializable;
 public class Widget implements JSONSerializable {
 
 	private int id;
-	private int defaultFilterId;
+	private Integer defaultFilterId;
 	private int widgetTypeId;
 	private int dashboardId;
 	private int priority;
@@ -32,10 +32,10 @@ public class Widget implements JSONSerializable {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getDefaultFilterId() {
+	public Integer getDefaultFilterId() {
 		return defaultFilterId;
 	}
-	public void setDefaultFilterId(int defaultFilterId) {
+	public void setDefaultFilterId(Integer defaultFilterId) {
 		this.defaultFilterId = defaultFilterId;
 	}
 	public int getWidgetTypeId() {

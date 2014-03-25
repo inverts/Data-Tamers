@@ -65,7 +65,9 @@ input { font: inherit; }
 /* header application */
 .header-application { height:60px; padding-left:340px; background:#eee; box-shadow:0px 0px 5px -1px; position:absolute; left:0px; right:0px;}
 .header-application .filter { float: left; padding: 10px 0px 0px 20px; }
-.header-application .avatar, .messages { height:50px; width:50px; float:right; margin:5px 20px 5px 0; }
+.header-application .avatar, .messages, .header-application .trash { height:50px; width:50px; float:right; margin:5px 20px 5px 0; }
+.header-application .trash { display:none; }
+.header-application .trash span.glyphicon { font-size:40px; padding-top:5px;}
 .header-application .messages { background-color:#239371; }
 
 #header .profile-info { width: 250px; height: 250px; margin: 10px; padding: 10px; border: 3px solid #aaa; }
