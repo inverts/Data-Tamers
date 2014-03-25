@@ -78,9 +78,9 @@ function loadWidget($content, widgetTypeId, widgetId, i, callback)
 			break;
 			
 		case 5:
-			elementId = "growingProblemsWidget" + i;
+			elementId = "trafficSourceTrendsWidget" + i;
 			$div.attr("id", elementId);
-			loadGrowingProblemsWidget(elementId);
+			loadTrafficSourceTrendsWidget(elementId);
 			break;
 			
 		case 6: 
@@ -88,7 +88,6 @@ function loadWidget($content, widgetTypeId, widgetId, i, callback)
 			$div.attr("id", elementId);
 			loadBoostPerformanceWidget(elementId);
 			break;
-		
 	}
 	
 	/** Global Widget Events **/

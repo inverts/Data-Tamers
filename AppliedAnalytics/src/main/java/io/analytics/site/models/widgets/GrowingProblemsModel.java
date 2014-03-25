@@ -29,8 +29,8 @@ public class GrowingProblemsModel extends WidgetModel {
 	private final String widgetClass = "growingProblems";
 	private final String widgetTitle = "growingproblems.title";
 	
-	private final String name = "Growing Problems";
-	private final String description = "Highlights traffic sources that have been steadily decreasing in performance.";
+	private final String name = "Traffic Source Trends";
+	private final String description = "Highlights traffic sources that have been steadily increasing or decreasing in performance.";
 
 	private ICoreReportingService coreReportingService;
 	private ISessionService sessionService;

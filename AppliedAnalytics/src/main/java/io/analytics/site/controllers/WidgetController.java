@@ -153,44 +153,46 @@ public class WidgetController {
 		
 	} 
 	
-	@RequestMapping(value = "/GrowingProblems", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView growingProblemsView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-
-		Credential credential;
-		SettingsModel settings;
-		FilterModel filter;
-		if (SessionService.checkAuthorization(session)) {
-			credential = SessionService.getCredentials();
-			filter = SessionService.getFilter();
-			settings = SessionService.getUserSettings();
-		} else {
-			SessionService.redirectToLogin(session, request, response);
-			return new ModelAndView("unavailable");
-		}
-
-		if (settings.getActiveProfile() == null) {
-			//TODO: Make an informative view for when widgets don't have an active profile to get data from.
-			return new ModelAndView ("unavailable");
-		}
-		
-		GrowingProblemsModel growingProblems = SessionService.getModel(session, "growingProblems", GrowingProblemsModel.class);
-		
-
-		//If there is no model available, or if the active profile changed, create a new model.
-		if ((growingProblems == null) || !(settings.getActiveProfile().equals(growingProblems.getActiveProfile()))) {
-			growingProblems = new GrowingProblemsModel(SessionService, CoreReportingService);
-		}
-
-		//TODO: We may need to make setStartDate and setEndDate abstract methods in the WidgetModel class.
-		/*if (filter != null) {
-			growingProblems.setStartDate(filter.getActiveStartDate());
-			growingProblems.setEndDate(filter.getActiveEndDate());
-		}*/
-		
-		viewMap.addAttribute("widget", growingProblems);
-
-		return new ModelAndView("widget", "view", "/WEB-INF/views/widgets/growing-problems.jsp");
-	}
+	
+	
+//	@RequestMapping(value = "/GrowingProblems", method = {RequestMethod.POST, RequestMethod.GET})
+//	public ModelAndView growingProblemsView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+//
+//		Credential credential;
+//		SettingsModel settings;
+//		FilterModel filter;
+//		if (SessionService.checkAuthorization(session)) {
+//			credential = SessionService.getCredentials();
+//			filter = SessionService.getFilter();
+//			settings = SessionService.getUserSettings();
+//		} else {
+//			SessionService.redirectToLogin(session, request, response);
+//			return new ModelAndView("unavailable");
+//		}
+//
+//		if (settings.getActiveProfile() == null) {
+//			//TODO: Make an informative view for when widgets don't have an active profile to get data from.
+//			return new ModelAndView ("unavailable");
+//		}
+//		
+//		GrowingProblemsModel growingProblems = SessionService.getModel(session, "growingProblems", GrowingProblemsModel.class);
+//		
+//
+//		//If there is no model available, or if the active profile changed, create a new model.
+//		if ((growingProblems == null) || !(settings.getActiveProfile().equals(growingProblems.getActiveProfile()))) {
+//			growingProblems = new GrowingProblemsModel(SessionService, CoreReportingService);
+//		}
+//
+//		//TODO: We may need to make setStartDate and setEndDate abstract methods in the WidgetModel class.
+//		/*if (filter != null) {
+//			growingProblems.setStartDate(filter.getActiveStartDate());
+//			growingProblems.setEndDate(filter.getActiveEndDate());
+//		}*/
+//		
+//		viewMap.addAttribute("widget", growingProblems);
+//
+//		return new ModelAndView("widget", "view", "/WEB-INF/views/widgets/growing-problems.jsp");
+//	}
 	
 	@RequestMapping(value = "/BoostPerformance", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView boostPerformanceView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
@@ -420,73 +422,44 @@ public class WidgetController {
 		}
 		
 
-		@RequestMapping(value = "/growing-problems", method = {RequestMethod.POST, RequestMethod.GET})
-		public ModelAndView growingProblems(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,
+		/**
+		 * TODO: This need to be accessed by the id in the database.
+		 * 
+		 * @param viewMap
+		 * @param request
+		 * @param response
+		 * @param session
+		 * @param serialize
+		 * @return
+		 */
+		@RequestMapping(value = "/widgets/traffic-source-trends", method = {RequestMethod.GET})
+		public ModelAndView trafficSourceTrends(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,
 				@RequestParam(value = "serialize", defaultValue = "0") boolean serialize) {
-			
+
+			//TODO: This needs to go into an Aspect.
+			if (!SessionService.checkAuthorization(session)) {
+				SessionService.redirectToLogin(session, request, response);
+				return new ModelAndView("unavailable");
+			}
+
+			GrowingProblemsModel model = new GrowingProblemsModel(SessionService, CoreReportingService);
+			viewMap.addAttribute("widget", model);
+			return new ModelAndView("widget", "view", "/WEB-INF/views/widgets/traffic-source-trends.jsp");
+		}
+
+		@RequestMapping(value = "/widgets/traffic-source-trends/data", method = {RequestMethod.GET})
+		public ModelAndView trafficSourceTrendsData(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,
+				@RequestParam(value = "serialize", defaultValue = "0") boolean serialize) {
+
+			//TODO: This needs to go into an Aspect.
+			if (!SessionService.checkAuthorization(session)) {
+				SessionService.redirectToLogin(session, request, response);
+				return new ModelAndView("unavailable");
+			}
 			
 			GrowingProblemsModel model = new GrowingProblemsModel(SessionService, CoreReportingService);
 			model.getTrafficSourceDataList();
 			viewMap.addAttribute("data", model.getJSONSerialization());
 			return new ModelAndView("plaintext");
-			/*
-			Credential credential;
-			SettingsModel settings;
-			FilterModel filter;
-			if (SessionService.checkAuthorization(session)) {
-				credential = SessionService.getCredentials();
-				filter = SessionService.getFilter();
-				settings = SessionService.getUserSettings();
-			} else {
-				SessionService.redirectToLogin(session, request, response);
-				return new ModelAndView("unavailable");
-			}
-			Date startDate = filter.getActiveStartDate();
-			Date endDate = filter.getActiveEndDate();
-			String profileId = settings.getActiveProfile().getId();
-			String metric = filter.getActiveMetric();
-			CoreReportingData reportingData = CoreReportingService.getTopTrafficSources(credential, profileId, metric, startDate, endDate, 25);
-			GaData gaData = reportingData.getData();
-			JSONObject dataDump = new JSONObject();
-			JSONArray table = new JSONArray();
-			List<String> dimensions = new ArrayList<String>();
-			for (List<String> row : gaData.getRows()) {
-				table.put(row);
-				dimensions.add(row.get(0));
-			}
-			try {
-				dataDump.put("Top Traffic Sources", table);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			CoreReportingData reportingData2 = CoreReportingService.getDimensionsByDay(credential, profileId, metric, "ga:source", dimensions, startDate, endDate, 1000);
-			GaData gaData2 = reportingData2.getData();
-			JSONArray table2 = new JSONArray();
-			for (List<String> row : gaData2.getRows()) {
-				table2.put(row);
-			}
-
-			try {
-				dataDump.put("Dimensions By Day", table2);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			String data = null;
-			
-			try {
-				data = dataDump.toString(4);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			viewMap.addAttribute("data", data);
-			return new ModelAndView("plaintext");
-			*/
 		}
-			
 }
