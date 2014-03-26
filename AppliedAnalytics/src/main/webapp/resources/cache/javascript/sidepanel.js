@@ -28,19 +28,34 @@ $(function() {
 	//$("#dashboard").hover(dashLinkHover);
 	
 	// dashboard list open on click
-	$("#dashboard").click(function() { $(".dashlist").slideToggle('fast'); });
+	$("#dashboard").click(function() { $(".dashlist").slideToggle("fast"); });
 	
-	$("#trends").click(function() {
-		loadTrendsWidgets(2);
-		active.css("color", "#fff");
-		active = $("#trends .nav-txt").css("color", "#00aeef");
+	
+	// open trends widget list
+	$("#trends").click(function() { $(".trends-list").slideToggle("fast"); });
+	
+	$("#trends-list").draggable({
+		
 	});
 	
-	$("#forecast").click(function() { 
-		loadForecastWidgets(2); 
-		active.css("color", "#fff");
-		active = $("#forecast .nav-txt").css("color", "#00aeef");
+	$("li.growingProblemsWidget").mousedown(function() {
+		$loadDataForecast("trends-thumb");
+		$("#trends-thumb").show();
+	}).bind("mouseup", function() {
+		$("#trends-thumb").empty().hide();
 	});
+	
+	// open forecast widget list
+	$("#forecast").click(function() { $(".forecast-list").slideToggle("fast"); });
+	
+	$("#forecast-list").draggable({
+		
+	});
+	
+	$("li.dataForecastWidget").mousedown(function() {
+		
+	});
+	
 	
 	/* add new dashboard */
 	$("#addDashboard").click(function() {

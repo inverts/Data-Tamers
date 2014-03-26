@@ -118,8 +118,10 @@ input { font: inherit; }
 .sidepanel .addNewDash { color:#fff; margin:0 0 10px 15px; font-size:15px; clear:both; }
 .sidepanel .addNewDash:hover { cursor:pointer; }
 .sidepanel .addNewDash .glyphicon { color:green; }
-.sidepanel .dashlist { vertical-align:middle; font-size:11px; width:97%; display:none; }
-.sidepanel #dashlist { overflow:auto; max-height:200px; margin-bottom:25px; }
+.sidepanel .dashlist, .sidepanel .trends-list, 
+.sidepanel .forecast-list { vertical-align:middle; font-size:11px; width:97%; display:none; }
+.sidepanel .dashlist ul, .sidepanel .trends-list ul, 
+.sidepanel .forecast-list ul { overflow:auto; max-height:200px; margin-bottom:25px; }
 
 .sidepanel .dashlist li { color:#fffffe; height:30px; padding-left:15px; position:relative; background:none; }
 .sidepanel .dashlist li.hover, 
