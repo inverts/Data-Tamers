@@ -9,17 +9,20 @@
  * @param dashboardId
  * @returns true if the dashboard successfully loaded, false otherwise.
  */
+
+
 function loadDashboard(dashboardId) {
 	$.post(applicationRoot + "application/dashboards/" + dashboardId, 
 			{ },
 			function(result) {
-				var $content = newPage("dashboard");
+				var $content = newPage("dashboard", dashboardId);
 				var dashboard = $.parseJSON(result);
 				var widgetIdArray = dashboard.widgetIds;
 				var widgetTypeIdArray = dashboard.widgetTypeIds;
 				var widgets = dashboard.widgets;
 				widgets = widgets.sort(compareWidgetPriority);
 				
+				// Setup widget remove functionality
 				$trash = $(".trash").droppable({
 					tolerance: "pointer",
 					over: function(e, ui) {
@@ -34,23 +37,7 @@ function loadDashboard(dashboardId) {
 					}
 				});
 					
-					// since the remove event is only specific to the dashboard, 
-					// we create a callback method to set it up. This is so we
-					// do not create the remove event for the widgets on the
-					// Trends and Forecast pages.
-					loadWidgets($content, widgets, function() {
-						var $last = $content.children().last();
-						var elementId = $last.attr("id");
-						var timeoutId = 0;
-						
-						$last.mousedown(function(e) {
-							timeoutId = setTimeout(function() { $trash.show(); }, 500);
-						}).bind("mouseup", function(e){
-							clearTimeout(timeoutId);
-							$trash.hide();
-						});
-
-					});
+					loadWidgets($content, widgets);
 
 					/*
 					 * This will not work as-is but may be a useful code snippet for loading in the list of dashboards.
@@ -68,10 +55,23 @@ function loadDashboard(dashboardId) {
 					tolerance: "pointer", 
 					zIndex: 100,
 					stop: updateWidgetPosition,
-					cancel: "div.widget-content, header.w-header .w-text"
+					cancel: "div.widget-content, header.w-header .w-text",
+					receive: function(e, ui) {
+						if (addedWidget.item.hasClass("widget-select")) {
+							var $w = addedWidget.item.children(":first");
+							var $wc = $w.clone();
+							var events = addedWidget.events;
+							//ui.item.replaceWith($w);
+							// replaceWith removes all events so we need to reattach them
+							for(var eventType in events) {
+								for (var idx in events[eventType])
+									$w[eventType](events[eventType][idx].handler);
+							}
+							addedWidget = { "events": null, "item": null };
+						}
+					}
 				});
-				
-	
+
 			});
 }
 

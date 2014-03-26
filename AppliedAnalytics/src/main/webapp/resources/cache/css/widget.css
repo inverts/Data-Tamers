@@ -43,7 +43,8 @@ svg path.domain { stroke:#333; stroke-width:2; }
 .widget .widget-content a:hover { text-decoration:none; }
 .widget .widget-content .overflow { max-height:220px; overflow:auto; }
 
-/*** WIDGET CONTROLS ***/
+
+/*** WIDGET CONTROLS (DEPRECATED)***/
 .widget .widget-content .controls { width:100%; height:35px; position:relative; }
 .widget .widget-content ul { display:block; margin:auto; position:absolute; left:40px; }
 

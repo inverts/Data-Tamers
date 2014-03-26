@@ -14,9 +14,9 @@ var filterStartIndex = 0; //TODO: get filter date start
  */
 function loadDataForecast(id) {
 	
-	var $element = $('#' + id);
 	//TODO: Possibly send id number out to append to ids in the model
 	$.post(applicationRoot + "DataForecast", null, function(response) {
+		var $element = $('#' + id);
 		if ($element.length > 0) {
 			$element.fadeIn("fast", function() { 
 					$element.append(response); 

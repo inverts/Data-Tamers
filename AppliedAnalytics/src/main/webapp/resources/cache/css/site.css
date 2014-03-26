@@ -118,14 +118,18 @@ input { font: inherit; }
 .sidepanel .addNewDash { color:#fff; margin:0 0 10px 15px; font-size:15px; clear:both; }
 .sidepanel .addNewDash:hover { cursor:pointer; }
 .sidepanel .addNewDash .glyphicon { color:green; }
+
+/**** SIDE PANEL TABS ****/
 .sidepanel .dashlist, .sidepanel .trends-list, 
 .sidepanel .forecast-list { vertical-align:middle; font-size:11px; width:97%; display:none; }
+
 .sidepanel .dashlist ul, .sidepanel .trends-list ul, 
 .sidepanel .forecast-list ul { overflow:auto; max-height:200px; margin-bottom:25px; }
 
-.sidepanel .dashlist li { color:#fffffe; height:30px; padding-left:15px; position:relative; background:none; }
-.sidepanel .dashlist li.hover, 
-.sidepanel .dashlist li:hover { background:rgb(128, 128, 128); color:#fff; } { background:rgb(128, 128, 128); color:#fff; }
+.sidepanel .sidepanel-nav li { color:#fffffe; height:30px; padding-left:15px; position:relative; background:none; }
+.sidepanel .sidepanel-nav li:hover { cursor:pointer; color:#fff; }
+
+.sidepanel .dashlist li:hover { background:rgb(128, 128, 128); }
 
 .sidepanel .dashlist li.selected { color:#00aeef; }
 
@@ -135,6 +139,7 @@ input { font: inherit; }
 .sidepanel .dashlist .deleteDash { color:red; width:20px; height:20px; right:0; top:10px; display:none; }
 .sidepanel .dashlist .deleteDash:hover { cursor:pointer; }
 .sidepanel .nav-icon { width:30px; height:30px; float:left; margin-top:-15px; background:url(../images/navicons.png) no-repeat; }
+
 
 /******ADD DASHBOARD*****/
 .addDashboard-content { margin-top:20px; padding:20px; display:none; }

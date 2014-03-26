@@ -36,7 +36,6 @@ $(function(){ getDashboardList($.parseJSON(dashboards)); });
 				<ul id="trends-list">
 					<li class="widgetLink growingProblemsWidget"><fmt:message key="growingproblems.title" /><span class="glyphicon glyphicon-credit-card"></span></li>
 				</ul>
-				<div id="trends-thumb"></div>
 			</div>
 			
 			<!-- FORECAST -->
@@ -48,7 +47,6 @@ $(function(){ getDashboardList($.parseJSON(dashboards)); });
 				<ul id="forecast">
 					<li id="1" class="widgetLink dataForecastWidget"><fmt:message key="dataforecast.title" /><span class="glyphicon glyphicon-credit-card"></span></li>
 				</ul>
-				<div id="forecast-thumb"></div>
 			</div>
 			
 			<!-- ALERTS -->
@@ -56,6 +54,6 @@ $(function(){ getDashboardList($.parseJSON(dashboards)); });
 				<div class="nav-icon" style="background-position:0 -90px;"></div>
 				<a class="nav-txt"><fmt:message key="alerts" /></a>
 			</div>
-		</div>	
+		</div>
 	</div>
 </nav>

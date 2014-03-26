@@ -49,58 +49,77 @@ function loadWidget($content, widgetTypeId, widgetId, i, callback)
 	
 	$div.data("pos", $div.index());
 	
-	var elementId;
-	
+	var elementId; 
+
 	switch(widgetTypeId)
 	{
 		case 1: 
 			elementId = "dataForecastWidget" + i;
 			$div.attr("id", elementId);
-			loadDataForecast(elementId);
+			$.when(loadDataForecast(elementId))
+			 .then(function() { widgetEvents($content, $div, elementId); });
 			break;
 			
 		case 2:
 			elementId = "websitePerformanceWidget" + i;
 			$div.attr("id", elementId);
-			loadWebsitePerformanceWidget("websitePerformanceWidget" + i);
+			$.when(loadWebsitePerformanceWidget("websitePerformanceWidget" + i))
+			 .then(function() { widgetEvents($content, $div, elementId); });
 			break;
 			
 		case 7:
 			elementId = "keyContributingFactorsWidget" + i;
 			$div.attr("id", elementId);
-			loadKeyContributingFactorsWidget(elementId);
+			$.when(loadKeyContributingFactorsWidget(elementId))
+			 .then(function() { widgetEvents($content, $div, elementId); });
 			break;
 		
 		case 4:
 			elementId = "keywordInsightWidget" + i;
 			$div.attr("id", elementId);
-			loadKeywordInsight(elementId);
+			$.when(loadKeywordInsight(elementId))
+			 .then(function() { widgetEvents($content, $div, elementId); });
 			break;
 			
 		case 5:
 			elementId = "trafficSourceTrendsWidget" + i;
 			$div.attr("id", elementId);
-			loadTrafficSourceTrendsWidget(elementId);
+			$.when(loadTrafficSourceTrendsWidget(elementId))
+			 .then(function() { widgetEvents($content, $div, elementId); });
 			break;
 			
 		case 6: 
 			elementId = "boostPerformanceWidget" + i;
 			$div.attr("id", elementId);
-			loadBoostPerformanceWidget(elementId);
+			$.when(loadBoostPerformanceWidget(elementId))
+			 .then(function() { widgetEvents($content, $div, elementId); });
 			break;
 	}
 	
-	/** Global Widget Events **/
-	
-	// collapse
-	$div.on("dblclick", ".widget_title", function() {
-		$(this).parent().siblings(".widget-content").slideToggle("fast");
-	});
-	
-	
+
 	if (callback)
 		callback(elementId);
 
+}
+
+
+function widgetEvents($content, $div, elementId) {
+	// collapse
+	$div.on("dblclick", ".widget_title", function(e) {
+		$(this).parent().siblings(".widget-content").slideToggle("fast");
+	});
+
+	
+	if ($content.hasClass("dashboard-content") || $content.hasClass("widget-select")) {
+		var timeoutId = 0;
+		$div.on("mousedown", function(e) {
+			timeoutId = setTimeout(function() { $trash.show(); }, 500);
+		}).bind("mouseup", function(e){
+			clearTimeout(timeoutId);
+			$trash.hide();
+		});
+	}
+	
 }
 
 
@@ -130,6 +149,25 @@ function updateWidgets(){
 }
 
 
+function addWidgetByList(widgetTypeId) {
+	
+	var $dash = $(".dashboard-content");
+	var nWidgets = $dash.data("n");
+	
+	$.post(applicationRoot + "addWidget", {widgetTypeId: widgetTypeId, dashboardId: $dash.data("id")},
+			function(response) {
+				var result = $.parseJSON(response);
+				
+				var result = loadWidget($dash, parseInt(widgetTypeId), result.widgetId, nWidgets);
+				
+				if (result.length)
+					$dash.data("n", ++nWidgets);
+				
+				return result;
+			});
+	
+	
+}
 
 
 function addWidget(widget, li) 

@@ -3,6 +3,7 @@
  */
 
 var active;
+var addedWidget = { "events": null, "item": null };
 
 $(function() {
 	
@@ -34,28 +35,48 @@ $(function() {
 	// open trends widget list
 	$("#trends").click(function() { $(".trends-list").slideToggle("fast"); });
 	
-	$("#trends-list").draggable({
+	$(".trends-list").sortable({
+		items: "li",
+		connectWith: ".dashboard-content",
+		helper: function() { 
+			var helper = $("<div>").addClass("widget-select");
+			return helper;  
+		}
 		
 	});
-	
-	$("li.growingProblemsWidget").mousedown(function() {
-		$loadDataForecast("trends-thumb");
-		$("#trends-thumb").show();
-	}).bind("mouseup", function() {
-		$("#trends-thumb").empty().hide();
-	});
-	
+
 	// open forecast widget list
 	$("#forecast").click(function() { $(".forecast-list").slideToggle("fast"); });
 	
-	$("#forecast-list").draggable({
-		
+	/*$(".forecast-list").sortable({
+		items: "li",
+		connectWith: ".dashboard-content",
+		helper: function(e, ui) { 
+			var helper = $("<div>").addClass("widget-select");
+			loadWidget(helper, parseInt(ui.attr("id")), -1, $(".dashboard-content").data("n"));
+			return helper;
+		},
+		beforeStop: function(e, ui) { 
+			addedWidget.item = ui.helper; 
+			addedWidget.events = $._data(ui.helper.children(":first").get(0), "events");
+		}
+	});*/
+	
+	$("li.dataForecastWidget").draggable({
+		connectToSortable: ".dashboard-content",
+		helper: function(e, ui) { 
+			var helper = $("<div>").addClass("widget-select");
+			loadWidget(helper, parseInt(e.currentTarget.id), -1, $(".dashboard-content").data("n"));
+			return helper;
+		},
+		drag: function(e, ui) { 
+			addedWidget.item = ui.helper; 
+			addedWidget.events = $._data(ui.helper.children(":first").get(0), "events");
+		},
+		revert: "invalid"
 	});
 	
-	$("li.dataForecastWidget").mousedown(function() {
-		
-	});
-	
+	$(".forecast-list").disableSelection();
 	
 	/* add new dashboard */
 	$("#addDashboard").click(function() {
