@@ -23,15 +23,32 @@ function loadTrafficSourceTrendsWidget(id) {
 				 					 .html(response);
 			}
 			
+			getTrafficSourceTrendsData($element.find("#trafficSourceTrendsWorst").get(0), function() {
+				
+			});
+			
 	});	
 }
 
 
-function getTrafficSourceTrendsData(id) {
+function getTrafficSourceTrendsData($element, callback) {
 	
 	$.get(applicationRoot + "/widgets/traffic-source-trends/data", null, 
 			function(response) {
-				//TODO: Place data in widget.
+				dataModel = $.parseJSON(response);
+				dataRows = dataModel.trafficSourceDataList;
+				$element.table({
+					"data": dataRows,
+					"columnHeaders" : [
+					                   {"name" : "Source"}, 
+					                   {"name" : "Slope"},
+					                   {"name" : "Confidence"}
+					                  ],
+					"m"				: {"length": 3}, // columns
+					"n"				: {"length": dataRows.length, "keys": null}, // rows
+					"title"			: dataModel.name
+				});
+				
 		});	
 	
 }
