@@ -307,7 +307,6 @@
                     <source>1.6</source>
                     <target>1.6</target>
                     <compilerArgument>-Xlint:all</compilerArgument>
-                    <compilerArgument>-Xmx512m</compilerArgument>
 			        <meminitial>128m</meminitial>
 			        <maxmem>512m</maxmem>
                     <showWarnings>true</showWarnings>
