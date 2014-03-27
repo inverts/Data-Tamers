@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 
@@ -64,14 +65,8 @@ public class KeywordInsightModel extends WidgetModel {
 	private int organicVisitsTotal;
 	private ArrayList<KeyData> cpcData;
 	private ArrayList<KeyData> organicData;
-	private String keywordSubstring;
-	@Autowired
-	ServletContext servletContext;
-
-	
-	
 	private Map<String,String> stopWordsMap;
-	//private List<String> stopWordsList;
+	
 	private final String widgetClass = "keywordInsight";
 	private final String widgetTitle = "keywordinsight.title";
 
@@ -95,27 +90,26 @@ public class KeywordInsightModel extends WidgetModel {
 		cal.add(Calendar.DAY_OF_MONTH, -30);
 		this.startDate = cal.getTime();
 
-		this.keywordSubstring = "";
 		this.cpcData = new ArrayList<KeyData>();
 		this.organicData = new ArrayList<KeyData>();		
 		this.stopWordsMap = new HashMap<String,String>();
 		
 		// read stopwords file into map
 		try {
+			// stopwords.txt is located in src/main/resources directory
 			Resource resource = new ClassPathResource("stopWords.txt");
 			InputStream is = resource.getInputStream();
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
 			String line = null;
 			while ((line = br.readLine()) != null){
 				this.stopWordsMap.put(line,"NA");
-				System.out.println(line);
+				//System.out.println(line);
 			}
 		} catch (IOException x) {
 			System.err.format("IOException: %s%n", x);
 		} 
 		this.viewCount = 3;
 		updateData();
-
 	}
 
 	
@@ -190,8 +184,20 @@ public class KeywordInsightModel extends WidgetModel {
 		itb = cpcBounceRate.iterator();
 		cpcData = new ArrayList<KeyData>(cpcKeywords.size());
 
+		String keyword = "";
 		while(itk.hasNext()) {
-			cpcData.add(new KeyData(itk.next(),itv.next(),itb.next(), "cpc"));
+			keyword = itk.next();
+			if (!(keyword.equals("(not set)") || keyword.equals("(not provided)"))) {
+				// remove non-alpha characters from keywords
+				keyword = keyword.replaceAll("[^a-zA-Z0-9 ]","");
+				/*Pattern p = Pattern.compile("[^a-zA-Z0-9 ]");
+				// if has special character
+				if (p.matcher(keyword).find()){
+					System.out.println(keyword);
+				}*/
+				System.out.println(keyword);
+				cpcData.add(new KeyData(keyword,itv.next(),itb.next(), "cpc"));
+			}
 		}
 
 		it = cpcData.iterator();
