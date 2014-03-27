@@ -32,9 +32,13 @@ $(function(){ getDashboardList($.parseJSON(dashboards)); });
 				<div class="nav-icon" style="background-position:0 -30px;"></div>
 				<a class="nav-txt"><fmt:message key="trends" /></a>
 			</div>
-			<div class="trends-list">
-				<ul id="trends-list">
-					<li class="widgetLink growingProblemsWidget"><fmt:message key="growingproblems.title" /><span class="glyphicon glyphicon-credit-card"></span></li>
+			<div id="trends-list" class="widget-list">
+				<ul class="trends-list">
+					<li class="widgetLink growingProblemsWidget">
+						<fmt:message key="growingproblems.title" />
+						<span class="glyphicon glyphicon-credit-card"></span>
+						<div class="widget-select"></div>
+					</li>
 				</ul>
 			</div>
 			
@@ -43,10 +47,13 @@ $(function(){ getDashboardList($.parseJSON(dashboards)); });
 				<div class="nav-icon" style="background-position:0 -60px;"></div>
 				<a class="nav-txt"><fmt:message key="forecast" /></a>
 			</div>
-			<div class="forecast-list">
-				<ul id="forecast">
-					<li id="1" class="widgetLink dataForecastWidget"><fmt:message key="dataforecast.title" /><span class="glyphicon glyphicon-credit-card"></span></li>
-				</ul>
+			<div id="forecast-list" class="widget-list">
+				<div class="forecast-list">
+					<div id="1" class="widgetLink dataForecastWidget">
+						<fmt:message key="dataforecast.title" />
+						<span class="glyphicon glyphicon-credit-card"></span>
+					</div>
+				</div>
 			</div>
 			
 			<!-- ALERTS -->

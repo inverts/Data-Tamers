@@ -24,7 +24,8 @@ function loadDashboard(dashboardId) {
 				
 				// Setup widget remove functionality
 				$trash = $(".trash").droppable({
-					tolerance: "pointer",
+					revert: false,
+					tolerance: "touch",
 					over: function(e, ui) {
 						var $target = $(e.target);
 						if ($target.hasClass("trash"))
@@ -32,8 +33,10 @@ function loadDashboard(dashboardId) {
 						},
 					out: function(e) { $(".trash span").css("color", "#000"); },
 					drop: function(e, ui) {
-						if ($(e.target).hasClass("trash"))
-							removeWidget(ui.draggable.attr("id"));
+						ui.draggable.hide();
+						$(e.target).hasClass("trash") ? removeWidget(ui.draggable.attr("id"))
+											 		  : ui.draggable.show();
+						e.stopPropagation();
 					}
 				});
 					
@@ -51,25 +54,25 @@ function loadDashboard(dashboardId) {
 				*/
 				
 				$content.sortable({ 
-					revert: true, 
-					tolerance: "pointer", 
+					revert: "invalid",
+					forcePlaceholderSize: true,
+					//tolerance: "touch", 
 					zIndex: 100,
+					placeholder: "widget-placeholder",
 					stop: updateWidgetPosition,
 					cancel: "div.widget-content, header.w-header .w-text",
+					// add widget functionality
 					receive: function(e, ui) {
-						if (addedWidget.item.hasClass("widget-select")) {
-							var $w = addedWidget.item.children(":first");
-							var $wc = $w.clone();
-							var events = addedWidget.events;
-							//ui.item.replaceWith($w);
-							// replaceWith removes all events so we need to reattach them
-							for(var eventType in events) {
-								for (var idx in events[eventType])
-									$w[eventType](events[eventType][idx].handler);
-							}
-							addedWidget = { "events": null, "item": null };
+						if (addedWidget.hasClass("widget-select")) {
+							var $w = addedWidget.children(":first");
+							$(this).data().uiSortable.currentItem.html($w);
+							$w.unwrap();
+							
+							addWidgetByList(parseInt(ui.item.attr("id")), $w);
+							
+							addedWidget = null;
 						}
-					}
+					},
 				});
 
 			});

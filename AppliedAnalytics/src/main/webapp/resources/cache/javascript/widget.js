@@ -112,9 +112,9 @@ function widgetEvents($content, $div, elementId) {
 	
 	if ($content.hasClass("dashboard-content") || $content.hasClass("widget-select")) {
 		var timeoutId = 0;
-		$div.on("mousedown", function(e) {
+		$div.on("mousedown.widget", function(e) {
 			timeoutId = setTimeout(function() { $trash.show(); }, 500);
-		}).bind("mouseup", function(e){
+		}).bind("mouseup.widget", function(e){
 			clearTimeout(timeoutId);
 			$trash.hide();
 		});
@@ -149,21 +149,23 @@ function updateWidgets(){
 }
 
 
-function addWidgetByList(widgetTypeId) {
+function addWidgetByList(widgetTypeId, $widget) {
 	
 	var $dash = $(".dashboard-content");
 	var nWidgets = $dash.data("n");
 	
-	$.post(applicationRoot + "addWidget", {widgetTypeId: widgetTypeId, dashboardId: $dash.data("id")},
+	$.post(applicationRoot + "addWidget", {widgetTypeId: widgetTypeId, dashboardId: $dash.data("id"), priority: $widget.index()},
 			function(response) {
 				var result = $.parseJSON(response);
 				
-				var result = loadWidget($dash, parseInt(widgetTypeId), result.widgetId, nWidgets);
+				$widget.data({
+					"widgetId": result.widgetId,
+					"widgetTypeId": widgetTypeId
+				});
 				
 				if (result.length)
 					$dash.data("n", ++nWidgets);
 				
-				return result;
 			});
 	
 	
