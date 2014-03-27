@@ -67,9 +67,10 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		
 		public static final String CPC_MEDIUM = "cpc";
 		public static final String ORGANIC_MEDIUM = "organic";
+		
 
 		public static final String KEYWORD_NOT_PROVIDED_FILTER = "ga:keyword==(not provided)";
-		
+		public static final String KEYWORD_FILTER_OUT_NOT_PROVIDED_AND_NOT_SET_FILTER = "ga:keyword!=(not provided);ga:keyword!=(not set)";
 		public static final boolean SORT_ASCENDING = true;
 		public static final boolean SORT_DESCENDING = false;
 
@@ -389,7 +390,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			String endDate = dateFormat.format(eDate);
 
 			//System.out.println("start date = "+startDate+", "+"end date = "+endDate);
-
+			
 			try {
 
 				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
@@ -457,8 +458,8 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 						endDate, // End date.
 						"ga:visits,ga:visitBounceRate") // Metrics.
 						.setDimensions("ga:medium,ga:keyword")
-						//.setFilters("ga:medium=="+medium+";ga:keyword!=(not provided)")
-						.setFilters("ga:keyword!=(not provided)")
+						//.setFilters("ga:medium=="+medium+";ga:keyword!=(not provided);ga:keyword!=(not set)")
+						.setFilters("ga:keyword!=(not provided);ga:keyword!=(not set)")
 						.setSort("-ga:visits")
 						.setMaxResults(maxResults);
 				

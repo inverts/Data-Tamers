@@ -32,7 +32,7 @@
 		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<beans:property name="url" value="jdbc:mysql://ec2-54-186-75-23.us-west-2.compute.amazonaws.com:3306/davidkai_analytics" />
 		<beans:property name="username" value="analyticsuser" />
-		<beans:property name="password" value="dGLnLlf4CXYCOrWYc7Vn" />
+		<beans:property name="password" value="dGLnLlf4CXYCOrWYc7Vn" />		
 	</beans:bean>
 	
 	<beans:bean id="transactionManager"
@@ -40,6 +40,14 @@
 	  scope="singleton">
 	  <beans:property name="dataSource" ref="dataSource" />
 	</beans:bean>
+	
+	<!-- <beans:bean id="myFileReader" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <beans:property name="location" value="classpath:app.properties"/>
+    </beans:bean>
+    
+	<beans:bean id="myFileReader" class="com.myapp.MyFileReader">
+    <beans:property name="path" value="${pathValue}" />
+	</beans:bean> -->
 	
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
