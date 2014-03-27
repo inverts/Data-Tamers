@@ -2,15 +2,21 @@
 
 /*** GENERAL WIDGET STYLING ***/
 
-.widget { padding:10px 5px 5px 5px; background:#eee repeat; height:auto !important; clear:both; box-shadow:0px 0px 6px 0px; 
-		  -webkit-box-shadow:0px 0px 6px 0px; -mozbox-shadow:0px 0px 6px 0px; margin:5px 0 5px 10px; border-radius: 3px; }
+.widget { background:#eee repeat; -webkit-box-shadow:2px 2px 6px #666; -moxbox-shadow:2px 2px 6px #666; box-shadow:2px 2px 6px #666; 
+		  border-radius:5px; position:relative; width:680px !important; height:auto !important; clear:both; margin:8px; border:1px solid #aaa; }
 .widget .widget_header { padding:0 20px; position:relative; height:40px; }
 .widget .widget_title { position:absolute; font-size:1.7em; color:#444; margin-bottom:5px; font-weight:bold; text-shadow:0px -1px 0px rgba(100,100,100,0.5); }
 .widget .widget_title:hover { cursor:pointer; }
-.widget .dropdown { position:absolute; right:20px; top:10px; }
-.widget .widget_menu { font-size:16px; color:#666; }
-.widget .widget_menu:hover { cursor:pointer; text-decoration:none; }
+.widget .w-prev, .widget .w-next { position:absolute; height:100%; width:40px; z-index:100; }
+.widget .w-prev span, .widget .w-next span { background:#000; height:inherit; width:inherit; position:inherit; 
+													   visibility:hidden; border-radius:inherit; opacity:0.4; }
+.widget .w-prev:hover, .widget .w-next:hover { cursor:pointer; }
+.widget .w-prev:hover span, .widget .w-next:hover span {visibility:visible; }
+.widget .w-prev { left:0; border-radius:5px 0 0 5px; }
+.widget .w-next { right:0; border-radius:0 5px 5px 0; }
+.widget .w-prev > span.glyphicon, .widget .w-next > span.glyphicon { vertical-align:middle; font-size:100px; }
 .widget .widget_collapse { float:left; width:20px; }
+.widget .widget-content { height:350px !important; }
 .widget .widgetView { visibility:'hidden'; }
 
 
@@ -28,13 +34,12 @@ svg path.domain { stroke:#333; stroke-width:2; }
 .widget .widget-content table { width:100%; border-collapse:collapse; background:#eee; table-layout:fixed; }
 .widget .widget-content table.view { border:1px solid #666; }
 .widget .widget-content thead { border-bottom:1px solid #666; }
-.widget .widget-content table th.long { width:32%; } 
-.widget .widget-content table td.long { width:37%; }
-.widget .widget-content table td { border:none; padding:0; text-align:left; }
+.widget .widget-content table td { border:none; text-align:left; height:50px; }
 .widget .widget-content table th.last,
 .widget .widget-content table td.last { width:auto; word-wrap:break-word; }
 .widget .widget-content table th > a,
 .widget .widget-content table td > a { padding:3px; word=wrap:break-word; }
+.widget .widget-content .tableTitle { float:left; font-size:18px; font-weight:500; }
 .widget .widget-content a:hover { text-decoration:none; }
 .widget .widget-content .overflow { max-height:220px; overflow:auto; }
 
@@ -44,9 +49,9 @@ svg path.domain { stroke:#333; stroke-width:2; }
 
 
 /*****CSS for DATA FORECAST WIDGET*****/
-.dataForecast { width:1000px; }
-.dataForecast .widget-content { width:990px;}
-.dataForecast #dataForecastData { width:inherit; height:280px; background:transparent; }
+.dataForecast { width:700px; }
+/*.dataForecast .widget-content { width:990px;}*/
+.dataForecast #dataForecastData { width:inherit; height:265px; background:transparent; }
 .dataForecast .controls { padding: 0 30px 5px 45px; }
 .dataForecast div.graph-legend { width:500px; height:20px; clear:both; }
 .dataForecast div.graph-legend ul { margin-left:6px; list-style:none; }
@@ -214,8 +219,6 @@ line:hover { opacity: 0.5; }
 #tangent { stroke: black; stroke-width: 2; fill: none; }
 
 /*****CSS for PAGE PERFORMANCE WIDGET ****/
-.pagePerformance{ width:600px;}
-.pagePerformance .widget-content{ width:590px; height:350px; }
 
 #websitePerformance-table {
 	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;	
@@ -488,8 +491,7 @@ line:hover { opacity: 0.5; }
 
 /*****CSS for KEYWORD INSIGHT WIDGET ****/
 
-.keywordInsight {width: 600px;}
-.keywordInsight .widget-content{width: 590px;}
+/*.keywordInsight .widget-content{width: 590px;}*/
 .keywordInsight h4 { text-align:center; margin-bottom:10px; color:#333; }
 .keywordInsight #keywordInsightData { margin:auto; height:315px; }
 .keywordInsight .main text { font: 10px sans-serif; }
@@ -504,9 +506,6 @@ line:hover { opacity: 0.5; }
 
 
 /*****CSS for PAGE PERFORMANCE - BAR CHART WIDGET ****/
-.pagePerformance{
-	width:600px;
-}
 .pagePerformance #pagePerformanceData {
 	height:315px;
 	width:inherit;

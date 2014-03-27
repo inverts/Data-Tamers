@@ -94,30 +94,26 @@ public class KeywordInsightModel extends WidgetModel {
 		cal.setTime(this.endDate);
 		cal.add(Calendar.DAY_OF_MONTH, -30);
 		this.startDate = cal.getTime();
+
 		this.keywordSubstring = "";
 		this.cpcData = new ArrayList<KeyData>();
-		this.organicData = new ArrayList<KeyData>();
+		this.organicData = new ArrayList<KeyData>();		
 		this.stopWordsMap = new HashMap<String,String>();
-//		Resource resource = servletContext.getResource("classpath:stopWords.txt");
-//		InputStream is = resource.getInputStream();
-//	    BufferedReader br = new BufferedReader(new ImputStreamReader(is));
-	        try {
-	        	Resource resource = new ClassPathResource("stopWords.txt");
-	    		InputStream is = resource.getInputStream();
-	    	 	BufferedReader br = new BufferedReader(new InputStreamReader(is));
-	            String line = null;
-	            while ((line = br.readLine()) != null){
-	                this.stopWordsMap.put(line,"NA");
-	                System.out.println(line);
-	            }
-	        } catch (IOException x) {
-	        	System.err.format("IOException: %s%n", x);
-	        } 
-	//	File rootDir = new File(ServletContext.getRealPath("/src/main/resource"));
-	//	if (sw.stopWordsStr != null) {
-	//		this.stopWordsList = Arrays.asList(sw.stopWordsStr.split(","));
-	//	}
-		//this.stopWordsList = new ArrayList<String>();
+		
+		// read stopwords file into map
+		try {
+			Resource resource = new ClassPathResource("stopWords.txt");
+			InputStream is = resource.getInputStream();
+			BufferedReader br = new BufferedReader(new InputStreamReader(is));
+			String line = null;
+			while ((line = br.readLine()) != null){
+				this.stopWordsMap.put(line,"NA");
+				System.out.println(line);
+			}
+		} catch (IOException x) {
+			System.err.format("IOException: %s%n", x);
+		} 
+		this.viewCount = 3;
 		updateData();
 
 	}
@@ -171,56 +167,6 @@ public class KeywordInsightModel extends WidgetModel {
 		privateOrganicVisitsTotal = dataObject.getPrivateOrganicVisitsTotal();
 		organicVisitsTotal = dataObject.getOrganicVisitsTotal();
 		cpcVisitsTotal = dataObject.getCpcVisitsTotal();
-		
-	/*	int s = 0;
-		if (this.stopWordsList != null && (s=this.stopWordsList.size())>0){	
-			System.out.println("Size of Stop Word List = "+s);
-			System.out.println("First stopword = "+stopWordsList.get(0));
-			System.out.println("Last stopword = "+stopWordsList.get(s-1)); 
-		} */
-		/*
-		Charset charset = Charset.forName("US-ASCII");
-		Path p1 = Paths.get("/src/main/resources/stopWords.txt");
-		System.out.println(p1);
-		Path p2 = Paths.get("/src/main/java/io/analytics/site/models/widgets/KeywordInsightModel.java");
-		// 
-		Path p2_to_p1 = p2.relativize(p1);
-		System.out.println(p2_to_p1);
-		//Path file = FileSystems.getDefault().getPath("src/main/resources", "stopWords.txt");
-		//InputStream inputStream = YourClass.class.getResourceAsStream(“file.txt”);
-		Path file = Paths.get("../stopWords.txt");
-		System.out.println(file); */
-
-
-/*		try {
-			//fr = new FileReader("../../../../../../../resources/stopWords.txt");
-			//fr = new FileReader("../stopWords.txt");
-			fr = new FileReader("src/main/resources/stopWords.txt");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try (BufferedReader reader = new BufferedReader(fr)) {
-		    String line = null;
-		    while ((line = reader.readLine()) != null) {
-		        System.out.println(line);
-		    }
-		} catch (IOException x) {
-		    System.err.format("IOException: %s%n", x);
-		}*/
-		
-		/*List<String> alist = null;
-		
-		
-		try {
-			alist = Files.readAllLines(p, charset);
-			for (String line : alist) {// ((line = reader.readLine()) != null) {
-				System.out.println(line);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 		
 		Iterator<String> itk = organicKeywords.iterator();
 		Iterator<Integer> itv = organicVisits.iterator();
@@ -720,58 +666,5 @@ class WordCount implements Comparable<WordCount>{
 	}
 
 }
-
-// bean file
-@Component
-class StopWords {
-	@Value("${stopwords}") public String stopWordsStr ;
-   
-	public String getStopWords() {
-		return this.stopWordsStr;
-	}
-}
-// bean file
-// from chapter 1 Spring in Practice, Use resource to get file location the read in data.
-// add to servletContext.xml
-/* <bean id="wordStopsBean"
- * 	class="io.analytics.site.models.widgets>
- *  <property name="wordStopFileResource" value="wordStop.txt" />
- *  </bean>
- */
-/*class MyFileReader {
-
-    public Path path;
-    public Map<String,String> map;
-    
-    public MyFileReader(Path path){
-    	this.path = path;
-    	this.map = new HashMap<String,String>();
-    }
-
-    public Map<String,String> readFile() {
-    	Charset charset = Charset.forName("US-ASCII");
-        BufferedReader reader = null;
-        try {
-            reader = BufferedReader(new InputStreamReader(is));
-            String line = null;
-            while ((line = reader.readLine()) != null){
-                this.map.put(line,"NA");
-                System.out.println(line);
-            }
-        } catch (IOException x) {
-        	System.err.format("IOException: %s%n", x);
-        } 
-        return new HashMap<String,String>(this.map);
-    }
-
-    public Path getPath() {
-        return this.path;
-    }
-
-    public void setPath(Path path) {
-        this.path = path;
-    } 
-
-} */
 
 

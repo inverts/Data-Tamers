@@ -64,6 +64,8 @@ public class WebsitePerformanceModel extends WidgetModel {
 			cal.setTime(this.endDate);
 			cal.add(Calendar.DAY_OF_MONTH, -30);
 			this.startDate = cal.getTime();
+			
+			this.viewCount = 2;
             
             updateData();
 

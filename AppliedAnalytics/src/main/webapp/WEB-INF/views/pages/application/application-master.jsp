@@ -12,6 +12,7 @@
 <link href="<c:url value="/cache/css/site.css" />" rel="stylesheet">
 <link href="<c:url value="/cache/css/widget.css" />" rel="stylesheet">
 <link href="<c:url value="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />" rel="stylesheet">
+<link href="<c:url value="/cache/css/libs/jquery.dataTables.css" />" rel="stylesheet">
 
 <script type="text/javascript">
 	/* Set the application root directory for the javascript files. */
@@ -24,10 +25,12 @@
 <script src="<c:url value="/cache/javascript/libs/d3.v3.min.js" />"></script>
 <script src="<c:url value="/cache/javascript/libs/bootstrap.min.js" />"></script>
 <script src="<c:url value="/cache/javascript/plugins/jquery.tipsy.js" />"></script>
+<script src="<c:url value="/cache/javascript/plugins/jquery.dataTables.min.js" />"></script>
 <script src="<c:url value="/cache/javascript/modal.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/utilities.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/test.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/graph.js" />"></script>
+<script src="<c:url value="/cache/javascript/api/table.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/scatter.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/bar.js" />"></script>
 <script src="<c:url value="/cache/javascript/headerfooter.js" />"></script>

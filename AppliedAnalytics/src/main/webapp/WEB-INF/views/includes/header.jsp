@@ -21,7 +21,8 @@
 						</c:otherwise>
 					</c:choose>
 				</div>
-				<div class="messages"></div>		
+				<div class="messages"></div>
+				<div class="trash"><span class="glyphicon glyphicon-trash"></span></div>	
 			</div>
 		</c:when> 
 		

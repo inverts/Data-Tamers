@@ -79,7 +79,21 @@ function getPagePerformanceData(id, callback){
 		});
 		
 		// create table
-		createTableView("pagePerformanceTable", d.data, 38, 0);
+		$("#" + id + " #pagePerformanceTable").table({
+			"data": d.data,
+			"columnHeaders" : [
+			                   {"name" : d.data.keys[0], "width": "70%"}, 
+			                   {"name" : d.data.keys[1]},
+			                   {"name" : d.data.keys[2]},
+			                   {"name" : d.data.keys[3]}
+			                  ],
+			"m"				: {"length": d.data.keys.length, "keys": d.data.keys}, // columns
+			"n"				: {"length": d.data[d.data.keys[0]].length, "keys": null}, // rows
+			"url"			: {"links": d.data.url, "cols": [0]},
+			"search"		: true
+		});
+		
+		//createTableView("pagePerformanceTable", d.data, 38, 0);
 		
 		if (callback)
 			callback();

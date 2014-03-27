@@ -11,6 +11,8 @@ import io.analytics.site.models.JSONSerializable;
 public abstract class WidgetModel implements JSONSerializable {
 
 
+	protected int viewCount = 1;
+	
 	/**
 	 * A name to describe the widget to the user.
 	 * @return
@@ -45,6 +47,15 @@ public abstract class WidgetModel implements JSONSerializable {
 	 * @return - string.properties path to the widget title.
 	 */
 	public abstract String getTitle();
+	
+	
+	/**
+	 * Default number of views is 1. If more, change in widget level constructor.
+	 * @return - the number of views this widget contains.
+	 */
+	public int getViewCount() {
+		return this.viewCount;
+	}
 	
 	//No setters; these should not change over the lifetime of the Widget.
 	

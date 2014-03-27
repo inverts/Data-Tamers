@@ -19,6 +19,20 @@ function loadDashboard(dashboardId) {
 				var widgetTypeIdArray = dashboard.widgetTypeIds;
 				var widgets = dashboard.widgets;
 				widgets = widgets.sort(compareWidgetPriority);
+				
+				$trash = $(".trash").droppable({
+					tolerance: "pointer",
+					over: function(e, ui) {
+						var $target = $(e.target);
+						if ($target.hasClass("trash"))
+							$(".trash span").css("color", "#00aeef");
+						},
+					out: function(e) { $(".trash span").css("color", "#000"); },
+					drop: function(e, ui) {
+						if ($(e.target).hasClass("trash"))
+							removeWidget(ui.draggable.attr("id"));
+					}
+				});
 					
 					// since the remove event is only specific to the dashboard, 
 					// we create a callback method to set it up. This is so we
@@ -27,12 +41,13 @@ function loadDashboard(dashboardId) {
 					loadWidgets($content, widgets, function() {
 						var $last = $content.children().last();
 						var elementId = $last.attr("id");
-						$last.on("click", ".dropdown-menu a.removeWidget", function() { // remove menu event
-							Modal.call({
-								"title" : "Remove Widget",
-								"content": "Remove " + $("#" + elementId + " .widget_title").html() + " widget?",
-								"action": function() { removeWidget(elementId); }
-							});
+						var timeoutId = 0;
+						
+						$last.mousedown(function(e) {
+							timeoutId = setTimeout(function() { $trash.show(); }, 500);
+						}).bind("mouseup", function(e){
+							clearTimeout(timeoutId);
+							$trash.hide();
 						});
 
 					});
@@ -53,7 +68,7 @@ function loadDashboard(dashboardId) {
 					tolerance: "pointer", 
 					zIndex: 100,
 					stop: updateWidgetPosition,
-					cancel: "div.widget-content"
+					cancel: "div.widget-content, header.w-header .w-text"
 				});
 				
 	

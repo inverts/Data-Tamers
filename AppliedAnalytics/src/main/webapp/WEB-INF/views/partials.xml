@@ -28,8 +28,13 @@
 	</bean>
 	
 	<!--  Widget -->
-	 <bean id="widget" class="org.springframework.web.servlet.view.JstlView">
+	<bean id="widget" class="org.springframework.web.servlet.view.JstlView">
 		<property name="url" value="/WEB-INF/views/widgets/widget.jsp" />
+	</bean>
+	
+	<!--  Widget Prototype -->
+	<bean id="widgetPrototype" class="org.springframework.web.servlet.view.JstlView">
+		<property name="url" value="/WEB-INF/views/widgets/widget-proto.jsp" />
 	</bean>
 
 </beans>   
