@@ -5,19 +5,9 @@ import io.analytics.service.interfaces.IKeywordInsightService;
 import io.analytics.service.interfaces.ISessionService;
 
 import java.io.BufferedReader;
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,23 +19,15 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Pattern;
-
-import javax.servlet.ServletContext;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Component;
-
 
 public class KeywordInsightModel extends WidgetModel {
 	private JSONObject jsonData;
@@ -65,17 +47,13 @@ public class KeywordInsightModel extends WidgetModel {
 	private int organicVisitsTotal;
 	private ArrayList<KeyData> cpcData;
 	private ArrayList<KeyData> organicData;
-	private Map<String,String> stopWordsMap;
+	private Set<String> stopWordsSet;
 	
 	private final String widgetClass = "keywordInsight";
 	private final String widgetTitle = "keywordinsight.title";
 
 	DateFormat presentationFormat = new SimpleDateFormat("MM/dd/yyyy"); 
 	
-	public KeywordInsightModel(){
-		
-	}
-
 	public KeywordInsightModel(ISessionService sessionService, IKeywordInsightService keywordInsightService) {
 
 		this.sessionService = sessionService;
@@ -92,7 +70,7 @@ public class KeywordInsightModel extends WidgetModel {
 
 		this.cpcData = new ArrayList<KeyData>();
 		this.organicData = new ArrayList<KeyData>();		
-		this.stopWordsMap = new HashMap<String,String>();
+		this.stopWordsSet = new HashSet<String>();
 		
 		// read stopwords file into map
 		try {
@@ -102,7 +80,7 @@ public class KeywordInsightModel extends WidgetModel {
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
 			String line = null;
 			while ((line = br.readLine()) != null){
-				this.stopWordsMap.put(line,"NA");
+				this.stopWordsSet.add(line);
 				//System.out.println(line);
 			}
 		} catch (IOException x) {
@@ -303,8 +281,12 @@ public class KeywordInsightModel extends WidgetModel {
 		Set<String> wordsSet = new HashSet<String>(allWords);
 		// count duplicates
 		ArrayList<WordCount> words = new ArrayList<WordCount>();
+	
 		for ( String word : wordsSet) {
-			words.add(new WordCount(word, Collections.frequency(allWords, word))) ; 
+	        //word = word.trim();
+			if (!stopWordsSet.contains(word) && !word.matches("[0-9]+") && !word.isEmpty()){
+				words.add(new WordCount(word, Collections.frequency(allWords, word))) ; 
+			}
 		}
 
 		// add up multipage visits for each keyword with word
