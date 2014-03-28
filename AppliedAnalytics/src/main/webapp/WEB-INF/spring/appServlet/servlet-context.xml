@@ -26,7 +26,14 @@
 		<beans:bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
 	        <beans:property name="basename" value="strings"/>
 	    </beans:bean>
+	    
+	<!-- Keyword Insight widget stop words string property -->
+	<!-- need bean for class here? -->
 	
+		<context:component-scan base-package="io.analytics.site.models.widgets" />
+ 		<context:property-placeholder location="classpath:strings.properties"/>
+ 	
+ 		
 	<!-- XMLViewResolver for partials.xml --> 
 		<beans:bean class="org.springframework.web.servlet.view.XmlViewResolver">
 		   <beans:property name="location" value="/WEB-INF/views/partials.xml" />
@@ -41,5 +48,12 @@
 			<beans:property name="order" value="2" />
 		</beans:bean>
  
+  <!--   <beans:bean id="myFileReader" class="io.analytics.site.models.widgets.KeywordInsightModel">
+    <beans:property name="location" value="classpath:app.properties"/>
+    </beans:bean>
+    
+	<beans:bean id="myFileReader" class="com.myapp.MyFileReader">
+    <beans:property name="path" value="${pathValue}" />
+	</beans:bean>	-->
 	
 </beans:beans>
