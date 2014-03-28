@@ -64,13 +64,17 @@ function dashLinkHover() {
  */
 function widgetDragNDrop(listClass) {
 	
-	$("." + listClass + " div").draggable({
+	$("." + listClass + " .widgetLink").draggable({
 		connectToSortable: ".dashboard-content",
 		// fetches the widget via loadWidget function in widget.js
 		helper: function(e, ui) { 
-			var helper = $("<div>").addClass("widget-select");
-			loadWidget(helper, parseInt(e.currentTarget.id), -1, $(".dashboard-content").data("n"));
+			var helper = $("<div>").addClass("widget widget-select");
 			return helper;
+		},
+		start: function(e, ui) {
+			if(ui.helper.length)
+				loadWidget(ui.helper, parseInt(e.currentTarget.id), -1, $(".dashboard-content").data("n"));
+
 		},
 		// before inserting the widget, we need to fetch a clone of the widget to preserve the events
 		// during this process. Also terminate the helper at this point since we no longer need it.

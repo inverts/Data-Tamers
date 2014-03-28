@@ -3,9 +3,11 @@
  */
 
 function loadWebsitePerformanceWidget(id) {
+	
+	var $element = $('#' + id);
+	
 	$.post(applicationRoot + "WebsitePerformance", null, 
 		function(response) {
-		var $element = $('#' + id);
 			if ($element.length > 0)
 				$element.fadeIn("fast", function() {
 					$element.append(response);

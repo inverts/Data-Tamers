@@ -179,8 +179,10 @@ function addWidgetByList(widgetTypeId, $widget) {
 					"widgetTypeId": widgetTypeId
 				});
 				
-				if (result.length)
+				if (result)
 					$dash.data("n", ++nWidgets);
+				
+				console.log("added widget: " + $widget.attr("id"));
 				
 			});
 	

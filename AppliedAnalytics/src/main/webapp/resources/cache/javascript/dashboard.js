@@ -38,10 +38,11 @@ function loadDashboard(dashboardId) {
 					// remove it right away and the time the widget remains creates for some weird display
 					// issues. If we this in vein, show the widget again.
 					drop: function(e, ui) {
+						e.preventDefault();
 						ui.draggable.hide();
 						$(e.target).hasClass("trash") ? removeWidget(ui.draggable.attr("id"))
 											 		  : ui.draggable.show();
-						e.stopPropagation();
+						//e.stopPropagation();
 					}
 				});
 					
@@ -85,13 +86,22 @@ function loadDashboard(dashboardId) {
 							// the widget itself is encapsulated into a container called .widget-select
 							// and needs to be extracted out of it.
 							var $w = addedWidget.children(":first");
-							// set the currentItem html to be that of the widget.
-							$(this).data().uiSortable.currentItem.html($w);
-							// remove the encapsulating parent container (currentItem) and leave
-							// the raw widget in its stead.
-							$w.unwrap();
-							// save widget to database
-							addWidgetByList(parseInt(ui.item.attr("id")), $w);
+
+							// did the user get the visualization?
+							if ($w.children().length) {
+								// set the currentItem html to be that of the widget.
+								$(this).data().uiSortable.currentItem.html($w);
+								// remove the encapsulating parent container (currentItem) and leave
+								// the raw widget in its stead.
+								$w.unwrap();
+								
+								// save widget to database
+								addWidgetByList(parseInt(ui.item.attr("id")), $w);
+
+							}
+							else
+								$(this).data().uiSortable.currentItem.remove();
+
 							// zero out the widget for the next drag n drop
 							addedWidget = null;
 						}

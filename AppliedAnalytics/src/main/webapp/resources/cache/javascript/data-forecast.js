@@ -13,10 +13,10 @@ var filterStartIndex = 0; //TODO: get filter date start
  * Initally loads the entire widget including model and view.
  */
 function loadDataForecast(id) {
-	
+	var $element = $('#' + id);
 	//TODO: Possibly send id number out to append to ids in the model
 	$.post(applicationRoot + "DataForecast", null, function(response) {
-		var $element = $('#' + id);
+		
 		if ($element.length > 0) {
 			$element.fadeIn("fast", function() { 
 					$element.append(response); 
@@ -30,15 +30,15 @@ function loadDataForecast(id) {
 		getDataForecastData(id, function() {
 
 			// Setup forecast buttons
-			$('#rawBtn').on('click', function() { toggleLine('raw', this); });
-			$('#normBtn').on('click', function() { toggleLine('normal', this); });
-			$('#smoothBtn').on('click', function() { toggleLine('smooth', this); });
+			$element.on('click', "#rawBtn", function() { toggleLine(id, 'raw', this); });
+			$element.on('click', "#normBtn", function() { toggleLine(id, 'normal', this); });
+			$element.on('click', "#smoothBtn", function() { toggleLine(id, 'smooth', this); });
 			
 			// legend
-			createLegend(lineclasses);
+			createLegend(id, lineclasses);
 			
 			// initially turn on RAW
-			$('#rawBtn').click(); // initially turn on raw data.
+			$("#" + id + " #rawBtn").click(); // initially turn on raw data.
 			
 			//$('#' + id + ' .dropdown-menu').attr('id', id);
 			
@@ -54,6 +54,7 @@ function getDataForecastData(id, callback) {
 		
 		$('#' + id + ' #dataForecastData').empty().graph({
 															data: d.data,
+															id: id,
 															yKey: dataForecastDataKeys,
 															lineClass: lineclasses,
 															lineType: lineTypes,
@@ -94,10 +95,10 @@ function updateDataForecast(id) {
  * @param className - name of the class aka line.
  * @param btn - id of the button clicked.
  */
-function toggleLine(className, btn) {
-	var line = d3.selectAll('.' + className + '.plot');
-	var altLine = d3.select('.' + className + '.alternate');
-	var legend = d3.select('.' + className + '.graph-legend');
+function toggleLine(id, className, btn) {
+	var line = d3.selectAll('#' + id + ' .' + className + '.plot');
+	var altLine = d3.select('#' + id + ' .' + className + '.alternate');
+	var legend = d3.select('#' + id + ' .' + className + '.graph-legend');
 	var current = line.attr('class');
 	
 	if (current == className + ' plot') {
@@ -124,11 +125,11 @@ function toggleLine(className, btn) {
  * 
  * @param lines - array of classes aka lines
  */
-function createLegend(lines) {
+function createLegend(id, lines) {
 
 	for(var i = 0; i < lines.length; i++) {
 		
-		var legendLine = d3.select('#graphLines').append('li')
+		var legendLine = d3.select('#' + id + ' #graphLines').append('li')
 								.attr('class', lines[i] + ' graph-legend')
 								.append('svg')
 								.append('g')

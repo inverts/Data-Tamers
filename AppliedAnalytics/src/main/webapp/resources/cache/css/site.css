@@ -48,6 +48,7 @@ input { font: inherit; }
 
 /* Standard page size and position */
 .login, .start, .terms, .personal-info, .main-goal { margin-left:340px; padding-top:30px;}
+.page #application-page .dashboard-content{ min-height:900px; }
 
 /* Error Message */
 .page .error { font:inherit; font-size:1em; color:red; margin-bottom:5px; padding:5px; }
@@ -121,6 +122,7 @@ input { font: inherit; }
 
 /**** SIDE PANEL TABS ****/
 .sidepanel .dashlist, .sidepanel .widget-list { vertical-align:middle; font-size:11px; width:97%; display:none; }
+.sidepanel .widget-list { padding-left:40px; }
 
 .sidepanel .dashlist ul, .sidepanel .forecast-list { overflow:auto; max-height:200px; margin-bottom:25px; }
 

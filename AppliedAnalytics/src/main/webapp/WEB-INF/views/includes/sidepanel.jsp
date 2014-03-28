@@ -31,7 +31,7 @@ $(function(){ getDashboardList($.parseJSON(dashboards)); });
 			<c:if test="${not empty widgetLibraries}">
 				<c:forEach var="wData" items="${widgetLibraries}">
 					<div id="<c:out value='${wData.getLibraryTitle().toLowerCase()}'/>" class="nav-cell">
-						<%--<div class="nav-icon" style="background-position:0 -30px;"></div>--%>
+						<div class="nav-icon" style=""></div>
 						<a class="nav-txt"><c:out value="${wData.getLibraryTitle()}"/></a>
 					</div>
 				    <div id="<c:out value='${wData.getLibraryTitle().toLowerCase()}'/>-list" class="widget-list">
@@ -46,37 +46,7 @@ $(function(){ getDashboardList($.parseJSON(dashboards)); });
 				    </div>
 				</c:forEach>
 			</c:if>
-			
-			
-			
-			<!-- TRENDS 
-			<div id="trends"class="nav-cell">
-				<div class="nav-icon" style="background-position:0 -30px;"></div>
-				<a class="nav-txt"><fmt:message key="trends" /></a>
-			</div>
-			<div id="trends-list" class="widget-list">
-				<ul class="trends-list">
-					<li class="widgetLink growingProblemsWidget">
-						<fmt:message key="growingproblems.title" />
-						<span class="glyphicon glyphicon-credit-card"></span>
-						<div class="widget-select"></div>
-					</li>
-				</ul>
-			</div> -->
-			
-			<!-- FORECAST 
-			<div id="forecast" class="nav-cell">
-				<div class="nav-icon" style="background-position:0 -60px;"></div>
-				<a class="nav-txt"><fmt:message key="forecast" /></a>
-			</div>
-			<div id="forecast-list" class="widget-list">
-				<div class="forecast-list">
-					<div id="1" class="widgetLink dataForecastWidget">
-						<fmt:message key="dataforecast.title" />
-						<span class="glyphicon glyphicon-credit-card"></span>
-					</div>
-				</div>
-			</div> -->
+
 			
 			<!-- ALERTS -->
 			<div id="suggestions" class="nav-cell">
