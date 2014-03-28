@@ -73,7 +73,7 @@ public class WidgetLibrariesRepository implements IWidgetLibrariesRepository {
 		public WidgetLibrary mapRow(ResultSet rs, int row) throws SQLException {
 			WidgetLibrary w = new WidgetLibrary(rs.getInt(WidgetLibrariesTable.LIBRARY_ID));
 			w.setName(rs.getString(WidgetLibrariesTable.NAME));
-			w.setName(rs.getString(WidgetLibrariesTable.DESCRIPTION));
+			w.setDescription(rs.getString(WidgetLibrariesTable.DESCRIPTION));
 			return w;
 		}
 	}

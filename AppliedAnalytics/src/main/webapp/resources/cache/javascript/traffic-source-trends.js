@@ -10,9 +10,9 @@
  */
 function loadTrafficSourceTrendsWidget(id) {
 
-	var $element = $('#' + id);
 	$.get(applicationRoot + "/widgets/traffic-source-trends", null, 
 		function(response) {
+		var $element = $('#' + id);
 			if ($element.length > 0)
 				$element.empty().append(response);
 			else {

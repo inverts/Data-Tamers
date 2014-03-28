@@ -5,10 +5,9 @@
 
 function loadKeywordInsight(id) {
 
-	var $element = $("#" + id);
-
 	$.post(applicationRoot + "KeywordInsight", null, 
 			function(response) {
+		var $element = $("#" + id);
 		if ($element.length > 0) {
 			$element.fadeIn("fast", function() { 
 				$element.append(response); 

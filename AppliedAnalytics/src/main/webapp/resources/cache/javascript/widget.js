@@ -30,12 +30,14 @@ function loadWidgets($content, widgets, callback) {
 
 
 /**
- * Loads in the specified widget
+ * Loads in the specified widget based on widgetTypeId.
  * 
- * @param $content - the jQuery element the widget will be appended too.
+ * @author - Andrew Riley
+ * @param $content - the jQuery page element the widget will be appended too.
  * @param widgetTypeId - Database Id of the widget type.
  * @param widgetId - Database Id of the widget instance.
- * @param i - an arbitrary number.
+ * @param i - an arbitrary number, usually the index 
+ * priority or number of widgets + 1.
  */
 function loadWidget($content, widgetTypeId, widgetId, i, callback)
 {
@@ -50,71 +52,76 @@ function loadWidget($content, widgetTypeId, widgetId, i, callback)
 	$div.data("pos", $div.index());
 	
 	var elementId; 
-
+	
+	// which widget's load function do we need to call?
 	switch(widgetTypeId)
 	{
 		case 1: 
 			elementId = "dataForecastWidget" + i;
 			$div.attr("id", elementId);
-			$.when(loadDataForecast(elementId))
-			 .then(function() { widgetEvents($content, $div, elementId); });
+			$.when(loadDataForecast(elementId)).then(function() { widgetEvents($content, $div, elementId); });
 			break;
 			
 		case 2:
 			elementId = "websitePerformanceWidget" + i;
 			$div.attr("id", elementId);
-			$.when(loadWebsitePerformanceWidget("websitePerformanceWidget" + i))
-			 .then(function() { widgetEvents($content, $div, elementId); });
+			$.when(loadWebsitePerformanceWidget("websitePerformanceWidget" + i)).then(function() { widgetEvents($content, $div, elementId); });
 			break;
 			
 		case 7:
 			elementId = "keyContributingFactorsWidget" + i;
 			$div.attr("id", elementId);
-			$.when(loadKeyContributingFactorsWidget(elementId))
-			 .then(function() { widgetEvents($content, $div, elementId); });
+			$.when(loadKeyContributingFactorsWidget(elementId)).then(function() { widgetEvents($content, $div, elementId); });
 			break;
 		
 		case 4:
 			elementId = "keywordInsightWidget" + i;
 			$div.attr("id", elementId);
-			$.when(loadKeywordInsight(elementId))
-			 .then(function() { widgetEvents($content, $div, elementId); });
+			$.when(loadKeywordInsight(elementId)).then(function() { widgetEvents($content, $div, elementId); });
 			break;
 			
 		case 5:
 			elementId = "trafficSourceTrendsWidget" + i;
 			$div.attr("id", elementId);
-			$.when(loadTrafficSourceTrendsWidget(elementId))
-			 .then(function() { widgetEvents($content, $div, elementId); });
+			$.when(loadTrafficSourceTrendsWidget(elementId)).then(function() { widgetEvents($content, $div, elementId); });
 			break;
 			
 		case 6: 
 			elementId = "boostPerformanceWidget" + i;
 			$div.attr("id", elementId);
-			$.when(loadBoostPerformanceWidget(elementId))
-			 .then(function() { widgetEvents($content, $div, elementId); });
+			$.when(loadBoostPerformanceWidget(elementId)).then(function() { widgetEvents($content, $div, elementId); });
 			break;
 	}
 	
-
+	// execute callback function if provided.
 	if (callback)
 		callback(elementId);
 
 }
 
-
+/**
+ * Sets up all global widget events.
+ * @author - Andrew Riley
+ * @param $content
+ * @param $div
+ * @param elementId
+ */
 function widgetEvents($content, $div, elementId) {
-	// collapse
+	
+	// collapse event on title double click
 	$div.on("dblclick", ".widget_title", function(e) {
 		$(this).parent().siblings(".widget-content").slideToggle("fast");
 	});
 
-	
+	// display trash bin for removal on click and hold
 	if ($content.hasClass("dashboard-content") || $content.hasClass("widget-select")) {
 		var timeoutId = 0;
 		$div.on("mousedown.widget", function(e) {
-			timeoutId = setTimeout(function() { $trash.show(); }, 500);
+			// we use a timeout to capture the hold so we don't get flashes
+			// of the trash bin on every single click.
+			timeoutId = setTimeout(function() { $trash.show(); }, 500); 
 		}).bind("mouseup.widget", function(e){
+			// if just a normal click and not hold, we don't want to show the trash bin at all.
 			clearTimeout(timeoutId);
 			$trash.hide();
 		});
@@ -126,15 +133,18 @@ function widgetEvents($content, $div, elementId) {
 /**
  * Updates each widget"s visualization based on new data 
  * without reloading the entire widget.
+ * @author - Andrew Riley
  */
 function updateWidgets(){
 	
+	// get all the active widgets on the current page.
 	var widgets = $.map($(".w_container"), function(widget) {
 						return { "elementId": widget.id, "widgetTypeId" : $(widget).data("widgetTypeId") };
 					});
 	
 	for(var i = 0; i < widgets.length; i++) {
 		
+		// call appropriate widget's update function.
 		switch(widgets[i].widgetTypeId)
 		{
 			case 1:
@@ -148,7 +158,13 @@ function updateWidgets(){
 		
 }
 
-
+/**
+ * Since adding widgets is a little different when doing it from
+ * the drag n drop, I created a new function that handles it.
+ * @author - Andrew Riley
+ * @param widgetTypeId - the widget type id
+ * @param $widget - the widget helper object. Needed to inject the new widget data to make it 'real'.
+ */
 function addWidgetByList(widgetTypeId, $widget) {
 	
 	var $dash = $(".dashboard-content");
@@ -171,7 +187,12 @@ function addWidgetByList(widgetTypeId, $widget) {
 	
 }
 
-
+/**
+ * Adds a widget from dragging the widget onto a dashboard link.
+ * @author - Andrew Riley
+ * @param widget - the widget to be added into another dashboard
+ * @param li - dashboard li element. Used to extract the dashboard Id
+ */
 function addWidget(widget, li) 
 {
 	if (li.length) {
@@ -187,11 +208,6 @@ function addWidget(widget, li)
 						"title" : "Add Widget",
 						"content": widgetName + " has been added to dashboard \"" + li.children("a").html()  + "\"!"
 					});
-					
-					//loadWidget($content, widgetTypeId, widgetId, i, callback);
-					
-					// update the number of widgets <-- no longer needed
-					//$(".dashbaord-content").data("n", nWidgets);
 				});
 
 	}
@@ -201,7 +217,8 @@ function addWidget(widget, li)
 
 /**
  * Removes a widget from the dashboard and deletes it from the database.
- * @param id - the element id of the widget as on the current page.
+ * @author - Andrew Riley
+ * @param id - the element id of the widget as on the current page
  */
 function removeWidget(id) {
 
@@ -229,9 +246,6 @@ function removeWidget(id) {
 	}
 
 }
-
-
-
 
 
 /**
@@ -265,15 +279,16 @@ function updateWidgetPosition() {
 
 
 /**
- * Next and Previous buttons for pagination controls.
- * @param id
- * @param viewClass
+ * Next and Previous slide controls used on widgets with multiple views.
+ * @author - Andrew Riley
+ * @param id - widget element Id (the id used to distinguish widgets on the pages)
+ * @param viewClass - uniformed class name given to each view of the widget.
  */
 function nextPreviousControls(id, viewClass) {
 	
 	var $parent = $("#" + id + " ." + viewClass).parent();
 	
-	// previous button
+	// previous
 	$("#" + id + " .w-prev").click(function(e) {
 		var $prev = $parent.children(".active").prev();
 		$parent.children(".active").removeClass("active").hide("slide", {direction: "right"}, "fast", function() {
@@ -284,7 +299,7 @@ function nextPreviousControls(id, viewClass) {
 		
 	});
 	
-	// next button
+	// next
 	$("#" + id + " .w-next").click(function(e) {
 		var $next = $parent.children(".active").next();
 		$parent.children(".active").removeClass("active").hide("slide", {direction: "left"}, "fast", function() {
@@ -298,8 +313,9 @@ function nextPreviousControls(id, viewClass) {
 
 /**
  * Direct view button event.
- * @param id
- * @param view
+ * @author - Andrew Riley
+ * @param id - widget element Id
+ * @param view - Id of the view on the widget
  */
 function changeViewBtn(id, view) {
 	

@@ -1,69 +1,39 @@
 /**
  * Sidepanel.js
+ * NOT LOCALIZED
  */
 
-var addedWidget;
+// Needed to preserve 'helper' so it can be inserted into the sortable list.
+var addedWidget; // variable used in dashboard.js to contain the widget being added. 
+var currentPage; // contains which page the user is currently on.
 
 $(function() {
 	
 	$(".sidepanel-background").css("width", $(".sidepanel").width());
-	
-	/*$(".sidepanel-nav").droppable({
-		 tolerance: "touch",
-		 greedy: false,
-		 over: function(event, ui) { 
-			 dashLinkHover();
-		 },
-		 out: function() { $(".dashlist").slideUp('fast'); }
-	});*/
 
-	/* Navigation hover effect */
+	// Navigation gray hover effect
 	$(".nav-cell").hover(function(){
 		$(this).animate({ backgroundColor: "gray" }, 100, "swing");
 	}, function() {
 		$(this).animate({ backgroundColor: "transparent" }, 0, "swing");
 	});
 	
-	// dashboard list open on hover
-	//$("#dashboard").hover(dashLinkHover);
-	
-	// dashboard list open on click
+	// dashboard list open on click.
 	$("#dashboard").click(function() { $(".dashlist").slideToggle("fast"); });
 	
+	// Opens trends library.
+	$("#trends").click(function() { $("#trends-list").slideToggle("fast"); });
 	
-	// open trends widget list
-	$("#trends").click(function() { $(".trends-list").slideToggle("fast"); });
-	
-	$(".trends-list").sortable({
-		items: "li",
-		connectWith: ".dashboard-content",
-		helper: function() { 
-			var helper = $("<div>").addClass("widget-select");
-			return helper;  
-		}
-		
-	});
+	// Setup widget drag and drop for trends library.
+	widgetDragNDrop("trends-list");
 
-	// open forecast widget list
+	// Opens forecast library.
 	$("#forecast").click(function() { $("#forecast-list").slideToggle("fast"); });
 	
-	$(".forecast-list div").draggable({
-		connectToSortable: ".dashboard-content",
-		helper: function(e, ui) { 
-			var helper = $("<div>").addClass("widget-select");
-			loadWidget(helper, parseInt(e.currentTarget.id), -1, $(".dashboard-content").data("n"));
-			return helper;
-		},
-		stop: function(e, ui){ 
-								addedWidget = ui.helper.clone(true, true); 
-								ui.helper.remove(); 
-							},
-		revert: false
-	});
+	// Setup widget drag and drop for forecast library.
+	widgetDragNDrop("forecast-list");
 	
-	$(".forecast-list").disableSelection();
-	
-	/* add new dashboard */
+	// Opens add dashboard pane.
 	$("#addDashboard").click(function() {
 		$(".right-pane")
 			.addClass("addDashboard");
@@ -71,11 +41,15 @@ $(function() {
 		showAddDashboardPanel(550, addDashboardPage);
 	});
 	
-	active = $("#dashboard .nav-txt").css("color", "#00aeef");
+	// mark the page the user is currently on.
+	 currentPage = $("#dashboard .nav-txt").css("color", "#00aeef");
 
 });
 
-
+/**
+ * DEPRECATED: Used to invoke the dashboard list on hover.
+ * @author - Andrew Riley
+ */
 function dashLinkHover() {
 	$(".dashlist").slideDown('fast');
 	$('.sidepanel-content').hover(null, function() {
@@ -83,25 +57,67 @@ function dashLinkHover() {
 						});
 }
 
+/**
+ * Setups up a list to have the widget drag and drop ability.
+ * @author - Andrew Riley
+ * @param listClass - name of the list class that contains the draggable elements
+ */
+function widgetDragNDrop(listClass) {
+	
+	$("." + listClass + " div").draggable({
+		connectToSortable: ".dashboard-content",
+		// fetches the widget via loadWidget function in widget.js
+		helper: function(e, ui) { 
+			var helper = $("<div>").addClass("widget-select");
+			loadWidget(helper, parseInt(e.currentTarget.id), -1, $(".dashboard-content").data("n"));
+			return helper;
+		},
+		// before inserting the widget, we need to fetch a clone of the widget to preserve the events
+		// during this process. Also terminate the helper at this point since we no longer need it.
+		stop: function(e, ui){ 
+								addedWidget = ui.helper.clone(true, true); 
+								ui.helper.remove(); 
+							},
+		revert: false
+	});
+	
+	// not 100% sure if this is needed or not. Was in a lot of the examples.
+	$("." + listClass).disableSelection();
+}
 
+/**
+ * Converts a list of dashboard Ids into the dashboard list 
+ * displayed in the side panel.
+ * @author - Andrew Riley
+ * @param list - list of dashboard Ids
+ */
 function getDashboardList(list) {
 	
+	// TODO: Handle case of no dashboards. Should do something besides throw a console error.
 	if (!list.length)
 		console.error("No Dashboards");
 	
+	// Create a dashboard link in the sidepanel for each dashboard Id.
 	for(var i = 0; i < list.length; i++) {	
 		createDashboardLink(list[i]);
 	}
 }
 
-/* Populates the right pane with the new dashboard form */
+/**
+ * Fetches the html to populate the left pane when the page is invoked.
+ * @author - Andrew Riley
+ */
 function addDashboardPage() {
-	$.post(applicationRoot + "addDashboard", {}, function( data ) {
-		  $(".addDashboard").html( data );
+	$.post(applicationRoot + "addDashboard", {}, function(data) {
+		  $(".addDashboard").html(data);
 	});
 }
 
-/* Removes a dashboard */
+/**
+ * Deletes a dashboard.
+ * @author - Andrew Riley
+ * @param dashboardId - the id of the dashboard to be deleted.
+ */
 function removeDashboard(dashboardId) {
 	
 	$.post(applicationRoot + "application/deleteDashboard", {dashboardId: dashboardId}, 
@@ -119,22 +135,26 @@ function removeDashboard(dashboardId) {
 	});
 }
 
-/* Creates a dashboard link */
+/**
+ * Creates a new dashboard page.
+ * @author - Andrew Riley
+ * @param dashboard - dashboard object containing various properties like id and name.
+ */
 function createDashboardLink(dashboard) {
 	var $dashlist = $("#dashlist");
 	
-	var $li = $("<li>").attr("id", dashboard.id)
-					   .appendTo($dashlist);
+	// dashboard link list item.
+	var $li = $("<li>").attr("id", dashboard.id).appendTo($dashlist);
 
-	
+	// dashboard link click events
 	var $link = $("<a>").click(function() {
 							loadDashboard(dashboard.id);
-							active.css("color", "#fff");
-							active = $("#dashboard .nav-txt").css("color", "#00aeef");
+							currentPage.css("color", "#fff");
+							currentPage = $("#dashboard .nav-txt").css("color", "#00aeef");
 				})
 				.html((dashboard.name)? dashboard.name : dashboard.id).appendTo($li);
 	
-	/* Creates the droppable action that will add a widget */
+	// droppable functionality to allow drag and drop widgets into this dashboard from elsewhere.
 	$link.droppable({
 		accept: ".w_container",
 		tolerance: "touch",
@@ -154,11 +174,12 @@ function createDashboardLink(dashboard) {
 		}
 	});
 	
+	// sets up the delete icon.
 	var $delete = $("<span>").addClass("deleteDash glyphicon glyphicon-remove-circle")
 							 .attr("title", "remove " + $link.html())
 							 .appendTo($li);
 	
-	/* Set remove dashboard event */
+	// adds remove event to delete icon.
 	$delete.click(function(e){
 		e.preventDefault();
 		var name = $(this).siblings("a").html();
@@ -171,9 +192,8 @@ function createDashboardLink(dashboard) {
 		
 	});
 	
-	$("#dashlist #" + dashboard.id).hover(function() {
-		$delete.toggle();
-	});
+	// display delete icon on hover only
+	$("#dashlist #" + dashboard.id).hover(function() { $delete.toggle(); });
 	
 }
 
@@ -220,7 +240,10 @@ function showAddDashboardPanel(width, showPage) {
     }
 }
 
-/* Hides right pane */
+/**
+ * Hides the add dashboard pane on click via animation.
+ * @author - Andrew Riley
+ */
 function hideAddDashboardPanel() {
 	$(".addDashboard").animate({width: 0}, 500, "swing", function() {
 			$(".right-pane")
@@ -230,6 +253,8 @@ function hideAddDashboardPanel() {
             $(".addDashboard-content").hide(); 
     });
 }
+
+
 
 //TODO: I will probably combine these two functions into one when we hook
 // up data on the back end. For now keep them separate.
