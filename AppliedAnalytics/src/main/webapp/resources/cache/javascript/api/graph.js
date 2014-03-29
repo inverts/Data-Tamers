@@ -5,7 +5,7 @@
  * @author - Andrew Riley
  * 
  */
-
+var nGraphs = 0; // number of graphs currently. Needed for the clipping mask id.
 (function ($) {
 	
 	registerKeyboardHandler = function(callback) {
@@ -92,6 +92,7 @@
 							"size"		: { "width": 0, "height": 0 },
 							"zoom"		: function() {},
 							"line"		: { "_class": settings.lineClass, "type": settings.lineType },
+							"n"			: nGraphs++
 						};
 			
 			/********************************
@@ -305,13 +306,13 @@
 						  active = classes.indexOf("active") != -1;
 						  d3.select("#" + id + " path." + graph.line._class[i] + ".plot").remove();
 						  d3.select("#" + id + " path." + graph.line._class[i] + ".alternate" ).remove();
-					  	  d3.select("#" + id + " #" + graph.line._class[i] + "clip").remove();
+					  	  d3.select("#" + id + " #" + graph.line._class[i] + "clip" + graph.n).remove();
 					  }
 					  
 					  // Setup clipping if applicable
 					  if (clip.show) {
 						  vis.select("svg").append("clipPath")
-						  				   .attr("id", graph.line._class[i] + "clip")
+						  				   .attr("id", graph.line._class[i] + "clip" + graph.n)
 										   .append("rect")
 										   .attr({
 													"x":  clip.x,
@@ -351,7 +352,7 @@
 						  				.attr({
 						  						"class": (active) ? graph.line._class[i] + " alternate active" 
 						  										  : graph.line._class[i] + " alternate",
-						  						"clip-path": "url(#" + graph.line._class[i] + "clip)"
+						  						"clip-path": "url(#" + graph.line._class[i] + "clip" + graph.n + ")"
 						  					  })
 						  			    .datum(graph.data)
 						  			    .attr("d", d3.svg.line().interpolate(graph.line.type[i])

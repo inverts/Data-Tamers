@@ -72,8 +72,9 @@ function widgetDragNDrop(listClass) {
 			return helper;
 		},
 		start: function(e, ui) {
-			if(ui.helper.length)
-				loadWidget(ui.helper, parseInt(e.currentTarget.id), -1, $(".dashboard-content").data("n"));
+			if(ui.helper.length) {
+				loadWidget(ui.helper, parseInt(e.currentTarget.id), -1);
+			}
 
 		},
 		// before inserting the widget, we need to fetch a clone of the widget to preserve the events

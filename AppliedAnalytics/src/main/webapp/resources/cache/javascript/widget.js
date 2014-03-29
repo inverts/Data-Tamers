@@ -56,38 +56,38 @@ function loadWidget($content, widgetTypeId, widgetId, i, callback)
 	// which widget's load function do we need to call?
 	switch(widgetTypeId)
 	{
-		case 1: 
-			elementId = "dataForecastWidget" + i;
+		case 1:
+			elementId = "dataForecastWidget" + (i || $(".dataForecast").length);
 			$div.attr("id", elementId);
 			$.when(loadDataForecast(elementId)).then(function() { widgetEvents($content, $div, elementId); });
 			break;
 			
 		case 2:
-			elementId = "websitePerformanceWidget" + i;
+			elementId = "websitePerformanceWidget" + (i || $(".pagePerformance").length);
 			$div.attr("id", elementId);
 			$.when(loadWebsitePerformanceWidget("websitePerformanceWidget" + i)).then(function() { widgetEvents($content, $div, elementId); });
 			break;
 			
 		case 7:
-			elementId = "keyContributingFactorsWidget" + i;
+			elementId = "keyContributingFactorsWidget" + (i || $(".keyContributingFactors").length);
 			$div.attr("id", elementId);
 			$.when(loadKeyContributingFactorsWidget(elementId)).then(function() { widgetEvents($content, $div, elementId); });
 			break;
 		
 		case 4:
-			elementId = "keywordInsightWidget" + i;
+			elementId = "keywordInsightWidget" + (i || $(".keywordInsight").length);
 			$div.attr("id", elementId);
 			$.when(loadKeywordInsight(elementId)).then(function() { widgetEvents($content, $div, elementId); });
 			break;
 			
 		case 5:
-			elementId = "trafficSourceTrendsWidget" + i;
+			elementId = "trafficSourceTrendsWidget" + (i || $(".growingProblems").length);
 			$div.attr("id", elementId);
 			$.when(loadTrafficSourceTrendsWidget(elementId)).then(function() { widgetEvents($content, $div, elementId); });
 			break;
 			
-		case 6: 
-			elementId = "boostPerformanceWidget" + i;
+		case 6:
+			elementId = "boostPerformanceWidget" + (i || $(".boostPerformance").length);
 			$div.attr("id", elementId);
 			$.when(loadBoostPerformanceWidget(elementId)).then(function() { widgetEvents($content, $div, elementId); });
 			break;

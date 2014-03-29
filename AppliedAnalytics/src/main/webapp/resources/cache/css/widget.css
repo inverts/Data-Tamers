@@ -56,7 +56,7 @@ svg path.domain { stroke:#333; stroke-width:2; }
 .dataForecast #dataForecastData { width:inherit; height:265px; background:transparent; }
 .dataForecast .controls { padding: 0 30px 5px 45px; }
 .dataForecast div.graph-legend { width:500px; height:20px; clear:both; }
-.dataForecast div.graph-legend ul { margin-left:6px; list-style:none; }
+.dataForecast div.graph-legend ul { margin-left:6px; list-style:none; height:inherit; }
 .dataForecast li.graph-legend { width:120px; background:#FF000; float:left; text-transform:uppercase; display:none;}
 .dataForecast li.graph-legend.active { display:block; }
 .dataForecast .controls .left { float:left; }

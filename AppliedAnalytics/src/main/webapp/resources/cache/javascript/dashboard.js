@@ -42,7 +42,6 @@ function loadDashboard(dashboardId) {
 						ui.draggable.hide();
 						$(e.target).hasClass("trash") ? removeWidget(ui.draggable.attr("id"))
 											 		  : ui.draggable.show();
-						//e.stopPropagation();
 					}
 				});
 					
@@ -72,7 +71,7 @@ function loadDashboard(dashboardId) {
 					// element that serves as the widget area when moving a new widget
 					// from the drag n drop so the user can see where the widget
 					// will be placed. Since we use a helper item to drag the widget, it
-					// does not use its height and width attributes in association with the
+					// does not use its height and width attributes in conjunction with the
 					// sortable list and therefore will not force the widgets in said list to
 					// move.
 					placeholder: "widget-placeholder",
