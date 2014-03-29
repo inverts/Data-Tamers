@@ -121,6 +121,8 @@ public class KeywordInsightModel extends WidgetModel {
 
 	/**
 	 * TODO: Have this automatically occur when dependencies are updated.
+	 * 
+	 * TODO: http://en.wikipedia.org/wiki/Refactor
 	 */
 	public void updateData() {
 
