@@ -17,7 +17,6 @@ function loadWebsitePerformanceWidget(id) {
 			}
 			
 			getPagePerformanceData(id, function(e) {
-				nextPreviousControls(id, "pagePerformanceVisual");
 				
 				$("#" + id + " a.bar").click(function(e) { changeViewBtn(id, "pagePerformanceBar"); });
 				$("#" + id + " a.pp-table").click(function(e) { changeViewBtn(id, "pagePerformanceTable"); });

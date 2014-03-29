@@ -27,8 +27,6 @@ function loadKeywordInsight(id) {
 		// Get the data and setup widget functions after data has been retrieved.
 		getKeywordInsightData(id, function() {
 
-			nextPreviousControls(id, "keywordVisual");
-
 			// direct view buttons
 			$("#" + id + " a.scatter").click(function(e) { changeViewBtn(id, "keywordInsightScatter"); });
 			$("#" + id + " a.improve").click(function(e) { changeViewBtn(id, "keywordInsightImprove"); });

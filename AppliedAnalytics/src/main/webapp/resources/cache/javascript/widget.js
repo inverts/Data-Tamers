@@ -65,7 +65,7 @@ function loadWidget($content, widgetTypeId, widgetId, i, callback)
 		case 2:
 			elementId = "websitePerformanceWidget" + (i || $(".pagePerformance").length);
 			$div.attr("id", elementId);
-			$.when(loadWebsitePerformanceWidget("websitePerformanceWidget" + i)).then(function() { widgetEvents($content, $div, elementId); });
+			$.when(loadWebsitePerformanceWidget("websitePerformanceWidget" + i)).then(function() { widgetEvents($content, $div, elementId, "pagePerformanceVisual"); });
 			break;
 			
 		case 7:
@@ -77,7 +77,7 @@ function loadWidget($content, widgetTypeId, widgetId, i, callback)
 		case 4:
 			elementId = "keywordInsightWidget" + (i || $(".keywordInsight").length);
 			$div.attr("id", elementId);
-			$.when(loadKeywordInsight(elementId)).then(function() { widgetEvents($content, $div, elementId); });
+			$.when(loadKeywordInsight(elementId)).then(function() { widgetEvents($content, $div, elementId, "keywordVisual"); });
 			break;
 			
 		case 5:
@@ -106,7 +106,7 @@ function loadWidget($content, widgetTypeId, widgetId, i, callback)
  * @param $div
  * @param elementId
  */
-function widgetEvents($content, $div, elementId) {
+function widgetEvents($content, $div, elementId, viewClass) {
 	
 	// collapse event on title double click
 	$div.on("dblclick", ".widget_title", function(e) {
@@ -125,6 +125,33 @@ function widgetEvents($content, $div, elementId) {
 			clearTimeout(timeoutId);
 			$trash.hide();
 		});
+	}
+	
+	// Next and Previous view controls
+	if (viewClass) {
+
+		// previous
+		$div.on("click",  ".w-prev", function(e) {
+			var $parent = $("#" + elementId + " ." + viewClass).parent();
+			var $prev = $parent.children(".active").prev();
+			$parent.children(".active").removeClass("active").hide("slide", {direction: "right"}, "fast", function() {
+				($prev.length) ? $prev.addClass("active").show("slide", {direction: "left" }, "fast")
+						       : $parent.children("." + viewClass + ":last").show("slide", {direction: "left"}, "fast")
+						       										     .addClass("active");
+			});
+			
+		});
+		
+		// next
+		$div.on("click", ".w-next", function(e) {
+			var $parent = $("#" + elementId + " ." + viewClass).parent();
+			var $next = $parent.children(".active").next();
+			$parent.children(".active").removeClass("active").hide("slide", {direction: "left"}, "fast", function() {
+				($next.length) ? $next.addClass("active").show("slide", {direction: "right"}, "fast")
+						       : $parent.children("." + viewClass + ":first").show("slide", {direction: "right"}, "fast")
+						       										     .addClass("active");
+			});
+		});	
 	}
 	
 }
@@ -173,16 +200,28 @@ function addWidgetByList(widgetTypeId, $widget) {
 	$.post(applicationRoot + "addWidget", {widgetTypeId: widgetTypeId, dashboardId: $dash.data("id"), priority: $widget.index()},
 			function(response) {
 				var result = $.parseJSON(response);
+				//TODO: Needs localized strings from response.
 				
-				$widget.data({
-					"widgetId": result.widgetId,
-					"widgetTypeId": widgetTypeId
-				});
-				
-				if (result)
-					$dash.data("n", ++nWidgets);
-				
-				console.log("added widget: " + $widget.attr("id"));
+				// add widget data to the widget element
+				if (result) {
+					$widget.data({
+						"widgetId": result.widgetId,
+						"widgetTypeId": widgetTypeId
+					});
+					
+					$dash.data("n", ++nWidgets); //increment number of widgets on page.
+					
+					console.log("added widget: " + $widget.attr("id"));
+				}
+				else {
+					Modal.alert({
+						"title": "Add Widget",
+						"content": "There was a problem trying to add " + $widget.children(".widget_title").html() + 
+								   ". This widget will now be removed."
+					});
+					
+					$widget.remove(); // if we cannot save the widget to the database, remove it off the page.
+				}
 				
 			});
 	
@@ -277,40 +316,6 @@ function updateWidgetPosition() {
 				function() {
 		});
 	}
-}
-
-
-/**
- * Next and Previous slide controls used on widgets with multiple views.
- * @author - Andrew Riley
- * @param id - widget element Id (the id used to distinguish widgets on the pages)
- * @param viewClass - uniformed class name given to each view of the widget.
- */
-function nextPreviousControls(id, viewClass) {
-	
-	var $parent = $("#" + id + " ." + viewClass).parent();
-	
-	// previous
-	$("#" + id + " .w-prev").click(function(e) {
-		var $prev = $parent.children(".active").prev();
-		$parent.children(".active").removeClass("active").hide("slide", {direction: "right"}, "fast", function() {
-			($prev.length) ? $prev.addClass("active").show("slide", {direction: "left" }, "fast")
-					       : $parent.children("." + viewClass + ":last").show("slide", {direction: "left"}, "fast")
-					       										     .addClass("active");
-		});
-		
-	});
-	
-	// next
-	$("#" + id + " .w-next").click(function(e) {
-		var $next = $parent.children(".active").next();
-		$parent.children(".active").removeClass("active").hide("slide", {direction: "left"}, "fast", function() {
-			($next.length) ? $next.addClass("active").show("slide", {direction: "right"}, "fast")
-					       : $parent.children("." + viewClass + ":first").show("slide", {direction: "right"}, "fast")
-					       										     .addClass("active");
-		});
-	});	
-	
 }
 
 /**
