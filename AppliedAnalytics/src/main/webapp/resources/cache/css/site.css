@@ -48,6 +48,7 @@ input { font: inherit; }
 
 /* Standard page size and position */
 .login, .start, .terms, .personal-info, .main-goal { margin-left:340px; padding-top:30px;}
+.page #application-page .dashboard-content{ min-height:900px; }
 
 /* Error Message */
 .page .error { font:inherit; font-size:1em; color:red; margin-bottom:5px; padding:5px; }
@@ -118,13 +119,17 @@ input { font: inherit; }
 .sidepanel .addNewDash { color:#fff; margin:0 0 10px 15px; font-size:15px; clear:both; }
 .sidepanel .addNewDash:hover { cursor:pointer; }
 .sidepanel .addNewDash .glyphicon { color:green; }
-.sidepanel .dashlist { vertical-align:middle; font-size:11px; width:97%; display:none; }
-.sidepanel #dashlist { overflow:auto; max-height:200px; margin-bottom:25px; }
 
-.sidepanel .dashlist li { color:#fffffe; height:30px; padding-left:15px; position:relative; background:none; }
-.sidepanel .dashlist li.hover, 
-.sidepanel .dashlist li:hover { background:rgb(128, 128, 128); color:#fff; } { background:rgb(128, 128, 128); color:#fff; }
+/**** SIDE PANEL TABS ****/
+.sidepanel .dashlist, .sidepanel .widget-list { vertical-align:middle; font-size:11px; width:97%; display:none; }
+.sidepanel .widget-list { padding-left:40px; }
 
+.sidepanel .dashlist ul, .sidepanel .forecast-list { overflow:auto; max-height:200px; margin-bottom:25px; }
+
+.sidepanel .sidepanel-nav li, .sidepanel .sidepanel-nav div.widgetLink { color:#fffffe; height:30px; padding-left:15px; position:relative; background:none; }
+.sidepanel .sidepanel-nav li:hover, .sidepanel .sidepanel-nav div.widgetLink:hover { cursor:pointer; color:#fff; }
+
+.sidepanel .dashlist li:hover { background:rgb(128, 128, 128); }
 .sidepanel .dashlist li.selected { color:#00aeef; }
 
 .sidepanel .dashlist a, .sidepanel .dashlist .deleteDash { display:inline-block; position:absolute; }
@@ -133,6 +138,8 @@ input { font: inherit; }
 .sidepanel .dashlist .deleteDash { color:red; width:20px; height:20px; right:0; top:10px; display:none; }
 .sidepanel .dashlist .deleteDash:hover { cursor:pointer; }
 .sidepanel .nav-icon { width:30px; height:30px; float:left; margin-top:-15px; background:url(../images/navicons.png) no-repeat; }
+
+#widget-clone { display:none; }
 
 /******ADD DASHBOARD*****/
 .addDashboard-content { margin-top:20px; padding:20px; display:none; }
@@ -192,10 +199,10 @@ input { font: inherit; }
 
 /* Dashboard */
 
-.page .w_container { float:left;}
+.page .w_container { display:inline-block; vertical-align:top; }
 
 .dashboard .dashboard-content, .trends .trends-content, 
-.forecast .forecast-content { padding:5px 0; }
+.forecast .forecast-content { padding:5px 0; overflow:hidden;}
 
 .dashboard .btn.active { z-index: 0; }
 

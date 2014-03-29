@@ -1,10 +1,11 @@
 /**
  * graph.js
  * 
- * jQuery function that attaches a grpah to a specified element.
+ * jQuery function that attaches a graph to a specified element.
+ * @author - Andrew Riley
  * 
  */
-
+var nGraphs = 0; // number of graphs currently. Needed for the clipping mask id.
 (function ($) {
 	
 	registerKeyboardHandler = function(callback) {
@@ -35,7 +36,7 @@
 		return this.each(function() {
 			var $this = $(this);	// disable widget drag on graph
 			var settings = $.extend({}, defaults, params); 					// we are integrating our default values into our params.
-			
+			var id = settings.id;
 			var padding = {
 				     		 "top":    settings.title  ? 22 : 5,			// padding required for graph labels
 				    	     "right":  30,
@@ -91,6 +92,7 @@
 							"size"		: { "width": 0, "height": 0 },
 							"zoom"		: function() {},
 							"line"		: { "_class": settings.lineClass, "type": settings.lineType },
+							"n"			: nGraphs++
 						};
 			
 			/********************************
@@ -159,7 +161,7 @@
 									.scaleExtent([minimumZ, maximumZ])
 									.on("zoom", function() {
 										
-															d3.selectAll("#" + graph.id + " Circle").remove(); // remove plots
+															d3.selectAll("#" + id + " #" + graph.id + " Circle").remove(); // remove plots
 															var t = graph.zoom.translate(),
 															tx = t[0], 
 															ty = t[1];
@@ -295,22 +297,22 @@
 				 ********************************/
 				 for (var i = 0; i < graph.y.keys.length; i++) {
 					  
-					  var $line = $("." + graph.line._class[i] + ".plot");
+					  var $line = $("#" + id + " ." + graph.line._class[i] + ".plot");
 					  var classes = null;
 					  var active = false;
 					  
 					  if($line.length) {
 						  classes = $line.attr("class");
 						  active = classes.indexOf("active") != -1;
-						  d3.select("path." + graph.line._class[i] + ".plot").remove();
-						  d3.select("path." + graph.line._class[i] + ".alternate" ).remove();
-					  	  d3.select("#" + graph.line._class[i] + "clip").remove();
+						  d3.select("#" + id + " path." + graph.line._class[i] + ".plot").remove();
+						  d3.select("#" + id + " path." + graph.line._class[i] + ".alternate" ).remove();
+					  	  d3.select("#" + id + " #" + graph.line._class[i] + "clip" + graph.n).remove();
 					  }
 					  
 					  // Setup clipping if applicable
 					  if (clip.show) {
 						  vis.select("svg").append("clipPath")
-						  				   .attr("id", graph.line._class[i] + "clip")
+						  				   .attr("id", graph.line._class[i] + "clip" + graph.n)
 										   .append("rect")
 										   .attr({
 													"x":  clip.x,
@@ -334,8 +336,8 @@
 					  					  .on("mousedown.drag", pan())
 					  					  .on("mouseover", function() {
 					  						  
-					  						 var key = d3.select(this).attr("id");
-					  						 var current = d3.select(this).attr("class");
+					  						 var key = d3.select("#" + id + " #" + this.id).attr("id");
+					  						 var current = d3.select("#" + id + " #" + this.id).attr("class");
 
 					  						 plotPoints(current, key);
 					  						  
@@ -350,7 +352,7 @@
 						  				.attr({
 						  						"class": (active) ? graph.line._class[i] + " alternate active" 
 						  										  : graph.line._class[i] + " alternate",
-						  						"clip-path": "url(#" + graph.line._class[i] + "clip)"
+						  						"clip-path": "url(#" + graph.line._class[i] + "clip" + graph.n + ")"
 						  					  })
 						  			    .datum(graph.data)
 						  			    .attr("d", d3.svg.line().interpolate(graph.line.type[i])
@@ -368,7 +370,7 @@
 				  *	  APPLY VERTICAL DATE LINE   *
 				  ********************************/
 				  if (dateLine) {
-					  d3.selectAll("line.dateLine").remove();
+					  d3.selectAll("#" + id + " line.dateLine").remove();
 					  vis.select("svg").append("line")
 					  				   .attr({
 					  							"class": "dateLine",
@@ -390,7 +392,7 @@
 				function plotPoints(current, key) {
 					
 					
-					d3.selectAll("#" + graph.id + " Circle").remove(); // remove old plots
+					d3.selectAll("#" + id + " #" + graph.id + " Circle").remove(); // remove old plots
 					
 					var circle = vis.select("svg").selectAll("circle").data(function(d) { return d; });
 					
@@ -406,57 +408,17 @@
 					
 					circle.exit();
 					
-					$("#" + graph.id + " circle").tipsy({
+					$("#" + id + " #" + graph.id + " circle").tipsy({
 						 gravity: "s",
 						 html: false,
 						 title: function() { return $(this).attr("original-title"); }
 					 });
-					
-					/*var circle = vis.select("svg").selectAll("circle").data(function(d) { return d; });
-						 
-						 
-
-					  circle.enter().append("circle")
-							        .attr("class", current)
-							        .attr("cx",    function(d) { return graph.x.point(new Date(d[graph.x.key])); })
-							        .attr("cy",    function(d) { return graph.y.point(d[key]); })
-							        .attr("r", settings.pointSize)
-							        .attr("pointer-events", "all")
-							        .on("mousedown.drag", pan());
-					 
-					  circle.append("circle")
-					      .attr("class", current)
-					      .attr("cx", function(d) { return graph.x.point(new Date(d.jsonDate)); })
-					      .attr("cy", function(d) { return graph.y.point(d[key]); })
-					 
-					  
-					      circle.exit().remove();
-					  /*$("#" + graph.id + " Circle").tipsy({
-							 gravity: "w",
-							 html: true,
-							 title: function() { return "test"; }
-						 });*/
-					  
-					  //graph.line.hover = key;
 					
 				}
 						
 					
 					function drawGraph() {
 						return function() {
-	
-							// d is the tick point.
-						    /*var tx = function(d) { 
-						    	var today = new Date();
-						    	if (d == today.getDate())
-						    		settings.onToday;
-						    	else
-						    		return null;
-						    };*/
-						    
-						    	//ty = function(d) { return "translate(0," + y(d) + ")"; },
-						    
-						  //stroke = function(d) { return d ? "#ccc" : "#666"; },
 
 						  /********************************
 						   *	APPLY X-AXIS TICKS		  *

@@ -26,6 +26,7 @@ import io.analytics.service.interfaces.IDashboardService;
 import io.analytics.service.interfaces.IGoogleAccountService;
 import io.analytics.service.interfaces.ISessionService;
 import io.analytics.service.interfaces.IUserService;
+import io.analytics.service.interfaces.IWidgetLibrariesService;
 import io.analytics.service.interfaces.IWidgetService;
 import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SessionModel;
@@ -63,6 +64,7 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 	@Autowired private ISessionService SessionService;
 	@Autowired private IDashboardService DashboardService;
 	@Autowired private IUserService UserService;
+	@Autowired private IWidgetLibrariesService WidgetLibrariesService;
 	@Autowired private IWidgetService WidgetService;
 	@Autowired private IGoogleAccountService GoogleAccountService;
 	
@@ -211,7 +213,7 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 		
 		model.addAttribute("filter", filter);
 
-		SidePanelModel sidePanelModel = new SidePanelModel(this.DashboardService, sessionModel);
+		SidePanelModel sidePanelModel = new SidePanelModel(this.DashboardService, this.WidgetLibrariesService, sessionModel);
 		
 		try {
 			sidePanelModel.generateDashboardInfo();
