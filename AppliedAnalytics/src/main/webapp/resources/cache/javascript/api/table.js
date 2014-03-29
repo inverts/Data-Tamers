@@ -70,6 +70,7 @@
 										bPaginate: false,
 										bFilter: settings.search,
 										bInfo: false,
+										sScrollY: ($this.height() - 65) + "px",
 										sScrollXInner: "100%",
 										sScrollYInner: "100%",
 										"sDom": '<"tableTitle">frtip',
