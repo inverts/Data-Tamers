@@ -42,7 +42,7 @@
 
 <body>
 
-	<div class="page">
+	<div class="application page">
 		<div class="wrapper">		
 			<!-- Site Header -->
 			<jsp:include page="${HEADER.path}"/>

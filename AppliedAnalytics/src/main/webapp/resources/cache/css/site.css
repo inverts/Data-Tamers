@@ -28,7 +28,8 @@ input[type="checkbox"] { margin:0; }
 
 .page { margin:0 auto; position:relative; background:#fff; }
 .page .wrapper { float:left; width:100%; position:relative; min-height:800px;}
-.page .content { min-height: 900px; margin: 60px 0px 0px 270px; }
+.page .content { min-height: 900px; }
+.page.application .content { margin: 60px 0px 0px 270px; }
 
 
 
@@ -47,18 +48,18 @@ input { font: inherit; }
 #modal .prompt { text-align:center; }
 
 /* Standard page size and position */
-.login, .start, .terms, .personal-info, .main-goal { margin-left:340px; padding-top:30px;}
+.login, .terms, .start, .main-goal { margin-left:340px; padding-top:10px; margin-top:125px; }
 .page #application-page .dashboard-content{ min-height:900px; }
 
 /* Error Message */
 .page .error { font:inherit; font-size:1em; color:red; margin-bottom:5px; padding:5px; }
 
 /******RIGHT PANE******/
-.page .right-pane { width:0; height:100%; position:absolute; float:right; background:#444; color:#fff; z-index:10; right: 0; display:none; border-left: 3px solid #ccc; }
+.page .right-pane { width:0; height:100%; position:absolute; float:right; background:rgb(1, 1, 133); color:#fff; z-index:10; right: 0; display:none; border-left: 3px solid #ccc; z-index:200; }
 .page .right-pane select, .page .right-pane input { color: #222; }
 
 /******HEADER/FOOTER******/
-.page #header { width:inherit; z-index:3; }
+.page #header { width:100%; z-index:3; }
 .page #footer { background:#222; clear:left; height:120px; position:relative; }
 
 #header-application, #header-entry { display:none; }
@@ -75,7 +76,7 @@ input { font: inherit; }
 #header .profile-image { cursor: pointer; }
 
 /* header home */
-.header-home { height:110px; z-index:2; background:#454545; box-shadow:0px 0px 5px 3px; position:relative; }
+.header-home { height:110px; z-index:2; background:#454545; box-shadow:0px 0px 5px 3px; position:absolute; left:0px; right:0px; }
 .header-home .nav-item { margin-left:30px; color:#ddd; font-size:20px; box-shadow:none; }
 .header-home .entry-wrapper { height:50px; position:absolute; top:0; bottom:0; left:0; right:0; margin:30px auto 0 auto; }
 .header-home .right { float:right; margin:25px 200px 0 0; }
@@ -173,8 +174,9 @@ input { font: inherit; }
 /*****ACCOUNTS*****/
 
 /* Start */
-.start .pager { width: 900px; font:inherit; padding:0;}
-.start .start-content { margin-top:10px; width:900px; line-height:35px; }
+.alert + .start { position:absolute; margin-top:175px; }
+.start .pager { font:inherit; padding:0;}
+.start .start-content { margin-top:10px; width:700px; line-height:35px; }
 
 
 /* Terms */
@@ -185,12 +187,14 @@ input { font: inherit; }
 .terms .continue { width:165px; margin-bottom:20px; }
 
 /* Personal */
-.personal-info td { min-width:200px; }
+.personal-info { padding:30px 0 0 50px; }
+.personal-info td { min-width:150px; }
 .personal-info tr > td { padding-bottom:1em; }
 .personal-info .btn { float:right; }
 .personal-info .googleAuth { width:600px; padding:10px 0; }
-.personal-info .googleAuth a{ float:right; margin-right:150px; }
-.new-account.alert { width:100%; padding-left:340px; border-radius:0;  }
+.personal-info .googleAuth a{ float:right; margin-right:195px; }
+.new-account.alert { width:100%; padding-left:340px; border-radius:0; position:absolute; top:110px; }
+.new-account div.alert-msg { width:700px; text-wrap:normal; }
 .googleName { color:#00aeef; }
 .personal-info .googleAuth a:hover { cursor:pointer; color:#00aeef; }
 

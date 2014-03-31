@@ -3,6 +3,7 @@ package io.analytics.site.controllers;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +30,7 @@ import io.analytics.service.interfaces.IWidgetService;
 import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SettingsModel;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -62,20 +65,20 @@ public class AccountController {
 	@Autowired IDashboardService DashboardService;
 	@Autowired IWidgetService WidgetService;
 	
-	// some kind of user service.
 	
 	/**
-	 * Starting page of the registration process.
+	 * Account registration page
 	 * @param model
-	 * @return terms page.
+	 * @return new accounts page
 	 */
 	@HeaderFooter(HeaderType.SIMPLE)
 	@RequestMapping(value = "/accounts/getstarted", method = RequestMethod.GET)
-	public ModelAndView start(Model model,
-			@RequestParam(value = "terms-and-conditions", defaultValue = "0") boolean terms)
+	public ModelAndView start(Model model)
 	{
-		return (terms) ? new ModelAndView("account/terms") : new ModelAndView("account/start");
+		return new ModelAndView("account/terms"); 
 	}
+	
+	
 	
 	/**
 	 * processes the accept terms request and if valid, 
@@ -85,8 +88,8 @@ public class AccountController {
 	 * @param accepted
 	 */
 	@RequestMapping(value = "/accounts/acceptterms", method = RequestMethod.POST)
-	public void acceptTerms(Model model, HttpServletResponse response, HttpSession session,
-			@RequestParam("accept_terms") boolean accepted)
+	private void acceptTerms(Model model, HttpServletResponse response, HttpSession session,
+							@RequestParam("accept_terms") boolean accepted)
 	{
 		try {
 			
@@ -96,7 +99,7 @@ public class AccountController {
 				response.sendRedirect("/appliedanalytics/");
 			}
 			else {
-				session.setAttribute("terms", true);
+				model.addAttribute("acceptTerms", accepted);
 				response.sendRedirect("/appliedanalytics/accounts/newaccount");
 			}
 		}
@@ -114,22 +117,22 @@ public class AccountController {
 	 * @param session
 	 * @param googlePage - page to input google account information.
 	 * @param personalPage - page to input personal information.
-	 * @param maingoalPage - page to input information about goals.
 	 * @return
 	 */
 	@HeaderFooter(HeaderType.SIMPLE)
 	@RequestMapping(value = "/accounts/newaccount", method = RequestMethod.GET)
 	public ModelAndView newAccountPage(@ModelAttribute("googleAuthorization") String googleAuthorization, 
-									   @ModelAttribute("accountForm") NewAccountForm form, Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session, 
-									   @RequestParam(value = "gaAuth", defaultValue = "0") boolean googleAuth)
+							     	   @ModelAttribute("accountForm") NewAccountForm form, Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session, 
+							     	   @RequestParam(value = "gaAuth", defaultValue = "0") boolean googleAuth)
 	{
-		ModelAndView page = new ModelAndView("account/personal-info");
+		ModelAndView formpage = new ModelAndView("account/new-account");
 		
+		// Need to authorize google analytics
 		if (googleAuth) {
-			if (SessionService.redirectToLogin(session, request, response))
-				return null;
-			
-			return new ModelAndView("redirect:/accounts/newaccount");
+				if (SessionService.redirectToLogin(session, request, response))
+					return null;
+				
+				return new ModelAndView("accounts/newaccount");
 		}
 		
 		// Flag indicating that user has selected to sign up using google.
@@ -153,17 +156,36 @@ public class AccountController {
 			
 			model.addAttribute("accountForm", form);
 			//String googleEmail = googleData.getEmail();
-			page.addObject("googleAccountName", googleData.getEmail());
-			page.addObject("accountForm", form);
+			formpage.addObject("googleAccountName", googleData.getEmail());
+			formpage.addObject("accountForm", form);
 			
 			// let the page know google authenticated successfully.
-			page.addObject("googleSuccess", true);
+			formpage.addObject("googleSuccess", true);
 		}
 		else if (googleAuthorization.equals("fail"))
-				page.addObject("googleFail", true);	
+			formpage.addObject("googleFail", true);	
 		
-		return page;	
+		
+		return formpage;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/accounts/accountform", method = RequestMethod.POST)
+	private ModelAndView accountForm( Model model, HttpSession session, @ModelAttribute("googleAuthorization") String googleAuthorization,
+									  @ModelAttribute("accountForm") NewAccountForm form) {
+		
+		ModelAndView newAccountForm = new ModelAndView("newAccountForm");
 
+		if (googleAuthorization.equals("success") && SessionService.checkAuthorization(session))
+			newAccountForm.addObject("googleSuccess", true);
+		else if (googleAuthorization.equals("fail"))
+			newAccountForm.addObject("googleFail", true);
+		
+		Map viewMap = model.asMap();
+		if (viewMap.containsKey("validation"))
+			newAccountForm.addObject("validation", viewMap.get("validation"));
+		
+		return newAccountForm;
 	}
 	
 	/**
@@ -184,6 +206,8 @@ public class AccountController {
 		
 		return "redirect:/accounts/newaccount";
 	}
+	
+	
 	
 	/**
 	 * Validates the new account information and creates several database entities

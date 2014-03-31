@@ -29,13 +29,22 @@
 
 <body>
 
-	<div class="page">
-	
-		<!-- Site Header -->
-		<jsp:include page="${HEADER.path}"/>
+	<div class="account page">
+		<div class="wrapper">
 		
-		<div class="wrapper">		
-			<jsp:include page="${BODY}"/>
+			<!-- Site Header -->
+			<jsp:include page="${HEADER.path}"/>
+		
+			<!--  Right side settings pane -->
+            <div class="right-pane">
+				<jsp:include page="${SETTINGS}"/>
+			</div>		
+			
+			<!-- Site Content -->
+			<div class="content">
+				<jsp:include page="${BODY}"/>
+			</div>
+			
 		</div>
 		
 		<!--  Site Footer -->
