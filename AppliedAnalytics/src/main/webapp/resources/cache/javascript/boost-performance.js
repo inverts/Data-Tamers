@@ -3,7 +3,7 @@
  */
 
 
-function loadBoostPerformanceWidget(id) {
+function loadBoostPerformanceWidget(id, callback) {
 	var $element = $('#' + id);
 	$.post(applicationRoot + "/BoostPerformance", null, 
 		function(response) {
@@ -17,6 +17,14 @@ function loadBoostPerformanceWidget(id) {
 				 					 .appendTo('.dashboard-content')
 				 					 .append(response);
 			}
+			
+			getBoostPerformanceData(id, function() {
+				
+				if(callback){				
+					callback();
+				}
+				
+			});
 			
 			$('.boostPerformance .widget_title').dblclick(function() {
 				$('.boostPerformance .widget-content').slideToggle('fast');

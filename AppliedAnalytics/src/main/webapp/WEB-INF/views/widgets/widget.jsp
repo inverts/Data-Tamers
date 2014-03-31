@@ -9,7 +9,10 @@
 	<div class="widget_header">
 		<div class="widget_title"><fmt:message key="${widget.getTitle()}" /></div>
 	</div>
-	<div class="widget-content">
+	<div class="widget-content">	
+		<div id = "spinner-content" align = "center"><img src="<c:url value="/cache/images/spinner.gif" />" width = "30" height = "30" /></div>
+			
 		<c:import url="${view}" />
+		
 	</div>
-</div>
+</div> 

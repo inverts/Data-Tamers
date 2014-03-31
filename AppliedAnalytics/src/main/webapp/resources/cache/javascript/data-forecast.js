@@ -12,7 +12,7 @@ var filterStartIndex = 0; //TODO: get filter date start
 /**
  * Initally loads the entire widget including model and view.
  */
-function loadDataForecast(id) {
+function loadDataForecast(id, callback) {
 	var $element = $('#' + id);
 	//TODO: Possibly send id number out to append to ids in the model
 	$.post(applicationRoot + "DataForecast", null, function(response) {
@@ -41,10 +41,17 @@ function loadDataForecast(id) {
 			$("#" + id + " #rawBtn").click(); // initially turn on raw data.
 			
 			//$('#' + id + ' .dropdown-menu').attr('id', id);
+
+			if(callback){				
+				callback();
+			}
 			
 		});
+		
+		
 
 	});
+	
 }
 
 

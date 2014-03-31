@@ -26,6 +26,7 @@
 <script src="<c:url value="/cache/javascript/libs/bootstrap.min.js" />"></script>
 <script src="<c:url value="/cache/javascript/plugins/jquery.tipsy.js" />"></script>
 <script src="<c:url value="/cache/javascript/plugins/jquery.dataTables.min.js" />"></script>
+<script src="<c:url value="/cache/javascript/plugins/nv.d3.min.js" />"></script>
 <script src="<c:url value="/cache/javascript/modal.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/utilities.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/test.js" />"></script>
