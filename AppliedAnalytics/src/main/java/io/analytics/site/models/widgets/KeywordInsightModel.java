@@ -284,7 +284,7 @@ public class KeywordInsightModel extends WidgetModel {
 	
 		for ( String word : wordsSet) {
 	        //word = word.trim();
-			if (!stopWordsSet.contains(word) && !word.matches("[0-9]+") && !word.isEmpty()){
+			if (!stopWordsSet.contains(word) && !word.matches("[0-9]*")){
 				words.add(new WordCount(word, Collections.frequency(allWords, word))) ; 
 			}
 		}
