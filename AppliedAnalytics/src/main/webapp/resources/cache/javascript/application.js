@@ -4,6 +4,9 @@
 
 var transitionOptions = { ease: 'swing', fadeOut: 100, floatIn: 500, offsetLeft: "20px", offsetRight: "20px" };
 
+/**
+ * This sets the application root directory to be used in any other javascript files.
+ */
 if (typeof applicationRoot == 'undefined' || !applicationRoot) {
 	applicationRoot = "/appliedanalytics/";
 	if (console)
@@ -22,16 +25,24 @@ $(function() {
 		$('.right-pane')
 			.addClass('settings')
 			.on( "change.settings", "#select-account", function() {
-				$.post(applicationRoot + "settings", { account: $('#select-account option:selected').val() }, function( data ) {
+				accountId = $('#select-account option:selected').val();
+				$('.settings-content #update-button').prop('disabled', true);
+				$('#select-property').html('').append('<option value="">Loading...</option>');
+				$('#select-profile').html('').append('<option value="">Loading...</option>');
+				$.post(applicationRoot + "settings", { account: accountId }, function( data ) {
 					  $(".settings").html( data );
 				});
 			})
 			.on( "change.settings", "#select-property", function() {
-				$.post(applicationRoot + "settings", { property: $('#select-property option:selected').val() }, function( data ) {
+				propertyId = $('#select-property option:selected').val();
+				$('.settings-content #update-button').prop('disabled', true);
+				$('#select-profile').html('').append('<option value="">Loading...</option>');
+				$.post(applicationRoot + "settings", { property: propertyId }, function( data ) {
 					  $(".settings").html( data );
 				});
 			})
 			.on( "change.settings", "#select-profile", function() {
+				$('.settings-content #update-button').prop('disabled', true);
 				$.post(applicationRoot + "settings", { profile: $('#select-profile option:selected').val() }, function( data ) {
 					  $(".settings").html( data );
 				});
