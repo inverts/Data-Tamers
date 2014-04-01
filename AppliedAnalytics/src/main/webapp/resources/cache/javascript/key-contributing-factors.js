@@ -3,7 +3,7 @@
  */
 
 
-function loadKeyContributingFactorsWidget(id) {
+function loadKeyContributingFactorsWidget(id, callback) {
 	var $element = $('#' + id);
 	//TODO: Possibly send id number out to append to ids in the model
 	$.post(applicationRoot + "KeyContributingFactors", null, function(response) {
@@ -24,6 +24,9 @@ function updateKeyContributingFactors(id) {
 	
 	
 	getKeyContributingFactorsData(id, function() {
+		if(callback){				
+			callback();
+		}
 		
 	});
 }

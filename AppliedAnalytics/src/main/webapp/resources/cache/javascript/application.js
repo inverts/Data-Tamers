@@ -116,8 +116,8 @@ function hideSettingsPanel() {
 // Used to differentiate between dashboard and other application pages.
 //
 // Returns the jQuery object of the content div.
-function newPage(pageclass) {
+function newPage(pageclass, pageId) {
 	var $wrapper = $("#application-page").attr("class", pageclass)
 										 .empty();
-	return $('<div>').addClass(pageclass + '-content').appendTo($wrapper);
+	return $('<div>').addClass(pageclass + '-content').data("id", pageId).appendTo($wrapper);
 }

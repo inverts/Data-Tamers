@@ -3,12 +3,12 @@
  */
 
 
-function loadKeywordInsight(id) {
+function loadKeywordInsight(id, callback) {
 
 	var $element = $("#" + id);
-
 	$.post(applicationRoot + "KeywordInsight", null, 
 			function(response) {
+		
 		if ($element.length > 0) {
 			$element.fadeIn("fast", function() { 
 				$element.append(response); 
@@ -27,8 +27,6 @@ function loadKeywordInsight(id) {
 		// Get the data and setup widget functions after data has been retrieved.
 		getKeywordInsightData(id, function() {
 
-			nextPreviousControls(id, "keywordVisual");
-
 			// direct view buttons
 			$("#" + id + " a.scatter").click(function(e) { changeViewBtn(id, "keywordInsightScatter"); });
 			$("#" + id + " a.improve").click(function(e) { changeViewBtn(id, "keywordInsightImprove"); });
@@ -37,6 +35,10 @@ function loadKeywordInsight(id) {
 			$("#" + id + " a.all").click(function(e) { changeViewBtn(id, "keywordInsightAll"); });
 			$("#" + id + " a.bestsub").click(function(e) { changeViewBtn(id, "keywordInsightBestSub"); });
 			$("#" + id + " a.worstsub").click(function(e) { changeViewBtn(id, "keywordInsightWorstSub"); });
+		
+			if(callback){				
+				callback();
+			}
 		});
 
 	});		

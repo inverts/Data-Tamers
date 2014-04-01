@@ -2,7 +2,7 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <div class="controls">
-   <div class="btn-group btn-group-sm left">
+	<div class="btn-group btn-group-sm left">
    	  <button type="button" id="rawBtn" class="btn btn-default"><fmt:message key="dataforecast.button.raw" /></button>
    	  <button type="button" id="smoothBtn" class="btn btn-default"><fmt:message key="dataforecast.button.smoothed" /></button>
    	  <button type="button" id="normBtn" class="btn btn-default"><fmt:message key="dataforecast.button.normal" /></button>

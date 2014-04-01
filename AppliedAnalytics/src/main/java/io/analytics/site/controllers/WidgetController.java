@@ -374,13 +374,15 @@ public class WidgetController {
 		@ResponseBody
 		@RequestMapping(value = "/addWidget", method = RequestMethod.POST)
 		private String addWidget(@RequestParam("widgetTypeId") int widgetTypeId,
-								 @RequestParam("dashboardId") int dashboardId)
+								 @RequestParam("dashboardId") int dashboardId,
+								 @RequestParam(value = "priority", defaultValue = "0") int priority)
 		{
 			JSONObject result = new JSONObject();
 			
 			try {
 				Widget w = new Widget(-1, widgetTypeId);
 				w.setDashboardId(dashboardId);
+				w.setPriority(priority);
 				
 				int newId = WidgetService.addNewWidget(w);
 				result.put("widgetId", newId);

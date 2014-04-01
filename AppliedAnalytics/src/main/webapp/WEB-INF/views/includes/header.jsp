@@ -30,7 +30,7 @@
 			<div class="header-home">
 				<div class="entry-wrapper">
 					<div class="logo">
-						<img src="<c:url value="/cache/images/logo-280.png" />" />
+						<a href="/appliedanalytics/"><img src="<c:url value="/cache/images/logo-280.png" />" /></a>
 					</div>
 					<div class="right">
 						<c:choose>

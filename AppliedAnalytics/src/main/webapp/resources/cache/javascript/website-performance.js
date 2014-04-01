@@ -2,7 +2,7 @@
  * website-performance.js
  */
 
-function loadWebsitePerformanceWidget(id) {
+function loadWebsitePerformanceWidget(id, callback) {
 	
 	var $element = $('#' + id);
 	
@@ -17,10 +17,13 @@ function loadWebsitePerformanceWidget(id) {
 			}
 			
 			getPagePerformanceData(id, function(e) {
-				nextPreviousControls(id, "pagePerformanceVisual");
 				
 				$("#" + id + " a.bar").click(function(e) { changeViewBtn(id, "pagePerformanceBar"); });
 				$("#" + id + " a.pp-table").click(function(e) { changeViewBtn(id, "pagePerformanceTable"); });
+			
+				if(callback){				
+					callback();
+				}
 			});
 
 	});		
@@ -45,6 +48,7 @@ function getPagePerformanceData(id, callback){
 			return;
 		}
 		
+		// originally sdata
 		var sdata = [{
 		    "page": "/",
 		    "visits": "65.7",
@@ -71,6 +75,8 @@ function getPagePerformanceData(id, callback){
 		    "bounces": "100",
 		    "exits": "100"
 		}];
+		
+		
 		
 		// bar chart view
 		$("#" + id + " #pagePerformanceBar").empty().bar({
