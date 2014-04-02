@@ -15,7 +15,8 @@ $(function() {
 
 	if ($("div.start").length) {
 		$(".right-pane").addClass("newAccount");
-		showNewAccountForm(800);
+		var percent = 0.48;
+		showNewAccountForm((percent * $("div.start").parent().width()) + "px");
 	}
 });
 

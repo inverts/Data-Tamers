@@ -12,7 +12,6 @@ import javax.validation.Valid;
 
 import io.analytics.aspect.HeaderFooter;
 import io.analytics.domain.Account;
-import io.analytics.domain.Dashboard;
 import io.analytics.domain.Filter;
 import io.analytics.domain.GoogleAccount;
 import io.analytics.domain.GoogleUserData;
@@ -30,16 +29,12 @@ import io.analytics.service.interfaces.IWidgetService;
 import io.analytics.site.models.FilterModel;
 import io.analytics.site.models.SettingsModel;
 
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,6 +42,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.analytics.model.Profile;
@@ -127,6 +123,7 @@ public class AccountController {
 	{
 		ModelAndView formpage = new ModelAndView("account/new-account");
 		
+		
 		// Need to authorize google analytics
 		if (googleAuth) {
 				if (SessionService.redirectToLogin(session, request, response))
@@ -180,10 +177,8 @@ public class AccountController {
 			newAccountForm.addObject("googleSuccess", true);
 		else if (googleAuthorization.equals("fail"))
 			newAccountForm.addObject("googleFail", true);
-		
-		Map viewMap = model.asMap();
-		if (viewMap.containsKey("validation"))
-			newAccountForm.addObject("validation", viewMap.get("validation"));
+		if (model.containsAttribute("validation"))
+			newAccountForm.addObject("validation", model.asMap().get("validation"));
 		
 		return newAccountForm;
 	}
@@ -218,9 +213,10 @@ public class AccountController {
 	 * @param session
 	 */
 	@RequestMapping(value = "/accounts/ProcessNewAccountInfo", method = RequestMethod.POST)
-	public String processAccountForm(@Valid @ModelAttribute("accountForm") NewAccountForm form, BindingResult result, 
+	public String processAccountForm(@Valid @ModelAttribute("accountForm") NewAccountForm form, BindingResult result,
+											RedirectAttributes redirect,
 											@RequestParam(value = "googleAuth", defaultValue = "0") boolean googleAuth, 
-											HttpSession session, Model model) 
+											HttpSession session, Model model, HttpServletRequest request) 
 	{
 		if (googleAuth) {
 			return "redirect:/accounts/newaccount?gaAuth=1";
@@ -229,7 +225,8 @@ public class AccountController {
 			// Don't retain passwords
 			form.setPassword("");
 			form.setConfirmPassword("");
-			model.addAttribute("validation", result);
+			//model.addAttribute("validation", result);
+			redirect.addFlashAttribute("validation", result);
 			return "redirect:/accounts/newaccount";
 		}
 		else {

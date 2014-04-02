@@ -179,7 +179,7 @@ input { font: inherit; }
 /* Start */
 .alert + .start { position:absolute; margin-top:175px; }
 .start .pager { font:inherit; padding:0;}
-.start .start-content { margin-top:10px; width:700px; line-height:35px; }
+.start .start-content { margin-top:10px; width:37%; line-height:35px; }
 
 
 /* Terms */
