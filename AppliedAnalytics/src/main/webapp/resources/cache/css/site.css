@@ -149,7 +149,7 @@ input { font: inherit; }
 .addDashboard-content label { font-weight:200; }
 .addDashboard-content tr > td { padding-bottom:1em; }
 .addDashboard-content td { font-weight:200; margin-left:20px;}
-.addDashboard-content input[type="button"] { float:right; color:#fffffe; }
+.addDashboard-content input[type="submit"] { float:right; color:#fffffe; }
 
 /******SETTINGS******/
 .settings-content { margin-top:20px; padding:20px; }

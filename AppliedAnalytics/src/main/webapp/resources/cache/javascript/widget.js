@@ -209,36 +209,39 @@ function addWidgetByList(widgetTypeId, $widget) {
 	
 	var $dash = $(".dashboard-content");
 	var nWidgets = $dash.data("n");
-	
-	$.post(applicationRoot + "addWidget", {widgetTypeId: widgetTypeId, dashboardId: $dash.data("id"), priority: $widget.index()},
-			function(response) {
-				var result = $.parseJSON(response);
-				//TODO: Needs localized strings from response.
+
+	$.ajax({
+		type: 'POST',
+		url: applicationRoot + "addWidget",
+		data: {widgetTypeId: widgetTypeId, dashboardId: $dash.data("id"), priority: $widget.index()},
+		success: function(response) {
+			var result = $.parseJSON(response);
+			//TODO: Needs localized strings from response.
+			
+			// add widget data to the widget element
+			if (result) {
+				$widget.data({
+					"widgetId": result.widgetId,
+					"widgetTypeId": widgetTypeId
+				});
 				
-				// add widget data to the widget element
-				if (result) {
-					$widget.data({
-						"widgetId": result.widgetId,
-						"widgetTypeId": widgetTypeId
-					});
-					
-					$dash.data("n", ++nWidgets); //increment number of widgets on page.
-					
-					console.log("added widget: " + $widget.attr("id"));
-				}
-				else {
-					Modal.alert({
-						"title": "Add Widget",
-						"content": "There was a problem trying to add " + $widget.children(".widget_title").html() + 
-								   ". This widget will now be removed."
-					});
-					
-					$widget.remove(); // if we cannot save the widget to the database, remove it off the page.
-				}
+				$dash.data("n", ++nWidgets); //increment number of widgets on page.
 				
-			});
-	
-	
+				console.log("added widget: " + $widget.attr("id"));
+			}
+			else {
+				Modal.alert({
+					"title": "Add Widget",
+					"content": "There was a problem trying to add " + $widget.children(".widget_title").html() + 
+							   ". This widget will now be removed."
+				});
+				
+				$widget.remove(); // if we cannot save the widget to the database, remove it off the page.
+			}
+			
+		},
+		error: handleAjaxError
+	});
 }
 
 /**
@@ -255,14 +258,20 @@ function addWidget(widget, li)
 		var widgetName = $("#" + id + " .widget_title").html();
 		//var nWidgets = $(".dashboard-content").data("n");
 
-		$.post(applicationRoot + "addWidget", {widgetTypeId: widgetTypeId, dashboardId: li.attr("id")},
-				function(response) {
-					var result = $.parseJSON(response);
-					Modal.alert({
-						"title" : "Add Widget",
-						"content": widgetName + " has been added to dashboard \"" + li.children("a").html()  + "\"!"
-					});
+		$.ajax({
+			type: 'POST',
+			url: applicationRoot + "addWidget",
+			data: {widgetTypeId: widgetTypeId, dashboardId: li.attr("id")},
+			success: function(response) {
+				var result = $.parseJSON(response);
+				Modal.alert({
+					"title" : "Add Widget",
+					"content": widgetName + " has been added to dashboard \"" + li.children("a").html()  + "\"!"
 				});
+			},
+			error: handleAjaxError
+		});
+			
 
 	}
 
@@ -282,25 +291,31 @@ function removeWidget(id) {
 		var nWidgets = $(".dashboard-content").data("n");
 		var widgetName = $("#" + id + " .widget_title").html();
 
-		$.post(applicationRoot + "removeWidget", {widgetId: widgetId}, 
-				function(response) {
-					if (response)
-						widget.remove();
-					// decrement the number of widgets on the page.
-					$(".dashboard-content").data("n", --nWidgets);
-						console.warn("removed widget: " + id);
-						
-						//TODO: Make the JSON response the title and content so we can use string properties.
-						Modal.alert({
-							"title" : "Remove Widget",
-							"content": widgetName + " has been removed!"
-						});
+		$.ajax({
+			type: 'POST',
+			url: applicationRoot + "removeWidget",
+			data: {widgetId: widgetId},
+			success: function(response, status, xhr) {
+				if (status != "success")
+					console.warn("There was a problem during the AJAX request.");
+				if (response)
+					widget.remove();
+				// decrement the number of widgets on the page.
+				$(".dashboard-content").data("n", --nWidgets);
+					console.warn("removed widget: " + id);
+					
+				//TODO: Make the JSON response the title and content so we can use string properties.
+				Modal.alert({
+					"title" : "Remove Widget",
+					"content": widgetName + " has been removed!"
 				});
+			},
+			error: handleAjaxError
+		});
 
 	}
 
 }
-
 
 /**
  * Updates the database of the new position of the widgets.
@@ -312,7 +327,7 @@ function updateWidgetPosition() {
 	var result = [];
 	var widgets = $(".w_container");
 	
-	// look for the widgets that have changed positions
+	// Look for the widgets that have changed positions
 	$.each(widgets, function() {
 		var $widget = $(this);
 		var idx = $widget.index();
@@ -324,9 +339,16 @@ function updateWidgetPosition() {
 		$widget.data("pos", idx);
 	});
 	
+	// If widgets have changed, save the changes.
 	if(result.length > 0) {
-		$.post(applicationRoot + "updateWidgetPosition", {"widgets": JSON.stringify(result) },
-				function() {
+		$.ajax({
+			type: 'POST',
+			url: applicationRoot + "updateWidgetPosition",
+			data: {"widgets": JSON.stringify(result) },
+			success: function() {
+				console.log("Widget position updated successfully.")
+			},
+			error: handleAjaxError
 		});
 	}
 }

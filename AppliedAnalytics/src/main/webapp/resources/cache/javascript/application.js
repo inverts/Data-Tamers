@@ -90,11 +90,18 @@ function handleAjaxSuccess(data, status, xhr) {
 function handleAjaxError(xhr, status, errorName) {
 	console.log("AJAX Error - " + xhr.status + ": " + errorName);
 
-	Modal.call({
-		"title": "Looks like you've logged out!",
-		"content": "Sorry, but it appears you have logged out or your session has expired. Please log in again.",
-		"action": function(e) {  e.preventDefault(); document.location.href = applicationRoot + "login"; }
-	});
+	if (xhr.status == 401) {
+		Modal.call({
+			"title": "Looks like you've logged out!",
+			"content": "Sorry, but it appears you have logged out or your session has expired. Please log in again.",
+			"action": function(e) {  e.preventDefault(); document.location.href = applicationRoot + "login"; }
+		});
+	} else {
+		Modal.alert({
+			"title": "An error occurred!",
+			"content": "Sorry, we could not complete that action at this time.",
+		});
+	}
 }
 
 
