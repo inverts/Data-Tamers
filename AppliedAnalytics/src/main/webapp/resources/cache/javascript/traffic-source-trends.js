@@ -54,7 +54,7 @@ function getTrafficSourceTrendsData(element, callback) {
 					return parseFloat(row1[1]) - parseFloat(row2[1]);
 				});
 				
-				$("#" + id + " .spinner-content").hide();
+				$("#" + $element.attr("id") + " .spinner-content").hide();
 				
 				$element.table({
 					"data"		: dataRows,

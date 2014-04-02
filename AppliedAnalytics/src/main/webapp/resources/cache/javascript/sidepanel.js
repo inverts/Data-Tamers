@@ -165,7 +165,7 @@ function createDashboardLink(dashboard) {
 	var $li = $("<li>").attr("id", dashboard.id).appendTo($dashlist);
 
 	// dashboard link click events
-	var $link = $("<a>").click(function() {
+	var $link = $("<a>").prop("href", "#dashboards/" + dashboard.id).click(function() {
 							loadDashboard(dashboard.id);
 							window.dashboardId = dashboard.id;
 							currentPage.css("color", "#fff");
