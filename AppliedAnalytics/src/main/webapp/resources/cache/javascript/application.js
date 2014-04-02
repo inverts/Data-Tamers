@@ -25,45 +25,77 @@ $(function() {
 		$('.right-pane')
 			.addClass('settings')
 			.on( "change.settings", "#select-account", function() {
-				accountId = $('#select-account option:selected').val();
 				$('.settings-content #update-button').prop('disabled', true);
 				$('#select-property').html('').append('<option value="">Loading...</option>');
 				$('#select-profile').html('').append('<option value="">Loading...</option>');
-				$.post(applicationRoot + "settings", { account: accountId }, function( data ) {
-					  $(".settings").html( data );
-				});
+				
+				updateSettings({ account: $('#select-account option:selected').val() });
 			})
+			
 			.on( "change.settings", "#select-property", function() {
-				propertyId = $('#select-property option:selected').val();
 				$('.settings-content #update-button').prop('disabled', true);
 				$('#select-profile').html('').append('<option value="">Loading...</option>');
-				$.post(applicationRoot + "settings", { property: propertyId }, function( data ) {
-					  $(".settings").html( data );
-				});
+				
+				updateSettings({ property: $('#select-property option:selected').val() });
 			})
+			
 			.on( "change.settings", "#select-profile", function() {
 				$('.settings-content #update-button').prop('disabled', true);
-				$.post(applicationRoot + "settings", { profile: $('#select-profile option:selected').val() }, function( data ) {
-					  $(".settings").html( data );
-				});
+				
+				updateSettings({ profile: $('#select-profile option:selected').val() });
 			})
+			
 			.on( "click.settings", "#update-button", function() {
-				$.post(applicationRoot + "settings", { update: 1 }, function( data ) {
-					  $(".settings").html( data );
-					  updateWidgets();
-				});
+				updateSettings({ update: 1 }, updateWidgets);
 			});
 
-		$.post(applicationRoot + "settings", {}, function( data ) {
-			  $(".settings").html( data );
-		});
+		
+		updateSettings();
+		
 		showSettingsPanel(550);
 		
 	});
 		
 });
 
+function updateSettings(data, callback) {
+	successFn = handleAjaxSuccess;
+	if (typeof(callback) != 'undefined') {
+		successFn = function(data, status, xhr) {
+			handleAjaxSuccess(data, status, xhr);
+			callback();
+		}
+	}
 
+	if (typeof(data) == 'undefined') 
+		data = null;
+	
+	$.ajax({
+		type: 'GET',
+		url: applicationRoot + "settings",
+		data: data,
+		success: successFn,
+		error: handleAjaxError
+	});
+	
+}
+
+function handleAjaxSuccess(data, status, xhr) {
+	if (status != "success")
+		console.warn("There was a problem during the AJAX request.");
+	
+	$(".settings").html( data );
+}
+
+function handleAjaxError(xhr, status, errorName) {
+	console.log("AJAX Error - " + xhr.status + ": " + errorName);
+
+	Modal.call({
+		"title": "Looks like you've logged out!",
+		"content": "Sorry, but it appears you have logged out or your session has expired. Please log in again.",
+		"action": function(e) {  e.preventDefault(); document.location.href = applicationRoot + "login"; }
+	});
+}
 
 
 
