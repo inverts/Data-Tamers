@@ -6,6 +6,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+<link rel="shortcut icon" href="<c:url value="/cache/images/icon.ico" />" />
 <!--  DEFAULT MASTER -->
 <!-- CSS -->
 <link href="<c:url value="/cache/css/libs/bootstrap.css" />" rel="stylesheet">
