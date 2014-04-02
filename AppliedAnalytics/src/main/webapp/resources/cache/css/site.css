@@ -157,6 +157,7 @@ input { font: inherit; }
 .settings-content  .profile-image-large { border:3px solid #96AFC5; }
 .settings-content .left-pane { width:150px; height:100%; float:left; margin:0px 25px 20px 0px; }
 .settings tr { height: 25px; }
+.settings-content select { width: 100%; }
 
 
 /******LOGIN*******/

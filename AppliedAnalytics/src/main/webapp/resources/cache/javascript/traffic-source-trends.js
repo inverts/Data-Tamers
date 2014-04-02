@@ -8,7 +8,7 @@
 /**
  * @param id the html DOM element id to place this data into.
  */
-function loadTrafficSourceTrendsWidget(id) {
+function loadTrafficSourceTrendsWidget(id, callback) {
 	var $element = $('#' + id);
 	$.get(applicationRoot + "/widgets/traffic-source-trends", null, 
 		function(response) {
@@ -24,7 +24,9 @@ function loadTrafficSourceTrendsWidget(id) {
 			}
 			
 			getTrafficSourceTrendsData($element.find("#trafficSourceTrendsWorst").get(0), function() {
-				
+				if(callback){				
+					callback();
+				}
 			});
 			
 	});	

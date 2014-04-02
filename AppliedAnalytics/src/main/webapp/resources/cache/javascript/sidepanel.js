@@ -154,6 +154,7 @@ function createDashboardLink(dashboard) {
 	// dashboard link click events
 	var $link = $("<a>").click(function() {
 							loadDashboard(dashboard.id);
+							window.dashboardId = dashboard.id;
 							currentPage.css("color", "#fff");
 							currentPage = $("#dashboard .nav-txt").css("color", "#00aeef");
 				})

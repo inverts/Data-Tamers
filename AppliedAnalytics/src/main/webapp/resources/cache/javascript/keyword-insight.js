@@ -3,7 +3,7 @@
  */
 
 
-function loadKeywordInsight(id) {
+function loadKeywordInsight(id, callback) {
 
 	var $element = $("#" + id);
 	$.post(applicationRoot + "KeywordInsight", null, 
@@ -35,6 +35,10 @@ function loadKeywordInsight(id) {
 			$("#" + id + " a.all").click(function(e) { changeViewBtn(id, "keywordInsightAll"); });
 			$("#" + id + " a.bestsub").click(function(e) { changeViewBtn(id, "keywordInsightBestSub"); });
 			$("#" + id + " a.worstsub").click(function(e) { changeViewBtn(id, "keywordInsightWorstSub"); });
+		
+			if(callback){				
+				callback();
+			}
 		});
 
 	});		
