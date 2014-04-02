@@ -35,6 +35,8 @@ function getKeyContributingFactorsData(id, callback) {
 	$.post(applicationRoot + "KeyContributingFactors", {"serialize": 1}, function(response) {
 		var d = $.parseJSON(response);
 		
+		$("#" + id + " .spinner-content").hide();
+		
 		$('#' + id + ' .keyContributingFactorsChart').empty().scatter({
 			id	: 'keyContributingFactorsChart',
 			xLabel: 'Percentage of bounce rates',

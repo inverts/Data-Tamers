@@ -60,49 +60,37 @@ function loadWidget($content, widgetTypeId, widgetId, i, callback)
 		case 1:
 			elementId = "dataForecastWidget" + (i || $(".dataForecast").length);
 			$div.attr("id", elementId);			
-			$.when(loadDataForecast(elementId, function() {
-				$("#spinner-content").remove();
-			})).then(function() { widgetEvents($content, $div, elementId); });
+			$.when(loadDataForecast(elementId)).then(function() { widgetEvents($content, $div, elementId); });
 			break;
 			
 		case 2:
 			elementId = "websitePerformanceWidget" + (i || $(".pagePerformance").length);
 			$div.attr("id", elementId);
-			$.when(loadWebsitePerformanceWidget(elementId, function() {
-				$("#spinner-content").remove();
-			})).then(function() { widgetEvents($content, $div, elementId); });
+			$.when(loadWebsitePerformanceWidget(elementId)).then(function() { widgetEvents($content, $div, elementId, "pagePerformanceVisual"); });
 			break;
 			
 		case 7:
 			elementId = "keyContributingFactorsWidget" + (i || $(".keyContributingFactors").length);
 			$div.attr("id", elementId);
-			$.when(loadKeyContributingFactorsWidget(elementId, function() {
-				$("#spinner-content").remove();
-			})).then(function() { widgetEvents($content, $div, elementId); });
+			$.when(loadKeyContributingFactorsWidget(elementId)).then(function() { widgetEvents($content, $div, elementId); });
 			break;
 		
 		case 4:
 			elementId = "keywordInsightWidget" + (i || $(".keywordInsight").length);
 			$div.attr("id", elementId);
-			$.when(loadKeywordInsight(elementId, function() {
-				$("#spinner-content").remove();
-			})).then(function() { widgetEvents($content, $div, elementId); });
+			$.when(loadKeywordInsight(elementId)).then(function() { widgetEvents($content, $div, elementId, "keywordVisual"); });
 			break;
 			
 		case 5:
 			elementId = "trafficSourceTrendsWidget" + (i || $(".growingProblems").length);
 			$div.attr("id", elementId);
-			$.when(loadTrafficSourceTrendsWidget(elementId, function() {
-				$("#spinner-content").remove();
-			})).then(function() { widgetEvents($content, $div, elementId); });
+			$.when(loadTrafficSourceTrendsWidget(elementId)).then(function() { widgetEvents($content, $div, elementId); });
 			break;
 			
 		case 6:
 			elementId = "boostPerformanceWidget" + (i || $(".boostPerformance").length);
 			$div.attr("id", elementId);
-			$.when(loadBoostPerformanceWidget(elementId, function() {
-				$("#spinner-content").remove();
-			})).then(function() { widgetEvents($content, $div, elementId); });
+			$.when(loadBoostPerformanceWidget(elementId)).then(function() { widgetEvents($content, $div, elementId); });
 			break;
 	}
 	
@@ -123,7 +111,8 @@ function widgetEvents($content, $div, elementId, viewClass) {
 	
 	// collapse event on title double click
 	$div.on("dblclick", ".widget_title", function(e) {
-		$(this).parent().siblings(".widget-content").slideToggle("fast");
+		var selector = e && e.data || this;
+		$(selector).parent().siblings(".widget-content").slideToggle("fast");
 	});
 
 	// display trash bin for removal on click and hold

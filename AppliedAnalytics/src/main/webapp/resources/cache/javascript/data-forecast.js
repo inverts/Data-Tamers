@@ -39,8 +39,6 @@ function loadDataForecast(id, callback) {
 			
 			// initially turn on RAW
 			$("#" + id + " #rawBtn").click(); // initially turn on raw data.
-			
-			//$('#' + id + ' .dropdown-menu').attr('id', id);
 
 			if(callback){				
 				callback();
@@ -58,6 +56,8 @@ function loadDataForecast(id, callback) {
 function getDataForecastData(id, callback) {
 	$.post(applicationRoot + "DataForecast", {"serialize": 1}, function(response) {
 		var d = $.parseJSON(response);
+		
+		$("#" + id + " .spinner-content").hide();
 		
 		$('#' + id + ' #dataForecastData').empty().graph({
 															data: d.data,

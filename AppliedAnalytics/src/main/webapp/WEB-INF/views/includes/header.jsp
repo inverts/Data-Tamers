@@ -7,14 +7,8 @@
 		<c:when test="${HEADER.type == 'APPLICATION'}">
 			<div class="header-application">
 				<div class="filter">
-					<label>Date Range:</label>
 					<input type="text" id="start-date" readonly value="${filter.getActiveStartDateString() }" />
-					<input type="text" id="end-date" readonly value="${filter.getActiveEndDateString() }" />
-					<label>What are you interested in?</label>
-					<select>
-						<option value="ga:visits">Visits</option>
-						<option value="ga:newVisits">New Visits</option>
-					</select>
+					<input type="text" id="end-date" readonly value="${filter.getActiveEndDateString() }" /><br />
 					<fmt:message key="filter.activemetric" /> ${filter.getActiveMetric().toUpperCase().substring(0,4).concat(filter.getActiveMetric().substring(4)).substring(3) }
 				</div> 
 				<div class="avatar">
@@ -27,6 +21,7 @@
 						</c:otherwise>
 					</c:choose>
 				</div>
+				<div class="messages"></div>
 				<div class="trash"><span class="glyphicon glyphicon-trash"></span></div>	
 			</div>
 		</c:when> 

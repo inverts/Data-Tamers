@@ -76,7 +76,7 @@ function getPagePerformanceData(id, callback){
 		    "exits": "100"
 		}];
 		
-		
+		$("#" + id + " .spinner-content").hide();
 		
 		// bar chart view
 		$("#" + id + " #pagePerformanceBar").empty().bar({

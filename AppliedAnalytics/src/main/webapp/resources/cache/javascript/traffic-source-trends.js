@@ -53,6 +53,9 @@ function getTrafficSourceTrendsData(element, callback) {
 				rawData = rawData.sort(function(row1,row2) {
 					return parseFloat(row1[1]) - parseFloat(row2[1]);
 				});
+				
+				$("#" + id + " .spinner-content").hide();
+				
 				$element.table({
 					"data"		: dataRows,
 					"rawData"	: rawData,

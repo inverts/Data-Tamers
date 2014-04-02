@@ -160,7 +160,6 @@ var nGraphs = 0; // number of graphs currently. Needed for the clipping mask id.
 									.x(graph.x.point)
 									.scaleExtent([minimumZ, maximumZ])
 									.on("zoom", function() {
-										
 															d3.selectAll("#" + id + " #" + graph.id + " Circle").remove(); // remove plots
 															var t = graph.zoom.translate(),
 															tx = t[0], 

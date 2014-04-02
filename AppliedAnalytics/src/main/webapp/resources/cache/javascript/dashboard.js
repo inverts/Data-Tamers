@@ -88,11 +88,17 @@ function loadDashboard(dashboardId) {
 
 							// did the user get the visualization?
 							if ($w.children().length) {
+								
 								// set the currentItem html to be that of the widget.
 								$(this).data().uiSortable.currentItem.html($w);
 								// remove the encapsulating parent container (currentItem) and leave
 								// the raw widget in its stead.
 								$w.unwrap();
+								//$._data($w.get(0), "events", addedEvents);
+								for(var e in addedEvents) {
+									for(var i = 0; i < addedEvents[e].length; i++)
+										$w.on(addedEvents[e][i].type, addedEvents[e][i].selector, addedEvents[e][i].handler);
+								}
 								
 								// save widget to database
 								addWidgetByList(parseInt(ui.item.attr("id")), $w);
