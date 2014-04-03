@@ -21,6 +21,7 @@ import io.analytics.site.models.widgets.DataForecastModel;
 import io.analytics.site.models.widgets.GrowingProblemsModel;
 import io.analytics.site.models.widgets.KeyContributingFactorsModel;
 import io.analytics.site.models.widgets.KeywordInsightModel;
+import io.analytics.site.models.widgets.VisitorClusteringModel;
 import io.analytics.site.models.widgets.WebsitePerformanceModel;
 
 import org.json.JSONArray;
@@ -450,8 +451,7 @@ public class WidgetController {
 		}
 
 		@RequestMapping(value = "/widgets/traffic-source-trends/data", method = {RequestMethod.GET})
-		public ModelAndView trafficSourceTrendsData(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,
-				@RequestParam(value = "serialize", defaultValue = "0") boolean serialize) {
+		public ModelAndView trafficSourceTrendsData(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 			//TODO: This needs to go into an Aspect.
 			if (!SessionService.checkAuthorization(session)) {
@@ -464,4 +464,20 @@ public class WidgetController {
 			viewMap.addAttribute("data", model.getJSONSerialization());
 			return new ModelAndView("plaintext");
 		}
+		
+		@RequestMapping(value = "/widgets/visitor-clustering/data", method = {RequestMethod.GET})
+		public ModelAndView visitorClusteringData(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+			if (!SessionService.checkAuthorization(session)) {
+				SessionService.redirectToLogin(session, request, response);
+				return new ModelAndView("unavailable");
+			}
+			
+			VisitorClusteringModel model = new VisitorClusteringModel(SessionService, CoreReportingService);
+			model.updateData();
+			
+			viewMap.addAttribute("data", model.getJSONSerialization());
+			return new ModelAndView("plaintext");
+		}
+
 }

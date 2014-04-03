@@ -654,4 +654,32 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			
 		}
 
+
+		@Override
+		public GaData getDenseVisitorInfo(Credential credential, String profileID, String startDate, String endDate) {
+			GaData gaData = null;
+			try {
+
+				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build().data().ga();
+				
+				String metrics = "ga:visits,ga:avgTimeOnSite,ga:pageviewsPerVisit";
+				String dimensions = "ga:hour,ga:dayOfWeek,ga:operatingSystemVersion,ga:browserVersion,ga:visitorType,ga:screenResolution";
+				Ga.Get request = reporting.get("ga:" + profileID, startDate, endDate, metrics) // Metrics.
+						.setDimensions(dimensions)
+						.setSort("-ga:visits")
+						.setMaxResults(10000); //Get all data later.. change..
+				
+				gaData = queryDispatcher.execute(request);
+			
+			} catch (GoogleJsonResponseException e) {
+				handleGoogleJsonResponseException(e);
+			} catch (IOException e) {
+				// Catch general parsing network errors.
+				e.printStackTrace();
+			}
+
+			return gaData;
+		}
+
 }
