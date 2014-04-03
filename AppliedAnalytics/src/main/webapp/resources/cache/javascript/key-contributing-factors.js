@@ -15,10 +15,9 @@ function loadKeyContributingFactorsWidget(id, callback) {
 		else
 			console.error('Could not append KeyContributingFactors Widget to id: ' + id);
 	});
-	
 
-	
 }
+
 
 function updateKeyContributingFactors(id) {
 	
@@ -34,6 +33,8 @@ function updateKeyContributingFactors(id) {
 function getKeyContributingFactorsData(id, callback) {
 	$.post(applicationRoot + "KeyContributingFactors", {"serialize": 1}, function(response) {
 		var d = $.parseJSON(response);
+		
+		$("#" + id + " .spinner-content").hide();
 		
 		$('#' + id + ' .keyContributingFactorsChart').empty().scatter({
 			id	: 'keyContributingFactorsChart',

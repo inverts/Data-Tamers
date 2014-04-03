@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.services.analytics.model.GaData;
 
 
 public interface ICoreReportingService {
@@ -34,6 +35,9 @@ public interface ICoreReportingService {
 	public CoreReportingData getTopTrafficSources(Credential credential, String profileID, String metric, Date startDate, Date endDate, int maxResults);
 	
 	public ForecastData getForecastData(Credential credential, String profileID);
+	
+	public GaData getDenseVisitorInfo(Credential credential, String profileID, Date startDate, Date endDate); 
+	
 
 }
 

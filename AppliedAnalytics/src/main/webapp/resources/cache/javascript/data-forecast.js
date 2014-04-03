@@ -19,7 +19,7 @@ function loadDataForecast(id, callback) {
 		
 		if ($element.length > 0) {
 			$element.fadeIn("fast", function() { 
-					$element.append(response); 
+					$element.html(response); 
 			});
 		}
 		else
@@ -36,18 +36,16 @@ function loadDataForecast(id, callback) {
 			
 			// legend
 			createLegend(id, lineclasses);
-			
+
 			// initially turn on RAW
 			$("#" + id + " #rawBtn").click(); // initially turn on raw data.
 			
-			//$('#' + id + ' .dropdown-menu').attr('id', id);
+			$element.data("hasData", true); // flag the widget as having data.
 
-			if(callback){				
-				callback();
-			}
-			
 		});
 		
+		if(callback)			
+			callback();
 		
 
 	});
@@ -58,6 +56,8 @@ function loadDataForecast(id, callback) {
 function getDataForecastData(id, callback) {
 	$.post(applicationRoot + "DataForecast", {"serialize": 1}, function(response) {
 		var d = $.parseJSON(response);
+		
+		$("#" + id + " .spinner-content").hide();
 		
 		$('#' + id + ' #dataForecastData').empty().graph({
 															data: d.data,
@@ -87,12 +87,13 @@ function getDataForecastData(id, callback) {
 function updateDataForecast(id) {
 	
 	var $buttons = $('#' + id + ' button.active').removeClass('active');
-	
+
 	getDataForecastData(id, function() {
-		$.each($buttons, function() {
-			$(this).click();
-		});	
+		
+		(!$buttons.length) ? $("#" + id + " #rawBtn").click()
+						   : $.each($buttons, function() { $(this).click(); });	
 	});
+
 }
 
 

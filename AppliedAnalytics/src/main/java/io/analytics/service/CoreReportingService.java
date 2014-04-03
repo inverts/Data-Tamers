@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.services.analytics.model.GaData;
 
 import io.analytics.domain.CoreReportingData;
 import io.analytics.domain.ForecastData;
@@ -61,6 +62,11 @@ public class CoreReportingService implements ICoreReportingService {
 
 		return REPOSITORY.getDimensionsByDay(credential, profileID, metric, dimension, dimensions, dateFormat.format(startDate), dateFormat.format(endDate), maxResults);
 
+	}
+
+	@Override
+	public GaData getDenseVisitorInfo(Credential credential, String profileID, Date startDate, Date endDate) {
+		return REPOSITORY.getDenseVisitorInfo(credential, profileID, dateFormat.format(startDate), dateFormat.format(endDate));
 	}
 	
 

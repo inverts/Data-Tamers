@@ -17,8 +17,8 @@ var Modal = {
 									 'title'	:'Modal title',
 									 'buttons' : {
 										 			'size': 'default', 
-										 			'confirm': {'name': 'ok', 'action': null}, 
-										 			'cancel': 'cancel', 
+										 			'confirm': {'name': 'Ok', 'action': null}, 
+										 			'cancel': 'Cancel', 
 										 		  },
 									 'content'	: '',
 									 'size'		: 'modal-default',

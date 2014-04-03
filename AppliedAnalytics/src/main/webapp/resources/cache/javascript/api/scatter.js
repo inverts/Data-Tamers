@@ -37,16 +37,20 @@
 			var height = $this.height();
 			
 			// tooltip
-			var tooltip = d3.select("#" + settings.id).append("div")
-					.attr("class", "tooltip").style("opacity", 0);
+			var tip = d3.select("#" + settings.id).append("div")
+			.attr("class", "tip").style("opacity", 0);
+				
+
 
 			/*******************************************************************
 			 * GRAPH PROPERTIES *
 			 ******************************************************************/
+			
+			
 			var scatter = {
 					"id"	:this.id + "Settings"				
 			};
-						
+
 			var svg = d3.select("#"+settings.id).append("svg").attr("height", height).attr("width", width);
 			svg.append("rect").style("fill", "#fff").attr("width", width).attr("height", height).attr("transform", "translate(" + margin.left, + "10)")
 				.style("stroke", "#666").style("stroke-width", 1);
@@ -66,8 +70,25 @@
 			var yScale = d3.scale.linear()
 				.domain([0, maxdataY])
 				.range([height-padding, padding]);
-
-
+			
+			// first color scale
+			var color = d3.scale.category10();
+			
+			
+			// show text always
+			var writeText = function() {
+			svg.selectAll("text")
+				.data(sdata)
+				.enter()
+				.append("text")
+				.text(function(d) {return d[2];})
+				.attr("x", function(d) {return xScale(d[0]);})
+				.attr("y", function(d) {return yScale(d[1]);});	
+		};
+			
+			//writeText();
+				
+			
 			// make circles for each data point
 			svg.selectAll("circle").data(sdata).enter()
 				.append("circle")
@@ -77,24 +98,74 @@
 					.attr("cy", function(d) {
 						return yScale(d[1]);
 					})
-					.attr("ke", function(d) {
-						return yScale(d[2]);
-					})
+					//.attr("ke", function(d) {
+						//return yScale(d[2]);
+					//})
 					.attr("r", 5)
-					.on("mouseover", function(d) {
-			          tooltip.transition()
+					.style("fill", function(d) { return color(d[2]); })
+					.on("mouseover", function(d) {	
+						d3.select(this)
+							.attr("r", 10);		
+						tip.transition()
 			               .duration(200)
-			               .style("opacity", .9);
-			          tooltip.html(d[2]) //+ "(" + d[0] + ", " + d[1] + ")")
-			               .style("left", (d3.event.pageX + 5) + "px")
-			               .style("top", (d3.event.pageY - 28) + "px");
+			               .style("opacity", .9)
+			               .attr("font-size", "10px");
+						tip.html(d[2])
+						.style("left", (d3.event.pageX-300) + "px")
+			            .style("top", (d3.event.pageY-150) + "px");
 			      })
 			      .on("mouseout", function(d) {
-			          tooltip.transition()
-			               .duration(500)
-			               .style("opacity", 0);
-			      });
-					
+			          d3.select(this)
+			          	.transition()
+			          	.duration(500)
+			          	.attr("r", 5);
+			          tip.transition()
+		               .duration(500)
+		               .style("opacity", 0);
+			      }); 
+			
+			// remove duplicates
+		    var legend_data = sdata.filter(function(elem, pos) {
+		        return sdata.indexOf(elem) == pos;
+		    });
+			// Legend
+			var legend = svg.selectAll(".legend")
+			      .data(legend_data)
+			    .enter().append("g")
+			      .attr("class", "legend")
+			      .attr("transform", function(d, i) { return "translate(0," + i * 10 + ")"; });
+
+			  legend.append("rect")
+			      .attr("x", width - 18)
+			      .attr("width", 18)
+			      .attr("height", 18)
+			      .style("fill", function(d) { return color(d[2]); })
+			      .on("mouseover", function(d) {	
+						d3.select(this)
+							.attr("width", 22)
+							.attr("height", 22)
+						tip.transition()
+			               .duration(200)
+			               .style("opacity", .9)
+			               .attr("font-size", "10px");
+						tip.html(d[2])
+						.style("left", (d3.event.pageX-300) + "px")
+			            .style("top", (d3.event.pageY-150) + "px");
+			      })
+			      .on("mouseout", function(d) {
+			          d3.select(this)
+			          	.transition()
+			          	.duration(500)
+			          	.attr("width", 18)
+			          	.attr("height", 18);
+			          tip.transition()
+		               .duration(500)
+		               .style("opacity", 0);
+			      }); 
+
+			  
+			      
+
 
 
 			// add x axes (functions)
@@ -104,7 +175,7 @@
 				// clean up axis
 				.attr("transform", "translate(0," + (height-padding) + ")")
 				.call(xAxis);
-		
+
 
 
 			// add y axis (functions)
@@ -112,7 +183,7 @@
 			svg.append("g").attr("class", "scatter-axis")
 				.attr("transform", "translate(" + padding + ",0)")
 				.call(yAxis);
-				
+
 
 			// add titles for x and y axis
 			// x axis
@@ -131,13 +202,11 @@
 			    .attr("y", 15)
 			    .attr("transform", "rotate(-90)")
 			    .text("Webpage Visits (%)"); //("Percentage of Webpage Visits");
-
+	
 		});
-	};
-		
+	}; 
+
 }(jQuery));
-
-
 
 
 

@@ -10,6 +10,7 @@
 <!-- CSS -->
 <link href="<c:url value="/cache/css/default.css" />" rel="stylesheet">
 
+<link rel="shortcut icon" href="<c:url value="/cache/images/icon.ico" />" />
 <script type="text/javascript">
 	/* Set the application root directory for the javascript files. */
 	applicationRoot = "<c:url value="/" />";

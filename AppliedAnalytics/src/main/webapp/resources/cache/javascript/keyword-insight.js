@@ -11,11 +11,10 @@ function loadKeywordInsight(id, callback) {
 		
 		if ($element.length > 0) {
 			$element.fadeIn("fast", function() { 
-				$element.append(response); 
+				$element.html(response); 
 			});
 		}
 		else {
-
 			console.error("could not append Keyword Insight Widget to id: " + id);
 		}
 
@@ -35,11 +34,13 @@ function loadKeywordInsight(id, callback) {
 			$("#" + id + " a.all").click(function(e) { changeViewBtn(id, "keywordInsightAll"); });
 			$("#" + id + " a.bestsub").click(function(e) { changeViewBtn(id, "keywordInsightBestSub"); });
 			$("#" + id + " a.worstsub").click(function(e) { changeViewBtn(id, "keywordInsightWorstSub"); });
-		
-			if(callback){				
-				callback();
-			}
+			
+			$element.data("hasData", true); // flag the widget as having data.
+
 		});
+		
+		if(callback)			
+			callback();
 
 	});		
 }
@@ -74,6 +75,7 @@ function getKeywordInsightData(id, callback) {
 		for (var r = 0; r < d.data.all[d.data.all.keys[0]].length; r++)
 			sdata.push([d.data.all[d.data.all.keys[2]][r], d.data.all[d.data.all.keys[1]][r], d.data.all[d.data.all.keys[0]][r]]);
 		
+		$("#" + id + " .spinner-content").hide();
 		
 		// scatter view
 		$("#" + id + " #keywordInsightScatter").empty().scatter({

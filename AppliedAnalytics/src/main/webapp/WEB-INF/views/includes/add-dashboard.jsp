@@ -4,7 +4,7 @@
 
 <div class="addDashboard-content">
 	<h2><fmt:message key="dashboard.add.title" /></h2>
-	<form:form id="addDashForm" action="addNewDashboard" modelAttribute="dashboardForm"  method="POST">
+	<form:form id="addDashForm" action="#" modelAttribute="dashboardForm" onsubmit="return false;">
 		<table>
 			<tr>
 				<td><form:label path="dashboardName"><fmt:message key="dashboard.add.name" /></form:label></td>
@@ -12,7 +12,7 @@
 			</tr>
 			<tr>
 				<td></td>
-				<td><input type="button" class="btn btn-primary btn-sm active" value="<fmt:message key='dashboard.add.submit' />" id="dash-submit" /></td>
+				<td><input type="submit" class="btn btn-primary btn-sm active" value="<fmt:message key='dashboard.add.submit' />" id="dash-submit" /></td>
 			</tr>
 		</table>
 	</form:form>

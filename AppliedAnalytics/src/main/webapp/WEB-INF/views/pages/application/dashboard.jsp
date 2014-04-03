@@ -11,6 +11,24 @@
 
 <script>
 var dashboardId = ${model.dashboardId};
+
+/* Check if the URL indicate's we're on a different dashboard. */
+var before = "#dashboards/";
+var after = "/";
+var begin = window.location.href.indexOf(before)
+if (begin > 0) {
+	begin += before.length;
+	end = window.location.href.indexOf(after, begin);
+	if (end < 0)
+		newId = window.location.href.substr(begin);
+	else
+		newId = window.location.href.substr(begin, end - begin);
+	newId = parseInt(newId);
+	console.log(newId);
+	if (!isNaN(newId)){
+		dashboardId = newId;
+	}
+}
 loadDashboard(dashboardId);
 
 </script>

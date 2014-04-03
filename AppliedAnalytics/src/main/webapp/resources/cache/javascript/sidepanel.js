@@ -5,6 +5,7 @@
 
 // Needed to preserve 'helper' so it can be inserted into the sortable list.
 var addedWidget; // variable used in dashboard.js to contain the widget being added. 
+var addedEvents;
 var currentPage; // contains which page the user is currently on.
 
 $(function() {
@@ -68,7 +69,7 @@ function widgetDragNDrop(listClass) {
 		connectToSortable: ".dashboard-content",
 		// fetches the widget via loadWidget function in widget.js
 		helper: function(e, ui) { 
-			var helper = $("<div>").addClass("widget widget-select");
+			var helper = $("<div>").addClass("widget widget-select").html("<img src=\"/appliedanalytics/cache/images/spinner.gif\" width = \"30\" height = \"30\" />");
 			return helper;
 		},
 		start: function(e, ui) {
@@ -80,9 +81,12 @@ function widgetDragNDrop(listClass) {
 		// before inserting the widget, we need to fetch a clone of the widget to preserve the events
 		// during this process. Also terminate the helper at this point since we no longer need it.
 		stop: function(e, ui){ 
-								addedWidget = ui.helper.clone(true, true); 
-								ui.helper.remove(); 
-							},
+			var temp = ui.helper.clone(true, true);
+			addedWidget = ui.helper; // need to set it as the actual object to preserve d3 events.
+			addedEvents = $._data(temp.children().get(0), "events"); // copy events of the cloned object to be used on the receive event.
+
+			ui.helper.remove(); 
+		},
 		revert: false
 	});
 	
@@ -109,12 +113,17 @@ function getDashboardList(list) {
 }
 
 /**
- * Fetches the html to populate the left pane when the page is invoked.
+ * Fetches the html to populate the right pane when the page is invoked.
  * @author - Andrew Riley
  */
 function addDashboardPage() {
-	$.post(applicationRoot + "addDashboard", {}, function(data) {
-		  $(".addDashboard").html(data);
+	$.ajax({
+		type: 'POST',
+		url: applicationRoot + "addDashboard",
+		success: function(data) {
+			$(".addDashboard").html(data);
+		},
+		error: handleAjaxError
 	});
 }
 
@@ -124,19 +133,23 @@ function addDashboardPage() {
  * @param dashboardId - the id of the dashboard to be deleted.
  */
 function removeDashboard(dashboardId) {
-	
-	$.post(applicationRoot + "application/deleteDashboard", {dashboardId: dashboardId}, 
-			function(result) {
-				result = $.parseJSON(result);
-				var $dash = $("#dashlist #" + result.dashboardId);
-				var name = $dash.children("a").html();
-				if (name != "Default Dashboard" && name != "Second Dashboard")
-					$dash.remove();
-				
-				Modal.alert({
-					"title": "Remove Dashboard",
-					"content": "Dashboard \"" + name + "\" has been successfully removed!",
-				});
+	$.ajax({
+		type: 'POST',
+		url: applicationRoot + "application/deleteDashboard",
+		data: {dashboardId: dashboardId},
+		success: function(result) {
+			result = $.parseJSON(result);
+			var $dash = $("#dashlist #" + result.dashboardId);
+			var name = $dash.children("a").html();
+			if (name != "Default Dashboard" && name != "Second Dashboard")
+				$dash.remove();
+			
+			Modal.alert({
+				"title": "Remove Dashboard",
+				"content": "Dashboard \"" + name + "\" has been successfully removed!",
+			});
+		},
+		error: handleAjaxError
 	});
 }
 
@@ -152,8 +165,9 @@ function createDashboardLink(dashboard) {
 	var $li = $("<li>").attr("id", dashboard.id).appendTo($dashlist);
 
 	// dashboard link click events
-	var $link = $("<a>").click(function() {
+	var $link = $("<a>").prop("href", "#dashboards/" + dashboard.id).click(function() {
 							loadDashboard(dashboard.id);
+							window.dashboardId = dashboard.id;
 							currentPage.css("color", "#fff");
 							currentPage = $("#dashboard .nav-txt").css("color", "#00aeef");
 				})
@@ -220,20 +234,26 @@ function showAddDashboardPanel(width, showPage) {
                 		
                 		var name = $("#dashboardName").val();
                 		
+                		
                 		Modal.call({
                 			"title": "Create Dashboard",
                 			"content": "Create new dashboard \"" + name + "\"?",
                 			"action": function(e) { 
                 				e.preventDefault();
-                				$.post(applicationRoot + "application/createDashboard", { name: name },
-                        				function(result) {
-                        						createDashboardLink($.parseJSON(result));
-                        						Modal.alert({
-                        							"title": "Create Dashboard",
-                        							"content": name + " has been successfully created!",
-                        						});
-                        						hideAddDashboardPanel();
-                        				});
+                				$.ajax({
+                					type: 'POST',
+                					url: applicationRoot + "application/createDashboard",
+                					data: { name: name },
+                					success: function(result) {
+                						createDashboardLink($.parseJSON(result));
+                						Modal.alert({
+                							"title": "Success!",
+                							"content": name + " has been successfully created!",
+                						});
+                						hideAddDashboardPanel();
+                					},
+                					error: handleAjaxError
+                				});
                 			}
                 		
                 		});
@@ -261,93 +281,93 @@ function hideAddDashboardPanel() {
 
 
 
-//TODO: I will probably combine these two functions into one when we hook
-// up data on the back end. For now keep them separate.
-function loadTrendsWidgets(trendsId) {
-	/*$.post(applicationRoot + "application/trends/" + trendsId, 
-			{ },
-			function(result) {*/
-				var $content = newPage("trends");
-				//var library = $.parseJSON(result);
-				//var widgetIdArray = library.widgetIds;
-				//var widgetTypeIdArray = library.widgetTypeIds;
-				//var widgets = library.widgets;
-				trendsWidgetLibraryId = 1;
-				$.post(applicationRoot + "widgetLibraries/" + trendsWidgetLibraryId + "/widgetTypes", function(data) {
-					
-					widgetLibraryTypes = $.parseJSON(data);
-					widgets = new Array();
-					for (index in widgetLibraryTypes) {
-						widgets.push({"widgetTypeId": widgetLibraryTypes[index].id, "id": 0})
-					}
-					/*
-					var widgets = [
-					               {"widgetTypeId": 2, "id": 235},
-					               {"widgetTypeId": 4, "id": 237},
-					               {"widgetTypeId": 5, "id": 239},
-					               {"widgetTypeId": 7, "id": 241}, 
-					              ];
-					*/
-					
-					loadWidgets($content, widgets, function() { });
-					
-					$content.sortable({
-						helper: "clone",
-						revert: true, 
-						tolerance: "pointer", 
-						zIndex: 100,
-						cancel: "div.widget-content",
-						over: function(event, ui) { 
-							if (event.target == $("#dashboard").get(0)) 
-								$("#dashboard").hover();
-							
-						}
-					});
-				
-
-				});
-				
-			//});
-}
-
-function loadForecastWidgets(forecastId) {
-	
-	/*$.post(applicationRoot + "application/forecast/" + forecastId, 
-	{ },
-	function(result) {*/
-		var $content = newPage("forecast");
-		//var library = $.parseJSON(result);
-		//var widgetIdArray = library.widgetIds;
-		//var widgetTypeIdArray = library.widgetTypeIds;
-		//var widgets = library.widgets;
-		
-		trendsWidgetLibraryId = 2;
-		$.post(applicationRoot + "widgetLibraries/" + trendsWidgetLibraryId + "/widgetTypes", function(data) {
-			
-			widgetLibraryTypes = $.parseJSON(data);
-			widgets = new Array();
-			for (index in widgetLibraryTypes) {
-				widgets.push({"widgetTypeId": widgetLibraryTypes[index].id, "id": 0})
-			}
-			/*
-			var widgets = [
-			               {"widgetTypeId": 1, "id": 234},
-			               {"widgetTypeId": 6, "id": 236}, 
-			              ];
-			*/
-			loadWidgets($content, widgets, function() { });
-			
-			$content.sortable({
-				helper: "clone",
-				revert: true, 
-				tolerance: "pointer", 
-				zIndex: 100,
-				cancel: "div.widget-content"
-			});
-		});
-
-	//});
-	
-}
+////TODO: I will probably combine these two functions into one when we hook
+//// up data on the back end. For now keep them separate.
+//function loadTrendsWidgets(trendsId) {
+//	/*$.post(applicationRoot + "application/trends/" + trendsId, 
+//			{ },
+//			function(result) {*/
+//				var $content = newPage("trends");
+//				//var library = $.parseJSON(result);
+//				//var widgetIdArray = library.widgetIds;
+//				//var widgetTypeIdArray = library.widgetTypeIds;
+//				//var widgets = library.widgets;
+//				trendsWidgetLibraryId = 1;
+//				$.post(applicationRoot + "widgetLibraries/" + trendsWidgetLibraryId + "/widgetTypes", function(data) {
+//					
+//					widgetLibraryTypes = $.parseJSON(data);
+//					widgets = new Array();
+//					for (index in widgetLibraryTypes) {
+//						widgets.push({"widgetTypeId": widgetLibraryTypes[index].id, "id": 0})
+//					}
+//					/*
+//					var widgets = [
+//					               {"widgetTypeId": 2, "id": 235},
+//					               {"widgetTypeId": 4, "id": 237},
+//					               {"widgetTypeId": 5, "id": 239},
+//					               {"widgetTypeId": 7, "id": 241}, 
+//					              ];
+//					*/
+//					
+//					loadWidgets($content, widgets, function() { });
+//					
+//					$content.sortable({
+//						helper: "clone",
+//						revert: true, 
+//						tolerance: "pointer", 
+//						zIndex: 100,
+//						cancel: "div.widget-content",
+//						over: function(event, ui) { 
+//							if (event.target == $("#dashboard").get(0)) 
+//								$("#dashboard").hover();
+//							
+//						}
+//					});
+//				
+//
+//				});
+//				
+//			//});
+//}
+//
+//function loadForecastWidgets(forecastId) {
+//	
+//	/*$.post(applicationRoot + "application/forecast/" + forecastId, 
+//	{ },
+//	function(result) {*/
+//		var $content = newPage("forecast");
+//		//var library = $.parseJSON(result);
+//		//var widgetIdArray = library.widgetIds;
+//		//var widgetTypeIdArray = library.widgetTypeIds;
+//		//var widgets = library.widgets;
+//		
+//		trendsWidgetLibraryId = 2;
+//		$.post(applicationRoot + "widgetLibraries/" + trendsWidgetLibraryId + "/widgetTypes", function(data) {
+//			
+//			widgetLibraryTypes = $.parseJSON(data);
+//			widgets = new Array();
+//			for (index in widgetLibraryTypes) {
+//				widgets.push({"widgetTypeId": widgetLibraryTypes[index].id, "id": 0})
+//			}
+//			/*
+//			var widgets = [
+//			               {"widgetTypeId": 1, "id": 234},
+//			               {"widgetTypeId": 6, "id": 236}, 
+//			              ];
+//			*/
+//			loadWidgets($content, widgets, function() { });
+//			
+//			$content.sortable({
+//				helper: "clone",
+//				revert: true, 
+//				tolerance: "pointer", 
+//				zIndex: 100,
+//				cancel: "div.widget-content"
+//			});
+//		});
+//
+//	//});
+//	
+//}
 
 
