@@ -22,6 +22,11 @@ function loadDashboard(dashboardId) {
 				var widgets = dashboard.widgets;
 				widgets = widgets.sort(compareWidgetPriority);
 				
+				
+				
+				/************************
+				 * 	  REMOVE WIDGET		*
+				 ************************/
 				// Setup widget remove functionality
 				$trash = $(".trash").droppable({
 					revert: false,
@@ -46,18 +51,11 @@ function loadDashboard(dashboardId) {
 				});
 					
 				loadWidgets($content, widgets);
-
-					/*
-					 * This will not work as-is but may be a useful code snippet for loading in the list of dashboards.
-				$.post(applicationRoot + "application/dashboards", function(data) {
-						dashboards = $.parseJSON(data);
-						dashboardList = $last.find('.dropdown-menu ul#dashboard-list');
-						for (index in dashboards) {
-							dashboardList.append('<li><a href="#">' + dashboards[index].name + '</a></li>');
-						}
-				});
-				*/
 				
+				
+				/************************
+				 *  	DROP WIDGET	    *
+				 ************************/
 				// Setup dashboard sortable functionality that allows widgets to be dragged and moved around
 				// as well as handle widgets being added.
 				$content.sortable({ 
@@ -102,6 +100,12 @@ function loadDashboard(dashboardId) {
 								
 								// save widget to database
 								addWidgetByList(parseInt(ui.item.attr("id")), $w);
+								
+								// Check to see if we have content and data, if not update the widget.
+								// potentially we can check if the spinner is spinning but that would break
+								// some widgets right now.
+								if (!$w.children() || !$w.data("hasData"))
+									updateWidget($w.data("widgetTypeId"), $w.attr("id"));
 
 							}
 							else

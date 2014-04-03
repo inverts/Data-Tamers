@@ -15,10 +15,9 @@ function loadKeyContributingFactorsWidget(id, callback) {
 		else
 			console.error('Could not append KeyContributingFactors Widget to id: ' + id);
 	});
-	
 
-	
 }
+
 
 function updateKeyContributingFactors(id) {
 	

@@ -21,10 +21,12 @@ function loadWebsitePerformanceWidget(id, callback) {
 				$("#" + id + " a.bar").click(function(e) { changeViewBtn(id, "pagePerformanceBar"); });
 				$("#" + id + " a.pp-table").click(function(e) { changeViewBtn(id, "pagePerformanceTable"); });
 			
-				if(callback){				
-					callback();
-				}
+				$element.data("hasData", true); // flag the widget as having data.
+				
 			});
+			
+			if(callback)				
+				callback();
 
 	});		
 }

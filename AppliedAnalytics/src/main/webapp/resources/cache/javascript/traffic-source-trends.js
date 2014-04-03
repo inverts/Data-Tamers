@@ -12,34 +12,33 @@ function loadTrafficSourceTrendsWidget(id, callback) {
 	var $element = $('#' + id);
 	$.get(applicationRoot + "/widgets/traffic-source-trends", null, 
 		function(response) {
-		
-			if ($element.length > 0)
-				$element.empty().append(response);
-			else {
-				
-				$element = $('<div>').attr({ 'id': 'traffic-source-trends', 'class': 'w_container'})
-				 					 .prop('draggable', true)
-				 					 .appendTo('.dashboard-content')
-				 					 .html(response);
+			if ($element.length > 0) {
+				$element.fadeIn("fast", function() { 
+						$element.html(response); 
+				});
 			}
+			else
+				console.error('Could not append Traffic Source Trends to id: ' + id);
 			
-			getTrafficSourceTrendsData($element.find("#trafficSourceTrendsWorst").get(0), function() {
-				if(callback){				
-					callback();
-				}
+			getTrafficSourceTrendsData($element, function() {
+				
+				$element.data("hasData", true); // flag the widget as having data.
 			});
+			
+			if(callback)			
+				callback();
 			
 	});	
 }
 
 
-function getTrafficSourceTrendsData(element, callback) {
-	$element = $(element);
-	$.get(applicationRoot + "/widgets/traffic-source-trends/data", null, 
+function getTrafficSourceTrendsData($element, callback) {
+
+	$.get(applicationRoot + "widgets/traffic-source-trends/data", null, 
 			function(response) {
 				dataModel = $.parseJSON(response);
 				dataRows = dataModel.trafficSourceDataList;
-				
+				var id = $element.attr("id");
 				//Convert dataRows to raw data
 				rawData = new Array();
 				
@@ -54,9 +53,9 @@ function getTrafficSourceTrendsData(element, callback) {
 					return parseFloat(row1[1]) - parseFloat(row2[1]);
 				});
 				
-				$("#" + $element.attr("id") + " .spinner-content").hide();
+				$("#" + id + " .spinner-content").hide();
 				
-				$element.table({
+				$("#" + id + " #trafficSourceTrendsBest").table({
 					"data"		: dataRows,
 					"rawData"	: rawData,
 					"columnHeaders" : [
@@ -67,9 +66,15 @@ function getTrafficSourceTrendsData(element, callback) {
 					"m"				: {"length": 3}, // columns
 					"n"				: {"length": dataRows.length, "keys": null}, // rows
 					"title"			: dataModel.name
-				});
+				}).show();
 
-				$("#" + $element.attr("id")).show();
+				//$("#" + $element.attr("id")).show();
 		});	
 	
+}
+
+
+function updateTrafficSourceTrends(id, callback) {
+	
+	getTrafficSourceTrendsData($("#" + id));
 }

@@ -19,7 +19,7 @@ function loadDataForecast(id, callback) {
 		
 		if ($element.length > 0) {
 			$element.fadeIn("fast", function() { 
-					$element.append(response); 
+					$element.html(response); 
 			});
 		}
 		else
@@ -36,16 +36,16 @@ function loadDataForecast(id, callback) {
 			
 			// legend
 			createLegend(id, lineclasses);
-			
+
 			// initially turn on RAW
 			$("#" + id + " #rawBtn").click(); // initially turn on raw data.
-
-			if(callback){				
-				callback();
-			}
 			
+			$element.data("hasData", true); // flag the widget as having data.
+
 		});
 		
+		if(callback)			
+			callback();
 		
 
 	});

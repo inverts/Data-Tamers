@@ -41,6 +41,7 @@ function loadWidgets($content, widgets, callback) {
  */
 function loadWidget($content, widgetTypeId, widgetId, i, callback)
 {
+	
 	//Create an empty widget div.
 	var $div = $("<div>").addClass("w_container")
 						 .data({
@@ -60,43 +61,44 @@ function loadWidget($content, widgetTypeId, widgetId, i, callback)
 		case 1:
 			elementId = "dataForecastWidget" + (i || $(".dataForecast").length);
 			$div.attr("id", elementId);			
-			$.when(loadDataForecast(elementId)).then(function() { widgetEvents($content, $div, elementId); });
+			loadDataForecast(elementId, function() { widgetEvents($content, $div, elementId); });
 			break;
 			
 		case 2:
 			elementId = "websitePerformanceWidget" + (i || $(".pagePerformance").length);
 			$div.attr("id", elementId);
-			$.when(loadWebsitePerformanceWidget(elementId)).then(function() { widgetEvents($content, $div, elementId, "pagePerformanceVisual"); });
+			loadWebsitePerformanceWidget(elementId, function() { widgetEvents($content, $div, elementId, "pagePerformanceVisual"); });
 			break;
 			
 		case 7:
 			elementId = "keyContributingFactorsWidget" + (i || $(".keyContributingFactors").length);
 			$div.attr("id", elementId);
-			$.when(loadKeyContributingFactorsWidget(elementId)).then(function() { widgetEvents($content, $div, elementId); });
+			loadKeyContributingFactorsWidget(elementId, function() { widgetEvents($content, $div, elementId); });
 			break;
 		
 		case 4:
 			elementId = "keywordInsightWidget" + (i || $(".keywordInsight").length);
 			$div.attr("id", elementId);
-			$.when(loadKeywordInsight(elementId)).then(function() { widgetEvents($content, $div, elementId, "keywordVisual"); });
+			loadKeywordInsight(elementId, function() { widgetEvents($content, $div, elementId, "keywordVisual"); });
 			break;
 			
 		case 5:
 			elementId = "trafficSourceTrendsWidget" + (i || $(".growingProblems").length);
 			$div.attr("id", elementId);
-			$.when(loadTrafficSourceTrendsWidget(elementId)).then(function() { widgetEvents($content, $div, elementId); });
+			loadTrafficSourceTrendsWidget(elementId, function() { widgetEvents($content, $div, elementId, "trafficSourceVisual"); });
 			break;
 			
 		case 6:
 			elementId = "boostPerformanceWidget" + (i || $(".boostPerformance").length);
 			$div.attr("id", elementId);
-			$.when(loadBoostPerformanceWidget(elementId)).then(function() { widgetEvents($content, $div, elementId); });
+			loadBoostPerformanceWidget(elementId, function() { widgetEvents($content, $div, elementId); });
 			break;
 	}
-	
+
 	// execute callback function if provided.
 	if (callback)
 		callback(elementId);
+
 
 }
 
@@ -108,6 +110,9 @@ function loadWidget($content, widgetTypeId, widgetId, i, callback)
  * @param elementId
  */
 function widgetEvents($content, $div, elementId, viewClass) {
+	
+	if ($content.hasClass("widget-select"))
+		$content.children("img").remove();
 	
 	// collapse event on title double click
 	$div.on("dblclick", ".widget_title", function(e) {
@@ -164,7 +169,7 @@ function widgetEvents($content, $div, elementId, viewClass) {
  * without reloading the entire widget.
  * @author - Andrew Riley
  */
-function updateWidgets(){
+function updateWidgets() {
 	
 	// get all the active widgets on the current page.
 	var widgets = $.map($(".w_container"), function(widget) {
@@ -172,20 +177,33 @@ function updateWidgets(){
 					});
 	
 	for(var i = 0; i < widgets.length; i++) {
-		
-		// call appropriate widget's update function.
-		switch(widgets[i].widgetTypeId)
-		{
-			case 1:
-				updateDataForecast(widgets[i].elementId);
-				break;
-			case 4:
-				updateKeywordInsight(widgets[i].elementId);
-				break;
-		}
+		updateWidget(widgets[i].widgetTypeId, widgets[i].elementId);
 	}
-		
 }
+
+/**
+ * Updates the specified widget.
+ * @author - Andrew Riley
+ * @param widgetTypeId - TypeId of the widget
+ * @param elementId - Id of the widget container
+ */
+function updateWidget(widgetTypeId, elementId) {
+	
+	// call appropriate widget's update function.
+	switch(widgetTypeId)
+	{
+		case 1:
+			updateDataForecast(elementId);
+			break;
+		case 4:
+			updateKeywordInsight(elementId);
+			break;
+		case 5:
+			updateTrafficSourceTrends(elementId);
+			break;
+	}
+}
+
 
 /**
  * Since adding widgets is a little different when doing it from

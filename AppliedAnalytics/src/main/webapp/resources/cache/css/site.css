@@ -197,7 +197,7 @@ input { font: inherit; }
 .personal-info .googleAuth { width:600px; padding:10px 0; }
 .personal-info .googleAuth a{ float:right; margin-right:195px; }
 .new-account.alert { width:100%; padding-left:340px; border-radius:0; position:absolute; top:110px; }
-.new-account div.alert-msg { width:700px; text-wrap:normal; }
+.new-account div.alert-msg { width:38%; text-wrap:normal; }
 .googleName { color:#00aeef; }
 .personal-info .googleAuth a:hover { cursor:pointer; color:#00aeef; }
 
@@ -205,8 +205,7 @@ input { font: inherit; }
 /*****APPLICATION*****/
 
 /* Dashboard */
-
-.page .w_container { display:inline-block; vertical-align:top; }
+.page .w_container { display:inline-block; vertical-align:top; padding:8px; }
 
 .dashboard .dashboard-content, .trends .trends-content, 
 .forecast .forecast-content { padding:5px 0; overflow:hidden;}
