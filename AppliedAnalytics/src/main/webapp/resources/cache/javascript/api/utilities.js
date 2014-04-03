@@ -102,7 +102,7 @@ function keyValues(obj, keys) {
 		var values = [];
 		
 		for (var i = 0; i < keys.length; i++) {
-			if (obj[keys[i]])
+			if (obj[keys[i]] != "undefined")
 				values.push(obj[keys[i]]);
 		}
 		
