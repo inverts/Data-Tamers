@@ -124,28 +124,47 @@
 		               .style("opacity", 0);
 			      }); 
 			
-		
-
+			// remove duplicates
+		    var legend_data = sdata.filter(function(elem, pos) {
+		        return sdata.indexOf(elem) == pos;
+		    });
 			// Legend
 			var legend = svg.selectAll(".legend")
-			      .data(sdata)
+			      .data(legend_data)
 			    .enter().append("g")
 			      .attr("class", "legend")
-			      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+			      .attr("transform", function(d, i) { return "translate(0," + i * 10 + ")"; });
 
 			  legend.append("rect")
 			      .attr("x", width - 18)
 			      .attr("width", 18)
 			      .attr("height", 18)
-			      .style("fill", function(d) { return color(d[2]); });
+			      .style("fill", function(d) { return color(d[2]); })
+			      .on("mouseover", function(d) {	
+						d3.select(this)
+							.attr("width", 22)
+							.attr("height", 22)
+						tip.transition()
+			               .duration(200)
+			               .style("opacity", .9)
+			               .attr("font-size", "10px");
+						tip.html(d[2])
+						.style("left", (d3.event.pageX-300) + "px")
+			            .style("top", (d3.event.pageY-150) + "px");
+			      })
+			      .on("mouseout", function(d) {
+			          d3.select(this)
+			          	.transition()
+			          	.duration(500)
+			          	.attr("width", 18)
+			          	.attr("height", 18);
+			          tip.transition()
+		               .duration(500)
+		               .style("opacity", 0);
+			      }); 
 
-			  legend.append("text")
-			      .attr("x", width - 24)
-			      .attr("y", 9)
-			      .attr("dy", ".35em")
-			      .style("font-size","15px")
-			      .style("text-anchor", "end")
-			      .text(function(d) { return d[2]; });
+			  
+			      
 
 
 
