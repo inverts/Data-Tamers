@@ -87,12 +87,13 @@ function getDataForecastData(id, callback) {
 function updateDataForecast(id) {
 	
 	var $buttons = $('#' + id + ' button.active').removeClass('active');
-	
+
 	getDataForecastData(id, function() {
-		$.each($buttons, function() {
-			$(this).click();
-		});	
+		
+		(!$buttons.length) ? $("#" + id + " #rawBtn").click()
+						   : $.each($buttons, function() { $(this).click(); });	
 	});
+
 }
 
 
