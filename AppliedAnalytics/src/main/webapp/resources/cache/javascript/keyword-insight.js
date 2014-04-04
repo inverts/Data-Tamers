@@ -12,6 +12,25 @@ function loadKeywordInsight(id, callback) {
 		if ($element.length > 0) {
 			$element.fadeIn("fast", function() { 
 				$element.html(response); 
+				
+				// Get the data and setup widget functions after data has been retrieved.
+				getKeywordInsightData(id, function() {
+
+					// direct view buttons
+					$("#" + id + " a.scatter").click(function(e) { changeViewBtn(id, "keywordInsightScatter"); });
+					$("#" + id + " a.improve").click(function(e) { changeViewBtn(id, "keywordInsightImprove"); });
+					$("#" + id + " a.best").click(function(e) { changeViewBtn(id, "keywordInsightBest"); });
+					$("#" + id + " a.worst").click(function(e) { changeViewBtn(id, "keywordInsightWorst"); });
+					$("#" + id + " a.all").click(function(e) { changeViewBtn(id, "keywordInsightAll"); });
+					$("#" + id + " a.bestsub").click(function(e) { changeViewBtn(id, "keywordInsightBestSub"); });
+					$("#" + id + " a.worstsub").click(function(e) { changeViewBtn(id, "keywordInsightWorstSub"); });
+					
+					$element.data("hasData", true); // flag the widget as having data.
+
+				});
+				
+				if(callback)			
+					callback();
 			});
 		}
 		else {
@@ -22,25 +41,6 @@ function loadKeywordInsight(id, callback) {
 		$a = $("<a>").attr({"role": "menu-item", "class": "viewOption"});
 		$li = $("<li>").append($a);
 		$("#" + id + " .dropdown-menu").append($li);
-		
-		// Get the data and setup widget functions after data has been retrieved.
-		getKeywordInsightData(id, function() {
-
-			// direct view buttons
-			$("#" + id + " a.scatter").click(function(e) { changeViewBtn(id, "keywordInsightScatter"); });
-			$("#" + id + " a.improve").click(function(e) { changeViewBtn(id, "keywordInsightImprove"); });
-			$("#" + id + " a.best").click(function(e) { changeViewBtn(id, "keywordInsightBest"); });
-			$("#" + id + " a.worst").click(function(e) { changeViewBtn(id, "keywordInsightWorst"); });
-			$("#" + id + " a.all").click(function(e) { changeViewBtn(id, "keywordInsightAll"); });
-			$("#" + id + " a.bestsub").click(function(e) { changeViewBtn(id, "keywordInsightBestSub"); });
-			$("#" + id + " a.worstsub").click(function(e) { changeViewBtn(id, "keywordInsightWorstSub"); });
-			
-			$element.data("hasData", true); // flag the widget as having data.
-
-		});
-		
-		if(callback)			
-			callback();
 
 	});		
 }

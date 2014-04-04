@@ -20,33 +20,30 @@ function loadDataForecast(id, callback) {
 		if ($element.length > 0) {
 			$element.fadeIn("fast", function() { 
 					$element.html(response); 
+					
+					getDataForecastData(id, function() {
+
+						// Setup forecast buttons
+						$element.on('click', "#rawBtn", function() { toggleLine(id, 'raw', this); });
+						$element.on('click', "#normBtn", function() { toggleLine(id, 'normal', this); });
+						$element.on('click', "#smoothBtn", function() { toggleLine(id, 'smooth', this); });
+						
+						// legend
+						createLegend(id, lineclasses);
+
+						// initially turn on RAW
+						$("#" + id + " #rawBtn").click(); // initially turn on raw data.
+						
+					});
+					
+					if(callback)			
+						callback();
+					
+					
 			});
 		}
 		else
 			console.error('Could not append Data Forecast Widget to id: ' + id);
-		
-		
-		
-		getDataForecastData(id, function() {
-
-			// Setup forecast buttons
-			$element.on('click', "#rawBtn", function() { toggleLine(id, 'raw', this); });
-			$element.on('click', "#normBtn", function() { toggleLine(id, 'normal', this); });
-			$element.on('click', "#smoothBtn", function() { toggleLine(id, 'smooth', this); });
-			
-			// legend
-			createLegend(id, lineclasses);
-
-			// initially turn on RAW
-			$("#" + id + " #rawBtn").click(); // initially turn on raw data.
-			
-			$element.data("hasData", true); // flag the widget as having data.
-
-		});
-		
-		if(callback)			
-			callback();
-		
 
 	});
 	
@@ -56,6 +53,9 @@ function loadDataForecast(id, callback) {
 function getDataForecastData(id, callback) {
 	$.post(applicationRoot + "DataForecast", {"serialize": 1}, function(response) {
 		var d = $.parseJSON(response);
+		
+		if (d && d.data)
+			$("#" + id).data("hasData", true); // flag the widget as having data.
 		
 		$("#" + id + " .spinner-content").hide();
 		

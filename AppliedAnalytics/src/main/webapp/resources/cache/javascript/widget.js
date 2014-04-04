@@ -18,8 +18,16 @@ function loadWidgets($content, widgets, callback) {
 		var widgetTypeId = widgets[i].widgetTypeId;
 		var widgetId = widgets[i].id;
 		
+		//Create an empty widget div.
+		var $div = $("<div>").addClass("w_container")
+							 .data({
+								 	"widgetTypeId": widgetTypeId, 
+								 	"widgetId": widgetId 
+								   })
+							 .appendTo($content);
+		
 		// load in each widget and fire the callback
-		loadWidget($content, widgetTypeId, widgetId, i, callback);
+		loadWidget($div, widgetTypeId, i, callback);
 		
 	}
 	
@@ -39,17 +47,9 @@ function loadWidgets($content, widgets, callback) {
  * @param i - an arbitrary number, usually the index 
  * priority or number of widgets + 1.
  */
-function loadWidget($content, widgetTypeId, widgetId, i, callback)
+function loadWidget($div, widgetTypeId, i, callback)
 {
-	
-	//Create an empty widget div.
-	var $div = $("<div>").addClass("w_container")
-						 .data({
-							 	"widgetTypeId": widgetTypeId, 
-							 	"widgetId": widgetId 
-							   })
-						 .appendTo($content);
-	
+
 	$div.data("pos", $div.index());
 	
 	
@@ -61,37 +61,37 @@ function loadWidget($content, widgetTypeId, widgetId, i, callback)
 		case 1:
 			elementId = "dataForecastWidget" + (i || $(".dataForecast").length);
 			$div.attr("id", elementId);			
-			loadDataForecast(elementId, function() { widgetEvents($content, $div, elementId); });
+			loadDataForecast(elementId, function() { widgetEvents($div, elementId); });
 			break;
 			
 		case 2:
 			elementId = "websitePerformanceWidget" + (i || $(".pagePerformance").length);
 			$div.attr("id", elementId);
-			loadWebsitePerformanceWidget(elementId, function() { widgetEvents($content, $div, elementId, "pagePerformanceVisual"); });
+			loadWebsitePerformanceWidget(elementId, function() { widgetEvents($div, elementId, "pagePerformanceVisual"); });
 			break;
 			
 		case 7:
 			elementId = "keyContributingFactorsWidget" + (i || $(".keyContributingFactors").length);
 			$div.attr("id", elementId);
-			loadKeyContributingFactorsWidget(elementId, function() { widgetEvents($content, $div, elementId); });
+			loadKeyContributingFactorsWidget(elementId, function() { widgetEvents($div, elementId); });
 			break;
 		
 		case 4:
 			elementId = "keywordInsightWidget" + (i || $(".keywordInsight").length);
 			$div.attr("id", elementId);
-			loadKeywordInsight(elementId, function() { widgetEvents($content, $div, elementId, "keywordVisual"); });
+			loadKeywordInsight(elementId, function() { widgetEvents($div, elementId, "keywordVisual"); });
 			break;
 			
 		case 5:
 			elementId = "trafficSourceTrendsWidget" + (i || $(".growingProblems").length);
 			$div.attr("id", elementId);
-			loadTrafficSourceTrendsWidget(elementId, function() { widgetEvents($content, $div, elementId, "trafficSourceVisual"); });
+			loadTrafficSourceTrendsWidget(elementId, function() { widgetEvents($div, elementId, "trafficSourceVisual"); });
 			break;
 			
 		case 6:
 			elementId = "boostPerformanceWidget" + (i || $(".boostPerformance").length);
 			$div.attr("id", elementId);
-			loadBoostPerformanceWidget(elementId, function() { widgetEvents($content, $div, elementId); });
+			loadBoostPerformanceWidget(elementId, function() { widgetEvents($div, elementId); });
 			break;
 	}
 
@@ -109,13 +109,15 @@ function loadWidget($content, widgetTypeId, widgetId, i, callback)
  * @param $div
  * @param elementId
  */
-function widgetEvents($content, $div, elementId, viewClass) {
+function widgetEvents($div, elementId, viewClass) {
+	
+	var $content = $div.parent();
 	
 	if ($content.hasClass("widget-select"))
 		$content.children("img").remove();
 	
 	// collapse event on title double click
-	$div.on("dblclick", ".widget_title", function(e) {
+	$div.on("dblclick.widget", ".widget_title", function(e) {
 		var selector = e && e.data || this;
 		$(selector).parent().siblings(".widget-content").slideToggle("fast");
 	});

@@ -14,20 +14,19 @@ function loadTrafficSourceTrendsWidget(id, callback) {
 		function(response) {
 			if ($element.length > 0) {
 				$element.fadeIn("fast", function() { 
-						$element.html(response); 
+						$element.html(response);
+						
+						getTrafficSourceTrendsData($element, function() {
+							$element.data("hasData", true); // flag the widget as having data.
+						});
+						
+						if(callback)			
+							callback();
 				});
 			}
 			else
 				console.error('Could not append Traffic Source Trends to id: ' + id);
-			
-			getTrafficSourceTrendsData($element, function() {
-				
-				$element.data("hasData", true); // flag the widget as having data.
-			});
-			
-			if(callback)			
-				callback();
-			
+
 	});	
 }
 

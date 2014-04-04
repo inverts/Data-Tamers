@@ -207,7 +207,7 @@ input { font: inherit; }
 /*****APPLICATION*****/
 
 /* Dashboard */
-.page .w_container { display:inline-block; vertical-align:top; padding:8px; }
+.page .w_container { display:inline-block !important; vertical-align:top; padding:8px; }
 
 .dashboard .dashboard-content, .trends .trends-content, 
 .forecast .forecast-content { padding:5px 0; overflow:hidden;}

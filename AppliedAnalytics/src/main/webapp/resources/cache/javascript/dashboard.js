@@ -79,41 +79,53 @@ function loadDashboard(dashboardId) {
 					cancel: "div.widget-content, header.w-header .w-text",
 					// add a widget to the page functionality
 					receive: function(e, ui) {
-						if (addedWidget.hasClass("widget-select")) {
+						
+						//e.preventDefault();
+						
+						if (addedWidget.widget.hasClass("widget-select")) {
 							// the widget itself is encapsulated into a container called .widget-select
 							// and needs to be extracted out of it.
-							var $w = addedWidget.children(":first");
-
-							// did the user get the visualization?
-							if ($w.children().length) {
-								
-								// set the currentItem html to be that of the widget.
-								$(this).data().uiSortable.currentItem.html($w);
-								// remove the encapsulating parent container (currentItem) and leave
-								// the raw widget in its stead.
-								$w.unwrap();
-								//$._data($w.get(0), "events", addedEvents);
-								for(var e in addedEvents) {
-									for(var i = 0; i < addedEvents[e].length; i++)
-										$w.on(addedEvents[e][i].type, addedEvents[e][i].selector, addedEvents[e][i].handler);
-								}
-								
-								// save widget to database
-								addWidgetByList(parseInt(ui.item.attr("id")), $w);
-								
-								// Check to see if we have content and data, if not update the widget.
-								// potentially we can check if the spinner is spinning but that would break
-								// some widgets right now.
-								if (!$w.children() || !$w.data("hasData"))
-									updateWidget($w.data("widgetTypeId"), $w.attr("id"));
-
+							var $w = addedWidget.widget.children(".w_container");
+			
+							// set the currentItem html to be that of the widget.
+							$(this).data().uiSortable.currentItem.html($w);
+							// remove the encapsulating parent container (currentItem) and leave
+							// the raw widget in its stead.
+							$w.unwrap();
+							
+							for(var e in addedWidget.events) {
+								for(var i = 0; i < addedWidget.events[e].length; i++)
+									$w.on(addedWidget.events[e][i].type, addedWidget.events[e][i].selector, addedWidget.events[e][i].handler);
 							}
-							else
-								$(this).data().uiSortable.currentItem.remove();
+
+							// VALIDATION							
+							// widget did not load at all!
+							var reload;
+							if (!addedWidget.events) {
+								reload = setTimeout(function() {
+									if (!$w.children().length) // if no events, that means we did not get the widget loaded at all
+										loadWidget($w.empty(), parseInt(ui.item.attr("id"))); // reload the widget.
+									else
+										clearTimeout(this);
+								}, 5000);
+							}
+							
+							
+							// widget loaded but data did not!
+							if ($w.children().length && !addedWidget.data.hasData)
+								updateWidget($w.data("widgetTypeId"), $w.attr("id"));
+							
+							// save widget to database
+							addWidgetByList(parseInt(ui.item.attr("id")), $w);
 
 							// zero out the widget for the next drag n drop
-							addedWidget = null;
+							addedWidget = {widget: null, events: null, data: null };
+							
+							if ($w.children().length && reload)
+								clearTimeout(reload);
 						}
+						else
+							$(this).data().uiSortable.currentItem.remove();
 					},
 				});
 
