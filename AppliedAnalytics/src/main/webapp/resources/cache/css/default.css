@@ -18,13 +18,13 @@
 
 /******GENERAL******/
 /* Styling for basic site modules */
-html{ background:#222; }
+html{ background:#222; height:100%; }
 body, h1, h2, h3, h4, a, img { padding:0 auto; margin:0 auto; outline: none; border: none; font-family: 'museo-sans-500', 'Trebuchet MS', 'Helvetica', sans-serif; }
 
 
 .page { margin:0 auto; position:relative; background:#fff; }
-.page .wrapper { float:left; width:100%; position:relative; min-height:800px;}
-.page .content { min-height: 900px; margin: 60px 0px 0px 310px; }
+.page .wrapper { float:left; width:100%; position:relative; height:85%}
+.page .content { height:100%; margin: 60px 0px 0px 310px; }
 
 
 /******HEADER/FOOTER******/

@@ -79,7 +79,7 @@ function loadDashboard(dashboardId) {
 						updateWidgetPosition();
 					},
 					// do not enable dragging while in these elements...
-					cancel: "div.widget-content, header.w-header .w-text",
+					cancel: "div.widget-content, header.w-header .w-text div.w-next div.w-prev",
 					// add a widget to the page functionality
 					receive: function(e, ui) {
 						

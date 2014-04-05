@@ -79,7 +79,7 @@
 										bPaginate: false,
 										bFilter: settings.search,
 										bInfo: false,
-										sScrollY: ($this.height() - 65) + "px",
+										sScrollY: ($this.height() - 110) + "px",
 										sScrollXInner: "100%",
 										sScrollYInner: "100%",
 										"sDom": 'l<"subtitle'+$this.attr("id")+'">frtip',

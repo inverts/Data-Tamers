@@ -8,7 +8,7 @@ table.dataTable {
 	width: 100%;
 }
 
-div.dataTables_scroll { clear:both; }
+div.dataTables_scroll { clear:both; border:1px solid #999; }
 
 .dataTable, .dataTables_scrollHeadInner { width:100% !important; }
 
