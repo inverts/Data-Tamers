@@ -6,10 +6,17 @@ var $header = $('#header');
 var $footer = $('#footer');
 
 $(function() {
-	  $( "#start-date" ).datepicker();
-	  $( "#end-date" ).datepicker();
-	  $("#start-date").change(updateDates);
-	  $("#end-date").change(updateDates);
+	if ($("loglabel").length)
+		$('#loglabel').dropdown();
+	
+	if ($( "#start-date" ).length)
+		$( "#start-date" ).datepicker();
+	if ($( "#end-date" ).length)
+		$( "#end-date" ).datepicker();
+	if ($("#start-date").length)
+		$("#start-date").change(updateDates);
+	if ($("#end-date").length)
+		$("#end-date").change(updateDates);
 });
 
 

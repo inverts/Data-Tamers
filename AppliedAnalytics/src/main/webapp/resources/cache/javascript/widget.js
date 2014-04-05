@@ -53,43 +53,62 @@ function loadWidget($div, widgetTypeId, i, callback)
 	$div.data("pos", $div.index());
 	
 	
-	var elementId;
+	var elementId, n;
 	
 	// which widget's load function do we need to call?
 	switch(widgetTypeId)
 	{
 		case 1:
-			elementId = "dataForecastWidget" + (i || $(".dataForecast").length);
+			n = i || $(".dataForecast").length;
+			elementId = "dataForecastWidget";
+			while($("#" + elementId + n).length) { n++; } // need to ensure that the number is not already used for this widget
+			elementId += n;
 			$div.attr("id", elementId);			
 			loadDataForecast(elementId, function() { widgetEvents($div, elementId); });
 			break;
 			
 		case 2:
-			elementId = "websitePerformanceWidget" + (i || $(".pagePerformance").length);
+			
+			n = i || $(".pagePerformance").length;
+			elementId = "websitePerformanceWidget";
+			while($("#" + elementId + n).length) { n++; } // need to ensure that the number is not already used for this widget
+			elementId += n;
 			$div.attr("id", elementId);
 			loadWebsitePerformanceWidget(elementId, function() { widgetEvents($div, elementId, "pagePerformanceVisual"); });
 			break;
 			
 		case 7:
-			elementId = "keyContributingFactorsWidget" + (i || $(".keyContributingFactors").length);
+			n = i || $(".keyContributingFactors").length;
+			elementId = "keyContributingFactorsWidget";
+			while($("#" + elementId + n).length) { n++; } // need to ensure that the number is not already used for this widget
+			elementId += n;
 			$div.attr("id", elementId);
 			loadKeyContributingFactorsWidget(elementId, function() { widgetEvents($div, elementId); });
 			break;
 		
 		case 4:
-			elementId = "keywordInsightWidget" + (i || $(".keywordInsight").length);
+			n = i || $(".keywordInsight").length;
+			elementId = "keywordInsightWidget";
+			while($("#" + elementId + n).length) { n++; } // need to ensure that the number is not already used for this widget
+			elementId += n;
 			$div.attr("id", elementId);
 			loadKeywordInsight(elementId, function() { widgetEvents($div, elementId, "keywordVisual"); });
 			break;
 			
 		case 5:
-			elementId = "trafficSourceTrendsWidget" + (i || $(".growingProblems").length);
+			n = i || $(".growingProblems").length;
+			elementId = "trafficSourceTrendsWidget";
+			while($("#" + elementId + n).length) { n++; } // need to ensure that the number is not already used for this widget
+			elementId += n;
 			$div.attr("id", elementId);
 			loadTrafficSourceTrendsWidget(elementId, function() { widgetEvents($div, elementId, "trafficSourceVisual"); });
 			break;
 			
 		case 6:
-			elementId = "boostPerformanceWidget" + (i || $(".boostPerformance").length);
+			n = i || $(".boostPerformance").length;
+			elementId = "boostPerformanceWidget";
+			while($("#" + elementId + n).length) { n++; } // need to ensure that the number is not already used for this widget
+			elementId += n;
 			$div.attr("id", elementId);
 			loadBoostPerformanceWidget(elementId, function() { widgetEvents($div, elementId); });
 			break;
@@ -123,7 +142,7 @@ function widgetEvents($div, elementId, viewClass) {
 	});
 
 	// display trash bin for removal on click and hold
-	if ($content.hasClass("dashboard-content") || $content.hasClass("widget-select")) {
+	/*if ($content.hasClass("dashboard-content") || $content.hasClass("widget-select")) {
 		var timeoutId = 0;
 		$div.on("mousedown.widget", function(e) {
 			// we use a timeout to capture the hold so we don't get flashes
@@ -134,7 +153,7 @@ function widgetEvents($div, elementId, viewClass) {
 			clearTimeout(timeoutId);
 			$trash.hide();
 		});
-	}
+	}*/
 	
 	// Next and Previous view controls
 	if (viewClass) {

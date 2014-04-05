@@ -100,8 +100,7 @@ function getKeywordInsightData(id, callback) {
 			                  ],
 			"m"			    : {"length": d.data.improve.keys.length, "keys": d.data.improve.keys, "url": {"links": null, "key": 0}}, // columns
 			"n"				: {"length": d.data.improve[d.data.improve.keys[0]].length, "keys": null}, // rows
-			"title"			: "Improve the website to better meet the needs of the following keywords:",
-			"search"		: $("#" + id + " .w-text")
+			"title"			: "Improve the website to better meet the needs of the following keywords:"
 		});
 		
 		//createTableView("keywordInsightBest", d.data.best);
@@ -116,8 +115,7 @@ function getKeywordInsightData(id, callback) {
 			                  ],
 			"m"				: {"length": d.data.best.keys.length, "keys": d.data.best.keys, "url": {"links": null, "key": 0}}, // columns
 			"n"				: {"length": d.data.best[d.data.best.keys[0]].length, "keys": null}, // rows
-			"title"			: d.data.best.title,
-			"search"		: false
+			"title"			: d.data.best.title
 		});
 		
 		//createTableView("keywordInsightWorst", d.data.worst);
@@ -132,8 +130,7 @@ function getKeywordInsightData(id, callback) {
 			                  ],
 			"m"				: {"length": d.data.worst.keys.length, "keys": d.data.worst.keys, "url": {"links": null, "key": 0}}, // columns
 			"n"				: {"length": d.data.worst[d.data.worst.keys[0]].length, "keys": null}, // rows
-			"title"			: d.data.worst.title,
-			"search"		: true
+			"title"			: d.data.worst.title
 		});
 		
 		//createTableView("keywordInsightAll", d.data.all);
@@ -164,8 +161,7 @@ function getKeywordInsightData(id, callback) {
 			                  ],
 			"m"				: {"length": d.data.bestsubstr.keys.length, "keys": d.data.bestsubstr.keys, "url": {"links": null, "key": 0}}, // columns
 			"n"				: {"length": d.data.bestsubstr[d.data.bestsubstr.keys[0]].length, "keys": null}, // rows
-			"title"			: d.data.bestsubstr.title,
-			"search"		: true
+			"title"			: d.data.bestsubstr.title
 		});
 		
 		//createTableView("keywordInsightWorstSub", d.data.worstsubstr);
@@ -179,8 +175,7 @@ function getKeywordInsightData(id, callback) {
 			                  ],
 			"m"				: {"length": d.data.worstsubstr.keys.length, "keys": d.data.worstsubstr.keys, "url": {"links": null, "key": 0}}, // columns
 			"n"				: {"length": d.data.worstsubstr[d.data.bestsubstr.keys[0]].length, "keys": null}, // rows
-			"title"			: d.data.worstsubstr.title,
-			"search"		: true
+			"title"			: d.data.worstsubstr.title
 		});
 
 		if(callback)

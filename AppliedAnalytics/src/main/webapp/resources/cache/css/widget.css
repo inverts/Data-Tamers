@@ -9,15 +9,17 @@
 .widget .widget_header { padding:0 20px; position:relative; height:40px; }
 .widget .widget_title { position:absolute; font-size:1.7em; color:#444; margin-bottom:5px; font-weight:bold; text-shadow:0px -1px 0px rgba(100,100,100,0.5); margin-top: 10px;}
 .widget .widget_title:hover { cursor:pointer; }
-.widget .w-prev, .widget .w-next { position:absolute; height:100%; width:40px; z-index:100; }
-.widget .w-prev span, .widget .w-next span { background:#000; height:inherit; width:inherit; position:inherit; 
-													   visibility:hidden; border-radius:inherit; opacity:0.4; }
+.widget .w-prev, .widget .w-next { position:absolute; height:100%; width:15px; z-index:100; }
+.widget .w-prev span, .widget .w-next span { height:inherit; width:inherit; position:absolute; visibility:hidden; border-radius:inherit; opacity:0.4; margin-top:150px; }
+.widget .w-prev span { right:10px; }
+.widget .w-next span { right:50px; }
 .widget .w-prev:hover, .widget .w-next:hover { cursor:pointer; }
 .widget .w-prev:hover span, .widget .w-next:hover span {visibility:visible; }
 .widget .w-prev { left:0; border-radius:5px 0 0 5px; }
 .widget .w-next { right:0; border-radius:0 5px 5px 0; }
-.widget .w-prev > span.glyphicon, .widget .w-next > span.glyphicon { vertical-align:middle; font-size:100px; }
+.widget .w-prev > span.glyphicon, .widget .w-next > span.glyphicon { vertical-align:middle; font-size:70px; }
 .widget .widget-content, .widget.widget-select { height:350px;}
+.widget .widget-content { padding:10px 20px 5px 20px; }
 .widget .widgetView { visibility:'hidden'; }
 .widget-placeholder { width:680px; height:350px; margin:8px; display:inline-block; clear:both; }
 
@@ -29,7 +31,7 @@ svg .axis path { display: none; }
 svg path.domain { stroke:#333; stroke-width:2; }
 
 /*** TABLE STYLING ***/
-.widget .widget-content th { background:#ddd; color:#333; width:20%; }
+.widget .widget-content th { background:#ddd; color:#333; }
 .widget .widget-content th:hover{ background:#00aeff; color:#fffffe; cursor:pointer; }
 .widget .widget-content .data-table tr:hover { background:rgb(153, 255, 255); }
 .widget .widget-content table { width:100%; border-collapse:collapse; background:#eee; table-layout:fixed; }
@@ -47,16 +49,13 @@ svg path.domain { stroke:#333; stroke-width:2; }
 
 /*** WIDGET CONTROLS (DEPRECATED)***/
 .widget .widget-content .controls { width:100%; height:35px; position:relative; }
-.widget .widget-content ul { display:block; margin:auto; position:absolute; left:40px; }
+.widget .widget-content ul { display:block; margin:auto; position:absolute; right:0;}
 
 .widget.widget-select > img, .widget img.spinner-content { position:absolute; top:45%; left:50%; z-index:99; }
 
 
 /*****CSS for DATA FORECAST WIDGET*****/
-.dataForecast { width:700px; }
-/*.dataForecast .widget-content { width:990px;}*/
 .dataForecast #dataForecastData { width:inherit; height:265px; background:transparent; }
-.dataForecast .controls { padding: 0 30px 5px 45px; }
 .dataForecast div.graph-legend { width:500px; height:20px; clear:both; }
 .dataForecast div.graph-legend ul { margin-left:6px; list-style:none; height:inherit; }
 .dataForecast li.graph-legend { width:120px; background:#FF000; float:left; text-transform:uppercase; display:none;}
@@ -357,8 +356,7 @@ line:hover { opacity: 0.5; }
 
 
 /*****CSS for GROWING PROBLEMS WIDGET ****/
-.growingProblems { width:600px; }
-.growingProblems .widget-content{ width:590px; height:350px; }
+
 
 .growingProblemsChart {
 	font: 16px/16px 'Helvetica Neue', Arial, sans-serif;	
@@ -496,7 +494,7 @@ line:hover { opacity: 0.5; }
 /*****CSS for KEYWORD INSIGHT WIDGET ****/
 
 .keywordInsight h4 { text-align:center; margin-bottom:10px; color:#333; }
-.keywordInsight #keywordInsightData { margin:auto; height:315px; }
+.keywordInsight #keywordInsightData { margin:auto; height:300px; }
 .keywordInsight .main text { font: 10px sans-serif; }
 .keywordInsight .keywordVisual { width:inherit; height:305px; display:none; margin-bottom:10px; margin:0 auto; }
 .keywordInsight .keywordVisual.active { display:block; }
@@ -517,7 +515,7 @@ line:hover { opacity: 0.5; }
 
 /*****CSS for PAGE PERFORMANCE - BAR CHART WIDGET ****/
 .pagePerformance #pagePerformanceData {
-	height:315px;
+	height:300px;
 	width:inherit;
 	margin:auto;
 }
@@ -552,3 +550,4 @@ line:hover { opacity: 0.5; }
   height: 28px;
   pointer-events: none;
 }
+

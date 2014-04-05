@@ -8,7 +8,7 @@ table.dataTable {
 	width: 100%;
 }
 
-div.dataTables_scroll { clear:both; }
+div.dataTables_scroll { clear:both; border:1px solid #999; }
 
 .dataTable, .dataTables_scrollHeadInner { width:100% !important; }
 
@@ -19,6 +19,10 @@ table.dataTable thead th {
 	cursor: pointer;
 	*cursor: hand;
 }
+
+table.dataTable thead th, table.dataTable tbody td { width:15px !important; }
+table.dataTable thead th:first-child, table.dataTable tbody td:first-child { width:60px !important; }
+
 
 table.dataTable tfoot th {
 	padding: 3px 18px 3px 10px;

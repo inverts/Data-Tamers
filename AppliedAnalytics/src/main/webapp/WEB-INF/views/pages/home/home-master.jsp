@@ -8,9 +8,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <!-- HOME MASTER -->
 <!-- CSS -->
+<link href="<c:url value="/cache/css/libs/bootstrap.css" />" rel="stylesheet">
 <link href="<c:url value="/cache/css/default.css" />" rel="stylesheet">
 
 <link rel="shortcut icon" href="<c:url value="/cache/images/icon.ico" />" />
+
+<script src="<c:url value="/cache/javascript/libs/jquery-1.10.2.min.js" />"></script>
+<script src="<c:url value="/cache/javascript/libs/jquery-ui-1.10.3.custom.min.js" />"></script>
+<script src="<c:url value="/cache/javascript/libs/bootstrap.min.js" />"></script>
+<script src="<c:url value="/cache/javascript/headerfooter.js" />"></script>
 <script type="text/javascript">
 	/* Set the application root directory for the javascript files. */
 	applicationRoot = "<c:url value="/" />";

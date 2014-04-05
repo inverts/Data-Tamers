@@ -49,42 +49,14 @@ function getPagePerformanceData(id, callback){
 			
 			return;
 		}
-		
-		// originally sdata
-		var sdata = [{
-		    "page": "/",
-		    "visits": "65.7",
-		    "bounces": "38.6",
-		    "exits": "36.7"
-		}, {
-		    "page": "/funny-spanish-commercials/",
-		    "visits": "13.4",
-		    "bounces": "100",
-		    "exits": "100"
-		}, {
-		    "page": "/interpreter-jobs/",
-		    "visits": "10.4",
-		    "bounces": "85.7",
-		    "exits": "30.4"
-		}, {
-		    "page": "/contact/",
-		    "visits": "6",
-		    "bounces": "100",
-		    "exits": "75"
-		}, {
-		    "page": "/the-greatest-radio-competition-of-all-time/",
-		    "visits": "1.5",
-		    "bounces": "100",
-		    "exits": "100"
-		}];
-		
+
 		$("#" + id + " .spinner-content").hide();
 		
 		// bar chart view
-		$("#" + id + " #pagePerformanceBar").empty().bar({
+		/*$("#" + id + " #pagePerformanceBar").empty().bar({
 			"id"	: "pagePerformanceBar",
 			"data": sdata
-		});
+		});*/
 		
 		// create table
 		$("#" + id + " #pagePerformanceTable").table({
@@ -97,8 +69,7 @@ function getPagePerformanceData(id, callback){
 			                  ],
 			"m"				: {"length": d.data.keys.length, "keys": d.data.keys}, // columns
 			"n"				: {"length": d.data[d.data.keys[0]].length, "keys": null}, // rows
-			"url"			: {"links": d.data.url, "cols": [0]},
-			"search"		: true
+			"url"			: {"links": d.data.url, "cols": [0]}
 		});
 		
 		//createTableView("pagePerformanceTable", d.data, 38, 0);
