@@ -32,14 +32,23 @@
 		return this.each(function() {
 			var $this = $(this);
 			var settings = $.extend({}, defaults, params); // Combine params with the defaults.
-			var heightOffSet = (settings.search) ? 110 : 80;
+			var heightOffSet = function() {
+				if(settings.title && settings.search)
+					return 110;
+				else if (settings.search)
+					return 90;
+				else if (settings.title)
+					return 80;
+				else
+					return 50;
+			}
 			// Base Cases << What does that mean in this context...??
 			var table = {
 							"id"		: this.id + "DataTable",
 							"data"		: settings.data,
 							"rawData"	: settings.rawData,
 							"title"		: settings.title,
-							"size"		: { "width": $this.width(), "height": $this.height() - heightOffSet },
+							"size"		: { "width": $this.width(), "height": $this.height() - heightOffSet() },
 							"cols"		: {
 											"length": settings.m.length,
 											"headers": {
