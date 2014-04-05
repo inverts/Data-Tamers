@@ -168,7 +168,7 @@ public class SessionService implements ISessionService {
 	public boolean redirectToLogin(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
 		String contextPath = session.getServletContext().getContextPath();
 		try {
-			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED );
 			response.sendRedirect(contextPath + "/galogin" + "?destinationURL=" + request.getRequestURL());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -179,7 +179,7 @@ public class SessionService implements ISessionService {
 	public boolean redirectToRegularLogin(HttpSession session, String queryString, HttpServletResponse response) {
 		String contextPath = session.getServletContext().getContextPath();
 		try {
-			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED );
 			response.sendRedirect(contextPath + "/login" + queryString);
 
 		} catch (IOException e) {
