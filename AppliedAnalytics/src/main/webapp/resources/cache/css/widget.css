@@ -31,7 +31,7 @@ svg .axis path { display: none; }
 svg path.domain { stroke:#333; stroke-width:2; }
 
 /*** TABLE STYLING ***/
-.widget .widget-content th { background:#ddd; color:#333; width:20%; }
+.widget .widget-content th { background:#ddd; color:#333; }
 .widget .widget-content th:hover{ background:#00aeff; color:#fffffe; cursor:pointer; }
 .widget .widget-content .data-table tr:hover { background:rgb(153, 255, 255); }
 .widget .widget-content table { width:100%; border-collapse:collapse; background:#eee; table-layout:fixed; }
@@ -515,7 +515,7 @@ line:hover { opacity: 0.5; }
 
 /*****CSS for PAGE PERFORMANCE - BAR CHART WIDGET ****/
 .pagePerformance #pagePerformanceData {
-	height:315px;
+	height:300px;
 	width:inherit;
 	margin:auto;
 }

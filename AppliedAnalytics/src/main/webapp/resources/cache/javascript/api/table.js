@@ -32,14 +32,14 @@
 		return this.each(function() {
 			var $this = $(this);
 			var settings = $.extend({}, defaults, params); // Combine params with the defaults.
-
+			var heightOffSet = (settings.search) ? 110 : 80;
 			// Base Cases << What does that mean in this context...??
 			var table = {
 							"id"		: this.id + "DataTable",
 							"data"		: settings.data,
 							"rawData"	: settings.rawData,
 							"title"		: settings.title,
-							"size"		: { "width": $this.width(), "height": $this.height() },
+							"size"		: { "width": $this.width(), "height": $this.height() - heightOffSet },
 							"cols"		: {
 											"length": settings.m.length,
 											"headers": {
@@ -70,6 +70,7 @@
 
 			// Now we place the table in the container (empty), and keep the reference to this table.
 			table.element = $("<table>").css("width", table.size.width).appendTo($view);
+			
 
 			//This invokes the jQuery DataTables plugin on the <table> element.
 			//Isn't the correct syntax ".dataTable(..."?
@@ -79,7 +80,7 @@
 										bPaginate: false,
 										bFilter: settings.search,
 										bInfo: false,
-										sScrollY: ($this.height() - 110) + "px",
+										sScrollY: table.size.height + "px",
 										sScrollXInner: "100%",
 										sScrollYInner: "100%",
 										"sDom": 'l<"subtitle'+$this.attr("id")+'">frtip',
@@ -93,7 +94,7 @@
 			// with class "tableTitle" to this title ..... -_
 
 			if (table.title)
-				$("div.subtitle"+$this.attr("id")).html("<b>&nbsp&nbsp&nbsp&nbsp&nbsp"+table.title+"</b>");
+				$("div.subtitle"+$this.attr("id")).html("<b>" + table.title + "</b>");
 
 			// If search is enabled (a search box element is provided), then bind the filter function
 			// to changes in the search box. But if the search box is empty.. then forget the binding? -_-
