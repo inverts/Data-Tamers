@@ -17,19 +17,8 @@ function loadDashboard(dashboardId) {
 			function(result) {
 				var $content = newPage("dashboard", dashboardId);
 				var dashboard = $.parseJSON(result);
-				//var widgetIdArray = dashboard.widgetIds;
-				//var widgetTypeIdArray = dashboard.widgetTypeIds;
-				var widgets = dashboard.widgets;
-				widgets = widgets.sort(compareWidgetPriority);
+				var widgets = dashboard.widgets.sort(compareWidgetPriority);
 				
-				
-				
-				/************************
-				 * 	  REMOVE WIDGET		*
-				 ************************/
-				// Setup widget remove functionality
-				//$trash = 
-					
 				loadWidgets($content, widgets);
 				
 				
@@ -42,7 +31,7 @@ function loadDashboard(dashboardId) {
 					// only do revert to start position animation when we try to click the widget
 					// somewhere it cannot go.
 					revert: "invalid",
-					contain: "body",
+					containment: ".wrapper",
 					forcePlaceholderSize: true, // YOLO property (not sure if its needed).
 					// we need the widgets to be up front when they drag otherwise they do not move
 					// the other widgets around properly due to priority restraints with the html elements.
@@ -64,19 +53,22 @@ function loadDashboard(dashboardId) {
 								// highlight trash bin when the widget touches it.
 								over: function(e, ui) {
 									var $target = $(e.target);
-									if ($target.hasClass("trash"))
+									if ($target.hasClass("trash")) {
 										$(".trash span").css("color", "#00aeef");
-									},
+									}
+									
+									
+								},
 								// revert trash bin to unhighlighted state on out event.
 								out: function(e) { $(".trash span").css("color", "#000"); },
 								// triggers the remove on drop. Immediately hide the widget since removeWidget does not
 								// remove it right away and the time the widget remains creates for some weird display
 								// issues. If we this in vein, show the widget again.
 								drop: function(e, ui) {
-									ui.draggable.hide();
-									ui.helper.hide();
-									$(e.target).hasClass("trash") ? removeWidget(ui.draggable.attr("id"))
-														 		  : ui.draggable.show();
+									w.item.hide();
+									w.helper.hide();
+									$(e.target).hasClass("trash") ? removeWidget(w.item.attr("id"))
+														 		  : w.item.show();
 								}
 							}).show();
 						}
@@ -110,30 +102,39 @@ function loadDashboard(dashboardId) {
 							}
 
 							// VALIDATION							
-							// widget did not load at all!
-							var reload;
+							// widget did not load at all! Wait 5 seconds to see if it loads.
+							var reloadW;
 							if (!addedWidget.events) {
-								reload = setTimeout(function() {
-									if (!$w.children().length) // if no events, that means we did not get the widget loaded at all
-										loadWidget($w.empty(), parseInt(ui.item.attr("id"))); // reload the widget.
-									else
-										clearTimeout(this);
+								reloadW = setTimeout(function() {
+									// if no events, that means we did not get the widget loaded at all
+									(!$w.children().length) 
+										? loadWidget($w.empty(), parseInt(ui.item.attr("id"))) // reload the widget.
+										: clearTimeout(this);
 								}, 5000);
 							}
 							
-							
-							// widget loaded but data did not!
-							if ($w.children().length && !addedWidget.data.hasData)
-								updateWidget(addedWidget.data.widgetTypeId, $w.attr("id"));
-							
+							var updateW;
+							// widget loaded but data did not! Wait 5 seconds to see if it comes.
+							if ($w.children().length && addedWidget.data && !addedWidget.data.hasData) {
+								updateW = setTimeout(function() {
+									($w.children("img.spinner-content").length) 
+										? updateWidget(addedWidget.data.widgetTypeId, $w.attr("id"))
+										: clearTimeout(this);
+								}, 5000);
+							}
+
 							// save widget to database
 							addWidgetByList(parseInt(ui.item.attr("id")), $w);
 
 							// zero out the widget for the next drag n drop
 							addedWidget = {widget: null, events: null, data: null };
 							
-							if ($w.children().length && reload)
-								clearTimeout(reload);
+							// did the widgets load finally? If so clear the timeouts
+							if ($w.children().length && reloadW || !$w.length)
+								clearTimeout(reloadW);
+							
+							if (!$w.children("img.spinner-content").length && updateW || !$w.length)
+								clearTimeout(updateW);
 						}
 						else
 							$(this).data().uiSortable.currentItem.remove();
