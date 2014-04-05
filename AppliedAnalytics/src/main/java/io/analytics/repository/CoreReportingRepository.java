@@ -452,8 +452,9 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 						endDate, // End date.
 						"ga:visits,ga:visitBounceRate") // Metrics.
 						.setDimensions("ga:medium,ga:keyword")
-						//.setFilters("ga:medium=="+medium+";ga:keyword!=(not provided);ga:keyword!=(not set)")
-						.setFilters("ga:keyword!=(not provided);ga:keyword!=(not set)")
+						.setFilters("ga:medium==organic;ga:keyword!=(not provided);ga:keyword!=(not set)")
+						// .setFilters("ga:medium=="+medium+";ga:keyword!=(not provided);ga:keyword!=(not set)")
+						//.setFilters("ga:keyword!=(not provided);ga:keyword!=(not set)")
 						.setSort("-ga:visits")
 						.setMaxResults(maxResults);
 				
