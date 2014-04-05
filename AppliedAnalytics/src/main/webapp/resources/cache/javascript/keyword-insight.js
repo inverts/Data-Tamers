@@ -57,7 +57,7 @@ function getKeywordInsightData(id, callback) {
 			
 		var d = $.parseJSON(response);
 		
-		if (!d.data) {
+		if (d.data === null || d.data === undefined) {
 			// TODO: Handle null data scenario.
 			console.log("No data for keywordInsight");
 			
@@ -98,9 +98,9 @@ function getKeywordInsightData(id, callback) {
 			                   {"name" : d.data.improve.keys[2]},
 			                   {"name" : d.data.improve.keys[3]}
 			                  ],
-			"m"				: {"length": d.data.improve.keys.length, "keys": d.data.improve.keys, "url": {"links": null, "key": 0}}, // columns
+			"m"			    : {"length": d.data.improve.keys.length, "keys": d.data.improve.keys, "url": {"links": null, "key": 0}}, // columns
 			"n"				: {"length": d.data.improve[d.data.improve.keys[0]].length, "keys": null}, // rows
-			"title"			: d.data.improve.title,
+			"title"			: "Improve the website to better meet the needs of the following keywords:",
 			"search"		: $("#" + id + " .w-text")
 		});
 		
