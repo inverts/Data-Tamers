@@ -21,7 +21,7 @@ import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.analytics.model.GaData;
 import com.google.gson.Gson;
 
-public class GrowingProblemsModel extends WidgetModel {
+public class TrafficSourceTrendsModel extends WidgetModel {
 	
 	private List<TrafficSourceData> trafficSourceDataList;
 
@@ -39,7 +39,7 @@ public class GrowingProblemsModel extends WidgetModel {
 	private Date startDate, endDate;
 	private String profileId, metric;
 	
-	public GrowingProblemsModel(ISessionService sessionService, ICoreReportingService coreReportingService) {
+	public TrafficSourceTrendsModel(ISessionService sessionService, ICoreReportingService coreReportingService) {
 		super();
 		this.sessionService = sessionService;
 		this.coreReportingService = coreReportingService;
@@ -82,7 +82,7 @@ public class GrowingProblemsModel extends WidgetModel {
 		this.profileId = profileId;
 		this.metric = metric;
 		
-		CoreReportingData reportingData = coreReportingService.getTopTrafficSources(credential, profileId, metric, startDate, endDate, 25);
+		CoreReportingData reportingData = coreReportingService.getTopTrafficSources(credential, profileId, metric, startDate, endDate, 50);
 		GaData gaData = reportingData.getData();
 		List<String> dimensions = new ArrayList<String>();
 		Double totalMetricValue = 0.0;

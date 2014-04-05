@@ -1,7 +1,7 @@
 @CHARSET "ISO-8859-1";
 
 /*** GENERAL WIDGET STYLING ***/
-.widget-select, .widget-select .widget { opacity:.6; }
+.widget-select, .widget-select .widget { opacity:.6; display:inline-block; }
 .widget-select.widget { height:392px !important; }
 .widget-select .w_container { padding:0; }
 .widget { background:#eee repeat; -webkit-box-shadow:2px 2px 6px #666; -moxbox-shadow:2px 2px 6px #666; box-shadow:2px 2px 6px #666; 

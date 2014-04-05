@@ -1,14 +1,10 @@
 
 package io.analytics.site.controllers;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import io.analytics.domain.CoreReportingData;
 import io.analytics.domain.Widget;
 import io.analytics.service.interfaces.ICoreReportingService;
 import io.analytics.service.interfaces.IKeywordInsightService;
@@ -18,14 +14,13 @@ import io.analytics.service.interfaces.IWidgetService;
 import io.analytics.site.models.*;
 import io.analytics.site.models.widgets.BoostPerformanceModel;
 import io.analytics.site.models.widgets.DataForecastModel;
-import io.analytics.site.models.widgets.GrowingProblemsModel;
 import io.analytics.site.models.widgets.KeyContributingFactorsModel;
 import io.analytics.site.models.widgets.KeywordInsightModel;
+import io.analytics.site.models.widgets.TrafficSourceTrendsModel;
 import io.analytics.site.models.widgets.VisitorClusteringModel;
 import io.analytics.site.models.widgets.WebsitePerformanceModel;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,11 +31,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.services.analytics.model.GaData;
 
 @Controller
 public class WidgetController {
@@ -445,7 +438,7 @@ public class WidgetController {
 				return new ModelAndView("unavailable");
 			}
 
-			GrowingProblemsModel model = new GrowingProblemsModel(SessionService, CoreReportingService);
+			TrafficSourceTrendsModel model = new TrafficSourceTrendsModel(SessionService, CoreReportingService);
 			viewMap.addAttribute("widget", model);
 			return new ModelAndView("widget", "view", "/WEB-INF/views/widgets/traffic-source-trends.jsp");
 		}
@@ -459,7 +452,7 @@ public class WidgetController {
 				return new ModelAndView("unavailable");
 			}
 			
-			GrowingProblemsModel model = new GrowingProblemsModel(SessionService, CoreReportingService);
+			TrafficSourceTrendsModel model = new TrafficSourceTrendsModel(SessionService, CoreReportingService);
 			model.getTrafficSourceDataList();
 			viewMap.addAttribute("data", model.getJSONSerialization());
 			return new ModelAndView("plaintext");

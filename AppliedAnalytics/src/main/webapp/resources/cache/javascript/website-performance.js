@@ -10,23 +10,23 @@ function loadWebsitePerformanceWidget(id, callback) {
 		function(response) {
 			if ($element.length > 0)
 				$element.fadeIn("fast", function() {
-					$element.append(response);
+					$element.html(response);
+					
+					getPagePerformanceData(id, function(e) {
+						
+						$("#" + id + " a.bar").click(function(e) { changeViewBtn(id, "pagePerformanceBar"); });
+						$("#" + id + " a.pp-table").click(function(e) { changeViewBtn(id, "pagePerformanceTable"); });
+					
+						$element.data("hasData", true); // flag the widget as having data.
+						
+					});
+					
+					if(callback)				
+						callback();
 				});
 			else {
 				console.log("Could not append PagePerformance");
 			}
-			
-			getPagePerformanceData(id, function(e) {
-				
-				$("#" + id + " a.bar").click(function(e) { changeViewBtn(id, "pagePerformanceBar"); });
-				$("#" + id + " a.pp-table").click(function(e) { changeViewBtn(id, "pagePerformanceTable"); });
-			
-				$element.data("hasData", true); // flag the widget as having data.
-				
-			});
-			
-			if(callback)				
-				callback();
 
 	});		
 }

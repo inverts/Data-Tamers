@@ -4,8 +4,7 @@
  */
 
 // Needed to preserve 'helper' so it can be inserted into the sortable list.
-var addedWidget; // variable used in dashboard.js to contain the widget being added. 
-var addedEvents;
+var addedWidget = {widget: null, events: null, data: null }; // variable used in dashboard.js to contain the widget being added. 
 var currentPage; // contains which page the user is currently on.
 
 $(function() {
@@ -74,7 +73,12 @@ function widgetDragNDrop(listClass) {
 		},
 		start: function(e, ui) {
 			if(ui.helper.length) {
-				loadWidget(ui.helper, parseInt(e.currentTarget.id), -1);
+				var widgetTypeId = parseInt(e.currentTarget.id);
+				var $div = $("<div>").addClass("w_container")
+									 .data("widgetTypeId", widgetTypeId)
+									 .appendTo(ui.helper);
+				
+				loadWidget($div, widgetTypeId);
 			}
 
 		},
@@ -82,9 +86,9 @@ function widgetDragNDrop(listClass) {
 		// during this process. Also terminate the helper at this point since we no longer need it.
 		stop: function(e, ui){ 
 			var temp = ui.helper.clone(true, true);
-			addedWidget = ui.helper; // need to set it as the actual object to preserve d3 events.
-			addedEvents = $._data(temp.children().get(0), "events"); // copy events of the cloned object to be used on the receive event.
-
+			addedWidget.widget = ui.helper; // need to set it as the actual object to preserve d3 events.
+			addedWidget.events = $._data(temp.children(".w_container").get(0), "events"); // copy events of the cloned object to be used on the receive event.
+			addedWidget.data = {"hasData": temp.children(".w_container").data("hasData")};
 			ui.helper.remove(); 
 		},
 		revert: false

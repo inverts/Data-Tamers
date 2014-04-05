@@ -10,24 +10,23 @@
  */
 function loadTrafficSourceTrendsWidget(id, callback) {
 	var $element = $('#' + id);
-	$.get(applicationRoot + "/widgets/traffic-source-trends", null, 
+	$.get(applicationRoot + "widgets/traffic-source-trends", null, 
 		function(response) {
 			if ($element.length > 0) {
 				$element.fadeIn("fast", function() { 
-						$element.html(response); 
+						$element.html(response);
+						
+						getTrafficSourceTrendsData($element, function() {
+							$element.data("hasData", true); // flag the widget as having data.
+						});
+						
+						if(callback)			
+							callback();
 				});
 			}
 			else
 				console.error('Could not append Traffic Source Trends to id: ' + id);
-			
-			getTrafficSourceTrendsData($element, function() {
-				
-				$element.data("hasData", true); // flag the widget as having data.
-			});
-			
-			if(callback)			
-				callback();
-			
+
 	});	
 }
 
@@ -38,16 +37,22 @@ function getTrafficSourceTrendsData($element, callback) {
 			function(response) {
 				dataModel = $.parseJSON(response);
 				dataRows = dataModel.trafficSourceDataList;
+				metric = dataModel.metric.substr(3);
+				
 				var id = $element.attr("id");
 				//Convert dataRows to raw data
 				rawData = new Array();
 				
 				for(i in dataRows) {
-					row = new Array();
-					row.push(dataRows[i]['sourceName']);
-					row.push(dataRows[i]['slope']);
-					row.push(dataRows[i]['confidenceHalfWidth']);
-					rawData.push(row);
+					changePerMonth = Math.round(dataRows[i]['slope'] * 30.436875 * 10) / 10;
+					variancePerMonth = Math.round(dataRows[i]['confidenceHalfWidth'] * 30.436875 * 10) / 10;
+					if (Math.abs(changePerMonth) > 1 && Math.abs(changePerMonth) - variancePerMonth > 0) {
+						row = new Array();
+						row.push(dataRows[i]['sourceName']);
+						row.push(changePerMonth);
+						row.push(variancePerMonth);
+						rawData.push(row);
+					}
 				}
 				rawData = rawData.sort(function(row1,row2) {
 					return parseFloat(row1[1]) - parseFloat(row2[1]);
@@ -60,8 +65,8 @@ function getTrafficSourceTrendsData($element, callback) {
 					"rawData"	: rawData,
 					"columnHeaders" : [
 					                   {"name" : "Source"}, 
-					                   {"name" : "Slope"},
-					                   {"name" : "Confidence"}
+					                   {"name" : metric + " per month"},
+					                   {"name" : "+-"}
 					                  ],
 					"m"				: {"length": 3}, // columns
 					"n"				: {"length": dataRows.length, "keys": null}, // rows

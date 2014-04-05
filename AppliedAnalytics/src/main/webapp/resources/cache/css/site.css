@@ -67,6 +67,8 @@ input { font: inherit; }
 /* header application */
 .header-application { height:65px; padding-left:285px; background:#eee; box-shadow:0px 0px 5px -1px; position:absolute; left:0px; right:0px;}
 .header-application .filter { float: left; padding-top: 10px; }
+.header-application .filter .form-control { display:inline; width: 125px; cursor: pointer; }
+.header-application .filter .form-control[readonly] { background-color: rgb(218, 229, 233); }
 .header-application .filter label { margin: 10px 20px; }
 .header-application .filter select, .header-application .filter select option { padding:5px; margin: 5px; }
 .header-application .avatar, .messages, .header-application .trash { height:50px; width:50px; float:right; margin:5px 20px 5px 0; }
@@ -205,7 +207,7 @@ input { font: inherit; }
 /*****APPLICATION*****/
 
 /* Dashboard */
-.page .w_container { display:inline-block; vertical-align:top; padding:8px; }
+.page .w_container { display:inline-block !important; vertical-align:top; padding:8px; }
 
 .dashboard .dashboard-content, .trends .trends-content, 
 .forecast .forecast-content { padding:5px 0; overflow:hidden;}
