@@ -40,7 +40,36 @@
 						<c:choose>
 							<c:when test="${HEADER.type == 'HOME'}">
 								<span class="nav-item"><a href="#"><fmt:message key="header.about" /></a></span>
-								<span class="nav-item"><a href="<c:url value="/login" />"><fmt:message key="header.login" /></a></span>
+								
+								<div class="nav-item dropdown">
+								  <a id="loglabel" role="button" data-toggle="dropdown">
+								  <c:choose>
+								  	<c:when test="${not empty model.loggedin }">
+								  		${model.name}
+								  	</c:when>
+								  	<c:otherwise>
+								    	<fmt:message key="header.guest" />
+								    </c:otherwise>
+								  </c:choose>
+								  	<span class="caret"></span>
+								  </a>
+								  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+								  	<!-- both -->
+								  	<li><a href="/appliedanalytics/accounts/getstarted">New Account</a></li>
+								  	<li><a href="http://www.google.com/analytics/" target="_blank">Google Analytics</a></li>
+								  	<c:choose>
+								  		<c:when test="${not empty model.loggedin}">
+								  			<li><a href="application">Dashboard</a></li>
+								  			<li class="divider"></li>
+											<li><a href="/appliedanalytics/signout"><fmt:message key="header.logout" /></a></li>
+								    	</c:when>
+								    	<c:otherwise>
+										    <li class="divider"></li>
+											<li><a href="/appliedanalytics/login"><fmt:message key="header.login" /></a></li>
+								    	</c:otherwise>
+								    </c:choose>
+								  </ul>
+								</div>
 							</c:when>
 						</c:choose>
 					</div>

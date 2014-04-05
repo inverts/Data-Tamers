@@ -44,7 +44,8 @@ body, h1, h2, h3, h4, a, img { padding:0 auto; margin:0 auto; outline: none; bor
 
 /* header home */
 .header-home { height:110px; z-index:2; background:#454545; box-shadow:0px 0px 5px 3px; position:relative; }
-.header-home .nav-item { margin-left:30px; color:#ddd; font-size:20px; box-shadow:none; }
+.header-home .nav-item { margin-left:30px; color:#ddd; font-size:20px; box-shadow:none; display:inline-block; }
+.header-home .nav-item.dropdown:hover { cursor:pointer; }
 .header-home .entry-wrapper { height:50px; position:absolute; top:0; bottom:0; left:0; right:0; margin:30px auto 0 auto; max-width: 960px; padding: 0px 20px;}
 .header-home .right { float:right; margin-top:25px; }
 .header-home a { color:#ccc; text-decoration:none; }

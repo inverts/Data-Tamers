@@ -3,6 +3,7 @@ package io.analytics.site.controllers;
 import io.analytics.aspect.HeaderFooter;
 import io.analytics.aspect.Reset;
 import io.analytics.domain.GoogleUserData;
+import io.analytics.domain.User;
 import io.analytics.enums.HeaderType;
 
 import java.util.Locale;
@@ -33,8 +34,21 @@ public class HomeController {
 	@HeaderFooter(HeaderType.HOME)
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView home(Locale locale, Model model, HttpSession session) {
+		
+		
+		ModelAndView homepage = new ModelAndView("home/home");
+		User u = (User)session.getAttribute("user");
+		
+		if (u != null) {
+			homepage.addObject("loggedin", true);
+			String name = u.getFirstName();
+			if (name == null || name.isEmpty())
+				name = u.getUsername();
+			homepage.addObject("name", name);
+		}
+		
 		model.addAttribute("isEntry", "something");
-		return new ModelAndView("home/home");
+		return homepage;
 	}
 	
 	
