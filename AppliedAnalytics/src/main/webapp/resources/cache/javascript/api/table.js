@@ -139,7 +139,7 @@
 				  	  var urls = {
 			  			  		  "aTargets": table.url.cols,
 			  				  	  "mRender": function (data, type, full) {
-					  				  		   return "<a href=\"" + "#" + "\">" + data + "</a>"
+					  				  		   return "<a href=\"" + table.url.links[data] + "\" target=\"_blank\">" + data + "</a>";
 					  				  	  	}
 				  	  			};
 

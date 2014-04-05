@@ -34,7 +34,8 @@ public class WebsitePerformanceModel extends WidgetModel {
 		
 		private String[] pagePathResults;
 		private String[] pageTitleResults;
-		private String[] pageLinkResults;
+		//private String[] pageLinkResults;
+		private JSONObject pageLinkResults;
 		private double[] visitsPercentResults;
 		private double[] bounceRateResults;
 		private double[] exitRateResults;
@@ -52,7 +53,8 @@ public class WebsitePerformanceModel extends WidgetModel {
 			this.activeProfile = this.pagePerformanceService.getProfile();
 			pagePathResults = new String[5];
 			pageTitleResults = new String[5];
-			pageLinkResults = new String[5];
+			//pageLinkResults = new String[5];
+			pageLinkResults = new JSONObject();
 			visitsPercentResults = new double[5];
 			bounceRateResults = new double[5];
 			exitRateResults = new double[5];
@@ -153,7 +155,13 @@ public class WebsitePerformanceModel extends WidgetModel {
 				} else {
 					pageTitleResults[c] = pathToTitle.get(pagePathResults[c]);
 				}
-				pageLinkResults[c] = "http://".concat(hostname.concat(pagePathResults[c]));
+				//pageLinkResults[c] = "http://".concat(hostname.concat(pagePathResults[c]));
+				try {
+					pageLinkResults.put(pageTitleResults[c], "http://" + hostname + pagePathResults[c]);
+				} catch(Exception e) {
+					
+				}
+				
 				c++;
 			}		
 			
