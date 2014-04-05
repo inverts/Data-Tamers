@@ -53,10 +53,10 @@ function getPagePerformanceData(id, callback){
 		$("#" + id + " .spinner-content").hide();
 		
 		// bar chart view
-		$("#" + id + " #pagePerformanceBar").empty().bar({
+		/*$("#" + id + " #pagePerformanceBar").empty().bar({
 			"id"	: "pagePerformanceBar",
 			"data": sdata
-		});
+		});*/
 		
 		// create table
 		$("#" + id + " #pagePerformanceTable").table({
