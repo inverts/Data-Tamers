@@ -85,10 +85,10 @@ function widgetDragNDrop(listClass) {
 		// before inserting the widget, we need to fetch a clone of the widget to preserve the events
 		// during this process. Also terminate the helper at this point since we no longer need it.
 		stop: function(e, ui){ 
-			var temp = ui.helper.clone(true, true);
+			var temp = ui.helper.clone(true, true).children(".w_container");
 			addedWidget.widget = ui.helper; // need to set it as the actual object to preserve d3 events.
-			addedWidget.events = $._data(temp.children(".w_container").get(0), "events"); // copy events of the cloned object to be used on the receive event.
-			addedWidget.data = {"hasData": temp.children(".w_container").data("hasData")};
+			addedWidget.events = $._data(temp.get(0), "events"); // copy events of the cloned object to be used on the receive event.
+			addedWidget.data = {"hasData": temp.data("hasData"), "widgetTypeId": temp.data("widgetTypeId")};
 			ui.helper.remove(); 
 		},
 		revert: false

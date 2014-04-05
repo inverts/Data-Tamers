@@ -123,7 +123,7 @@ function widgetEvents($div, elementId, viewClass) {
 	});
 
 	// display trash bin for removal on click and hold
-	if ($content.hasClass("dashboard-content") || $content.hasClass("widget-select")) {
+	/*if ($content.hasClass("dashboard-content") || $content.hasClass("widget-select")) {
 		var timeoutId = 0;
 		$div.on("mousedown.widget", function(e) {
 			// we use a timeout to capture the hold so we don't get flashes
@@ -134,7 +134,7 @@ function widgetEvents($div, elementId, viewClass) {
 			clearTimeout(timeoutId);
 			$trash.hide();
 		});
-	}
+	}*/
 	
 	// Next and Previous view controls
 	if (viewClass) {

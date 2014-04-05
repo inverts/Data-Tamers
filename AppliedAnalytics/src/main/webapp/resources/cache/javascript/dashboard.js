@@ -28,27 +28,7 @@ function loadDashboard(dashboardId) {
 				 * 	  REMOVE WIDGET		*
 				 ************************/
 				// Setup widget remove functionality
-				$trash = $(".trash").droppable({
-					revert: false,
-					tolerance: "touch",
-					// highlight trash bin when the widget touches it.
-					over: function(e, ui) {
-						var $target = $(e.target);
-						if ($target.hasClass("trash"))
-							$(".trash span").css("color", "#00aeef");
-						},
-					// revert trash bin to unhighlighted state on out event.
-					out: function(e) { $(".trash span").css("color", "#000"); },
-					// triggers the remove on drop. Immediately hide the widget since removeWidget does not
-					// remove it right away and the time the widget remains creates for some weird display
-					// issues. If we this in vein, show the widget again.
-					drop: function(e, ui) {
-						e.preventDefault();
-						ui.draggable.hide();
-						$(e.target).hasClass("trash") ? removeWidget(ui.draggable.attr("id"))
-											 		  : ui.draggable.show();
-					}
-				});
+				//$trash = 
 					
 				loadWidgets($content, widgets);
 				
@@ -62,6 +42,7 @@ function loadDashboard(dashboardId) {
 					// only do revert to start position animation when we try to click the widget
 					// somewhere it cannot go.
 					revert: "invalid",
+					contain: "body",
 					forcePlaceholderSize: true, // YOLO property (not sure if its needed).
 					// we need the widgets to be up front when they drag otherwise they do not move
 					// the other widgets around properly due to priority restraints with the html elements.
@@ -73,8 +54,38 @@ function loadDashboard(dashboardId) {
 					// sortable list and therefore will not force the widgets in said list to
 					// move.
 					placeholder: "widget-placeholder",
+					// when moving widgets, we want the actual widget and not a helper clone.
+					helper: "original",	
+					start: function(event, w) {
+						if (w.item.hasClass("w_container")) {
+							$(".trash").droppable({
+								revert: false,
+								tolerance: "touch",
+								// highlight trash bin when the widget touches it.
+								over: function(e, ui) {
+									var $target = $(e.target);
+									if ($target.hasClass("trash"))
+										$(".trash span").css("color", "#00aeef");
+									},
+								// revert trash bin to unhighlighted state on out event.
+								out: function(e) { $(".trash span").css("color", "#000"); },
+								// triggers the remove on drop. Immediately hide the widget since removeWidget does not
+								// remove it right away and the time the widget remains creates for some weird display
+								// issues. If we this in vein, show the widget again.
+								drop: function(e, ui) {
+									ui.draggable.hide();
+									ui.helper.hide();
+									$(e.target).hasClass("trash") ? removeWidget(ui.draggable.attr("id"))
+														 		  : ui.draggable.show();
+								}
+							}).show();
+						}
+					},
 					// update widgets after dragging.
-					stop: updateWidgetPosition,
+					stop: function() {
+						$(".trash").hide();
+						updateWidgetPosition();
+					},
 					// do not enable dragging while in these elements...
 					cancel: "div.widget-content, header.w-header .w-text",
 					// add a widget to the page functionality
@@ -113,7 +124,7 @@ function loadDashboard(dashboardId) {
 							
 							// widget loaded but data did not!
 							if ($w.children().length && !addedWidget.data.hasData)
-								updateWidget($w.data("widgetTypeId"), $w.attr("id"));
+								updateWidget(addedWidget.data.widgetTypeId, $w.attr("id"));
 							
 							// save widget to database
 							addWidgetByList(parseInt(ui.item.attr("id")), $w);

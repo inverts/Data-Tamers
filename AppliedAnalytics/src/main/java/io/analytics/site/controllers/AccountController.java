@@ -43,6 +43,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.analytics.model.Profile;
@@ -169,7 +170,7 @@ public class AccountController {
 	@ResponseBody
 	@RequestMapping(value = "/accounts/accountform", method = RequestMethod.POST)
 	private ModelAndView accountForm( Model model, HttpSession session, @ModelAttribute("googleAuthorization") String googleAuthorization,
-									  @ModelAttribute("accountForm") NewAccountForm form) {
+									  @ModelAttribute("accountForm") NewAccountForm form, HttpServletRequest request) {
 		
 		ModelAndView newAccountForm = new ModelAndView("newAccountForm");
 
@@ -177,8 +178,10 @@ public class AccountController {
 			newAccountForm.addObject("googleSuccess", true);
 		else if (googleAuthorization.equals("fail"))
 			newAccountForm.addObject("googleFail", true);
-		if (model.containsAttribute("validation"))
-			newAccountForm.addObject("validation", model.asMap().get("validation"));
+
+		Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
+		if (inputFlashMap != null)
+			newAccountForm.addObject("validation", inputFlashMap.get("validation"));
 		
 		return newAccountForm;
 	}
@@ -216,7 +219,7 @@ public class AccountController {
 	public String processAccountForm(@Valid @ModelAttribute("accountForm") NewAccountForm form, BindingResult result,
 											RedirectAttributes redirect,
 											@RequestParam(value = "googleAuth", defaultValue = "0") boolean googleAuth, 
-											HttpSession session, Model model, HttpServletRequest request) 
+											HttpSession session, HttpServletRequest request) 
 	{
 		if (googleAuth) {
 			return "redirect:/accounts/newaccount?gaAuth=1";
@@ -225,7 +228,6 @@ public class AccountController {
 			// Don't retain passwords
 			form.setPassword("");
 			form.setConfirmPassword("");
-			//model.addAttribute("validation", result);
 			redirect.addFlashAttribute("validation", result);
 			return "redirect:/accounts/newaccount";
 		}
