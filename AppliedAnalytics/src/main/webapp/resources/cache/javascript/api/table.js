@@ -40,7 +40,7 @@
 				else if (settings.title)
 					return 80;
 				else
-					return 50;
+					return 60;
 			}
 			// Base Cases << What does that mean in this context...??
 			var table = {
