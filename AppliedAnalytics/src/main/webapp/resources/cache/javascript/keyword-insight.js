@@ -187,7 +187,9 @@ function getKeywordInsightData(id, callback) {
 
 // Updates the widget.
 function updateKeywordInsight(id) {
-	getKeywordInsightData(id); 
+	getKeywordInsightData(id, function() {
+		$("#" + id + " .keywordVisual.active").show();
+	}); 
 }
 
 

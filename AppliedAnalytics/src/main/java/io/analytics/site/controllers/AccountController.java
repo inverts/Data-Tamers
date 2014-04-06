@@ -49,7 +49,7 @@ import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.analytics.model.Profile;
 
 @Controller
-@SessionAttributes({"accountForm", "validation", "googleAuthorization"})
+@SessionAttributes({"accountForm", "googleAuthorization", "acceptTerms"})
 public class AccountController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
@@ -120,8 +120,16 @@ public class AccountController {
 	@RequestMapping(value = "/accounts/newaccount", method = RequestMethod.GET)
 	public ModelAndView newAccountPage(@ModelAttribute("googleAuthorization") String googleAuthorization, 
 							     	   @ModelAttribute("accountForm") NewAccountForm form, Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session, 
-							     	   @RequestParam(value = "gaAuth", defaultValue = "0") boolean googleAuth)
+							     	   @RequestParam(value = "gaAuth", defaultValue = "0") boolean googleAuth,
+							     	   @ModelAttribute("acceptTerms") boolean acceptedTerms)
 	{
+		try {
+		if (!acceptedTerms)
+			response.sendRedirect("getstarted");
+		} catch(Exception e) {
+			
+		}
+		
 		ModelAndView formpage = new ModelAndView("account/new-account");
 		
 		
@@ -143,11 +151,11 @@ public class AccountController {
 			GoogleUserData googleData = SessionService.getUserSettings().getGoogleUserData();
 			
 			// Only pre-populate fields that the user has no input in.
-			if (form.getFirstname().isEmpty())
-				form.setFirstname(googleData.getName());
-			if (form.getLastname().isEmpty())
-				form.setLastname(googleData.getGiven_name());
-			if (form.getEmail().isEmpty()) {
+			if (form.getFirstname() == null || form.getFirstname().isEmpty())
+				form.setFirstname(googleData.getGiven_name());
+			if (form.getLastname() == null || form.getLastname().isEmpty())
+				form.setLastname(googleData.getFamily_name());
+			if (form.getEmail() == null || form.getEmail().isEmpty()) {
 				form.setEmail(googleData.getEmail());
 				form.setConfirmEmail(googleData.getEmail());
 			}
@@ -156,6 +164,10 @@ public class AccountController {
 			//String googleEmail = googleData.getEmail();
 			formpage.addObject("googleAccountName", googleData.getEmail());
 			formpage.addObject("accountForm", form);
+			
+			Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
+			if (inputFlashMap != null)
+				formpage.addObject("validation", (BindingResult)inputFlashMap.get("validation"));
 			
 			// let the page know google authenticated successfully.
 			formpage.addObject("googleSuccess", true);
@@ -179,10 +191,6 @@ public class AccountController {
 		else if (googleAuthorization.equals("fail"))
 			newAccountForm.addObject("googleFail", true);
 
-		Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
-		if (inputFlashMap != null)
-			newAccountForm.addObject("validation", inputFlashMap.get("validation"));
-		
 		return newAccountForm;
 	}
 	
@@ -312,6 +320,10 @@ public class AccountController {
 		return "none";
 	}
 	
+	@ModelAttribute("acceptTerms")
+	public boolean acceptTerms() {
+		return false;
+	}
 
 
 }

@@ -32,7 +32,6 @@
 
 	<div class="account page">
 		<div class="body">
-		
 			<!-- Site Header -->
 			<jsp:include page="${HEADER.path}"/>
 		

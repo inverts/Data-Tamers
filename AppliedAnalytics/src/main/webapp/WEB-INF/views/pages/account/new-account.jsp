@@ -2,6 +2,10 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
+<c:if test="${not empty model.validation}">
+	<c:set var="errors" scope="session" value="${model.validation}" />
+</c:if>
+
 <c:if test="${model.googleFail}">
 	<div class="new-account alert alert-danger">
 		<div class="alert-msg"><fmt:message key="account.alert.google.fail" /></div>
@@ -16,5 +20,4 @@
 		</div>
 	</div>
 </c:if>
-
 <c:import url="/WEB-INF/views/pages/account/start.jsp" />
