@@ -19,7 +19,7 @@ $(function(){ getDashboardList($.parseJSON(dashboards)); });
 				<a class="nav-txt"><fmt:message key="dashboard" /></a>
 			</div>
 			<div class="dashlist">
-				<ul id="dashlist" class="dashlist"></ul>
+				<ul id="dashlist"></ul>
 				<div class="addNewDash" id="addDashboard">
 					<span class="glyphicon glyphicon-plus"></span>
 					<fmt:message key="dashboard.add.link" />

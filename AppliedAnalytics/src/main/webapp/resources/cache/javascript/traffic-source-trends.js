@@ -49,8 +49,7 @@ function getTrafficSourceTrendsData($element, callback) {
 					if (Math.abs(changePerMonth) > 1 && Math.abs(changePerMonth) - variancePerMonth > 0) {
 						row = new Array();
 						row.push(dataRows[i]['sourceName']);
-						row.push(changePerMonth);
-						row.push(variancePerMonth);
+						row.push(changePerMonth + " ±" + variancePerMonth + " " + metric);
 						rawData.push(row);
 					}
 				}
@@ -65,12 +64,12 @@ function getTrafficSourceTrendsData($element, callback) {
 					"rawData"	: rawData,
 					"columnHeaders" : [
 					                   {"name" : "Source"}, 
-					                   {"name" : metric + " per month"},
-					                   {"name" : "+-"}
+					                   {"name" : "Change in " + metric + " per month"}
 					                  ],
 					"m"				: {"length": 3}, // columns
 					"n"				: {"length": dataRows.length, "keys": null}, // rows
-					"title"			: dataModel.name
+					"title"			: dataModel.name,
+					"sorting"		: [[1, 'desc']]
 				}).show();
 
 				//$("#" + $element.attr("id")).show();

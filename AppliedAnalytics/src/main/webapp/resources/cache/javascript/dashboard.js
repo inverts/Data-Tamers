@@ -21,9 +21,16 @@ function loadDashboard(dashboardId) {
 		success: function(result) {
 				var $content = newPage("dashboard", dashboardId);
 				var dashboard = $.parseJSON(result);
-				var widgets = dashboard.widgets.sort(compareWidgetPriority);
-				
-				loadWidgets($content, widgets);
+				if (dashboard.widgets.length > 0) {
+					var widgets = dashboard.widgets.sort(compareWidgetPriority);
+					loadWidgets($content, widgets);
+				} else {
+					Modal.alert({
+						"title": "Time to add some widgets!",
+						"content": "It looks like you haven't added any widgets to this dashboard yet. To add a widget, drag it into your dashboard from the Trends or Forecast libraries.",
+						"size": 'modal-default'
+					});
+				}
 				
 				
 				/************************

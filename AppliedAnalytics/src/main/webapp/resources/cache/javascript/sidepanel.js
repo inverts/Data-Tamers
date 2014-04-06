@@ -107,8 +107,13 @@ function widgetDragNDrop(listClass) {
 function getDashboardList(list) {
 	
 	// TODO: Handle case of no dashboards. Should do something besides throw a console error.
-	if (!list.length)
-		console.error("No Dashboards");
+	if (!list.length) {
+		Modal.alert({
+			"title": "No dashboards available!",
+			"content": "It looks like you don't have any dashboards - click the Add New Dashboard link to get started!",
+			"size": 'modal-default'
+		});
+	}
 	
 	// Create a dashboard link in the sidepanel for each dashboard Id.
 	for(var i = 0; i < list.length; i++) {	
