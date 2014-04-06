@@ -49,7 +49,7 @@ import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.analytics.model.Profile;
 
 @Controller
-@SessionAttributes({"accountForm", "validation", "googleAuthorization"})
+@SessionAttributes({"accountForm", "validation", "googleAuthorization", "acceptTerms"})
 public class AccountController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
@@ -120,8 +120,16 @@ public class AccountController {
 	@RequestMapping(value = "/accounts/newaccount", method = RequestMethod.GET)
 	public ModelAndView newAccountPage(@ModelAttribute("googleAuthorization") String googleAuthorization, 
 							     	   @ModelAttribute("accountForm") NewAccountForm form, Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session, 
-							     	   @RequestParam(value = "gaAuth", defaultValue = "0") boolean googleAuth)
+							     	   @RequestParam(value = "gaAuth", defaultValue = "0") boolean googleAuth,
+							     	   @ModelAttribute("acceptTerms") boolean acceptedTerms)
 	{
+		try {
+		if (!acceptedTerms)
+			response.sendRedirect("getstarted");
+		} catch(Exception e) {
+			
+		}
+		
 		ModelAndView formpage = new ModelAndView("account/new-account");
 		
 		
@@ -144,9 +152,9 @@ public class AccountController {
 			
 			// Only pre-populate fields that the user has no input in.
 			if (form.getFirstname().isEmpty())
-				form.setFirstname(googleData.getName());
+				form.setFirstname(googleData.getGiven_name());
 			if (form.getLastname().isEmpty())
-				form.setLastname(googleData.getGiven_name());
+				form.setLastname(googleData.getFamily_name());
 			if (form.getEmail().isEmpty()) {
 				form.setEmail(googleData.getEmail());
 				form.setConfirmEmail(googleData.getEmail());
@@ -312,6 +320,10 @@ public class AccountController {
 		return "none";
 	}
 	
+	@ModelAttribute("acceptTerms")
+	public boolean acceptTerms() {
+		return false;
+	}
 
 
 }
