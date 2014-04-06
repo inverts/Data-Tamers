@@ -20,6 +20,11 @@
 <script type="text/javascript">
 	/* Set the application root directory for the javascript files. */
 	applicationRoot = "<c:url value="/" />";
+	window.onload = function() {
+		$(".entry-content").css('visibility','visible').hide().fadeIn(600, function() {
+			$(".entry-content #center-box").fadeIn(1000);
+		});
+	};
 </script>
 
 

@@ -1,0 +1,30 @@
+/*****ACCOUNTS*****/
+
+/* Start */
+.start .pager { font:inherit; padding:0;}
+.start .start-content { margin-top:10px; line-height:35px; }
+
+.body .content { position: relative; min-height: 650px;}
+
+/* Terms */
+.terms .terms-wrapper { width: 900px; }
+.terms .termstext { border:solid 1px #000; overflow:auto; height:400px; margin:10px 0 0 5px; padding:10px; font-family:"Times New Roman", Serif; }
+.terms .accept-div, .terms .continue { float:right; clear:right; margin-top:10px; }
+.terms .accept-div { width:382px; }
+.terms .continue { width:165px; margin-bottom:20px; }
+
+/* Personal */
+.personal-info td { min-width:150px; }
+.personal-info tr > td { padding-bottom:1em; }
+.personal-info .btn { float:right; }
+.new-account.alert { width: 100%; border-radius: 0px; margin-bottom: 0px;}
+.new-account div.alert-msg { margin: 0px auto; width: 1080px; text-align: center; }
+.googleName { color:#00aeef; }
+.personal-info .googleAuth a:hover { cursor:pointer; color:#00aeef; }
+
+.account.page { position: relative; }
+.account.page .body { padding-bottom: 100px; }
+
+#introduction { display: inline-table; width: 450px; padding-right: 20px; }
+#introduction h1 { font-size: 30px; }
+#sign-up-form { display: inline-table; position: absolute; right: 0px; }

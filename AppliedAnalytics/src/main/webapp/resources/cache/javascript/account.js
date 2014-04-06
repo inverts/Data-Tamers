@@ -34,18 +34,22 @@ function invokeGoogleAuthentication(formId) {
 }
 
 
-function showNewAccountForm(width) {        
-    if ($(".newAccount").length) {
-    	$(".newAccount")
-    		.show()
-    		.animate({width: width}, 500, 'swing', function() {
-    			
-    			$.post(applicationRoot + "accounts/accountform", null, function(response) {
-    				 $('.newAccount').html(response);
-    			});
-                                                        
-            }).click(function(e){ e.stopPropagation(); });
-    }
+function showNewAccountForm(width) { 
+
+	$.post(applicationRoot + "accounts/accountform", null, function(response) {
+		 $('.start #sign-up-form').html(response);
+	});
+//    if ($(".newAccount").length) {
+//    	$(".newAccount")
+//    		.show()
+//    		.animate({width: width}, 500, 'swing', function() {
+//    			
+//    			$.post(applicationRoot + "accounts/accountform", null, function(response) {
+//    				 $('.newAccount').html(response);
+//    			});
+//                                                        
+//            }).click(function(e){ e.stopPropagation(); });
+//    }
 }
 
 /*function hideSettingsPanel() {
