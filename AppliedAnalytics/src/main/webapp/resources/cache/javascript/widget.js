@@ -68,7 +68,6 @@ function loadWidget($div, widgetTypeId, i, callback)
 			break;
 			
 		case 2:
-			
 			n = i || $(".pagePerformance").length;
 			elementId = "websitePerformanceWidget";
 			while($("#" + elementId + n).length) { n++; } // need to ensure that the number is not already used for this widget
@@ -215,6 +214,9 @@ function updateWidget(widgetTypeId, elementId) {
 	{
 		case 1:
 			updateDataForecast(elementId);
+			break;
+		case 2:
+			updatePagePerformance(elementId);
 			break;
 		case 4:
 			updateKeywordInsight(elementId);
