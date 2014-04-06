@@ -31,7 +31,7 @@
 
 	<div class="account page">
 		<div class="wrapper">
-		
+			
 			<!-- Site Header -->
 			<jsp:include page="${HEADER.path}"/>
 		

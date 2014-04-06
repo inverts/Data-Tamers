@@ -25,8 +25,8 @@
 				<td><form:label path="firstname"><fmt:message key="account.name.first" /></form:label></td>
 				<td><form:input class="textbox" path="firstname"/></td>
 				<td class="error">
-					<c:if test='${not empty validation && not empty validation.getFieldError("firstname")}'>
-						<fmt:message key='${validation.getFieldError("firstname").getDefaultMessage()}' />
+					<c:if test='${not empty errors && not empty errors.getFieldError("firstname")}'>
+						<fmt:message key='${errors.getFieldError("firstname").getDefaultMessage()}' />
 					</c:if>
 				</td>
 			</tr>
@@ -34,8 +34,8 @@
 				<td><form:label path="lastname"><fmt:message key="account.name.last" /></form:label></td>
 				<td><form:input class="textbox" path="lastname"/></td>
 				<td class="error">
-					<c:if test='${not empty validation && not empty validation.getFieldError("lastname")}'>
-						<fmt:message key='${validation.getFieldError("lastname").getDefaultMessage()}' />
+					<c:if test='${not empty errors && not empty errors.getFieldError("lastname")}'>
+						<fmt:message key='${errors.getFieldError("lastname").getDefaultMessage()}' />
 					</c:if>
 				</td>
 			</tr>
@@ -43,8 +43,8 @@
 				<td><label><fmt:message key="account.email" /></label></td>
 				<td><form:input class="textbox" path="email"/></td>
 				<td class="error">
-					<c:if test='${not empty validation && not empty validation.getFieldError("email")}'>
-						<fmt:message key='${validation.getFieldError("email").getDefaultMessage()}' />
+					<c:if test='${not empty errors && not empty errors.getFieldError("email")}'>
+						<fmt:message key='${errors.getFieldError("email").getDefaultMessage()}' />
 					</c:if>
 				</td>
 			</tr>
@@ -52,8 +52,8 @@
 				<td><label><fmt:message key="account.email.confirm" /></label></td>
 				<td><form:input class="textbox" path="confirmEmail"/></td>
 				<td class="error">
-					<c:if test='${not empty validation && not empty validation.getFieldError("confirmEmail")}'>
-						<fmt:message key='${validation.getFieldError("confirmEmail").getDefaultMessage()}' />
+					<c:if test='${not empty errors && not empty errors.getFieldError("confirmEmail")}'>
+						<fmt:message key='${errors.getFieldError("confirmEmail").getDefaultMessage()}' />
 					</c:if>
 				</td>
 			</tr>
@@ -61,8 +61,8 @@
 				<td><label><fmt:message key="account.name.user" /></label></td>
 				<td><form:input class="textbox" path="username"/></td>
 				<td class="error">
-					<c:if test='${not empty validation && not empty validation.getFieldError("username")}'>
-						<fmt:message key='${validation.getFieldError("username").getDefaultMessage()}' />
+					<c:if test='${not empty errors && not empty errors.getFieldError("username")}'>
+						<fmt:message key='${errors.getFieldError("username").getDefaultMessage()}' />
 					</c:if>
 				</td>
 			</tr>
@@ -70,8 +70,8 @@
 				<td><label><fmt:message key="account.password" /></label></td>
 				<td><form:input type="password" class="textbox" path="password"/></td>
 				<td class="error">
-					<c:if test='${not empty validation && not empty validation.getFieldError("password")}'>
-						<fmt:message key='${validation.getFieldError("password").getDefaultMessage()}' />
+					<c:if test='${not empty errors && not empty errors.getFieldError("password")}'>
+						<fmt:message key='${errors.getFieldError("password").getDefaultMessage()}' />
 					</c:if>
 				</td>
 			</tr>
@@ -79,8 +79,8 @@
 				<td><label><fmt:message key="account.password.confirm" /></label></td>
 				<td><form:input type="password" class="textbox" path="confirmPassword"/></td>
 				<td class="error">
-					<c:if test='${not empty validation && not empty validation.getFieldError("confirmPassword")}'>
-						<fmt:message key='${validation.getFieldError("confirmPassword").getDefaultMessage()}' />
+					<c:if test='${not empty errors && not empty errors.getFieldError("confirmPassword")}'>
+						<fmt:message key='${errors.getFieldError("confirmPassword").getDefaultMessage()}' />
 					</c:if>
 				</td>
 			</tr>
