@@ -41,7 +41,7 @@ function loadDashboard(dashboardId) {
 				$content.sortable({ 
 					// only do revert to start position animation when we try to click the widget
 					// somewhere it cannot go.
-					revert: "invalid",
+					revert: "false",
 					containment: ".wrapper",
 					forcePlaceholderSize: true, // YOLO property (not sure if its needed).
 					// we need the widgets to be up front when they drag otherwise they do not move
