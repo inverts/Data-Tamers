@@ -4,8 +4,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -25,20 +28,22 @@ public class WebsitePerformanceModel extends WidgetModel {
 		private Date startDate;
 		private Date endDate;
 		private ArrayList<String> pagePath;
-		private Map<String,String> pathToTitle;
+		private Map<String,String> pathToTitleMap;
 		private ArrayList<Integer> visits;
 		private ArrayList<Double> visitsBounceRate;
 		private ArrayList<Double> exitRate;
 		private int visitsTotal;
 		private String hostname;
+		private List<PageData> pageDataList;
+		private List<PageData> resultsPageData;
 		
-		private String[] pagePathResults;
-		private String[] pageTitleResults;
-		//private String[] pageLinkResults;
-		private JSONObject pageLinkResults;
-		private double[] visitsPercentResults;
-		private double[] bounceRateResults;
-		private double[] exitRateResults;
+		private List<String> pageTitleResults;
+		private JSONObject pageLinkResultsJson;
+		private List<String> pageLinkResults;
+		private List<Double> visitsPercentResults;
+		private List<Double> bounceRateResults;
+		private List<Double> exitRateResults;
+		private List<Double> weightedAvgResults;
 		
 		
 		private final String widgetClass = "pagePerformance";
@@ -51,15 +56,16 @@ public class WebsitePerformanceModel extends WidgetModel {
 			this.pagePerformanceService = pagePerformanceService;
 			this.jsonData = new JSONObject();
 			this.activeProfile = this.pagePerformanceService.getProfile();
-			pagePathResults = new String[5];
-			pageTitleResults = new String[5];
-			//pageLinkResults = new String[5];
-			pageLinkResults = new JSONObject();
-			visitsPercentResults = new double[5];
-			bounceRateResults = new double[5];
-			exitRateResults = new double[5];
+			pageTitleResults = new ArrayList<String>();
+			pageLinkResultsJson = new JSONObject();
+			pageLinkResults = new ArrayList<String>();
+			visitsPercentResults = new ArrayList<Double>();
+			bounceRateResults = new ArrayList<Double>();
+			exitRateResults = new ArrayList<Double>();
+			pageDataList = new ArrayList<PageData>();
+			resultsPageData = new ArrayList<PageData>();
+			weightedAvgResults = new ArrayList<Double>();
 			
-
 			// default dates
 			this.endDate = new Date();
 			Calendar cal = new GregorianCalendar();
@@ -112,65 +118,75 @@ public class WebsitePerformanceModel extends WidgetModel {
 			this.visitsBounceRate = dataObject.getVisitsBounceRateData();
 			this.exitRate = dataObject.getExitRateData();
 			this.visitsTotal = dataObject.getVisitsTotal();
-			this.pathToTitle = dataObject.getUrlToTitle();
+			this.pathToTitleMap = dataObject.getPathToTitleMap();
 			this.hostname = dataObject.getHostname();
 
-			ArrayList<Double> weightedAvg = new ArrayList<Double>(pagePath.size());
-			for (int i=0; i<pagePath.size(); i++){
-				weightedAvg.add(i, visits.get(i)*visitsBounceRate.get(i) + 
-						visits.get(i)*exitRate.get(i));
+			this.pageDataList.clear();				
+			this.pageTitleResults.clear();
+			this.visitsPercentResults.clear();
+			this.bounceRateResults.clear();
+			this.exitRateResults.clear();;
+			this.weightedAvgResults.clear();
+			this.resultsPageData.clear();
+			this.pageLinkResults.clear();
+			this.pageLinkResultsJson = new JSONObject();
+					
+			double vp = -1;  // visits percent
+			double br = -1;  // bounce rate
+			double er = -1;  // exit rate
+			double wa = -1;  // weighted avg of visits that bounce and visits that exit
+			String url = "";
+			String title = "";
+			for (int i=0; i<this.pagePath.size(); i++){
+				wa = this.visits.get(i)*this.visitsBounceRate.get(i) + 
+						this.visits.get(i)*this.exitRate.get(i);
+				vp = Math.round(this.visits.get(i)*1000.00/this.visitsTotal)/10.0;
+				br = Math.round(this.visitsBounceRate.get(i)*10.0)/10.0;
+				er = Math.round(this.exitRate.get(i)*10.0)/10.0;
+				wa = Math.round(wa*10.0)/10.0;
+				url = "http://".concat(this.hostname).concat(this.pagePath.get(i));
+				title = this.pathToTitleMap.get(this.pagePath.get(i));
+				this.pageDataList.add(new PageData(url, title, vp, br, er, wa));
 			}
-
-			// iterate to find top 6 maximum weighted averages and save indices
-			double max = weightedAvg.get(0);
-			int maxIndex = 0;
-			int[] worstI = new int[6];
-			for (int i = 0; i<6; i++) {
-				worstI[i]=-1;
-			}
-			for (int j=0; j<6; j++){
-				for (int i=j; i<pagePath.size(); i++) {
-					if (max < weightedAvg.get(i) && i!=worstI[0] && i!=worstI[1] && i!=worstI[2] &&
-							i!=worstI[3] && i != worstI[4] && i != worstI[5]) {
-						max = weightedAvg.get(i);
-						maxIndex = i;
-					}
-				}
-				worstI[j]=maxIndex;
-				max = 0;
-			}
-
-		// Only keep top 5, but not the homepage
+			
+			// sort ascending
+			Collections.sort(this.pageDataList);
+			// then reverse the list
+			Collections.reverse(this.pageDataList);
+			
 			int c = 0;
-			for (int i=0; i<6; i++){
-				if (pagePath.get(worstI[i]).equals("/") || c == 5){
+			Iterator<PageData> it = this.pageDataList.iterator();
+			while (it.hasNext() && c < 5) {
+				PageData pd = it.next();
+				if (pd.pageLink.equals("http://".concat(this.hostname).concat("/"))){
 					continue;
 				}
-				pagePathResults[c] = pagePath.get(worstI[i]);
-				visitsPercentResults[c] = Math.round(visits.get(worstI[i])*100.00/visitsTotal*10.0)/10.0;
-				bounceRateResults[c] = Math.round(visitsBounceRate.get(worstI[i])*10.0)/10.0;
-				exitRateResults[c] = Math.round(exitRate.get(worstI[i])*10.0)/10.0;
-				if (!pathToTitle.containsKey(pagePathResults[c])){
-					pageTitleResults[c]= pagePathResults[c];
-				} else {
-					pageTitleResults[c] = pathToTitle.get(pagePathResults[c]);
-				}
-				//pageLinkResults[c] = "http://".concat(hostname.concat(pagePathResults[c]));
+				
+				// this array is for debug viewing
+				this.resultsPageData.add(pd);
+				this.pageLinkResults.add(pd.pageLink);
+				// load result into arrays for transfer to JSON
 				try {
-					pageLinkResults.put(pageTitleResults[c], "http://" + hostname + pagePathResults[c]);
-				} catch(Exception e) {
-					
+					this.pageLinkResultsJson.put(pd.pageTitle,pd.pageLink);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
+				this.pageTitleResults.add(pd.pageTitle);
+				this.visitsPercentResults.add(pd.visitsPercent);
+				this.bounceRateResults.add(pd.bounceRate);
+				this.exitRateResults.add(pd.exitRate);
+				this.weightedAvgResults.add(pd.weightedAvg);
 				
 				c++;
-			}		
-			
-			this.getDataPoints();
+			}
+
+			this.setJsonDataPoints();
 		}
 		
-		// put data into JSON object to pass to the view website-performance.jsp 
+		// put data into JSON object member to be passed to the view website-performance.jsp 
 
-		public JSONObject getDataPoints()  {
+		public void setJsonDataPoints()  {
 			 try {
 				 
 				 /*JSONArray arr1 = new JSONArray();
@@ -187,18 +203,21 @@ public class WebsitePerformanceModel extends WidgetModel {
 				 this.jsonData.put(keys1[1], visitsPercentResults);
 				 this.jsonData.put(keys1[2], bounceRateResults);
 				 this.jsonData.put(keys1[3], exitRateResults);
-				 //this.jsonData.put("domain", pageTitleResults);
-				 this.jsonData.put("url", pageLinkResults);
+				
+				 this.jsonData.put("url", pageLinkResultsJson);
 				 this.jsonData.put("keys", keys1);
-				 
-				 
+				 this.jsonData.put("title","Improve the performance of these webpages:");
+
 				 
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-			 return this.jsonData;
+		}
+		
+		public JSONObject getDataPoints(){
+			return new JSONObject(this.jsonData);
 		}
 
 		@Override
@@ -209,7 +228,7 @@ public class WebsitePerformanceModel extends WidgetModel {
 				result.put("description", this.getDescription());
 				//result.put("metric", this.getMetric());
 				result.put("priority", this.getPositionPriority());
-				result.put("data", this.getDataPoints());
+				result.put("data", this.jsonData);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -233,3 +252,28 @@ public class WebsitePerformanceModel extends WidgetModel {
 			return this.widgetTitle;
 		}
 }
+
+//class to holds word, a frequency count, a rank
+class PageData implements Comparable<PageData>{
+	public String pageLink;
+	public String pageTitle;
+	public double visitsPercent;
+	public double bounceRate;
+	public double exitRate;
+	public double weightedAvg;
+
+	public PageData(String pageLink, String pageTitle, double visitsPercent, double bounceRate, double exitRate, double weightedAvg ){
+		this.pageLink = pageLink;
+		this.pageTitle = pageTitle;
+		this.visitsPercent = visitsPercent;
+		this.bounceRate = bounceRate;
+		this.exitRate = exitRate;
+		this.weightedAvg = weightedAvg;
+	}
+
+	public int compareTo(PageData d){
+		return Double.compare(this.weightedAvg, d.weightedAvg);
+	}
+
+}
+

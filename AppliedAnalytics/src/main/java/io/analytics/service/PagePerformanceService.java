@@ -53,6 +53,7 @@ public class PagePerformanceService implements IPagePerfomanceService{
 		ArrayList<String> dataTypes = new ArrayList<String>();
 	
 		int pagePathColumn = -1; 
+		int pageTitleColumn = -1; 
 		int hostnameColumn = -1;
 		int visitsColumn = -1; 
 		int visitBounceRateColumn = -1; 
@@ -61,8 +62,10 @@ public class PagePerformanceService implements IPagePerfomanceService{
 		for (ColumnHeaders header : gaData.getColumnHeaders()) {
 			column++;
 			String name = header.getName();
-			if (name.equals("ga:pagePath"))
+			if (name.equals("ga:pagePath"))		
 				pagePathColumn = column;
+			if (name.equals("ga:pageTitle"))
+				pageTitleColumn = column;
 			if (name.equals("ga:hostname"))
 				hostnameColumn = column;
 		    if (name.equals("ga:visits"))
@@ -76,6 +79,7 @@ public class PagePerformanceService implements IPagePerfomanceService{
 		}
 		
 		ArrayList<String> pagePath = new ArrayList<String>();
+		ArrayList<String> pageTitle = new ArrayList<String>();
 		ArrayList<Integer> visits= new ArrayList<Integer>();
 		ArrayList<Double> visitBounceRate = new ArrayList<Double>();
 		ArrayList<Double> exitRate = new ArrayList<Double>();
@@ -90,18 +94,19 @@ public class PagePerformanceService implements IPagePerfomanceService{
 			int two = Integer.parseInt(row.get(visitsColumn));
 			double three = Double.parseDouble(row.get(visitBounceRateColumn));
 			double four = Double.parseDouble(row.get(exitRateColumn));
+			String five = row.get(pageTitleColumn);
+			
 			if (!hostFound){
-				//temp = row.get(hostnameColumn);
-				//if (temp.matches("^[wW][wW][wW].")) { // TODO remove from loop, do a single access
-					hostname = row.get(hostnameColumn);
-					System.out.println("Hostname = "+ hostname);
-					hostFound = true;
-				//}
+				// TODO remove from loop, do a single access
+				hostname = row.get(hostnameColumn);
+				System.out.println("Hostname = "+ hostname);
+				hostFound = true;
 			}
 			pagePath.add(one);
 			visits.add(two);
 			visitBounceRate.add(three);
 			exitRate.add(four);
+			pageTitle.add(five);
 		}
 		} catch (NumberFormatException e) {
 			//The metric we are retrieving is not numeric.
@@ -112,6 +117,18 @@ public class PagePerformanceService implements IPagePerfomanceService{
 		visits.trimToSize();
 		visitBounceRate.trimToSize();
 		exitRate.trimToSize();
+		pageTitle.trimToSize();
+		
+		Map<String, String> pathToTitleMap = new HashMap<String, String>();
+        // add url and titles to map
+		Iterator<String> itu = pagePath.iterator();
+		Iterator<String> itt = pageTitle.iterator();
+	
+		while(itu.hasNext()) {
+			pathToTitleMap.put(itu.next(), itt.next());
+		}
+		
+	
 		
 		// Create the domain dataObject, add page performance data
 		PagePerformanceData dataObject = new PagePerformanceData();
@@ -120,11 +137,12 @@ public class PagePerformanceService implements IPagePerfomanceService{
 		dataObject.setVisitsBounceRateData(visitBounceRate);
 		dataObject.setExitRateData(exitRate);
 		dataObject.setHostname(hostname);
+		dataObject.setPathToTitleMap(pathToTitleMap);
 		
 		// ********************
 		// GA query page title 
 		
-		gaData = REPOSITORY.getPageTitle(credential, profileID, startDate, endDate, maxResults);
+/*		gaData = REPOSITORY.getPageTitle(credential, profileID, startDate, endDate, maxResults);
 		
 		//printColumnHeaders(gaData);
 		//printDataTable(gaData);
@@ -173,7 +191,7 @@ public class PagePerformanceService implements IPagePerfomanceService{
 		// add page path and  data
 		dataObject.setUrlToTitle(urlToTitle);
 
-
+*/
 		// ********************
 		// GA query visits (total)
 		

@@ -70,7 +70,7 @@ function getTrafficSourceTrendsData($element, callback) {
 					                  ],
 					"m"				: {"length": 3}, // columns
 					"n"				: {"length": dataRows.length, "keys": null}, // rows
-					"title"			: dataModel.name
+					"title"			: ""// dataModel.name
 				}).show();
 
 				//$("#" + $element.attr("id")).show();

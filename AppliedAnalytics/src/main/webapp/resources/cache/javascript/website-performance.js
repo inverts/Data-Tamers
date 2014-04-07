@@ -2,6 +2,7 @@
  * website-performance.js
  */
 
+
 function loadWebsitePerformanceWidget(id, callback) {
 	
 	var $element = $('#' + id);
@@ -41,6 +42,8 @@ function getPagePerformanceData(id, callback){
 		} 
 		var d = $.parseJSON(response);
 		
+		console.log(d.data.url);
+		
 		if (!d.data) {
 			console.log("No data for pagePerformance");		
 			
@@ -58,6 +61,7 @@ function getPagePerformanceData(id, callback){
 			"data": sdata
 		});*/
 		
+		
 		// create table
 		$("#" + id + " #pagePerformanceTable").table({
 			"data": d.data,
@@ -69,7 +73,8 @@ function getPagePerformanceData(id, callback){
 			                  ],
 			"m"				: {"length": d.data.keys.length, "keys": d.data.keys}, // columns
 			"n"				: {"length": d.data[d.data.keys[0]].length, "keys": null}, // rows
-			"url"			: {"links": d.data.url, "cols": [0]}
+			"url"			: {"links": d.data.url, "cols": [0]},
+			"title"         : d.data.title
 		});
 		
 		//createTableView("pagePerformanceTable", d.data, 38, 0);

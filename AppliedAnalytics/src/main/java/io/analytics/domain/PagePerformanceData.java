@@ -18,7 +18,7 @@ public class PagePerformanceData {
 	private ArrayList<Double> visitsBounceRate;
 	private ArrayList<Double> exitRate;
 	private int visitsTotal;
-	private Map<String, String> urlToTitle;
+	private Map<String, String> pathToTitleMap;
 	private String hostname;
 	
 	public PagePerformanceData(){
@@ -27,7 +27,7 @@ public class PagePerformanceData {
 		visitsBounceRate = new ArrayList<Double>();
 		exitRate = new ArrayList<Double>();
 		visitsTotal = -1;
-		urlToTitle = new HashMap<String, String>();
+		pathToTitleMap = new HashMap<String, String>();
 		hostname="";
 	}
 	
@@ -79,13 +79,13 @@ public class PagePerformanceData {
 		return this.visitsTotal;
 	}	
 	
-	public void setUrlToTitle(Map<String,String> data) {
-		this.urlToTitle.clear();
-		this.urlToTitle.putAll(data);
+	public void setPathToTitleMap(Map<String,String> data) {
+		this.pathToTitleMap.clear();
+		this.pathToTitleMap.putAll(data);
 	}
 	
-	public Map<String,String> getUrlToTitle() {
-		Map<String,String> data = new HashMap<String,String>(this.urlToTitle);
+	public Map<String,String> getPathToTitleMap() {
+		Map<String,String> data = new HashMap<String,String>(this.pathToTitleMap);
 		return data;
 	}
 	

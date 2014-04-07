@@ -12,28 +12,32 @@ import java.util.ArrayList;
 	 */
 public class KeywordInsightData {
 	
-		private ArrayList<String> cpcKeywords;
-		private ArrayList<String> organicKeywords;
-		private ArrayList<Integer> cpcVisits;
-		private ArrayList<Integer> organicVisits;
-		private ArrayList<Double> cpcVisitBounceRate;
-		private ArrayList<Double> organicVisitBounceRate;
-		private int cpcVisitsTotal;
-		private int privateOrganicVisitsTotal;
-		private int organicVisitsTotal;
+		private ArrayList<String> keywords;
+		//private ArrayList<String> organicKeywords;
+		private ArrayList<Integer> visits;
+		//private ArrayList<Integer> organicVisits;
+		private ArrayList<Double> visitBounceRate;
+		//private ArrayList<Double> organicVisitBounceRate;
+		private ArrayList<String> medium;
+		private ArrayList<String> hostname;
+		private int visitsTotal;
+		//private int privateOrganicVisitsTotal;
+		//private int organicVisitsTotal;
 		
 		public KeywordInsightData(){
-			cpcKeywords = new ArrayList<String>();
-			organicKeywords = new ArrayList<String>();
-			cpcVisits = new ArrayList<Integer>();
-			organicVisits = new ArrayList<Integer>();
-			cpcVisitBounceRate = new ArrayList<Double>();
-			organicVisitBounceRate = new ArrayList<Double>();
-			cpcVisitsTotal = -1;
-			privateOrganicVisitsTotal = -1;
-			organicVisitsTotal = -1;
+			keywords = new ArrayList<String>();
+			//organicKeywords = new ArrayList<String>();
+			visits = new ArrayList<Integer>();
+			//organicVisits = new ArrayList<Integer>();
+			visitBounceRate = new ArrayList<Double>();
+			//organicVisitBounceRate = new ArrayList<Double>();
+			medium = new ArrayList<String>();
+			hostname = new ArrayList<String>();
+			visitsTotal = -1;
+			//privateOrganicVisitsTotal = -1;
+			//organicVisitsTotal = -1;
 		}
-	
+/*	
 		public void setOrganicKeywords(ArrayList<String> data) {
 			this.organicKeywords.clear();
 			this.organicKeywords.addAll(data);
@@ -43,17 +47,17 @@ public class KeywordInsightData {
 			ArrayList<String> data = new ArrayList<String>(this.organicKeywords);
 			return data;
 		}
-		
-		public void setCpcKeywords(ArrayList<String> data) {
-			this.cpcKeywords.clear();
-			this.cpcKeywords.addAll(data);
+*/		
+		public void setKeywords(ArrayList<String> data) {
+			this.keywords.clear();
+			this.keywords.addAll(data);
 		}
 		
-		public ArrayList<String> getCpcKeywords() {
-			ArrayList<String> data = new ArrayList<String>(this.cpcKeywords);
+		public ArrayList<String> getKeywords() {
+			ArrayList<String> data = new ArrayList<String>(this.keywords);
 			return data;
 		}
-		
+	/*	
 		public void setOrganicVisits(ArrayList<Integer> data){
 			this.organicVisits.clear();
 			this.organicVisits.addAll(data);
@@ -63,17 +67,37 @@ public class KeywordInsightData {
 			ArrayList<Integer> data = new ArrayList<Integer>(this.organicVisits);
 			return data;
 		} 
-		
-		public void setCpcVisits(ArrayList<Integer> data){
-			this.cpcVisits.clear();
-			this.cpcVisits.addAll(data);
+	*/	
+		public void setVisits(ArrayList<Integer> data){
+			this.visits.clear();
+			this.visits.addAll(data);
 		}
 		
-		public ArrayList<Integer> getCpcVisits() {
-			ArrayList<Integer> data = new ArrayList<Integer>(this.cpcVisits);
+		public ArrayList<Integer> getVisits() {
+			ArrayList<Integer> data = new ArrayList<Integer>(this.visits);
 			return data;
 		} 
 		
+		public void setMedium(ArrayList<String> data){
+			this.medium.clear();
+			this.medium.addAll(data);
+		}
+		
+		public ArrayList<String> getMedium() {
+			ArrayList<String> data = new ArrayList<String>(this.medium);
+			return data;
+		} 
+		
+		public void setHostname(ArrayList<String> data){
+			this.hostname.clear();
+			this.hostname.addAll(data);
+		}
+		
+		public ArrayList<String> getHostname() {
+			ArrayList<String> data = new ArrayList<String>(this.hostname);
+			return data;
+		} 
+/*		
 		public void setOrganicVisitBounceRate(ArrayList<Double> data){
 			this.organicVisitBounceRate.clear();
 			this.organicVisitBounceRate.addAll(data);
@@ -83,17 +107,17 @@ public class KeywordInsightData {
 			ArrayList<Double> data = new ArrayList<Double>(this.organicVisitBounceRate);
 			return data;
 		}
-		
-		public void setCpcVisitBounceRate(ArrayList<Double> data){
-			this.cpcVisitBounceRate.clear();
-			this.cpcVisitBounceRate.addAll(data);
+*/		
+		public void setVisitBounceRate(ArrayList<Double> data){
+			this.visitBounceRate.clear();
+			this.visitBounceRate.addAll(data);
 		}
 		
-		public ArrayList<Double> getCpcVisitBounceRate() {
-			ArrayList<Double> data = new ArrayList<Double>(this.cpcVisitBounceRate);
+		public ArrayList<Double> getVisitBounceRate() {
+			ArrayList<Double> data = new ArrayList<Double>(this.visitBounceRate);
 			return data;
 		}
-		
+/*		
 		public void setPrivateOrganicVisitsTotal(int datum) {
 			this.privateOrganicVisitsTotal = datum;
 		}
@@ -101,7 +125,7 @@ public class KeywordInsightData {
 		public int getPrivateOrganicVisitsTotal() {
 			return this.privateOrganicVisitsTotal;
 		}
-		
+	
 		public void setOrganicVisitsTotal(int datum) {
 			this.organicVisitsTotal = datum;
 		}
@@ -109,12 +133,12 @@ public class KeywordInsightData {
 		public int getOrganicVisitsTotal() {
 			return this.organicVisitsTotal;
 		}
-		
-		public void setCpcVisitsTotal(int datum) {
-			this.cpcVisitsTotal = datum;
+*/		
+		public void setVisitsTotal(int datum) {
+			this.visitsTotal = datum;
 		}
 		
-		public int getCpcVisitsTotal() {
-			return this.cpcVisitsTotal;
+		public int getVisitsTotal() {
+			return this.visitsTotal;
 		}
 }

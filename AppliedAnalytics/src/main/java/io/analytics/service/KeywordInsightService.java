@@ -56,7 +56,9 @@ public class KeywordInsightService implements IKeywordInsightService {
 		
 		int keywordColumn = -1; 
 		int visitsColumn = -1; 
-		int visitBounceRateColumn = -1; 
+		int visitBounceRateColumn = -1;
+		int mediumColumn = -1;
+		int hostnameColumn = -1;
 		int column = -1;
 		boolean hasData = false;
 
@@ -174,7 +176,7 @@ public class KeywordInsightService implements IKeywordInsightService {
 		/* * * * * * * * * * * * * * * * * * * * *
 		/* GA query CPC (paid) keywords, visits, visitBounceRate
 		/* * * * * * * * * * * * * * * * * * * * */
-		gaData = REPOSITORY.getKeywords(credential, profileID, startDate, endDate, maxResults, CoreReportingRepository.CPC_MEDIUM);
+		gaData = REPOSITORY.getKeywords(credential, profileID, startDate, endDate, maxResults, CoreReportingRepository.KEYWORD_FILTER_NOT_PROVIDED_AND_NOT_SET);
 		if (gaData!=null){
 			//printColumnHeaders(gaData);
 			//printDataTable(gaData);
@@ -186,6 +188,7 @@ public class KeywordInsightService implements IKeywordInsightService {
 			keywordColumn = -1; 
 			visitsColumn = -1; 
 			visitBounceRateColumn = -1; 
+			mediumColumn = -1;
 			column = -1;
 			for (ColumnHeaders header : gaData.getColumnHeaders()) {
 				column++;
@@ -196,14 +199,20 @@ public class KeywordInsightService implements IKeywordInsightService {
 					visitsColumn = column;
 				if (name.equals("ga:visitBounceRate"))
 					visitBounceRateColumn = column;
+				if (name.equals("ga:medium"))
+					mediumColumn = column;
+				if (name.equals("ga:hostname"))
+					hostnameColumn = column;
 
 				dataTypes.add(header.getDataType());
 			}
 
-			ArrayList<String> cpcKeywords = new ArrayList<String>();
-			ArrayList<Integer> cpcVisits= new ArrayList<Integer>();
-			ArrayList<Double> cpcVisitBounceRate = new ArrayList<Double>();
-
+			ArrayList<String> keywords = new ArrayList<String>();
+			ArrayList<Integer> visits= new ArrayList<Integer>();
+			ArrayList<Double> visitBounceRate = new ArrayList<Double>();
+			ArrayList<String> medium = new ArrayList<String>();
+			ArrayList<String> hostname = new ArrayList<String>();
+			
 			List<List<String>> dataRows = gaData.getRows();
 
 			//TODO: Handle this appropriately - this is just a quick fix.
@@ -212,23 +221,28 @@ public class KeywordInsightService implements IKeywordInsightService {
 
 			try {
 				for(List<String> row : dataRows) {
-					cpcKeywords.add(row.get(keywordColumn));
-					cpcVisits.add(Integer.parseInt(row.get(visitsColumn)));
-					cpcVisitBounceRate.add(Double.parseDouble(row.get(visitBounceRateColumn)));
+					keywords.add(row.get(keywordColumn));
+					visits.add(Integer.parseInt(row.get(visitsColumn)));
+					visitBounceRate.add(Double.parseDouble(row.get(visitBounceRateColumn)));
+					medium.add(row.get(mediumColumn));
+					hostname.add(row.get(hostnameColumn));
 				}
 			} catch (NumberFormatException e) {
 				//The metric we are retrieving is not numeric.
 				return null;
 			}
 
-			cpcKeywords.trimToSize();
-			cpcVisits.trimToSize();
-			cpcVisitBounceRate.trimToSize();
+			keywords.trimToSize();
+			visits.trimToSize();
+			visitBounceRate.trimToSize();
 
 			// add data to domain class
-			dataObject.setCpcKeywords(cpcKeywords);
-			dataObject.setCpcVisits(cpcVisits);
-			dataObject.setCpcVisitBounceRate(cpcVisitBounceRate);
+			dataObject.setKeywords(keywords);
+			dataObject.setVisits(visits);
+			dataObject.setVisitBounceRate(visitBounceRate);
+			dataObject.setMedium(medium);
+			dataObject.setHostname(hostname);
+			
 			hasData = true;
 
 		}
@@ -262,7 +276,7 @@ public class KeywordInsightService implements IKeywordInsightService {
 				//The metric we are retrieving is not numeric.
 				return null;
 			}
-			dataObject.setCpcVisitsTotal(datum);
+			dataObject.setVisitsTotal(datum);
 			hasData = true;
 		}
 
