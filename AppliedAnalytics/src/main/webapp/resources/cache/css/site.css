@@ -161,6 +161,11 @@ input { font: inherit; }
 
 .dashboard .btn.active { z-index: 0; }
 
+/**** DATA TABLES *****/
+table.dataTable td.center, table.dataTable td.dataTables_empty {
+	font-size: 18px;
+}
+
 /*****BOOTSTRAP EXTRAS *****/
 .dropdown-submenu{position:relative;}
 .dropdown-submenu>.dropdown-menu{top:0;left:100%;margin-top:-6px;margin-left:-1px;-webkit-border-radius:0 6px 6px 6px;-moz-border-radius:0 6px 6px 6px;border-radius:0 6px 6px 6px;}

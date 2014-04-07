@@ -20,7 +20,8 @@
 			"search"		: false,
 			"show"			: 5,
 			"title"			: "",
-			"sorting"		: []
+			"sorting"		: [],
+			"oLanguage"		: { }
 	}; 
 
 	/**
@@ -73,7 +74,8 @@
 										  },
 							"url"		: settings.url,
 							"element"	: null,
-							"sorting"	: settings.sorting
+							"sorting"	: settings.sorting,
+							"oLanguage"	: settings.oLanguage
 						};
 
 			// This is the container that the table will be placed in.
@@ -99,7 +101,8 @@
 										aoColumns: getHeaders(),
 										aoColumnDefs: getDefinitions(),
 										iDisplayLength: settings.show,
-										aaSorting: settings.sorting
+										aaSorting: settings.sorting,
+										oLanguage: settings.oLanguage
 									});
 
 			// If there is a title to the table element, set the contents of all divs on the page

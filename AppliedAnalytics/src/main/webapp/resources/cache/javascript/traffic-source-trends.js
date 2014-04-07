@@ -69,7 +69,10 @@ function getTrafficSourceTrendsData($element, callback) {
 					"m"				: {"length": 3}, // columns
 					"n"				: {"length": dataRows.length, "keys": null}, // rows
 					"title"			: dataModel.name,
-					"sorting"		: [[1, 'desc']]
+					"sorting"		: [[1, 'desc']],
+					"oLanguage": {
+				        "sEmptyTable":     "Nothing to report here for now!"
+				    }
 				}).show();
 
 				//$("#" + $element.attr("id")).show();

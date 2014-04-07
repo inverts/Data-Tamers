@@ -84,6 +84,10 @@ public class TrafficSourceTrendsModel extends WidgetModel {
 		
 		CoreReportingData reportingData = coreReportingService.getTopTrafficSources(credential, profileId, metric, startDate, endDate, 50);
 		GaData gaData = reportingData.getData();
+		if (gaData.getTotalResults() == 0 || gaData.getRows() == null) {
+			this.trafficSourceDataList = new ArrayList<TrafficSourceData>();
+			return this.trafficSourceDataList;
+		}
 		List<String> dimensions = new ArrayList<String>();
 		Double totalMetricValue = 0.0;
 		//Rows should follow this format: [source, metric]
