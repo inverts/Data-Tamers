@@ -2,7 +2,6 @@
  * table.js
  */
 
-
 (function ($) {
 
 	/* This looks like a helper function but I don't see it being used anywhere. */
@@ -145,7 +144,9 @@
 				  	  var urls = {
 			  			  		  "aTargets": table.url.cols,
 			  				  	  "mRender": function (data, type, full) {
-					  				  		   return "<a href=\"" + table.url.links[data] + "\" target=\"_blank\">" + data + "</a>";
+			  				  		  		  return "<a href=\"" + table.url.links[data] + "\" target=\"_blank\">" + data + "</a>";
+					  				  		  // return "<div id='website-performance-wrapper'>" +
+					  				  		  // 		"<iframe id='website-performance-iframe' src='" + table.url.links[data] + "'></div>";
 					  				  	  	}
 				  	  			};
 

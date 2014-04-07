@@ -19,6 +19,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -36,24 +37,26 @@ public class KeywordInsightModel extends WidgetModel {
 	private String activeProfile;
 	private Date startDate;
 	private Date endDate;
-	private ArrayList<String> cpcKeywords;
-	private ArrayList<String> organicKeywords;
-	private ArrayList<Integer> cpcVisits;
-	private ArrayList<Integer> organicVisits;
-	private ArrayList<Double> cpcBounceRate;
-	private ArrayList<Double> organicBounceRate;
-	private int cpcVisitsTotal;
-	private int privateOrganicVisitsTotal;
-	private int organicVisitsTotal;
+	private ArrayList<String> keywords;
+	//private ArrayList<String> organicKeywords;
+	private ArrayList<Integer> visits;
+	//private ArrayList<Integer> organicVisits;
+	private ArrayList<Double> bounceRate;
+	//private ArrayList<Double> organicBounceRate;
+	private int visitsGaTotal;
+	//private int privateOrganicVisitsTotal;
+	//private int organicVisitsTotal;
+	private ArrayList<String> medium;
+	private ArrayList<String> hostname;
 	private ArrayList<KeyData> cpcData;
 	private ArrayList<KeyData> organicData;
 	private Set<String> stopWordsSet;
-	
+
 	private final String widgetClass = "keywordInsight";
 	private final String widgetTitle = "keywordinsight.title";
 
 	DateFormat presentationFormat = new SimpleDateFormat("MM/dd/yyyy"); 
-	
+
 	public KeywordInsightModel(ISessionService sessionService, IKeywordInsightService keywordInsightService) {
 
 		this.sessionService = sessionService;
@@ -71,7 +74,7 @@ public class KeywordInsightModel extends WidgetModel {
 		this.cpcData = new ArrayList<KeyData>();
 		this.organicData = new ArrayList<KeyData>();		
 		this.stopWordsSet = new HashSet<String>();
-		
+
 		// read stopwords file into map
 		try {
 			// stopwords.txt is located in src/main/resources directory
@@ -90,7 +93,7 @@ public class KeywordInsightModel extends WidgetModel {
 		updateData();
 	}
 
-	
+
 	public String getName() {
 		return "Keyword Insight";
 	}
@@ -132,16 +135,18 @@ public class KeywordInsightModel extends WidgetModel {
 			this.jsonData=null;
 			return;
 		}
-		organicKeywords = dataObject.getOrganicKeywords();
-		cpcKeywords = dataObject.getCpcKeywords();
-		organicVisits = dataObject.getOrganicVisits();
-		cpcVisits = dataObject.getCpcVisits();
-		organicBounceRate = dataObject.getOrganicVisitBounceRate();
-		cpcBounceRate = dataObject.getCpcVisitBounceRate();	
-		privateOrganicVisitsTotal = dataObject.getPrivateOrganicVisitsTotal();
-		organicVisitsTotal = dataObject.getOrganicVisitsTotal();
-		cpcVisitsTotal = dataObject.getCpcVisitsTotal();
-		
+		//organicKeywords = dataObject.getOrganicKeywords();
+		keywords = dataObject.getKeywords();
+		//organicVisits = dataObject.getOrganicVisits();
+		visits = dataObject.getVisits();
+		//organicBounceRate = dataObject.getOrganicVisitBounceRate();
+		bounceRate = dataObject.getVisitBounceRate();	
+		//privateOrganicVisitsTotal = dataObject.getPrivateOrganicVisitsTotal();
+		//organicVisitsTotal = dataObject.getOrganicVisitsTotal();
+		visitsGaTotal = dataObject.getVisitsTotal();
+		medium = dataObject.getMedium();
+		hostname = dataObject.getHostname();
+		/*	
 		Iterator<String> itk = organicKeywords.iterator();
 		Iterator<Integer> itv = organicVisits.iterator();
 		Iterator<Double> itb = organicBounceRate.iterator();
@@ -158,238 +163,343 @@ public class KeywordInsightModel extends WidgetModel {
 			kd.multipageVisitsPercent= Math.round(100.0*kd.visitsPercent*(1.0-kd.bounceRate/100.0))/100.0;
 		}
 		Collections.sort(organicData);
-
-		itk = cpcKeywords.iterator();
-		itv = cpcVisits.iterator();
-		itb = cpcBounceRate.iterator();
-		cpcData = new ArrayList<KeyData>(cpcKeywords.size());
+		 */
+		Iterator<String> itk = keywords.iterator();
+		Iterator<Integer> itv = visits.iterator();
+		Iterator<Double> itb = bounceRate.iterator();
+		Iterator<String> itm = medium.iterator();
+		cpcData = new ArrayList<KeyData>();
+		organicData = new ArrayList<KeyData>();
 
 		String keyword = "";
+		String mediumVal = "";
+		int v = 0;
+		int countOtherMed = 0;
+		int visitsCpcTotal = 0;
+		int visitsOrganicTotal = 0;
+
 		while(itk.hasNext()) {
 			keyword = itk.next();
-			if (!(keyword.equals("(not set)") || keyword.equals("(not provided)"))) {
-				// remove non-alpha characters from keywords
-				keyword = keyword.replaceAll("[^a-zA-Z0-9 ]","");
-				/*Pattern p = Pattern.compile("[^a-zA-Z0-9 ]");
-				// if has special character
-				if (p.matcher(keyword).find()){
-					System.out.println(keyword);
-				}*/
-				System.out.println(keyword);
-				cpcData.add(new KeyData(keyword,itv.next(),itb.next(), "cpc"));
+			// remove non-alpha characters from keywords
+			//keyword = keyword.replaceAll("[^a-zA-Z0-9 ]","");
+
+			mediumVal = itm.next();
+			v = itv.next();
+			if (mediumVal.equals("cpc")) {
+				cpcData.add(new KeyData(keyword,v,itb.next()));
+				visitsCpcTotal += v;
+			} else if (mediumVal.equals("organic")) {
+				organicData.add(new KeyData(keyword,v,itb.next()));
+				visitsOrganicTotal += v;
+			} else {
+				countOtherMed++;
 			}
 		}
 
-		it = cpcData.iterator();
-		while (it.hasNext()){
-			KeyData kd = it.next();
-			kd.visitsPercent = Math.round(10000.0*kd.visits/this.cpcVisitsTotal)/100.0;
-			kd.multipageVisitsPercent= Math.round(100.0*kd.visitsPercent*(1.0-kd.bounceRate/100.0))/100.0;
-		}
-		// order ascending
-		Collections.sort(cpcData);
+		System.out.println("Number of keywords with a medium other than cpc or organic = "+countOtherMed);
+		System.out.println("Visits: cpc = "+visitsCpcTotal+" organic = "+visitsOrganicTotal+" GA total = "+visitsGaTotal);
 
-		int breakpoint = 0;	
-		int val = breakpoint;
 
-		// * * * * * * * * * * * * * * * * * * * * *
-		// "Consider removing these keywords from AdWords:"
-		// select cpc keywords with low visits
+		ArrayList<KeyData> data;
+		ArrayList<WordData> bestWords = new ArrayList<WordData>();
+		ArrayList<String> allWords = new ArrayList<String>(); 
+		ArrayList<WordData> worstWords = new ArrayList<WordData>();
 		ArrayList<KeyData> removeKeywords = new ArrayList<KeyData>();
-
-		KeyData minKd;
-		it = cpcData.iterator();
-		if (it.hasNext()){
-			minKd = it.next();
-			// if the rank 
-			if (minKd.multipageVisitsPercent < 1.e-9){
-				removeKeywords.add(minKd);
-
-				while (it.hasNext()){
-					KeyData kd = it.next();
-					if (Math.abs((minKd.multipageVisitsPercent - kd.multipageVisitsPercent)) < 1e-9) {
-						removeKeywords.add(kd);
-					}
-					else {
-						break;
-					}
-				}
-			}
-		}
-
-		// * * * * * * * * * * * * * * * * * * * * *
-		// "Change website to better address these keywords:"
-		// select keywords with high visits and high bounce rate that
-		//    are either organic or cpc keywords.
-
-		// only cpc keywords right now
-		// select keywords with visits>5% and bouncerate>50%
-
 		ArrayList<KeyData> helpKeywords = new ArrayList<KeyData>();
-		it = cpcData.iterator();
-		while (it.hasNext()){
-			KeyData kd = it.next();
-			if (kd.multipageVisitsPercent>=1.0 && kd.bounceRate>=50){
-				kd.multipageVisitsPercent = Math.round(100.0*kd.multipageVisitsPercent)/100.0;
-				helpKeywords.add(kd);
-			}
-		}
-		// order descending
-		Collections.reverse(helpKeywords);
-
-		// * * * * * * * * * * * * * * * * * * * * *
-		// Find best performing keywords
-		//    (organic and cpc separate)
-
-		// only cpc right now
-
 		ArrayList<KeyData> bestKeywords = new ArrayList<KeyData>();
-		it = cpcData.iterator();
-		while (it.hasNext()){
-			KeyData kd = it.next();
-			if (kd.multipageVisitsPercent>=1.0 && kd.bounceRate<50){
-				kd.multipageVisitsPercent = Math.round(100.0*kd.multipageVisitsPercent)/100.0;
-				bestKeywords.add(kd);
+		ArrayList<KeyData> allKeywords = new ArrayList<KeyData>();
+		ArrayList<WordData> words = new ArrayList<WordData>();
+		Map<String,WordData> wordMap = new HashMap<String,WordData>();
+
+		this.createJson(removeKeywords, helpKeywords, bestKeywords, allKeywords, words, worstWords, bestWords); 
+
+		int n = 1;
+		if (visitsCpcTotal>0)
+			n = 2;
+
+		for (int i=0; i<n; i++){
+			if (i==0){
+				data = organicData;
+				System.out.println("Organic loop");
+			} else {
+				data = cpcData;
+				removeKeywords.clear();
+				helpKeywords.clear();
+				bestKeywords.clear();
+				allKeywords.clear();
+				words.clear();
+				worstWords.clear();
+				bestWords.clear();
+				wordMap.clear();
+				System.out.println("CPC loop");
 			}
-		}
-		// order descending
-		Collections.reverse(bestKeywords);
-
-		// * * * * * * * * * * * * * * * * * * * * *
-		// List all keywords
-		//    (organic and cpc separate)
-
-		// only cpc right now
-		ArrayList<KeyData> allCpcKeywords = new ArrayList<KeyData>();
-		allCpcKeywords.addAll(cpcData);
-		// order descending
-		Collections.reverse(allCpcKeywords);
-
-		// * * * * * * * * * * * * * * * * * * * * *
-		// Find all keywords that contain the user entered substring
-		//    (organic and cpc separate)
-
-		// Find word substrings: parse words and make a set
-
-		// Collect a list of all words including duplicates
-		ArrayList<String> allWords = new ArrayList<String>();
-		it = cpcData.iterator();
-		while (it.hasNext()){
-			KeyData kd = it.next();
-			allWords.addAll(Arrays.asList(kd.keyword.split(" ")));
-		}
-
-		// eliminate duplicates
-		Set<String> wordsSet = new HashSet<String>(allWords);
-		// count duplicates
-		ArrayList<WordCount> words = new ArrayList<WordCount>();
-	
-		for ( String word : wordsSet) {
-	        //word = word.trim();
-			if (!stopWordsSet.contains(word) && !word.matches("[0-9]*")){
-				words.add(new WordCount(word, Collections.frequency(allWords, word))) ; 
-			}
-		}
-
-		// add up multipage visits for each keyword with word
-		Iterator<WordCount> itwc = words.iterator();
-		while (itwc.hasNext()) {
-			WordCount wordCount = itwc.next();
-			it = cpcData.iterator();
+			Iterator<KeyData> it = data.iterator();
 			while (it.hasNext()){
 				KeyData kd = it.next();
-				if (kd.keyword.contains(wordCount.word)){
-					wordCount.multipageVisitsPercent += kd.multipageVisitsPercent;
+				kd.visitsPercent = Math.round(10000.0*kd.visits/(visitsCpcTotal+visitsOrganicTotal))/100.0;
+				kd.multipageVisitsPercent= Math.round(100.0*kd.visitsPercent*(1.0-kd.bounceRate/100.0))/100.0;
+			}
+			// order ascending
+			Collections.sort(data);
+
+			int breakpoint = 0;	
+			int val = breakpoint;
+
+			// * * * * * * * * * * * * * * * * * * * * *
+			// "Consider removing these keywords from AdWords:"
+			// select cpc keywords with low visits
+
+			KeyData minKd;
+			it = data.iterator();
+			if (it.hasNext()){
+				minKd = it.next();
+				// if the rank 
+				if (minKd.multipageVisitsPercent < 1.e-9){
+					removeKeywords.add(minKd);
+
+					while (it.hasNext()){
+						KeyData kd = it.next();
+						if (Math.abs((minKd.multipageVisitsPercent - kd.multipageVisitsPercent)) < 1e-9) {
+							removeKeywords.add(kd);
+						}
+						else {
+							break;
+						}
+					}
 				}
 			}
-			wordCount.multipageVisitsPercent = Math.round(100.0*wordCount.multipageVisitsPercent)/100.0;
+
+			// * * * * * * * * * * * * * * * * * * * * *
+			// "Change website to better address these keywords:"
+			// select keywords with high visits and high bounce rate that
+			//    are either organic or cpc keywords.
+
+			// only cpc keywords right now
+			// select keywords with visits>5% and bouncerate>50%
+
+
+			it = data.iterator();
+			while (it.hasNext()){
+				KeyData kd = it.next();
+				if (kd.multipageVisitsPercent>=1.0 && kd.bounceRate>=50){
+					kd.multipageVisitsPercent = Math.round(100.0*kd.multipageVisitsPercent)/100.0;
+					helpKeywords.add(kd);
+				}
+			}
+			// sort ascending
+			Collections.sort(helpKeywords);
+			// reverse so descending
+			Collections.reverse(helpKeywords);
+
+			// * * * * * * * * * * * * * * * * * * * * *
+			// Find best performing keywords
+			//    (organic and cpc separate)
+
+			// only cpc right now
+
+
+			it = data.iterator();
+			while (it.hasNext()){
+				KeyData kd = it.next();
+				if (kd.multipageVisitsPercent>=.5) {//&& kd.bounceRate<50){
+					kd.multipageVisitsPercent = Math.round(100.0*kd.multipageVisitsPercent)/100.0;
+					bestKeywords.add(kd);
+				}
+			}
+			// sort ascending
+			Collections.sort(bestKeywords);
+			// reverse so descending
+			Collections.reverse(bestKeywords);
+
+			// * * * * * * * * * * * * * * * * * * * * *
+			// List all keywords
+			//    (organic and cpc separate)
+
+			// only cpc right now
+
+			allKeywords.addAll(data);
+			// sort ascending
+			Collections.sort(allKeywords);
+			// then reverse so descending			
+			Collections.reverse(allKeywords);
+
+			// * * * * * * * * * * * * * * * * * * * * *
+			// Find all keywords that contain the user entered substring
+			//    (organic and cpc separate)
+
+			// Find word substrings: parse words and make a set
+
+			// Collect a list of all words including duplicates
+		
+			List<String> newWordList = new ArrayList<String>();
+            String kw;
+			
+			it = data.iterator();
+			while (it.hasNext()){
+				KeyData kd = it.next();
+				kw = kd.keyword;
+				
+				// exclude (content targeting), and other non-keywords
+				if (kw.matches("^\\(.*\\)$")){
+					continue;
+				}
+				// replace + with space.
+				if (kw.contains("+")){
+					kw = kw.replaceAll("\\+", " ");
+				}
+				newWordList = Arrays.asList(kw.split(" "));
+
+				for (int j=0; j<newWordList.size(); j++){
+					String word = newWordList.get(j);
+					// remove non-alpha characters from beginning and end of word
+					word = word.replaceAll("^[^a-zA-Z0-9 ]+","");
+					word = word.replaceAll("[^a-zA-Z0-9 ]+$","");
+
+					// update word for keyword obj list
+					newWordList.set(j, word);
+
+					// leave stopwords or numbers off the map word list
+					if (stopWordsSet.contains(word) || word.matches("[0-9]*")){
+						continue;
+					}
+					// add word and update multipage visits
+					if (wordMap.containsKey(word)){
+						WordData wd = wordMap.get(word);
+						wd.count += 1;
+						wd.multipageVisitsPercent += kd.multipageVisitsPercent;
+						wordMap.put(word, wd);
+					} else {
+						wordMap.put(word, new WordData(word, 1, kd.multipageVisitsPercent));
+					}
+				}
+				kd.setWordList(newWordList);
+			}
+
+/*			// combine data for words that are substrings of the url into the url	
+			String url = hostname.get(0);
+			WordData wdUrl = new WordData(url, 0);
+			Iterator<Map.Entry<String,WordData>> itwm = wordMap.entrySet().iterator();
+			while (itwm.hasNext()) {
+				Map.Entry<String,WordData> e = itwm.next();
+				if (url.contains(e.getValue().word)) {
+					wdUrl.count += e.getValue().count;
+					wdUrl.multipageVisitsPercent += e.getValue().multipageVisitsPercent;
+					itwm.remove();
+				}
+			}
+
+			//if url is substring of a word add, wdUrl data to it o.w. add wdUrl
+			boolean isUrl = false;
+			itwm = wordMap.entrySet().iterator();
+			while (itwm.hasNext()) {
+				Map.Entry<String,WordData> e = itwm.next();
+				if (e.getValue().word.contains(wdUrl.word)) {
+					e.getValue().count += wdUrl.count;
+					e.getValue().multipageVisitsPercent += wdUrl.multipageVisitsPercent;
+					isUrl = true;
+				}
+			}
+			if (!isUrl){
+				wordMap.put(wdUrl.word,wdUrl);
+			}
+*/
+			words.addAll(wordMap.values());
+
+			// sort ascending
+			Collections.sort(words);
+
+			// Pick off first worst words if they perform at 0
+			Iterator<WordData>itw = words.iterator();
+			while (itw.hasNext()){
+				WordData wordData = itw.next();
+				if (wordData.multipageVisitsPercent < 1e-9) {
+					worstWords.add(wordData);
+				}
+				else {
+					break;
+				}
+			}
+			// sort ascending 
+			Collections.sort(worstWords);
+
+			// reverse so is descending
+			Collections.reverse(words);
+
+			// Pick off first best words if the perform well
+			itw = words.iterator();
+			while (itw.hasNext()){
+				WordData wordData = itw.next();
+				if (wordData.multipageVisitsPercent >= .5) {
+					wordData.multipageVisitsPercent = Math.round(100.0*wordData.multipageVisitsPercent)/100.0;
+					bestWords.add(wordData);
+				}
+				else{
+					break;
+				}
+			}
+			// sort descending (sort then reverse)
+			Collections.sort(bestWords);
+			Collections.reverse(bestWords);
+
 		}
 
-		// sort ascending
-		Collections.sort(words);
-		// Pick off first worst words if they perform at 0
-		ArrayList<WordCount> worstWords = new ArrayList<WordCount>();
-		itwc = words.iterator();
-		while (itwc.hasNext()){
-			WordCount wordCount = itwc.next();
-			if (wordCount.multipageVisitsPercent < 1e-9) {
-				worstWords.add(wordCount);
-			}
-			else {
-				break;
-			}
-		}
-
-		// sort descending
-		Collections.reverse(words);
-		// Pick off first best words if the perform well
-		ArrayList<WordCount> bestWords = new ArrayList<WordCount>();
-		itwc = words.iterator();
-		while (itwc.hasNext()){
-			WordCount wordCount = itwc.next();
-			if (wordCount.multipageVisitsPercent >= 5.0) {
-				wordCount.multipageVisitsPercent = Math.round(100.0*wordCount.multipageVisitsPercent)/100.0;
-				bestWords.add(wordCount);
-			}
-			else{
-				break;
-			}
-		}
+		System.out.println("Hostname = "+hostname.get(0));
 
 		// * * * * * * * * * * * * * * * * * * * * *
 		// "Consider adding these keywords to AdWords:"
 		// select organic keywords with high visits that are not cpc keywords.
 
-
 		// put data into the JSON Object member jsonData
-		this.createJson(removeKeywords, helpKeywords, bestKeywords, allCpcKeywords, words, worstWords, bestWords); 
+		this.createJson(removeKeywords, helpKeywords, bestKeywords, allKeywords, words, worstWords, bestWords); 
+
 	}
-	
+
+
 	public int editDistance (String s0, String s1) {
 		int len0 = s0.length()+1;
 		int len1 = s1.length()+1;
-	 
+
 		// the array of distances
 		int[] cost = new int[len0];
 		int[] newcost = new int[len0];
-	 
+
 		// initial cost of skipping prefix in String s0
 		for(int i=0;i<len0;i++) cost[i]=i;
-	 
+
 		// dynamically computing the array of distances
-	 
+
 		// transformation cost for each letter in s1
 		for(int j=1;j<len1;j++) {
-	 
+
 			// initial cost of skipping prefix in String s1
 			newcost[0]=j-1;
-	 
+
 			// transformation cost for each letter in s0
 			for(int i=1;i<len0;i++) {
-	 
+
 				// matching current letters in both strings
 				int match = (s0.charAt(i-1)==s1.charAt(j-1))?0:1;
-	 
+
 				// computing cost for each transformation
 				int cost_replace = cost[i-1]+match;
 				int cost_insert  = cost[i]+1;
 				int cost_delete  = newcost[i-1]+1;
-	 
+
 				// keep minimum cost
 				newcost[i] = Math.min(Math.min(cost_insert, cost_delete),cost_replace );
 			}
-	 
+
 			// swap cost/newcost arrays
 			int[] swap=cost; cost=newcost; newcost=swap;
 		}
-	 
+
 		// the distance is the cost for transforming all letters in both strings
 		return cost[len0-1];
 	}
 
 	// put data into JSON object to pass to the view website-performance.jsp 
 
-	public void createJson(ArrayList<KeyData> rk, ArrayList<KeyData> hk, ArrayList<KeyData> bk, ArrayList<KeyData> ak, ArrayList<WordCount> wc, ArrayList<WordCount> ww, ArrayList<WordCount> bw)  {
+	public void createJson(ArrayList<KeyData> rk, ArrayList<KeyData> hk, ArrayList<KeyData> bk, ArrayList<KeyData> ak, ArrayList<WordData> wc, ArrayList<WordData> ww, ArrayList<WordData> bw)  {
 		try {
 
 			JSONArray removeKeywords = new JSONArray();
@@ -409,7 +519,7 @@ public class KeywordInsightModel extends WidgetModel {
 			JSONArray allCpcBounceRate = new JSONArray();
 			JSONArray allCpcMultipageVisitsPercent = new JSONArray();
 			JSONArray words = new JSONArray();
-			JSONArray wordCount = new JSONArray();
+			JSONArray wordData = new JSONArray();
 			JSONArray multipageVisitsPercent = new JSONArray();
 			JSONArray worstWords = new JSONArray();
 			JSONArray worstWordsCount = new JSONArray();
@@ -458,17 +568,17 @@ public class KeywordInsightModel extends WidgetModel {
 				allCpcMultipageVisitsPercent.put(d.multipageVisitsPercent);
 			}
 
-			Iterator<WordCount> itwc = wc.iterator();
+			Iterator<WordData> itwc = wc.iterator();
 			while (itwc.hasNext()){
-				WordCount d = itwc.next();
+				WordData d = itwc.next();
 				words.put(d.word);
-				wordCount.put(d.count);
+				wordData.put(d.count);
 				multipageVisitsPercent.put(d.multipageVisitsPercent);
 			}
 
 			itwc = ww.iterator();
 			while (itwc.hasNext()){
-				WordCount d = itwc.next();
+				WordData d = itwc.next();
 				worstWords.put(d.word);
 				worstWordsCount.put(d.count);
 				worstWordsMultipageVisitsPercent.put(d.multipageVisitsPercent);
@@ -476,7 +586,7 @@ public class KeywordInsightModel extends WidgetModel {
 
 			itwc = bw.iterator();
 			while (itwc.hasNext()){
-				WordCount d = itwc.next();
+				WordData d = itwc.next();
 				bestWords.put(d.word);
 				bestWordsCount.put(d.count);
 				bestWordsMultipageVisitsPercent.put(d.multipageVisitsPercent);
@@ -512,7 +622,7 @@ public class KeywordInsightModel extends WidgetModel {
 			JSONObject improve = new JSONObject();
 
 			// title
-			improve.put("title", "Improve website performance for the following keywords:");
+			improve.put("title", "Improve website performance for these keywords:");
 
 			// JSON key is the row category for use in Javascript
 			improve.put(keys1[0], helpKeywords);
@@ -524,7 +634,7 @@ public class KeywordInsightModel extends WidgetModel {
 			/* Best Keywords */
 			JSONObject best = new JSONObject();
 
-			best.put("title", "The best performing keywords:");
+			best.put("title", "Best performing keywords:");
 
 			best.put(keys1[0], bestKeywords);
 			best.put(keys1[1], bestVisitsPercent);
@@ -535,7 +645,7 @@ public class KeywordInsightModel extends WidgetModel {
 			/* Remove Keywords */
 			JSONObject worst = new JSONObject();
 
-			worst.put("title", "Consider removing the following keywords from Adwords:");
+			worst.put("title", "Worst performing keywords:");
 
 			worst.put(keys1[0], removeKeywords);
 			worst.put(keys1[1], removeVisitsPercent);
@@ -547,7 +657,7 @@ public class KeywordInsightModel extends WidgetModel {
 			JSONObject all = new JSONObject();
 
 			// title
-			all.put("title", "All paid keywords:");
+			all.put("title", "All keywords:");
 
 			all.put(keys1[0], allCpcKeywords);
 			all.put(keys1[1], allCpcVisitsPercent);
@@ -558,7 +668,7 @@ public class KeywordInsightModel extends WidgetModel {
 			/* Best Keyword Substrings */
 			JSONObject bestSubStr = new JSONObject();
 
-			bestSubStr.put("title", "The best performing keyword substrings:");
+			bestSubStr.put("title", "Best performing keyword substrings:");
 
 			bestSubStr.put(keys2[0], bestWords);
 			bestSubStr.put(keys2[1], bestWordsCount);
@@ -568,7 +678,7 @@ public class KeywordInsightModel extends WidgetModel {
 			/* Worst Keyword Substrings */
 			JSONObject worstSubStr = new JSONObject();
 
-			worstSubStr.put("title", "The worst performing keyword substrings:");
+			worstSubStr.put("title", "Worst performing keyword substrings:");
 
 			worstSubStr.put(keys2[0], worstWords);
 			worstSubStr.put(keys2[1], worstWordsCount);
@@ -594,7 +704,7 @@ public class KeywordInsightModel extends WidgetModel {
 			 this.jsonData.put("allCpcBounceRate", allCpcBounceRate);
 			 this.jsonData.put("allCpcMultipageVisitsPercent", allCpcMultipageVisitsPercent);
 			 this.jsonData.put("words", words);
-			 this.jsonData.put("wordCount", wordCount);
+			 this.jsonData.put("wordData", wordData);
 			 this.jsonData.put("multipageVisitsPercent", multipageVisitsPercent);
 			 this.jsonData.put("worstWords", worstWords);
 			 this.jsonData.put("worstWordsCount", worstWordsCount);
@@ -664,15 +774,24 @@ class KeyData implements Comparable<KeyData>{
 	public double bounceRate;
 	public double multipageVisitsPercent;
 	public double visitsPercent;
-	public String medium;
+	private List<String> wordList = new ArrayList<String>();
 
-	public KeyData(String keyword, int visits, double bounceRate, String medium){
+	public KeyData(String keyword, int visits, double bounceRate){
 		this.keyword = keyword;
 		this.visits = visits;
 		this.bounceRate = Math.round(100.0*bounceRate)/100.0;
 		this.multipageVisitsPercent = -1.;
 		this.visitsPercent = -1.;
-		this.medium = medium;
+	}
+
+	public List<String> getWordList(){
+		List<String> newlist = new ArrayList<String>(wordList);
+		return newlist;
+	}
+
+	public void setWordList(List<String> list) {
+		wordList.clear();
+		wordList.addAll(list);
 	}
 
 	public int compareTo(KeyData kd){
@@ -682,21 +801,28 @@ class KeyData implements Comparable<KeyData>{
 }
 
 //class to holds word, a frequency count, a rank
-class WordCount implements Comparable<WordCount>{
+class WordData implements Comparable<WordData>{
 	public String word;
 	public int count;
 	public double multipageVisitsPercent;
 
-	public WordCount(String word, int count){
+	public WordData(String word, int count){
 		this.word = word;
 		this.count = count;
 		this.multipageVisitsPercent = 0;
 	}
 
-	public int compareTo(WordCount kc){
+	public WordData(String word, int count, double multipageVisitsPercent){
+		this.word = word;
+		this.count = count;
+		this.multipageVisitsPercent = multipageVisitsPercent;
+	}
+
+	public int compareTo(WordData kc){
 		return Double.compare(this.multipageVisitsPercent, kc.multipageVisitsPercent);
 	}
 
 }
+
 
 

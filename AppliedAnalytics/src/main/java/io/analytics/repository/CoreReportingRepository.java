@@ -65,7 +65,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		
 
 		public static final String KEYWORD_NOT_PROVIDED_FILTER = "ga:keyword==(not provided)";
-		public static final String KEYWORD_FILTER_OUT_NOT_PROVIDED_AND_NOT_SET_FILTER = "ga:keyword!=(not provided);ga:keyword!=(not set)";
+		public static final String KEYWORD_FILTER_NOT_PROVIDED_AND_NOT_SET = "ga:keyword!=(not provided);ga:keyword!=(not set)";
 		public static final boolean SORT_ASCENDING = true;
 		public static final boolean SORT_DESCENDING = false;
 
@@ -313,7 +313,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 						startDate, // Start date.
 						endDate, // End date.
 						"ga:visitBounceRate,ga:visits,ga:exitRate") // Metrics.
-						.setDimensions("ga:pagePath,ga:hostname")
+						.setDimensions("ga:pagePath,ga:hostname,ga:pageTitle")
 						.setSort("-ga:visits")
 						.setMaxResults(maxResults);
 				
@@ -368,14 +368,13 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			return gaData;
 		}	
 		
-		
 	
 		/**
-		 *  Get the total metric for the website, e.g. visits, a single integer.
+		 *  Get the total metric for the website (e.g. visits)
 		 *  Widgets where used:
 		 *    - Page Performance
 		 *  Inputs: 
-		 *  	metric <String> must be in the GA command form 
+		 *  	metric <String> must be in the GA command form
 		 */
 
 		public GaData getTotalMetric(Credential credential, String profileID, String metric, Date sDate, Date eDate){
@@ -425,10 +424,9 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		*/
 
 		/**
-		 * Get the "cpc" or "organic" keywords that contain the substring and are not "(not provided)"
+		 * Get the all keywords that "
 		 *   Special Inputs: 
-		 *   	String <medium>: expect "cpc" or "organic"
-		 *      String <substring>: filter based on this substring
+		 *      String <filter>: set filter with this value;
 		 *      
 		 * @param sDate
 		 * @param eDate
@@ -438,10 +436,11 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 * @return
 		 */
 
-		public GaData getKeywords(Credential credential, String profileID, Date sDate, Date eDate, int maxResults, String medium) {
+		public GaData getKeywords(Credential credential, String profileID, Date sDate, Date eDate, int maxResults, String filter) {
 			GaData gaData = null;
 			String startDate = dateFormat.format(sDate);
 			String endDate = dateFormat.format(eDate);
+			
 
 			try {
 				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
@@ -451,8 +450,8 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 						startDate, // Start date.
 						endDate, // End date.
 						"ga:visits,ga:visitBounceRate") // Metrics.
-						.setDimensions("ga:medium,ga:keyword")
-						.setFilters("ga:medium==organic;ga:keyword!=(not provided);ga:keyword!=(not set)")
+						.setDimensions("ga:medium,ga:keyword,ga:hostname")
+						.setFilters(filter)
 						// .setFilters("ga:medium=="+medium+";ga:keyword!=(not provided);ga:keyword!=(not set)")
 						//.setFilters("ga:keyword!=(not provided);ga:keyword!=(not set)")
 						.setSort("-ga:visits")

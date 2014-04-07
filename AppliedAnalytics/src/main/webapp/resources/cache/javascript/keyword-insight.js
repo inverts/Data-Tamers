@@ -2,7 +2,6 @@
  * keyword-insight.js
  */
 
-
 function loadKeywordInsight(id, callback) {
 
 	var $element = $("#" + id);
@@ -100,7 +99,7 @@ function getKeywordInsightData(id, callback) {
 			                  ],
 			"m"			    : {"length": d.data.improve.keys.length, "keys": d.data.improve.keys, "url": {"links": null, "key": 0}}, // columns
 			"n"				: {"length": d.data.improve[d.data.improve.keys[0]].length, "keys": null}, // rows
-			"title"			: "Improve the website to better meet the needs of the following keywords:"
+			"title"			: d.data.improve.title
 		});
 		
 		//createTableView("keywordInsightBest", d.data.best);
@@ -182,6 +181,8 @@ function getKeywordInsightData(id, callback) {
 			callback();
 		
 	});
+	
+	
 
 }
 
