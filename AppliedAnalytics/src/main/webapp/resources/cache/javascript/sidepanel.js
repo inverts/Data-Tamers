@@ -51,10 +51,10 @@ $(function() {
  * @author - Andrew Riley
  */
 function dashLinkHover() {
-	$(".dashlist").slideDown('fast');
-	$('.sidepanel-content').hover(null, function() {
-							$(".dashlist").slideUp('fast');
-						});
+//	$(".dashlist").slideDown('fast');
+//	$('.sidepanel-content').hover(null, function() {
+//							$(".dashlist").slideUp('fast');
+//						});
 }
 
 /**

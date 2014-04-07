@@ -68,7 +68,7 @@ input { font: inherit; }
 .header-application .filter label { margin: 10px 20px; }
 .header-application .filter select, .header-application .filter select option { padding:5px; margin: 5px; }
 .header-application .avatar, .messages, .header-application .trash { height:50px; width:50px; margin:5px 20px 5px 0; position: absolute; right: 0px; }
-.header-application .trash { display:none; }
+.header-application .trash { display:none; position: absolute; right: 70px;}
 .header-application .trash span.glyphicon { font-size:40px; padding-top:5px;}
 .header-application .messages { background-color:#239371; }
 
@@ -173,3 +173,6 @@ table.dataTable td.center, table.dataTable td.dataTables_empty {
 .dropdown-submenu>a:after{display:block;content:" ";float:right;width:0;height:0;border-color:transparent;border-style:solid;border-width:5px 0 5px 5px;border-left-color:#cccccc;margin-top:5px;margin-right:-10px;}
 .dropdown-submenu:hover>a:after{border-left-color:#ffffff;}
 .dropdown-submenu.pull-left{float:none;}.dropdown-submenu.pull-left>.dropdown-menu{left:-100%;margin-left:10px;-webkit-border-radius:6px 0 6px 6px;-moz-border-radius:6px 0 6px 6px;border-radius:6px 0 6px 6px;}
+
+
+.ui-sortable-helper { opacity: 0.6;  }
