@@ -20,7 +20,7 @@ table.dataTable thead th {
 	*cursor: hand;
 }
 
-table.dataTable thead th, table.dataTable tbody td { width:15px !important; }
+table.dataTable thead th, table.dataTable tbody td { width:15px !important; word-wrap:break-word; }
 table.dataTable thead th:first-child, table.dataTable tbody td:first-child { width:60px !important; }
 
 

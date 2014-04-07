@@ -35,7 +35,8 @@ public class LoginController {
 	@RequestMapping(value = "/login", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView loginPage(Model model, HttpSession session, HttpServletResponse response, HttpServletRequest request,
 			@RequestParam(value = "errors", defaultValue = "0") boolean hasErrors,
-			@RequestParam(value = "noaccount", defaultValue = "0") boolean noAccount)
+			@RequestParam(value = "noaccount", defaultValue = "0") boolean noAccount,
+			@RequestParam(value = "signUpComplete", defaultValue = "0") boolean signUpComplete)
 	{
 		// Everytime we load the login page, we want a clean form.
 

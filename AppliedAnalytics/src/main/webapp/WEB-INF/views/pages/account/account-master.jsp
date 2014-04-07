@@ -10,7 +10,8 @@
 <!-- CSS -->
 <link href="<c:url value="/cache/css/libs/bootstrap.css" />" rel="stylesheet">
 <link href="<c:url value="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />" rel="stylesheet">
-<link href="<c:url value="/cache/css/site.css" />" rel="stylesheet">
+<link href="<c:url value="/cache/css/signup.css" />" rel="stylesheet">
+<link href="<c:url value="/cache/css/default.css" />" rel="stylesheet">
 
 <script type="text/javascript">
 	/* Set the application root directory for the javascript files. */
@@ -30,15 +31,10 @@
 <body>
 
 	<div class="account page">
-		<div class="wrapper">
-		
+		<div class="body">
 			<!-- Site Header -->
 			<jsp:include page="${HEADER.path}"/>
 		
-			<!--  Right side settings pane -->
-            <div class="right-pane">
-				<jsp:include page="${SETTINGS}"/>
-			</div>		
 			
 			<!-- Site Content -->
 			<div class="content">

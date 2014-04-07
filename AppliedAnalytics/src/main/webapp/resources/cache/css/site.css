@@ -46,14 +46,11 @@ input { font: inherit; }
 /* Modal */
 #modal .prompt { text-align:center; }
 
-/* Standard page size and position */
-.login, .terms, .start, .main-goal { margin-left:340px; padding-top:10px; margin-top:125px; }
-
 /* Error Message */
 .page .error { font:inherit; font-size:1em; color:red; margin-bottom:5px; padding:5px; }
 
 /******RIGHT PANE******/
-.page .right-pane { width:0; height:100%; position:absolute; float:right; background:rgb(1, 1, 133); color:#fff; z-index:10; right: 0; display:none; border-left: 3px solid #ccc; z-index:200; }
+.page .right-pane { width:0; height:100%; position:absolute; float:right; background:#333; color:#fff; z-index:10; right: 0; display:none; border-left: 3px solid #ccc; z-index:200; }
 .page .right-pane select, .page .right-pane input { color: #222; }
 
 /******HEADER/FOOTER******/
@@ -63,13 +60,14 @@ input { font: inherit; }
 #header-application, #header-entry { display:none; }
 
 /* header application */
-.header-application { height:65px; padding-left:285px; background:#eee; box-shadow:0px 0px 5px -1px; position:absolute; left:0px; right:0px; z-index:5;}
-.header-application .filter { float: left; padding-top: 10px; }
+.header-application { min-height:65px; padding-left:285px; background:#eee; box-shadow:0px 0px 5px -1px; position:absolute; left:0px; right:0px; z-index:5;}
+.header-application .filter { float: left; padding: 10px 70px 0px 0px; }
 .header-application .filter .form-control { display:inline; width: 125px; cursor: pointer; }
 .header-application .filter .form-control[readonly] { background-color: rgb(218, 229, 233); }
+.header-application .filter #interestMetricSelection { display:inline-block; }
 .header-application .filter label { margin: 10px 20px; }
 .header-application .filter select, .header-application .filter select option { padding:5px; margin: 5px; }
-.header-application .avatar, .messages, .header-application .trash { height:50px; width:50px; float:right; margin:5px 20px 5px 0; }
+.header-application .avatar, .messages, .header-application .trash { height:50px; width:50px; margin:5px 20px 5px 0; position: absolute; right: 0px; }
 .header-application .trash { display:none; }
 .header-application .trash span.glyphicon { font-size:40px; padding-top:5px;}
 .header-application .messages { background-color:#239371; }
@@ -77,16 +75,16 @@ input { font: inherit; }
 #header .profile-info { width: 250px; height: 250px; margin: 10px; padding: 10px; border: 3px solid #aaa; }
 #header .profile-image { cursor: pointer; border: 2px solid #666; }
 
-/* header home */
-.header-home { height:110px; z-index:2; background:#454545; box-shadow:0px 0px 5px 3px; position:absolute; left:0px; right:0px; }
+/* header home 
+.header-home { height:110px; z-index:2; background:#454545; box-shadow:0px 0px 5px 3px;}
 .header-home .nav-item { margin-left:30px; color:#ddd; font-size:20px; box-shadow:none; }
-.header-home .entry-wrapper { height:50px; position:absolute; top:0; bottom:0; left:0; right:0; margin:30px auto 0 auto; }
+.header-home .entry-wrapper { height: 50px; margin: auto; width: 1080px; padding-top: 30px; }
 .header-home .right { float:right; margin:25px 200px 0 0; }
 .header-home a { color:#ccc; text-decoration:none; }
 .header-home a:hover { color:#fff; }
 .header-home a:visited { border:none; }
-.header-home .logo { float:left; margin-left:340px; height:50px;}
-
+.header-home .logo { height:50px;}
+*/
 
 /* footer */
 #footer { clear: both; z-index:201; position:relative; border-top:#000 solid 1px; }
@@ -96,17 +94,6 @@ input { font: inherit; }
 #footer .footer-nav { margin-top:15px; }
 #footer .footer-copyright { height:inherit; font: .85em Times New Roman; margin-top:15px; left:0; right:0; position:absolute; }
 
-
-
-/******ENTRY******/
-#logo { float:left; }
-.entry-content { background:url('../images/bg.png') no-repeat center #000; height:960px; clear:both; }
-#center-box { height: 225px; width: 550px; border-radius: 6px; -moz-border-radius: 6px; -webkit-border-radius: 6px; 
-			  background: url('../images/black-translucent.png') repeat; position: absolute; left:0; right:0; margin:0 auto;
-        	  top:300px; box-shadow: 0px 0px 25px -5px #fff; }
-#analyze-button { background:url('../images/start-analyzing.png') no-repeat; background-position:0px 0px; margin:auto;
-        		  position:absolute; width: 300px; height:94px; top:0; bottom:0; left:0; right:0; cursor:pointer; }
-#analyze-button:hover { background-position: 0px -94px; }
 
 
 /******SIDE PANEL******/
@@ -120,12 +107,13 @@ input { font: inherit; }
 .sidepanel .sidepanel-nav .nav-cell { height:20px; margin:20px 0; padding:20px; background:inherit; }
 .sidepanel .sidepanel-nav .nav-cell:hover { cursor:pointer; }
 .sidepanel .sidepanel-nav .nav-txt { font-size: 18px; color:#fff; line-height:0px; margin-left:10px; }
-.sidepanel .addNewDash { color:#fff; margin:0 0 10px 15px; font-size:15px; clear:both; }
+.sidepanel .addNewDash { color:#fff; margin:0 0 10px 15px; font-size:14px; clear:both; }
 .sidepanel .addNewDash:hover { cursor:pointer; }
-.sidepanel .addNewDash .glyphicon { color:green; }
+.sidepanel .addNewDash .glyphicon { color: rgb(89, 182, 53); margin-right: 10px;}
 
 /**** SIDE PANEL TABS ****/
 .sidepanel .dashlist, .sidepanel .widget-list { vertical-align:middle; font-size:11px; width:97%; display:none; }
+.sidepanel .dashlist { display: block; } /* Show the dashboard list by default. */
 .sidepanel .widget-list { padding-left:40px; }
 
 .sidepanel .dashlist ul, .sidepanel .forecast-list { overflow:auto; max-height:200px; margin-bottom:25px; }
@@ -161,47 +149,6 @@ input { font: inherit; }
 .settings-content .left-pane { width:150px; height:100%; float:left; margin:0px 25px 20px 0px; }
 .settings tr { height: 25px; }
 .settings-content select { width: 100%; }
-
-
-/******LOGIN*******/
-.login td { width:320px; padding: 5px 0;}
-.login a, .login a:visited { text-decoration:none; }
-.login .input-text { width:100%; border-radius:5px; margin-top:15px;}
-.login .remember { line-height:1.0em; }
-.login .checkbox { display:inline; }
-.login .btn { float:right; }
-.login .submit { padding-top:15px; }
-.login .register-div { height:40px; padding-top:10px; vertical-align:middle; }
-.login .register-div a { text-decoration:underline; }
-
-
-/*****ACCOUNTS*****/
-
-/* Start */
-.alert + .start { position:absolute; margin-top:175px; }
-.start .pager { font:inherit; padding:0;}
-.start .start-content { margin-top:10px; width:37%; line-height:35px; }
-
-
-/* Terms */
-.terms .terms-wrapper { width: 900px; }
-.terms .termstext { border:solid 1px #000; overflow:auto; height:400px; margin:10px 0 0 5px; padding:10px; font-family:"Times New Roman", Serif; }
-.terms .accept-div, .terms .continue { float:right; clear:right; margin-top:10px; }
-.terms .accept-div { width:382px; }
-.terms .continue { width:165px; margin-bottom:20px; }
-
-/* Personal */
-.personal-info { padding:30px 0 0 50px; }
-.personal-info td { min-width:150px; }
-.personal-info tr > td { padding-bottom:1em; }
-.personal-info .btn { float:right; }
-.personal-info .googleAuth { width:600px; padding:10px 0; }
-.personal-info .googleAuth a{ float:right; margin-right:195px; }
-.new-account.alert { width:100%; padding-left:340px; border-radius:0; position:absolute; top:110px; }
-.new-account div.alert-msg { width:38%; text-wrap:normal; }
-.googleName { color:#00aeef; }
-.personal-info .googleAuth a:hover { cursor:pointer; color:#00aeef; }
-
 
 /*****APPLICATION*****/
 

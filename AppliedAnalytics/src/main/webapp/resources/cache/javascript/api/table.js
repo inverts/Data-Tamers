@@ -18,7 +18,8 @@
 			"url"			: {"links": null, "cols": []},
 			"search"		: false,
 			"show"			: 5,
-			"title"			: ""
+			"title"			: "",
+			"sorting"		: []
 	}; 
 
 	/**
@@ -39,7 +40,7 @@
 				else if (settings.title)
 					return 80;
 				else
-					return 50;
+					return 60;
 			}
 			// Base Cases << What does that mean in this context...??
 			var table = {
@@ -70,7 +71,8 @@
 											"elements": []
 										  },
 							"url"		: settings.url,
-							"element"	: null
+							"element"	: null,
+							"sorting"	: settings.sorting
 						};
 
 			// This is the container that the table will be placed in.
@@ -96,6 +98,7 @@
 										aoColumns: getHeaders(),
 										aoColumnDefs: getDefinitions(),
 										iDisplayLength: settings.show,
+										aaSorting: settings.sorting
 									});
 
 			// If there is a title to the table element, set the contents of all divs on the page

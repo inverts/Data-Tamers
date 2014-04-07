@@ -10,11 +10,13 @@
 					<label>Date Range:</label>
 					<input class="form-control" type="text" id="start-date" readonly value="${filter.getActiveStartDateString() }" />
 					<input class="form-control" type="text" id="end-date" readonly value="${filter.getActiveEndDateString() }" />
-					<label>What are you interested in?</label>
-					<select class="form-control">
-						<option value="ga:visits" ${filter.getActiveMetric()=="ga:visits" ? "selected" : ""}>Visits</option>
-						<option value="ga:newVisits" ${filter.getActiveMetric()=="ga:newVisits" ? "selected" : ""}>New Visits</option>
-					</select>
+					<div id="interestMetricSelection">
+						<label>What are you interested in?</label>
+						<select class="form-control">
+							<option value="ga:visits" ${filter.getActiveMetric()=="ga:visits" ? "selected" : ""}>Visits</option>
+							<option value="ga:newVisits" ${filter.getActiveMetric()=="ga:newVisits" ? "selected" : ""}>New Visits</option>
+						</select>
+					</div>
 				</div> 
 				<div class="avatar">
 					<c:choose>
