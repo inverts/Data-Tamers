@@ -330,14 +330,24 @@ public class KeywordInsightModel extends WidgetModel {
 			// Find word substrings: parse words and make a set
 
 			// Collect a list of all words including duplicates
-
+		
 			List<String> newWordList = new ArrayList<String>();
-
-
+            String kw;
+			
 			it = data.iterator();
 			while (it.hasNext()){
 				KeyData kd = it.next();
-				newWordList = Arrays.asList(kd.keyword.split(" "));
+				kw = kd.keyword;
+				
+				// exclude (content targeting), and other non-keywords
+				if (kw.matches("^\\(.*\\)$")){
+					continue;
+				}
+				// replace + with space.
+				if (kw.contains("+")){
+					kw = kw.replaceAll("\\+", " ");
+				}
+				newWordList = Arrays.asList(kw.split(" "));
 
 				for (int j=0; j<newWordList.size(); j++){
 					String word = newWordList.get(j);
@@ -365,14 +375,8 @@ public class KeywordInsightModel extends WidgetModel {
 				kd.setWordList(newWordList);
 			}
 
-
-
-			// combine data for words that are substrings of the url into the url	
-
+/*			// combine data for words that are substrings of the url into the url	
 			String url = hostname.get(0);
-			//urlCore = url.replaceAll("www.","");
-			//urlCore = urlCore.replaceAll(".com","");
-			//WordData wdUrlCore = new WordData(urlCore, 0);
 			WordData wdUrl = new WordData(url, 0);
 			Iterator<Map.Entry<String,WordData>> itwm = wordMap.entrySet().iterator();
 			while (itwm.hasNext()) {
@@ -398,7 +402,7 @@ public class KeywordInsightModel extends WidgetModel {
 			if (!isUrl){
 				wordMap.put(wdUrl.word,wdUrl);
 			}
-
+*/
 			words.addAll(wordMap.values());
 
 			// sort ascending

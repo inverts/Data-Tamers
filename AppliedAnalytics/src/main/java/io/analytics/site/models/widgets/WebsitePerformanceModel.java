@@ -146,6 +146,9 @@ public class WebsitePerformanceModel extends WidgetModel {
 				wa = Math.round(wa*10.0)/10.0;
 				url = "http://".concat(this.hostname).concat(this.pagePath.get(i));
 				title = this.pathToTitleMap.get(this.pagePath.get(i));
+				if (title.equals("(not set)")) {
+					title = "No data for webpage title.";
+				}
 				this.pageDataList.add(new PageData(url, title, vp, br, er, wa));
 			}
 			
@@ -184,7 +187,7 @@ public class WebsitePerformanceModel extends WidgetModel {
 			this.setJsonDataPoints();
 		}
 		
-		// put data into JSON object member to be passed to the view website-performance.jsp 
+		// put data into JSON object to be passed to the view website-performance.jsp 
 
 		public void setJsonDataPoints()  {
 			 try {
@@ -196,7 +199,7 @@ public class WebsitePerformanceModel extends WidgetModel {
 				 JSONArray arr5 = new JSONArray();
 				 JSONArray arr6 = new JSONArray();*/
 				 
-				 String[] keys1 = new String[]{"Webpath Path", "Visits (%)", "Bounce Rate (%)", "Exit Rate (%)"};
+				 String[] keys1 = new String[]{"Webpage Title/Link", "Visits (%)", "Bounce Rate (%)", "Exit Rate (%)"};
 				 
 				 //this.jsonData.put(keys1[0], pagePathResults);
 				 this.jsonData.put(keys1[0], pageTitleResults);
