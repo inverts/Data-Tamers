@@ -17,6 +17,28 @@
 							<option value="ga:newVisits" ${filter.getActiveMetric()=="ga:newVisits" ? "selected" : ""}>New Visits</option>
 						</select>
 					</div>
+					<div id="activeProfileInfo">
+						<label>Google Profile: </label>
+						<!-- Always shows the current active profile we're looking at. -->
+						<c:choose>
+                                <c:when test="${not empty settings.getCurrentProfiles()}" >
+                                        <c:choose>
+                                                <c:when test="${not empty settings.getCurrentProfiles().getItems()}" >
+                                                        <select id="select-profile" class="form-control">
+                                                        <c:forEach var="profile" items="${ settings.getCurrentProfiles().getItems() }">
+                                                                <option value="${ profile.getId() }" ${settings.getActiveProfile() == profile ? "selected" : "" }>
+                                                                ${ profile.getName() }
+                                                                </option>
+                                                        </c:forEach>
+                                                        </select>
+                                                </c:when>
+                                                <c:otherwise>
+                                                        (Profile List Unavailable)
+                                                </c:otherwise>
+                                        </c:choose>
+                                </c:when>
+                        </c:choose>
+					</div>
 				</div> 
 				<div class="avatar">
 					<c:choose>
