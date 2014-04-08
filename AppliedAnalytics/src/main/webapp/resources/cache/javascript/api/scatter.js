@@ -92,9 +92,9 @@
 				  data[i].values.push({
 					  x:sdata[i][0],
 					  y:sdata[i][1]
-				  }); */
+				  }); 
 			  
-			  }
+			  } */
 			  console.log(data); 
 			  return data;
 			}
