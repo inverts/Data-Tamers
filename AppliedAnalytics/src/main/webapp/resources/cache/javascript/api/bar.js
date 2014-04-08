@@ -15,14 +15,15 @@
 	/* function declaration */
 	$.fn.bar = function (params) {
 		return this.each(function() {
+			/*
 			var $this = $(this);
 			var settings = $.extend({}, defaults, params);
 			var sdata = settings.data;		
 			
 			var padding = 40; //padding for scale values
-			var margin = {top: -10, right: 0, bottom: 20, left: 0};
+			var margin = {top: -10, right: 0, bottom: 0, left: 0};
 			var width = $this.width();
-			var height = $this.height()-margin.bottom;
+			var height = $this.height();
 
 			var svg = d3.select("#" + this.id).append("svg").attr("height", height).attr("width", width);
 			var color = d3.scale.ordinal().range(["#a6cee3", "#1f78b4", "#b2df8a"]);
@@ -81,10 +82,12 @@
 							function(d) {
 								tooltip.transition().duration(200).style(
 										"opacity", .9);
-								tooltip.html("(" + d.name + "%" + ")").style(
-										"font-size", "15px").style("left",
-										(d3.event.pageX + 5) + "px").style(
-										"top", (d3.event.pageY - 28) + "px");
+								tooltip.html("(" + d.name +"%" + ")")
+										.style("font-size","15px")
+										.style("left",
+												(d3.event.pageX + 5) + "px")
+										.style("top",
+												(d3.event.pageY - 28) + "px");
 							}).on("mouseout", function(d) {
 						tooltip.transition().duration(500).style("opacity", 0);
 					});
@@ -102,16 +105,10 @@
 			  .call(yAxis);
 
 			// Add x axis
-			var xAxis = d3.svg.axis()
-				.scale(x0)
-				.tickSize(5,1)
-				.tickValues(settings.data.map(function(d) { return d.page; }))
-				.orient("bottom");
-			
+			var xAxis = d3.svg.axis().scale(x0).orient("bottom");
 			svg.append("g").attr("class", "axis")
-			  .attr("transform", "translate(25," + (height-margin.bottom) + ")")
+			  .attr("transform", "translate(25," + (height-5) + ")")
 			  .call(xAxis);
-			
 			// Legend
 			var legend = svg.selectAll(".legend")
 			      .data(pageNames)
@@ -145,6 +142,67 @@
 			      .text("Percentage");
 
 		
-		});
+		}); */
+			
+			var svg = d3.select("#" + this.id).append("svg");
+			var $this = $(this);
+			var settings = $.extend({}, defaults, params);
+			var sdata = settings.data;			
+			
+			nv.addGraph(function() {
+				  var chart = nv.models.multiBarChart()
+				      .staggerLabels(true)    //Too many bars and not enough room? Try staggering labels.
+				      //.tooltips(false)        //Don't show tooltips
+				      .transitionDuration(350)
+				      ;
+				  chart.xAxis.tickFormat(function (d) { return sdata["Webpage Title/Link"][d];});
+
+				  svg.datum(formatData(sdata))
+				      .call(chart);
+
+				  nv.utils.windowResize(chart.update);
+
+				  return chart;
+				});
+			
+				//Each bar represents a single discrete quantity.
+				function formatData(sdata) {
+					var p = sdata["Webpage Title/Link"];
+					var paths = [];
+					var keys= [];					
+					var numKeys = sdata.keys.length;
+					var numVals = sdata["Visits (%)"].length;					
+									
+					for(i=1; i < numKeys; i++){
+						keys[i-1]=(sdata.keys[i]);
+					}
+										
+					for(i=0; i < paths.length; i++){
+						paths[i] = ('"'+p[i]+'"');
+					}
+					
+				var data = [];						
+					for(i=0; i < 3; i++){
+						data.push({
+							key: keys[i],
+							values:[]
+						});
+						
+						for(j=0; j < sdata["Webpage Title/Link"].length; j++){
+							data[i].values.push({
+								x:j,
+								y:sdata[sdata.keys[i+1]][j]
+							});
+						}
+						
+					}	
+				 return data;
+					
+					
+				}
+			
+			
+			// end chart 
+		}); 
 	};
 }(jQuery));

@@ -18,6 +18,14 @@ $(function() {
 		$(this).animate({ backgroundColor: "transparent" }, 0, "swing");
 	});
 	
+	/* ### TEST TOOLTIP */
+	$('#dashboard').attr('title', 'hello_worlddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd');	
+	$('#dashboard').tooltip(
+			{
+				color: '#FFFFF'					
+			});
+
+	
 	// dashboard list open on click.
 	$("#dashboard").click(function() { $(".dashlist").slideToggle("fast"); });
 	

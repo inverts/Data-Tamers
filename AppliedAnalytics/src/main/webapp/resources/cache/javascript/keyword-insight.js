@@ -75,7 +75,7 @@ function getKeywordInsightData(id, callback) {
 			sdata.push([d.data.all[d.data.all.keys[2]][r], d.data.all[d.data.all.keys[1]][r], d.data.all[d.data.all.keys[0]][r]]);
 		
 		$("#" + id + " .spinner-content").hide();
-		
+
 		// scatter view
 		$("#" + id + " #keywordInsightScatter").empty().scatter({
 			"id"	: "keywordInsightScatter",

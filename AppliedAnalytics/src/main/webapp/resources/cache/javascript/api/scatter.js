@@ -23,9 +23,8 @@
 			var settings = $.extend({}, defaults, params);
 			if(settings.data == null){
 				return;
-			}
-			
-			var sdata = settings.data;
+			}			
+			var sdata = settings.data;			
 
 			var margin = {
 				"top" : 20,
@@ -34,19 +33,78 @@
 				"left" : 60
 			};
 			var width = $this.width();
-			var height = $this.height();
-			
+			var height = $this.height();			
 			// tooltip
-			var tip = d3.select("#" + settings.id).append("div")
-			.attr("class", "tip").style("opacity", 0);
+			//var tip = d3.select("#" + settings.id).append("div")
+			//.attr("class", "tip").style("opacity", 0);
 				
+			
+			var svg = d3.select("#"+settings.id).append("svg").attr("height", height).attr("width", width);
+
+			var chart;
+			nv.addGraph(function() {
+			  chart = nv.models.scatterChart()
+			                .showDistX(true)
+			                .showDistY(true)
+			                .useVoronoi(true)
+			                .color(d3.scale.category10().range())
+			                .transitionDuration(300)
+			                ;
+
+			  chart.xAxis.tickFormat(d3.format('.02f'));
+			  chart.yAxis.tickFormat(d3.format('.02f'));
+			  chart.tooltipContent(function(d) {
+			      return '<h2>' + d[2] + '</h2>';
+			  });
+
+			  svg.datum(formatData(sdata))
+			      .call(chart);
+
+			  nv.utils.windowResize(chart.update);
+
+			  return chart;
+			});
+
+
+			function formatData(sdata) { 
+			  var data = [],
+			  	xvals = [],
+			  	yvals = [],
+			  	dat = [];					  
+			  
+			  for(i=0; i < sdata.length; i++){
+				  if(sdata[i][0] == 0){
+					  sdata[i][0] = sdata[i][0]+0.1;
+				  }
+				  if(sdata[i][1] == 0){
+					  sdata[i][1] = sdata[i][1]+0.1;
+				  }
+				  xvals[i] = sdata[i][0];
+				  yvals[i] = sdata[i][1];
+			  }
+			  /*
+			  for(i = 0; i < 1; i++){
+				  data.push({
+					  key:"word",
+					  values: []
+				  });
+				  for(j=0; j < 4; i++) {}
+				  data[i].values.push({
+					  x:sdata[i][0],
+					  y:sdata[i][1]
+				  }); */
+			  
+			  }
+			  console.log(data); 
+			  return data;
+			}
 
 
 			/*******************************************************************
 			 * GRAPH PROPERTIES *
 			 ******************************************************************/
 			
-			
+			/*
 			var scatter = {
 					"id"	:this.id + "Settings"				
 			};
@@ -72,22 +130,8 @@
 				.range([height-padding, padding]);
 			
 			// first color scale
-			var color = d3.scale.category10();
-			
-			
-			// show text always
-			var writeText = function() {
-			svg.selectAll("text")
-				.data(sdata)
-				.enter()
-				.append("text")
-				.text(function(d) {return d[2];})
-				.attr("x", function(d) {return xScale(d[0]);})
-				.attr("y", function(d) {return yScale(d[1]);});	
-		};
-			
-			//writeText();
-				
+			var color = d3.scale.category20();
+						
 			
 			// make circles for each data point
 			svg.selectAll("circle").data(sdata).enter()
@@ -98,27 +142,23 @@
 					.attr("cy", function(d) {
 						return yScale(d[1]);
 					})
-					//.attr("ke", function(d) {
-						//return yScale(d[2]);
-					//})
+					.attr("ke", function(d) {
+						return yScale(d[2]);
+					})
 					.attr("r", 5)
 					.style("fill", function(d) { return color(d[2]); })
 					.on("mouseover", function(d) {	
-						d3.select(this)
-							.attr("r", 10);		
+						d3.select(this).transition().attr("r", 10);
 						tip.transition()
 			               .duration(200)
 			               .style("opacity", .9)
 			               .attr("font-size", "10px");
 						tip.html(d[2])
-						.style("left", (d3.event.pageX-300) + "px")
-			            .style("top", (d3.event.pageY-150) + "px");
+						   	.style("left", (this.pageX) + "px")
+						   	.style("bottom", (d3.pageY) + "px");
 			      })
-			      .on("mouseout", function(d) {
-			          d3.select(this)
-			          	.transition()
-			          	.duration(500)
-			          	.attr("r", 5);
+			      .on("mouseout", function(d) {		
+			    	  d3.select(this).transition().attr("r", 5);
 			          tip.transition()
 		               .duration(500)
 		               .style("opacity", 0);
@@ -140,24 +180,16 @@
 			      .attr("width", 18)
 			      .attr("height", 18)
 			      .style("fill", function(d) { return color(d[2]); })
-			      .on("mouseover", function(d) {	
-						d3.select(this)
-							.attr("width", 22)
-							.attr("height", 22)
+			      .on("mouseenter", function(d) {	
 						tip.transition()
 			               .duration(200)
 			               .style("opacity", .9)
 			               .attr("font-size", "10px");
 						tip.html(d[2])
-						.style("left", (d3.event.pageX-300) + "px")
-			            .style("top", (d3.event.pageY-150) + "px");
+						//.style("left", (d3.event.pageX+300) + "px")
+			            //.style("top", (d3.event.pageY-150) + "px");
 			      })
-			      .on("mouseout", function(d) {
-			          d3.select(this)
-			          	.transition()
-			          	.duration(500)
-			          	.attr("width", 18)
-			          	.attr("height", 18);
+			      .on("mouseleave", function(d) {
 			          tip.transition()
 		               .duration(500)
 		               .style("opacity", 0);
@@ -190,7 +222,7 @@
 			svg.append("text")
 			    .attr("class", "xlabel")
 			    .attr("text-anchor", "middle")
-			    .attr("x", (width-padding)/2)
+			    .attr("x", (width-padding)-10)
 			    .attr("y", height-10)  
 			    .text("Bounce Rate (%)");    //("Percentage of Bounce Rates");
 
@@ -201,8 +233,8 @@
 			    .attr("x", -1 * (height/2))
 			    .attr("y", 15)
 			    .attr("transform", "rotate(-90)")
-			    .text("Webpage Visits (%)"); //("Percentage of Webpage Visits");
-	
+			    .text("Webpage Visits (%)"); //("Percentage of Webpage Visits"); */
+			
 		});
 	}; 
 
