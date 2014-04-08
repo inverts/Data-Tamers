@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -147,15 +148,17 @@ public class WebsitePerformanceModel extends WidgetModel {
 				url = "http://".concat(this.hostname).concat(this.pagePath.get(i));
 				title = this.pathToTitleMap.get(this.pagePath.get(i));
 				if (title.equals("(not set)")) {
-					title = "No data for webpage title.";
+					title = "No title set for path ".concat(this.pagePath.get(i));
 				}
 				this.pageDataList.add(new PageData(url, title, vp, br, er, wa));
 			}
 			
 			// sort ascending
 			Collections.sort(this.pageDataList);
-			// then reverse the list
+			// then reverse the list (descending)
 			Collections.reverse(this.pageDataList);
+			
+			Map<String,Integer> titleDupsMap = new HashMap<String,Integer>();
 			
 			int c = 0;
 			Iterator<PageData> it = this.pageDataList.iterator();
@@ -165,9 +168,19 @@ public class WebsitePerformanceModel extends WidgetModel {
 					continue;
 				}
 				
-				// this array is for debug viewing
+				// if title is duplicated, append (dupCount) to it so it is unique.  
+				if (titleDupsMap.containsKey(pd.pageTitle)){
+					int dupCount = titleDupsMap.get(pd.pageTitle)+1;
+					titleDupsMap.put(pd.pageTitle,dupCount);
+					pd.pageTitle = pd.pageTitle+" ("+dupCount+")";
+				} else {
+					titleDupsMap.put(pd.pageTitle, 1);
+				}
+				
+				// these arrays are for debug viewing
 				this.resultsPageData.add(pd);
 				this.pageLinkResults.add(pd.pageLink);
+				
 				// load result into arrays for transfer to JSON
 				try {
 					this.pageLinkResultsJson.put(pd.pageTitle,pd.pageLink);
