@@ -75,7 +75,8 @@ public class WidgetRepository implements IWidgetRepository {
 		public Widget mapRow(ResultSet rs, int row) throws SQLException {
 			Widget w = new Widget(rs.getInt(WidgetTable.WIDGET_ID));
 			w.setWidgetTypeId(rs.getInt(WidgetTable.WIDGET_TYPE_ID));
-			w.setDefaultFilterId(rs.getInt(WidgetTable.DEFAULT_FILTER_ID));
+			int defaultFilterId = rs.getInt(WidgetTable.DEFAULT_FILTER_ID);
+			w.setDefaultFilterId(defaultFilterId == 0 ? null : defaultFilterId);
 			w.setDashboardId(rs.getInt(WidgetTable.DASHBOARD_ID));
 			w.setPriority(rs.getInt(WidgetTable.PRIORITY));
 			return w;
