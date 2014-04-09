@@ -25,6 +25,9 @@
 .account.page { position: relative; }
 .account.page .body { padding-bottom: 100px; }
 
-#introduction { display: inline-table; width: 450px; padding-right: 20px; }
+#introduction { display: inline-table; width: 535px; padding-right: 20px; }
 #introduction h1 { font-size: 30px; }
-#sign-up-form { display: inline-table; position: absolute; right: 0px; }
+#sign-up-form { display: inline-table; position: absolute; right: 20px; }
+
+.googleAuth .btn { width: 200px; float:none; }
+.error-tooltips { font-size: 13px; background: #FFF2C8; }

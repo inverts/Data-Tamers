@@ -10,10 +10,10 @@
 			<h4><a onclick="invokeGoogleAuthentication('accountAction');">
 			<c:choose>
 				<c:when test="${googleSuccess}">
-					<fmt:message key="account.new.google.change" />
+					<input type="button" class="btn btn-primary" value="<fmt:message key="account.new.google.change" />" />
 				</c:when>
 				<c:otherwise>
-					<fmt:message key="account.new.google" />
+					<input type="button" class="btn btn-primary" value="<fmt:message key="account.new.google" />" title='<fmt:message key="account.new.google.required" />'/>
 					<c:set var="validation" value="" />
 				</c:otherwise>
 			</c:choose>
@@ -23,66 +23,60 @@
 		<table>
 			<tr>
 				<td><form:label path="firstname"><fmt:message key="account.name.first" /></form:label></td>
-				<td><form:input class="textbox" path="firstname"/></td>
-				<td class="error">
-					<c:if test='${not empty errors && not empty errors.getFieldError("firstname")}'>
-						<fmt:message key='${errors.getFieldError("firstname").getDefaultMessage()}' />
-					</c:if>
-				</td>
+				<c:set var="firstNameError" value="" />
+				<c:if test='${not empty errors && not empty errors.getFieldError("firstname")}'>
+					<c:set var="firstNameError"><fmt:message key='${errors.getFieldError("firstname").getDefaultMessage()}' /></c:set>
+				</c:if>
+				
+				<td><form:input class="textbox" path="firstname" title="${firstNameError}" /></td>
 			</tr>
 			<tr>
 				<td><form:label path="lastname"><fmt:message key="account.name.last" /></form:label></td>
-				<td><form:input class="textbox" path="lastname"/></td>
-				<td class="error">
-					<c:if test='${not empty errors && not empty errors.getFieldError("lastname")}'>
-						<fmt:message key='${errors.getFieldError("lastname").getDefaultMessage()}' />
-					</c:if>
-				</td>
+				<c:set var="lastNameError" value="" />
+				<c:if test='${not empty errors && not empty errors.getFieldError("lastname")}'>
+					<c:set var="lastNameError"> <fmt:message key='${errors.getFieldError("lastname").getDefaultMessage()}' /> </c:set>
+				</c:if>
+				<td><form:input class="textbox" path="lastname" title="${lastNameError}" /></td>
 			</tr>
 			<tr>
 				<td><label><fmt:message key="account.email" /></label></td>
-				<td><form:input class="textbox" path="email"/></td>
-				<td class="error">
-					<c:if test='${not empty errors && not empty errors.getFieldError("email")}'>
-						<fmt:message key='${errors.getFieldError("email").getDefaultMessage()}' />
-					</c:if>
-				</td>
+				<c:set var="emailError" value="" />
+				<c:if test='${not empty errors && not empty errors.getFieldError("email")}'>
+					<c:set var="emailError"> <fmt:message key='${errors.getFieldError("email").getDefaultMessage()}' /> </c:set>
+				</c:if>
+				<td><form:input class="textbox" path="email" title="${emailError}" /></td>
 			</tr>
 			<tr>
 				<td><label><fmt:message key="account.email.confirm" /></label></td>
-				<td><form:input class="textbox" path="confirmEmail"/></td>
-				<td class="error">
-					<c:if test='${not empty errors && not empty errors.getFieldError("confirmEmail")}'>
-						<fmt:message key='${errors.getFieldError("confirmEmail").getDefaultMessage()}' />
-					</c:if>
-				</td>
+				<c:set var="confirmEmailError" value="" />
+				<c:if test='${not empty errors && not empty errors.getFieldError("confirmEmail")}'>
+					<c:set var="confirmEmailError"> <fmt:message key='${errors.getFieldError("confirmEmail").getDefaultMessage()}' /> </c:set>
+				</c:if>
+				<td><form:input class="textbox" path="confirmEmail" title="${confirmEmailError}" /></td>
 			</tr>
 			<tr>
 				<td><label><fmt:message key="account.name.user" /></label></td>
-				<td><form:input class="textbox" path="username"/></td>
-				<td class="error">
-					<c:if test='${not empty errors && not empty errors.getFieldError("username")}'>
-						<fmt:message key='${errors.getFieldError("username").getDefaultMessage()}' />
-					</c:if>
-				</td>
+				<c:set var="usernameError" value="" />
+				<c:if test='${not empty errors && not empty errors.getFieldError("username")}'>
+					<c:set var="usernameError"> <fmt:message key='${errors.getFieldError("username").getDefaultMessage()}' /> </c:set>
+				</c:if>
+				<td><form:input class="textbox" path="username" title="${usernameError}" /></td>
 			</tr>
 			<tr>
 				<td><label><fmt:message key="account.password" /></label></td>
-				<td><form:input type="password" class="textbox" path="password"/></td>
-				<td class="error">
-					<c:if test='${not empty errors && not empty errors.getFieldError("password")}'>
-						<fmt:message key='${errors.getFieldError("password").getDefaultMessage()}' />
-					</c:if>
-				</td>
+				<c:set var="passwordError" value="" />
+				<c:if test='${not empty errors && not empty errors.getFieldError("password")}'>
+					<c:set var="passwordError"> <fmt:message key='${errors.getFieldError("password").getDefaultMessage()}' /> </c:set>
+				</c:if>
+				<td><form:input type="password" class="textbox" path="password" title="${passwordError}" /></td>
 			</tr>
 			<tr>
 				<td><label><fmt:message key="account.password.confirm" /></label></td>
-				<td><form:input type="password" class="textbox" path="confirmPassword"/></td>
-				<td class="error">
-					<c:if test='${not empty errors && not empty errors.getFieldError("confirmPassword")}'>
-						<fmt:message key='${errors.getFieldError("confirmPassword").getDefaultMessage()}' />
-					</c:if>
-				</td>
+				<c:set var="confirmPasswordError" value="" />
+				<c:if test='${not empty errors && not empty errors.getFieldError("confirmPassword")}'>
+					<c:set var="confirmPasswordError"> <fmt:message key='${errors.getFieldError("confirmPassword").getDefaultMessage()}' /> </c:set>
+				</c:if>
+				<td><form:input type="password" class="textbox" path="confirmPassword" title="${confirmPasswordError}" /></td>
 			</tr>
 			<tr>
 				<td></td>
@@ -94,7 +88,6 @@
 						<td><input type="button" class="btn btn-primary active disabled" id="account-submit" value="<fmt:message key="submit" />" /></td>
 					</c:otherwise>
 				</c:choose>
-				<td></td>
 			</tr>
 		</table>
 	</form:form>

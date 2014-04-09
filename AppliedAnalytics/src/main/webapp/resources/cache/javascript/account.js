@@ -38,6 +38,12 @@ function showNewAccountForm(width) {
 
 	$.post(applicationRoot + "accounts/accountform", null, function(response) {
 		 $('.start #sign-up-form').html(response);
+
+			var tooltips = $('input[type!="button"]').tooltip( { position: { my: "left top", at: "right top", collision: "flipfit" }, tooltipClass: "error-tooltips" } ).on('mouseout focusout', function(event) {
+                event.stopImmediatePropagation();
+            }).tooltip("open");
+			
+			$('input[type="button"]').tooltip( { position: { my: "left top", at: "right top", collision: "flipfit" }, tooltipClass: "error-tooltips" } );
 	});
 //    if ($(".newAccount").length) {
 //    	$(".newAccount")
