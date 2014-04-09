@@ -12,8 +12,12 @@
 <link href="<c:url value="/cache/css/libs/bootstrap.css" />" rel="stylesheet">
 <link href="<c:url value="/cache/css/site.css" />" rel="stylesheet">
 <link href="<c:url value="/cache/css/widget.css" />" rel="stylesheet">
+<link href="<c:url value="/cache/css/tooltip.css" />" rel="stylesheet">
 <link href="<c:url value="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />" rel="stylesheet">
 <link href="<c:url value="/cache/css/libs/jquery.dataTables.css" />" rel="stylesheet">
+<link href="<c:url value="/cache/css/libs/nv.d3.css" />" rel="stylesheet">
+
+
 
 <script type="text/javascript">
 	/* Set the application root directory for the javascript files. */
@@ -28,6 +32,7 @@
 <script src="<c:url value="/cache/javascript/plugins/jquery.dataTables.min.js" />"></script>
 <script src="<c:url value="/cache/javascript/plugins/nv.d3.min.js" />"></script>
 <script src="<c:url value="/cache/javascript/modal.js" />"></script>
+<script src="<c:url value="/cache/javascript/api/tooltip.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/utilities.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/test.js" />"></script>
 <script src="<c:url value="/cache/javascript/api/graph.js" />"></script>
@@ -71,6 +76,7 @@
 	
 	<!-- Site Modal to be used whenever -->
 	<jsp:include page="/WEB-INF/views/includes/modal.jsp"/>
+	<jsp:include page="/WEB-INF/views/includes/tooltip.jsp"/>
 	
 </body>
 </html>

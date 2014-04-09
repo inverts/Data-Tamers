@@ -26,27 +26,32 @@ $(function() {
 			.addClass('settings')
 			.on( "change.settings", "#select-account", function() {
 				$('.settings-content #update-button').prop('disabled', true);
-				$('#select-property').html('').append('<option value="">Loading...</option>');
-				$('#select-profile').html('').append('<option value="">Loading...</option>');
+				$('.settings #select-property').html('').append('<option value="">Loading...</option>');
+				$('.settings #select-profile').html('').append('<option value="">Loading...</option>');
 				
-				updateSettings({ account: $('#select-account option:selected').val() });
+				updateSettings({ account: $('.settings #select-account option:selected').val() });
 			})
 			
 			.on( "change.settings", "#select-property", function() {
 				$('.settings-content #update-button').prop('disabled', true);
 				$('#select-profile').html('').append('<option value="">Loading...</option>');
 				
-				updateSettings({ property: $('#select-property option:selected').val() });
+				updateSettings({ property: $('.settings #select-property option:selected').val() });
 			})
 			
 			.on( "change.settings", "#select-profile", function() {
 				$('.settings-content #update-button').prop('disabled', true);
 				
-				updateSettings({ profile: $('#select-profile option:selected').val() });
+				updateSettings({ profile: $('.settings #select-profile option:selected').val() });
 			})
 			
 			.on( "click.settings", "#update-button", function() {
-				updateSettings({ update: 1 }, updateWidgets);
+				updateSettings({ update: 1 }, function() {
+					updateWidgets();
+					//TODO: This is pretty kludge, I need to reorganize a bunch of things to make this better.
+					$(".filter #activeProfileInfo #select-profile option:selected").removeAttr("selected");
+					$(".filter #activeProfileInfo #select-profile option[value=" + $('.settings #select-profile option:selected').val() + "]").attr("selected", true);
+				});
 			});
 
 		

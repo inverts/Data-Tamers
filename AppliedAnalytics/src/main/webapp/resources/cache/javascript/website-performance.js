@@ -42,7 +42,10 @@ function getPagePerformanceData(id, callback){
 		} 
 		var d = $.parseJSON(response);
 		
-		console.log(d.data.url);
+		//
+		//console.log(d.data[ d.data.keys[ 2 ] ][0]);
+		//console.log(d.data["Visits (%)"]);
+		
 		
 		if (!d.data) {
 			console.log("No data for pagePerformance");		
@@ -56,10 +59,11 @@ function getPagePerformanceData(id, callback){
 		$("#" + id + " .spinner-content").hide();
 		
 		// bar chart view
-		/*$("#" + id + " #pagePerformanceBar").empty().bar({
+		$("#" + id + " #pagePerformanceBar").empty().bar({
 			"id"	: "pagePerformanceBar",
-			"data": sdata
-		});*/
+			"data": d.data
+		});
+		
 		
 		
 		// create table

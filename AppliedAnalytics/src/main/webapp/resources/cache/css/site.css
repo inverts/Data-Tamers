@@ -65,7 +65,9 @@ input { font: inherit; }
 .header-application .filter .form-control { display:inline; width: 125px; cursor: pointer; }
 .header-application .filter .form-control[readonly] { background-color: rgb(218, 229, 233); }
 .header-application .filter #interestMetricSelection { display:inline-block; }
-.header-application .filter label { margin: 10px 20px; }
+.header-application .filter #activeProfileInfo { display:inline-block; }
+.header-application .filter #activeProfileInfo .form-control { display:inline; width: 200px; cursor: pointer; }
+.header-application .filter label { margin: 10px 0px 10px 15px; }
 .header-application .filter select, .header-application .filter select option { padding:5px; margin: 5px; }
 .header-application .avatar, .messages, .header-application .trash { height:50px; width:50px; margin:5px 20px 5px 0; position: absolute; right: 0px; }
 .header-application .trash { display:none; position: absolute; right: 70px;}
@@ -147,7 +149,8 @@ input { font: inherit; }
 .settings-content .rowlabel { width:85px; font-weight:bold; }
 .settings-content  .profile-image-large { border:3px solid #96AFC5; }
 .settings-content .left-pane { width:150px; height:100%; float:left; margin:0px 25px 20px 0px; }
-.settings tr { height: 25px; }
+.settings tr { height: 40px; }
+.settings h3 { margin-bottom: 10px; }
 .settings-content select { width: 100%; }
 
 /*****APPLICATION*****/

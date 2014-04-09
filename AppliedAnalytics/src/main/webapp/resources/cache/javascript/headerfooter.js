@@ -8,7 +8,6 @@ var $footer = $('#footer');
 $(function() {
 	if ($("loglabel").length)
 		$('#loglabel').dropdown();
-	
 	if ($( "#start-date" ).length)
 		$( "#start-date" ).datepicker();
 	if ($( "#end-date" ).length)
@@ -17,6 +16,12 @@ $(function() {
 		$("#start-date").change(updateDates);
 	if ($("#end-date").length)
 		$("#end-date").change(updateDates);
+	
+	
+	$(".filter").on( "change.filter", "#select-profile", function() {
+		updateSettings({ profile: $('#select-profile option:selected').val() });
+		updateSettings({ update: 1 }, updateWidgets);
+	});
 });
 
 

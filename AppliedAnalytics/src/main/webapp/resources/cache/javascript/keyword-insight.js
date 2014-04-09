@@ -82,7 +82,7 @@ function getKeywordInsightData(id, callback) {
 		
 		console.log(sdata);
 		$("#" + id + " .spinner-content").hide();
-		
+
 		// scatter view
 		$("#" + id + " #keywordInsightScatter").empty().scatter({
 			"id"	: "keywordInsightScatter",
