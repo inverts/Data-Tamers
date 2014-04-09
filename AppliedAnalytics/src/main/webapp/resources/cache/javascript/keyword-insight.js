@@ -73,14 +73,25 @@ function getKeywordInsightData(id, callback) {
 		for (var r = 0; r < d.data.all[d.data.all.keys[0]].length; r++)
 			sdata.push([d.data.all[d.data.all.keys[2]][r], d.data.all[d.data.all.keys[1]][r], d.data.all[d.data.all.keys[0]][r]]);
 		
-/*		for (var r = 0; r<sdata.length; r++)
-		console.log(sdata[r][0]); */
+/*		console.log("bounce rate (%):");
+		for (var r = 0; r<sdata.length; r++)
+			console.log(sdata[r][0]);
+
+		console.log("visits (%):")
+		for (var r = 0; r<sdata.length; r++)
+			console.log(sdata[r][1]);
+		
+		console.log("keywords:")
+		for (var r = 0; r<sdata.length; r++)
+			console.log(sdata[r][2]); */
+		
+		//console.log(sdata);
 		
 	/*	for (var r = 0; r < d.data.scatter.allKeywords.length; r++){
 			sdata.push([d.data.scatter.allBounceRate[r], d.data.scatter.allVisitsPercent[r],d.data.scatter.allKeywords[r]]);
 		} */
 		
-		console.log(sdata);
+	/*	console.log(sdata); */
 		$("#" + id + " .spinner-content").hide();
 
 		// scatter view
