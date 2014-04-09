@@ -70,10 +70,17 @@ function getKeywordInsightData(id, callback) {
 		}
 		
 		var sdata = [];
-		
 		for (var r = 0; r < d.data.all[d.data.all.keys[0]].length; r++)
 			sdata.push([d.data.all[d.data.all.keys[2]][r], d.data.all[d.data.all.keys[1]][r], d.data.all[d.data.all.keys[0]][r]]);
 		
+/*		for (var r = 0; r<sdata.length; r++)
+		console.log(sdata[r][0]); */
+		
+	/*	for (var r = 0; r < d.data.scatter.allKeywords.length; r++){
+			sdata.push([d.data.scatter.allBounceRate[r], d.data.scatter.allVisitsPercent[r],d.data.scatter.allKeywords[r]]);
+		} */
+		
+		console.log(sdata);
 		$("#" + id + " .spinner-content").hide();
 		
 		// scatter view
