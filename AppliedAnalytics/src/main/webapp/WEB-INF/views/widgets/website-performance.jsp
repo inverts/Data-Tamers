@@ -2,8 +2,8 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <div id = "pagePerformanceData">
-	<div id="pagePerformanceBar" class="pagePerformanceVisual"></div>
 	<div id="pagePerformanceTable" class="pagePerformanceVisual active"></div>
+	<div id="pagePerformanceBar" class="pagePerformanceVisual"></div>
 </div>
 <div class="controls">
 	<ul class="pagination">

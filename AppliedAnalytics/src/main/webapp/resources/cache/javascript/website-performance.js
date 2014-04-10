@@ -58,14 +58,6 @@ function getPagePerformanceData(id, callback){
 
 		$("#" + id + " .spinner-content").hide();
 		
-		// bar chart view
-		$("#" + id + " #pagePerformanceBar").empty().bar({
-			"id"	: "pagePerformanceBar",
-			"data": d.data
-		});
-		
-		
-		
 		// create table
 		$("#" + id + " #pagePerformanceTable").table({
 			"data": d.data,
@@ -81,7 +73,12 @@ function getPagePerformanceData(id, callback){
 			"title"         : d.data.title
 		});
 		
-		//createTableView("pagePerformanceTable", d.data, 38, 0);
+		// bar chart view
+		$("#" + id + " #pagePerformanceBar").empty().bar({
+			"id"	: "pagePerformanceBar",
+			"data": d.data
+		});
+	
 		
 		if (callback)
 			callback();
