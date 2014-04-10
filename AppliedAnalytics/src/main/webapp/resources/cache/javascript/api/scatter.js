@@ -40,21 +40,32 @@
 				
 			
 			var svg = d3.select("#"+settings.id).append("svg").attr("height", height).attr("width", width);
-
+						
+			
+			// get size of object sdata
+			Object.size = function(obj) {
+			    var size = 0, key;
+			    for (key in obj) {
+			        if (obj.hasOwnProperty(key)) size++;
+			    }
+			    return size;
+			};
+			var len = Object.size(sdata);	
+			
 			var chart;
 			nv.addGraph(function() {
 			  chart = nv.models.scatterChart()
-			                .showDistX(true)
-			                .showDistY(true)
-			                .useVoronoi(true)
+			                //.showDistX(true)
+			                //.showDistY(true)
+			                .useVoronoi(false)
 			                .color(d3.scale.category10().range())
 			                .transitionDuration(300)
 			                ;
 
 			  chart.xAxis.tickFormat(d3.format('.02f'));
 			  chart.yAxis.tickFormat(d3.format('.02f'));
-			  chart.tooltipContent(function(d) {
-			      return '<h2>' + d[2] + '</h2>';
+			  chart.tooltipContent(function(key) {
+			      return '<h2>' + key + '</h2>';
 			  });
 
 			  svg.datum(formatData(sdata))
@@ -65,39 +76,46 @@
 			  return chart;
 			});
 
+			
+			function getKeywords(sdata){
+				var words = [];
+				for(i=0; i < len; i++){						  
+					  words[i] = sdata[i].key;
+				  }
+				return words;
+			}
 
 			function formatData(sdata) { 
+			  console.log(sdata)
 			  var data = [],
 			  	xvals = [],
 			  	yvals = [],
-			  	dat = [];					  
+			  	words = [];		
 			  
-			  for(i=0; i < sdata.length; i++){
-				  if(sdata[i][0] == 0){
-					  sdata[i][0] = sdata[i][0]+0.1;
-				  }
-				  if(sdata[i][1] == 0){
-					  sdata[i][1] = sdata[i][1]+0.1;
-				  }
-				  xvals[i] = sdata[i][0];
-				  yvals[i] = sdata[i][1];
+			  for(i=0; i < len; i++){						  
+				  xvals[i] = sdata[i].values[0].x;
+				  yvals[i] = sdata[i].values[0].y;
+				  words[i] = sdata[i].key;
 			  }
-			  /*
-			  for(i = 0; i < 1; i++){
-				  data.push({
-					  key:"word",
-					  values: []
-				  });
-				  for(j=0; j < 4; i++) {}
-				  data[i].values.push({
-					  x:sdata[i][0],
-					  y:sdata[i][1]
-				  }); 
+			  /* accessing data : */
+				// keywords -- sdata[index].key
+				// values BOUNCE RATE -- sdata[index].values[0].x
+				// values VISITS -- sdata[index].values[0].y
 			  
-			  } */
-			  console.log(data); 
-			  return data;
-			}
+			  for (i = 0; i < 1; i++) {
+				    data.push({
+				      key: 'keywords',
+				      values: []
+				    });
+
+				    for (j = 0; j < len; j++) {
+				      data[i].values.push({x: xvals[j], y: yvals[j]});
+				    }
+				  }
+			  
+			  	  console.log(data)
+				  return data;
+				}
 
 
 			/*******************************************************************
