@@ -19,7 +19,23 @@ $(function() {
 	var $footer = $('#footer');
 	var $sidepanel = { bg: $('.sidepanel-background'), content: $('.sidepanel-content') };
 
-	displaySidePanel();
+	displaySidePanel(function() {
+		/* ### TEST TOOLTIP */
+		//$('#dashboard').attr({'title': 'hello_worldd'})
+		$('#dashboard').data('tooltip', function() { return "This is the dashboard"; })
+						 .tooltip({
+									color: '#FFFFF',
+									onHover: function() { alert("hover"); },
+									gravity: "w",
+									open:  { "element": $('#dashboard'), "event": "click", "callback": null },
+									close: { "element": $('#dashboard'), "event": "click", "callback": null },
+									domReady: true
+								});
+		
+		$('#trends').attr({'rel': 'tipsy', 'title': 'second tooltip'})
+						 .tooltip();
+	});
+	
 	/* Settings Event Handlers */
 	$('.profile-image').click(function() {
 		$('.right-pane')
@@ -112,11 +128,11 @@ function handleAjaxError(xhr, status, errorName) {
 
 
 /* Animates the side panel (if toggled) */
-function displaySidePanel() {
+function displaySidePanel(callback) {
 	
 	if ($('#sidepanel').data('animate')) {
 		$('#sidepanel').fadeIn( { duration: 'slow', queue: false } );
-		$('#sidepanel').animate( { left: 0 }, {duration: 2000, easing: 'swing', queue: false} );
+		$('#sidepanel').animate( { left: 0 }, {duration: 2000, easing: 'swing', queue: false, complete: callback} );
 	} else {
 		$('#sidepanel').css('left', 0);
 		$('#sidepanel').show();

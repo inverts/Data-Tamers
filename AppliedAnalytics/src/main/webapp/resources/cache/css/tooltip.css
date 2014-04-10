@@ -7,18 +7,20 @@
     padding: 5px;
     z-index: 100000;
 }
+
 .tipsy-inner {
-    background-color: #000;
+	background-color:rgb(12, 12, 145);
     color: #FFF;
-    max-width: 200px;
+    /*max-width: 200px;*/
     padding: 5px 8px 4px 8px;
     text-align: center;
-}
- 
-.tipsy-inner {
     border-radius: 3px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
+    border:1px solid #00aeef;
+    -webkit-box-shadow:2px 2px 6px #666; 
+    -moxbox-shadow:2px 2px 6px #666; 
+    box-shadow:2px 2px 6px #666;
 }
  
  
@@ -27,26 +29,27 @@
     width: 0;
     height: 0;
     line-height: 0;
-    border: 5px dashed #FFF;
+    border: 10px dashed #00aeef;
 }
 
+
 .tipsy-arrow-n {
-    border-bottom-color: #000;
+    border-bottom-color: #eee;
 }
 .tipsy-arrow-s {
-    border-top-color: #000;
+    border-top-color: #eee;
 }
 .tipsy-arrow-e {
-    border-left-color: #000;
+    border-left-color: #eee;
 }
 .tipsy-arrow-w {
-    border-right-color: #000;
+    border-right-color: #eee;
 }
  
 .tipsy-n .tipsy-arrow {
-    top: 0px;
+    top: -5px;
     left: 50%;
-    margin-left: -5px;
+    margin-left: -10px;
     border-bottom-style: solid;
     border-top: none;
     border-left-color: transparent;
@@ -69,7 +72,7 @@
     border-right-color: transparent;
 }
 .tipsy-s .tipsy-arrow {
-    bottom: 0;
+    bottom: -5px;
     left: 50%;
     margin-left: -5px;
     border-top-style: solid;
@@ -103,20 +106,21 @@
     border-bottom-color: transparent;
 }
 .tipsy-w .tipsy-arrow {
-    left: 0;
+    left: -5px;
     top: 50%;
-    margin-top: -5px;
+    margin-top: -10px;
     border-right-style: solid;
     border-left: none;
     border-top-color: transparent;
     border-bottom-color: transparent;
 } 
 
+.tooltip-content { font-size:18px; max-width:350px; }
+.tooltip-content.sm { font-size: 14px; }
+.tooltip-content.lg { font-size: 24px; }
 
-.tooltip-body {
-	word-wrap:break-word;
-	max-width: 200px;
-}
+.tooltip-body { word-wrap:break-word; font-size:inherit; }
+
 /*
   .tipsy { pointer-events: none; padding: 5px; font-size: 10px; position: absolute; z-index: 100000; }
   .tipsy-inner { padding: 5px 8px 4px 8px; background-color: black; color: white; max-width: 200px; text-align: center; }
