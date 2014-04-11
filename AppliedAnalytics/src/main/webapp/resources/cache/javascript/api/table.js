@@ -78,10 +78,8 @@
 						};
 
 			// This is the container that the table will be placed in.
-			//var $view = $("#" + $this.attr("id")).empty().attr("style", "display:none;");
+			var $view = $("#" + $this.attr("id")).empty().attr("style", "display:none;");
 			
-			// removed teh display none, can't remember the reason I did that but just in case its important I'll preserve it.
-			var $view = $("#" + $this.attr("id")).empty();
 			
 			// Now we place the table in the container (empty), and keep the reference to this table.
 			table.element = $("<table>").css("width", table.size.width).appendTo($view);
