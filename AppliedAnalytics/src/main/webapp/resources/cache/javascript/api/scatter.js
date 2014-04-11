@@ -62,10 +62,13 @@
 			                .transitionDuration(300)
 			                ;
 
+			  chart.xAxis.axisLabel("Bounce Rates (%)");
+			  chart.yAxis.axisLabel("Visit Rates (%)");
 			  chart.xAxis.tickFormat(d3.format('.02f'));
 			  chart.yAxis.tickFormat(d3.format('.02f'));
-			  chart.tooltipContent(function(key) {
-			      return '<h2>' + key + '</h2>';
+			  			  
+			  chart.tooltipContent(function(d) {
+			      return '<h2>' + d[0] + '</h2>';
 			  });
 
 			  svg.datum(formatData(sdata))
@@ -109,7 +112,7 @@
 				    });
 
 				    for (j = 0; j < len; j++) {
-				      data[i].values.push({x: xvals[j], y: yvals[j]});
+				      data[i].values.push({x: xvals[j], y: yvals[j], kw: words[i]});
 				    }
 				  }
 			  

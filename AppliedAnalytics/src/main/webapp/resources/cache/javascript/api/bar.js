@@ -23,7 +23,9 @@
 				      //.tooltips(false)        //Don't show tooltips
 				      .transitionDuration(350)
 				      .width($this.width() * 2)
-				      .height($this.height());
+				      .height($this.height())
+				      .showXAxis(false)				      
+				      ;
 				  
 				  chart.xAxis.tickFormat(function (d) { return sdata["Webpage Title/Link"][d];});
 
