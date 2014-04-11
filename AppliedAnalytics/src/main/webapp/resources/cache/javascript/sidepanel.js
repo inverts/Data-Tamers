@@ -79,6 +79,8 @@ function widgetDragNDrop(listClass) {
 									 .appendTo(ui.helper);
 				
 				loadWidget($div, widgetTypeId);
+				
+				$("video").remove();
 			}
 
 		},

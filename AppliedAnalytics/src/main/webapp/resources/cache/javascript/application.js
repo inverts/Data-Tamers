@@ -14,26 +14,21 @@ if (typeof applicationRoot == 'undefined' || !applicationRoot) {
 }
 
 $(function() {
-	
-	// $header is obtained through header.js
-	var $footer = $('#footer');
-	var $sidepanel = { bg: $('.sidepanel-background'), content: $('.sidepanel-content') };
 
 	displaySidePanel(function() {
-		/* ### TEST TOOLTIP */
-		//$('#dashboard').attr({'title': 'hello_worldd'})
-		$('#dashboard').data('tooltip', function() { return "This is the dashboard"; })
+
+		$('.sidepanel-nav').data('tooltip', function() { return "Get Started!"; })
 						 .tooltip({
-									color: '#FFFFF',
+									size: "large",
+									height: 200,
+									width: 180,
 									onHover: function() { alert("hover"); },
 									gravity: "w",
-									open:  { "element": $('#dashboard'), "event": "click", "callback": null },
-									close: { "element": $('#dashboard'), "event": "click", "callback": null },
+									open: "load",
+									close: "click",
 									domReady: true
 								});
 		
-		$('#trends').attr({'rel': 'tipsy', 'title': 'second tooltip'})
-						 .tooltip();
 	});
 	
 	/* Settings Event Handlers */
@@ -185,7 +180,7 @@ function hideSettingsPanel() {
 
 // Creates a new page layout with a wrapper class and a content div.
 // Used to differentiate between dashboard and other application pages.
-//
+// DEPRECATED
 // Returns the jQuery object of the content div.
 function newPage(pageclass, pageId) {
 	var $wrapper = $("#application-page").attr("class", pageclass)

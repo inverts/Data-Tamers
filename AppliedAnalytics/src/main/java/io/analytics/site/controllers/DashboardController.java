@@ -1,7 +1,6 @@
 package io.analytics.site.controllers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -228,9 +227,18 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 		Sidepanel.put("model", sidePanelModel);
 		model.addAttribute("SIDEPANEL", Sidepanel);
 		
-		return new ModelAndView("application/dashboard");
+		ModelAndView dashboardPage = new ModelAndView("application/dashboard");
+		
+		dashboardPage.addObject("tutorial", true);
+		
+		return dashboardPage;
 	}
 	
+	
+	@RequestMapping(value = "/tutorial", method = RequestMethod.POST)
+	public ModelAndView tutorial() {
+		return new ModelAndView("tutorialVideo");
+	}
 	
 	
 	@RequestMapping(value = "/addDashboard", method = RequestMethod.POST)
@@ -336,7 +344,7 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 		}
 		//If the id does not match a valid dashboard, this list will be empty, but not null.
 		List<Widget> widgets = WidgetService.getDashboardWidgets(id);
-		if (widgets == null)
+		if (widgets == null) 
 			return new ModelAndView("serialize");
 		
 		DashboardModel d = new DashboardModel(id);

@@ -39,6 +39,9 @@
                                 </c:when>
                         </c:choose>
 					</div>
+				</div>
+				<div class="tutorialToggle">
+					<span class="glyphicon glyphicon-facetime-video"></span>
 				</div> 
 				<div class="avatar">
 					<c:choose>

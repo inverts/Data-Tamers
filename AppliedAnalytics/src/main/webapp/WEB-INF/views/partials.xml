@@ -36,5 +36,10 @@
 	<bean id="newAccountForm" class="org.springframework.web.servlet.view.JstlView">
 		<property name="url" value="/WEB-INF/views/pages/account/new-account-form.jsp" />
 	</bean>
+	
+	<!--  Tutorial Video -->
+	<bean id="tutorialVideo" class="org.springframework.web.servlet.view.JstlView">
+		<property name="url" value="/WEB-INF/views/includes/tutorial.jsp" />
+	</bean>
 
 </beans>   

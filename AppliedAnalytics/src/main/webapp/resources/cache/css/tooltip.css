@@ -64,7 +64,7 @@
     border-right-color: transparent;
 }
 .tipsy-ne .tipsy-arrow {
-    top: 0;
+    top: -5px;
     right: 10px;
     border-bottom-style: solid;
     border-top: none;
@@ -97,9 +97,9 @@
     border-right-color: transparent;
 }
 .tipsy-e .tipsy-arrow {
-    right: 0;
+    right: -5px;
     top: 50%;
-    margin-top: -5px;
+    margin-top: -10px;
     border-left-style: solid;
     border-right: none;
     border-top-color: transparent;
