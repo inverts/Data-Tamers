@@ -66,11 +66,19 @@
 			  chart.yAxis.axisLabel("Visit Rates (%)");
 			  chart.xAxis.tickFormat(d3.format('.02f'));
 			  chart.yAxis.tickFormat(d3.format('.02f'));
-			  			  
-			  chart.tooltipContent(function(d) {
-			      return '<h2>' + d[0] + '</h2>';
-			  });
-
+			  
+			  
+			  //tooltip content
+			  chart.tooltipContent(function(key, y, e, graph) {
+			        var x = String(graph.point.x);
+			        var y = String(graph.point.y);
+			        var key = String(graph.point.kw);
+			        tooltip_str = '<center><b>'+key+'</b></center>';
+			        return tooltip_str;
+			    });
+			  
+			  
+			  //append data to chart
 			  svg.datum(formatData(sdata))
 			      .call(chart);
 
@@ -112,7 +120,7 @@
 				    });
 
 				    for (j = 0; j < len; j++) {
-				      data[i].values.push({x: xvals[j], y: yvals[j], kw: words[i]});
+				      data[i].values.push({x: xvals[j], y: yvals[j], kw: words[j]});
 				    }
 				  }
 			  
