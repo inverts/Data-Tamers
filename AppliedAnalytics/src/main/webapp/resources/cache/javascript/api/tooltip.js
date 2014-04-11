@@ -11,16 +11,18 @@
 	var nTooltips = 0;
 	
 	var defaults = {
-			'size'		: 'default',
-			'color'		: '#CCC',
-			'opacity'	: 1.0,
-			'gravity'	: $.fn.tipsy.autoNS,
-			'arrow'		: true,
-			'onhover'	: null,
-			'out'		: null,
-			'open'		: { "element": null, "event": "mouseover", "callback": null },
-			'close'		: { "element": null, "event":"mouseout", "callback": null  },
-			'domReady'	: false
+			'size'		: 'default',	// text size
+			'width'		: null,	// specify a min-width. If the content is larger it will expand the width.
+			'height'	: null, // specify a min-height. If the content is larger it will expand the height.
+			'color'		: '#CCC',		// potentially color of the text or background? I'm currently not using it.
+			'opacity'	: 1.0,			// opacity level.
+			'gravity'	: $.fn.tipsy.autoNS,	// direction of arrow "n, s, e, w"
+			'arrow'		: true,			// show arrow or not
+			'onhover'	: null,			// event for when hovering onto a tooltip (currently not implemented)
+			'out'		: null,			// event for when hovering out of a tooltip (currently not implemented)
+			'open'		: { "element": null, "event": "mouseover", "callback": null },	//open element/action; could just be a string depicting the action and it will assume the element is the element portraying the tooltip.
+			'close'		: { "element": null, "event":"mouseout", "callback": null  }, // close element/action; "  "
+			'domReady'	: false // show tooltip when element loads
 	};
 	
 	
@@ -30,7 +32,7 @@
     		var $this = $(this);
     		var settings = $.extend({}, defaults, params);
     		
-    		
+    		// if just a string is passed in for open/close events
     		if(typeof(settings.open) == "string") {
     			var openObj = {"element": $this, "event": settings.open };
     			settings.open = openObj;
@@ -45,6 +47,14 @@
     		}
     		else if (!settings.close.element)
     			settings.close.element = $this;
+    		
+    		// Does not respond to 'hover' so if passed as the event, 
+    		// I will just set it to 'mouseover' and 'mouseout'.
+    		if (settings.open.event == "hover")
+    			settings.open.event = "mouseover";
+    		if (settings.close.event == "hover")
+    			settings.close.event = "mouseout";
+    		
     		
     		
     		
@@ -105,11 +115,25 @@
 			switch (settings.size) {
 				case "large": 
 					ttContent.addClass("lg").css("max-width", "500px");
+					// if an insane width is provided, just null it out. We can change this if we would like 
+		    		// tooltips with widths larger than the max.
+		    		if (settings.width && settings.width > 500)
+		    			settings.width = null;
 					break;
 				case "small" : 
 					ttContent.addClass("sm").css("max-width", "200px");
+					if (settings.width && settings.width > 200)
+		    			settings.width = null;
 					break;
+				default:
+					if (settings.width && settings.width > 350)
+		    			settings.width = null;
 			}
+			
+			if (settings.width)
+				ttContent.css("min-width", settings.width + "px");
+			if (settings.height)
+				ttContent.css("min-height", settings.height + "px");
 			
 			
 			
@@ -126,29 +150,6 @@
 				opacity: settings.opacity
 			});
 	
-			$('div.tipsy-arrow');
-			
-			var elm = $('tipsy-inner');
-		
-    			
-			/*
-			// default
-			$('#tipsy').href = "tooltip.css";
-			// change color
-			if(defaults.color != '#CCC'){
-				$('#tipsy-inner').href = "tooltip-simple.css";
-			}
-			else {
-				$('#tipsy-inner').href = "tooltip.css";
-			}
-			
-			// to include or hide arrow
-			if(defaults.arrow){
-				$('#tipsy-arrow').href = "tooltip.css";    				
-			}
-			else {
-				$('#tipsy-arrow').href = "tooltip-simple.css";
-			} */
 			
 			/****************************
 			 *  Tooltip Trigger Events	*

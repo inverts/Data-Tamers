@@ -71,13 +71,13 @@ function getPagePerformanceData(id, callback){
 			"n"				: {"length": d.data[d.data.keys[0]].length, "keys": null}, // rows
 			"url"			: {"links": d.data.url, "cols": [0]},
 			"title"         : d.data.title
-		});
+		}).show();
 		
 		// bar chart view
 		$("#" + id + " #pagePerformanceBar").empty().bar({
 			"id"	: "pagePerformanceBar",
 			"data": d.data
-		});
+		}).hide();
 	
 		
 		if (callback)
