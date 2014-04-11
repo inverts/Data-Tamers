@@ -69,24 +69,6 @@ function getKeywordInsightData(id, callback) {
 			return;
 		}
 
-/*		var sdata = [];
- 		for (var r = 0; r < d.data.scatter.allKeywords.length; r++){
-			sdata.push([d.data.scatter.allBounceRate[r], d.data.scatter.allVisitsPercent[r],d.data.scatter.allKeywords[r]]);
-		} 
- 		
-		// debugging		
-		console.log("bounce rate (%):");
-		for (var r = 0; r<sdata.length; r++)
-			console.log(sdata[r][0]);
-
-		console.log("visits (%):");
-		for (var r = 0; r<sdata.length; r++)
-			console.log(sdata[r][1]);
-
-		console.log("keywords:");
-		for (var r = 0; r<sdata.length; r++)
-			console.log(sdata[r][2]); 
-*/
 // nvd3 sdata
 		var sdata = [];
 		for (var i = 0; i < d.data.scatter.allKeywords.length; i++) {
@@ -103,7 +85,7 @@ function getKeywordInsightData(id, callback) {
 			});
 		} 
 		
-		console.log("keywords:");
+/*		console.log("keywords:");
 		for (var i = 0; i<sdata.length; i++)
 			console.log(sdata[i].key);
 		console.log("bounce rate:");
@@ -113,7 +95,7 @@ function getKeywordInsightData(id, callback) {
 		for (var i = 0; i<sdata.length; i++)
 			console.log(sdata[i].values[0].y);
 		console.log("end keyword data");
-
+*/
 		$("#" + id + " .spinner-content").hide();
 
 		// scatter view

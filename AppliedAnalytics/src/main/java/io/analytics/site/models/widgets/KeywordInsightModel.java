@@ -135,35 +135,13 @@ public class KeywordInsightModel extends WidgetModel {
 			this.jsonData=null;
 			return;
 		}
-		//organicKeywords = dataObject.getOrganicKeywords();
 		keywords = dataObject.getKeywords();
-		//organicVisits = dataObject.getOrganicVisits();
 		visits = dataObject.getVisits();
-		//organicBounceRate = dataObject.getOrganicVisitBounceRate();
 		bounceRate = dataObject.getVisitBounceRate();	
-		//privateOrganicVisitsTotal = dataObject.getPrivateOrganicVisitsTotal();
-		//organicVisitsTotal = dataObject.getOrganicVisitsTotal();
 		visitsGaTotal = dataObject.getVisitsTotal();
 		medium = dataObject.getMedium();
 		hostname = dataObject.getHostname();
-		/*	
-		Iterator<String> itk = organicKeywords.iterator();
-		Iterator<Integer> itv = organicVisits.iterator();
-		Iterator<Double> itb = organicBounceRate.iterator();
-		organicData = new ArrayList<KeyData>(organicKeywords.size());
 
-		while(itk.hasNext()) {
-			organicData.add(new KeyData(itk.next(),itv.next(),itb.next(), "organic"));
-		}
-
-		Iterator<KeyData> it = organicData.iterator();
-		while (it.hasNext()){
-			KeyData kd = it.next();
-			kd.visitsPercent = Math.round(10000.0*kd.visits/(this.organicVisitsTotal-this.privateOrganicVisitsTotal))/100.0;
-			kd.multipageVisitsPercent= Math.round(100.0*kd.visitsPercent*(1.0-kd.bounceRate/100.0))/100.0;
-		}
-		Collections.sort(organicData);
-		 */
 		Iterator<String> itk = keywords.iterator();
 		Iterator<Integer> itv = visits.iterator();
 		Iterator<Double> itb = bounceRate.iterator();
@@ -205,29 +183,26 @@ public class KeywordInsightModel extends WidgetModel {
 		ArrayList<KeyData> data;
 		ArrayList<WordData> words = new ArrayList<WordData>();
 		Map<String,WordData> wordMap = new HashMap<String,WordData>();
-		
+
 		ArrayList<WordData> bestWords = new ArrayList<WordData>();
 		ArrayList<WordData> worstWords = new ArrayList<WordData>();
 		ArrayList<KeyData> removeKeywords = new ArrayList<KeyData>();
 		ArrayList<KeyData> helpKeywords = new ArrayList<KeyData>();
 		ArrayList<KeyData> bestKeywords = new ArrayList<KeyData>();
 		ArrayList<KeyData> allKeywords = new ArrayList<KeyData>();
-		
-		ArrayList<WordData> organicBestWords = new ArrayList<WordData>();
-		ArrayList<WordData> organicWorstWords = new ArrayList<WordData>();
-		ArrayList<KeyData> organicRemoveKeywords = new ArrayList<KeyData>();
-		ArrayList<KeyData> organicHelpKeywords = new ArrayList<KeyData>();
-		ArrayList<KeyData> organicBestKeywords = new ArrayList<KeyData>();
-		ArrayList<KeyData> organicAllKeywords = new ArrayList<KeyData>();
+
 
 		// iterate twice to compute keyword data
 		// for organic search keywords and if available
 		// paid search keywords
+		boolean isPaid = false;
+		boolean hasPaid = false;
 		int n = 1;  // n is the number of iterations, at least one
-		
+
 		// if there is cpc data
 		if (visitsCpcTotal>0){
 			n = 2; // two iterations
+			hasPaid = true;		
 		}
 
 		// loop once for each data set
@@ -235,11 +210,13 @@ public class KeywordInsightModel extends WidgetModel {
 			// if organic loop
 			if (i==0){
 				data = organicData;
+				isPaid = false; 
 				System.out.println();
 				System.out.println("Organic loop");
 				System.out.println();
 			} else { // cpc loop
 				data = cpcData;
+				isPaid = true;
 				removeKeywords = new ArrayList<KeyData>();
 				helpKeywords = new ArrayList<KeyData>();
 				bestKeywords = new ArrayList<KeyData>();
@@ -252,13 +229,13 @@ public class KeywordInsightModel extends WidgetModel {
 				System.out.println("CPC loop");
 				System.out.println();
 			}
-			
+
 			// calculate visits percent and multipage visits for each keyword
 			Iterator<KeyData> it = data.iterator();
 			while (it.hasNext()){
 				KeyData kd = it.next();
 				if (i==1){
-				   System.out.println(kd.keyword);
+					System.out.println(kd.keyword);
 				}
 				kd.visitsPercent = Math.round(10000.0*kd.visits/(visitsCpcTotal+visitsOrganicTotal))/100.0;
 				kd.multipageVisitsPercent= Math.round(100.0*kd.visitsPercent*(1.0-kd.bounceRate/100.0))/100.0;
@@ -342,15 +319,15 @@ public class KeywordInsightModel extends WidgetModel {
 			// Find word substrings: parse words and make a set
 
 			// Collect a list of all words including duplicates
-		
+
 			List<String> newWordList = new ArrayList<String>();
-            String kw;
-			
+			String kw;
+
 			it = data.iterator();
 			while (it.hasNext()){
 				KeyData kd = it.next();
 				kw = kd.keyword;
-				
+
 				// exclude (content targeting), and other non-keywords
 				if (kw.matches("^\\(.*\\)$")){
 					continue;
@@ -427,33 +404,12 @@ public class KeywordInsightModel extends WidgetModel {
 			// sort ascending and then reverse so descending
 			Collections.sort(bestWords);
 			Collections.reverse(bestWords);
-			
-			if(i==0){
-				organicHelpKeywords.addAll(helpKeywords);
-				organicBestKeywords.addAll(bestKeywords);
-				organicRemoveKeywords.addAll(removeKeywords);
-				organicAllKeywords.addAll(allKeywords);
-				organicBestWords.addAll(bestWords);
-				organicWorstWords.addAll(worstWords);
-				
-				// these arrays are for cpc (paid) keywords
-				// null indicates no cpc data (if loop does not continue)
-				helpKeywords = null;
-				bestKeywords = null;
-				removeKeywords = null;
-				allKeywords = null;
-				bestWords = null;
-				worstWords = null;
-			}
-			
-			
+
+			// put data into the JSON Object member jsonData
+			this.loadJson(hasPaid, isPaid, helpKeywords, bestKeywords, removeKeywords, allKeywords, bestWords, worstWords); 
 		}
 
 		System.out.println("Hostname = "+hostname.get(0));
-
-		// put data into the JSON Object member jsonData
-		this.createJson(organicHelpKeywords, organicBestKeywords, organicRemoveKeywords, organicAllKeywords, organicBestWords, organicWorstWords, helpKeywords, bestKeywords, removeKeywords, allKeywords, bestWords, worstWords); 
-
 	}
 
 
@@ -500,8 +456,8 @@ public class KeywordInsightModel extends WidgetModel {
 	}
 
 	// put data into JSON object to pass to the view website-performance.jsp 
-//	this.createJson(organicHelpKeywords, organicBestKeywords, organicRemoveKeywords, organicAllKeywords, organicBestWords, organicWorstWords, helpKeywords, bestKeywords, removeKeywords, allKeywords, bestWords, worstWords); 
-	public void createJson(ArrayList<KeyData> ohk, ArrayList<KeyData> obk, ArrayList<KeyData> ork, ArrayList<KeyData> oak, ArrayList<WordData> obw, ArrayList<WordData> oww, ArrayList<KeyData> chk, ArrayList<KeyData> cbk, ArrayList<KeyData> crk, ArrayList<KeyData> cak, ArrayList<WordData> cbw, ArrayList<WordData> cww)  {
+	//	this.createJson(organicHelpKeywords, organicBestKeywords, organicRemoveKeywords, organicAllKeywords, organicBestWords, organicWorstWords, helpKeywords, bestKeywords, removeKeywords, allKeywords, bestWords, worstWords); 
+	public void loadJson(boolean hasPaid, boolean isPaid, ArrayList<KeyData> hk, ArrayList<KeyData> bk, ArrayList<KeyData> rk, ArrayList<KeyData> ak, ArrayList<WordData> bw, ArrayList<WordData> ww)  {
 		try {
 
 			JSONArray removeKeywords = new JSONArray();
@@ -527,7 +483,8 @@ public class KeywordInsightModel extends WidgetModel {
 			JSONArray allBounceRate = new JSONArray();
 			JSONArray allMultipageVisitsPercent = new JSONArray();
 
-			Iterator<KeyData> it = ork.iterator();
+
+			Iterator<KeyData> it = rk.iterator();
 			while (it.hasNext()){
 				KeyData d = it.next();
 				removeKeywords.put(d.keyword);
@@ -536,7 +493,7 @@ public class KeywordInsightModel extends WidgetModel {
 				removeMultipageVisitsPercent.put(Math.round(100.0*d.multipageVisitsPercent)/100.0);
 			}
 
-			it = ohk.iterator();
+			it = hk.iterator();
 			while (it.hasNext()){
 				KeyData d = it.next();
 				helpKeywords.put(d.keyword);
@@ -545,7 +502,7 @@ public class KeywordInsightModel extends WidgetModel {
 				helpMultipageVisitsPercent.put(d.multipageVisitsPercent);
 			}
 
-			it = obk.iterator();
+			it = bk.iterator();
 			while (it.hasNext()){
 				KeyData d = it.next();
 				bestKeywords.put(d.keyword);
@@ -555,7 +512,7 @@ public class KeywordInsightModel extends WidgetModel {
 			}
 
 
-			Iterator<WordData> itwc = oww.iterator();
+			Iterator<WordData> itwc = ww.iterator();
 			while (itwc.hasNext()){
 				WordData d = itwc.next();
 				worstWords.put(d.word);
@@ -563,7 +520,7 @@ public class KeywordInsightModel extends WidgetModel {
 				worstWordsMultipageVisitsPercent.put(d.multipageVisitsPercent);
 			}
 
-			itwc = obw.iterator();
+			itwc = bw.iterator();
 			while (itwc.hasNext()){
 				WordData d = itwc.next();
 				bestWords.put(d.word);
@@ -572,7 +529,7 @@ public class KeywordInsightModel extends WidgetModel {
 			}
 
 			// Scatter plot data
-			it = oak.iterator();
+			it = ak.iterator();
 			while (it.hasNext()){
 				KeyData d = it.next();
 				allKeywords.put(d.keyword);			
@@ -692,19 +649,43 @@ public class KeywordInsightModel extends WidgetModel {
 			 this.jsonData.put("bestWordsCount", bestWordsCount);
 			 this.jsonData.put("bestWordsMultipageVisitsPercent", bestWordsMultipageVisitsPercent);
 			 */
-			this.jsonData.put("scatter", scatter);
-			this.jsonData.put("improve", improve);
-			this.jsonData.put("best", best);
-			this.jsonData.put("worst", worst);
-			this.jsonData.put("all", all);
-			this.jsonData.put("bestsubstr", bestSubStr);
-			this.jsonData.put("worstsubstr", worstSubStr);
+
+			if (isPaid) {				
+				this.jsonData.put("paidscatter", scatter);
+				this.jsonData.put("paidimprove", improve);
+				this.jsonData.put("paidbest", best);
+				this.jsonData.put("paidworst", worst);
+				this.jsonData.put("paidall", all);
+				this.jsonData.put("paidbestsubstr", bestSubStr);
+				this.jsonData.put("paidworstsubstr", worstSubStr);
+
+			} else {
+				this.jsonData.put("scatter", scatter);
+				this.jsonData.put("improve", improve);
+				this.jsonData.put("best", best);
+				this.jsonData.put("worst", worst);
+				this.jsonData.put("all", all);
+				this.jsonData.put("bestsubstr", bestSubStr);
+				this.jsonData.put("worstsubstr", worstSubStr);
+
+				if (!hasPaid){
+					JSONObject nullobj = null;
+					this.jsonData.put("paidscatter", nullobj);
+					this.jsonData.put("paidimprove", nullobj);
+					this.jsonData.put("paidbest", nullobj);
+					this.jsonData.put("paidworst", nullobj);
+					this.jsonData.put("paidall", nullobj);
+					this.jsonData.put("paidbestsubstr", nullobj);
+					this.jsonData.put("paidworstsubstr", nullobj);
+				}
+			}
+
 
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 
 	} 
 
