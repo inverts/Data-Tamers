@@ -29,13 +29,16 @@
 				      .transitionDuration(350)
 				      .width($this.width() * 2)
 				      .height($this.height())
-				      .showXAxis(true)	
+				      .showXAxis(false)	
 				      .showYAxis(true)
 				      ;
 				  
-				  chart.xAxis.axisLabel("Webpages");
-				  chart.yAxis.axisLabel("Values (%)").axisLabelDistance(40);
-				  //chart.xAxis.tickFormat(function (d) { return sdata["Webpage Title/Link"][d];});
+				  chart.xAxis.axisLabel("Webpages");				  
+				  chart.yAxis.axisLabel("Values (%)").axisLabelDistance(40);					  
+				  chart.xAxis.tickFormat(function (d) { return sdata["Webpage Title/Link"][d];});
+
+				  
+				  
 				  
 				  svg.datum(formatData(sdata))
 				     .call(chart);
