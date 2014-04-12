@@ -14,7 +14,7 @@
 function loadDashboard(dashboardId) {
 
 	$("video").remove(); // in case video was loaded on  previous dashboard session. We dont want this to happen only on success.
-
+	$(".tipsy").remove();
 	$.ajax({
 		type: 'POST',
 		url: applicationRoot + "application/dashboards/" + dashboardId,
@@ -25,13 +25,25 @@ function loadDashboard(dashboardId) {
 				var dashboard = $.parseJSON(result);
 				var $tutorial = $(".tutorialToggle").hide();
 				if (dashboard.widgets.length > 0) {
-					$("#tipsy" + $tutorial.data("tooltip-n")).remove();
 					var widgets = dashboard.widgets.sort(compareWidgetPriority);
 					loadWidgets($content, widgets);
 				} else {
 					$.post(applicationRoot + "tutorial", null, function(video) {
 						$content.prepend(video);
-						$tutorial.show();
+						$tutorial.show(function() {
+							$tutorial.tooltip({
+										gravity: "ne",
+										open: "load",
+										close: { 
+											element: $tutorial,
+											event: "click", 
+											callback: function() { $("video").remove(); $tutorial.hide(); } 
+										},
+										domReady: true,
+										content: "Click here to close the tutorial or drag a widget onto the dashboard."
+									});
+						});
+						
 						Modal.alert({
 							"title": "Time to add some widgets!",
 							"content": "It looks like you haven't added any widgets to this dashboard yet. To add a widget, drag it into your dashboard from the Trends or Forecast libraries.",
