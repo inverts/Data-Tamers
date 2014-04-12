@@ -13,15 +13,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.Vector;
 import java.util.regex.Pattern;
 
 import org.json.JSONArray;
@@ -38,14 +43,9 @@ public class KeywordInsightModel extends WidgetModel {
 	private Date startDate;
 	private Date endDate;
 	private ArrayList<String> keywords;
-	//private ArrayList<String> organicKeywords;
 	private ArrayList<Integer> visits;
-	//private ArrayList<Integer> organicVisits;
 	private ArrayList<Double> bounceRate;
-	//private ArrayList<Double> organicBounceRate;
 	private int visitsGaTotal;
-	//private int privateOrganicVisitsTotal;
-	//private int organicVisitsTotal;
 	private ArrayList<String> medium;
 	private ArrayList<String> hostname;
 	private ArrayList<KeyData> cpcData;
@@ -84,13 +84,12 @@ public class KeywordInsightModel extends WidgetModel {
 			String line = null;
 			while ((line = br.readLine()) != null){
 				this.stopWordsSet.add(line);
-				//System.out.println(line);
 			}
 		} catch (IOException x) {
 			System.err.format("IOException: %s%n", x);
 		} 
 		this.viewCount = 3;
-		updateData();
+		//updateData();
 	}
 
 
@@ -176,9 +175,8 @@ public class KeywordInsightModel extends WidgetModel {
 			}
 		}
 
-		System.out.println("Number of keywords with a medium other than cpc or organic = "+countOtherMed);
-		System.out.println("Visits: cpc = "+visitsCpcTotal+" organic = "+visitsOrganicTotal+" GA total = "+visitsGaTotal);
-
+//		System.out.println("Number of keywords with a medium other than cpc or organic = "+countOtherMed);
+//		System.out.println("Visits: cpc = "+visitsCpcTotal+" organic = "+visitsOrganicTotal+" GA total = "+visitsGaTotal);
 
 		ArrayList<KeyData> data;
 		ArrayList<WordData> words = new ArrayList<WordData>();
@@ -211,9 +209,6 @@ public class KeywordInsightModel extends WidgetModel {
 			if (i==0){
 				data = organicData;
 				isPaid = false; 
-				System.out.println();
-				System.out.println("Organic loop");
-				System.out.println();
 			} else { // cpc loop
 				data = cpcData;
 				isPaid = true;
@@ -225,30 +220,29 @@ public class KeywordInsightModel extends WidgetModel {
 				worstWords = new ArrayList<WordData>();
 				bestWords = new ArrayList<WordData>();
 				wordMap.clear();
-				System.out.println();
-				System.out.println("CPC loop");
-				System.out.println();
 			}
 
 			// calculate visits percent and multipage visits for each keyword
 			Iterator<KeyData> it = data.iterator();
 			while (it.hasNext()){
 				KeyData kd = it.next();
-				if (i==1){
-					System.out.println(kd.keyword);
-				}
 				kd.visitsPercent = Math.round(10000.0*kd.visits/(visitsCpcTotal+visitsOrganicTotal))/100.0;
 				kd.multipageVisitsPercent= Math.round(100.0*kd.visitsPercent*(1.0-kd.bounceRate/100.0))/100.0;
 			}
-			// order ascending
-			Collections.sort(data);
-
+		
 
 			// * * * * * * * * * * * * * * * * * * * * *
 			// "Worst keywords:"
 			// select keywords with low visits
-
-			KeyData minKd;
+			
+			// order ascending
+			Collections.sort(data);
+			
+			int count = 0;
+			int dataSize = data.size();
+			int oneHalfData = dataSize/2;
+			int minNum = (5 <= oneHalfData)? 5 : oneHalfData;
+			KeyData minKd; 
 			it = data.iterator();
 			if (it.hasNext()){
 				minKd = it.next();
@@ -258,45 +252,71 @@ public class KeywordInsightModel extends WidgetModel {
 
 					while (it.hasNext()){
 						KeyData kd = it.next();
-						if (Math.abs((minKd.multipageVisitsPercent - kd.multipageVisitsPercent)) < 1e-9) {
+						if (Math.abs((minKd.multipageVisitsPercent - kd.multipageVisitsPercent)) < 1e-9 || count < minNum) {
 							removeKeywords.add(kd);
+							count++;
 						}
 						else {
 							break;
 						}
 					}
+				} else {
+					while (it.hasNext()){
+						KeyData kd = it.next();
+						removeKeywords.add(kd);
+						count++;
+						if (count == minNum){
+							break;
+						}
+					}
 				}
+				
 			}
 
 			// * * * * * * * * * * * * * * * * * * * * *
 			// "Improve website to better address these keywords:"
 			// select keywords with high visits and high bounce rate 
 
-			// select keywords with visits>5% and bouncerate>50%
+			// select keywords with visits>1% and bouncerate>50%
 
+			// order ascending
+			Collections.sort(data);
+			// reverse so descending
+			Collections.reverse(data);
+			
+			count = 0;
 			it = data.iterator();
 			while (it.hasNext()){
 				KeyData kd = it.next();
-				if (kd.multipageVisitsPercent>=1.0 && kd.bounceRate>=50){
+				if ((kd.multipageVisitsPercent>=1.0 && kd.bounceRate>=50) || (kd.bounceRate>=50 && count < minNum)){
 					kd.multipageVisitsPercent = Math.round(100.0*kd.multipageVisitsPercent)/100.0;
 					helpKeywords.add(kd);
+					count++;
 				}
 			}
+		
 			// sort ascending
 			Collections.sort(helpKeywords);
 			// reverse so descending
 			Collections.reverse(helpKeywords);
-
+			
 			// * * * * * * * * * * * * * * * * * * * * *
 			// "Best keywords:"
 			// Find best performing keywords
-
+			
+			// sort ascending
+			Collections.sort(helpKeywords);
+			// reverse so descending
+			Collections.reverse(helpKeywords);
+            
+			count = 0;
 			it = data.iterator();
 			while (it.hasNext()){
 				KeyData kd = it.next();
-				if (kd.multipageVisitsPercent>=.5) {//&& kd.bounceRate<50){
+				if (kd.multipageVisitsPercent>=.5 || count < minNum) {//&& kd.bounceRate<50){
 					kd.multipageVisitsPercent = Math.round(100.0*kd.multipageVisitsPercent)/100.0;
 					bestKeywords.add(kd);
+					count++;
 				}
 			}
 			// sort ascending
@@ -361,7 +381,7 @@ public class KeywordInsightModel extends WidgetModel {
 						wordMap.put(word, new WordData(word, 1, kd.multipageVisitsPercent));
 					}
 				}
-				kd.setWordList(newWordList);
+				//kd.setWordList(newWordList);
 			}
 
 			// all words array
@@ -371,11 +391,13 @@ public class KeywordInsightModel extends WidgetModel {
 			Collections.sort(words);
 
 			// Pick off first worst words if they perform at 0
+			count = 0;
 			Iterator<WordData>itw = words.iterator();
 			while (itw.hasNext()){
 				WordData wordData = itw.next();
-				if (wordData.multipageVisitsPercent < 1e-9) {
+				if (wordData.multipageVisitsPercent < 1e-9 || count < minNum) {
 					worstWords.add(wordData);
+					count++;
 				}
 				else {
 					break;
@@ -386,16 +408,19 @@ public class KeywordInsightModel extends WidgetModel {
 
 			// sort ascending (worst first)
 			Collections.sort(words);
+			
 			// reverse so is descending (best first)
 			Collections.reverse(words);
 
 			// Pick off first best words if the perform well
+			count = 0;
 			itw = words.iterator();
 			while (itw.hasNext()){
 				WordData wordData = itw.next();
-				if (wordData.multipageVisitsPercent >= .5) {
+				if (wordData.multipageVisitsPercent >= .5 || count < minNum) {
 					wordData.multipageVisitsPercent = Math.round(100.0*wordData.multipageVisitsPercent)/100.0;
 					bestWords.add(wordData);
+					count++;
 				}
 				else{
 					break;
@@ -404,12 +429,49 @@ public class KeywordInsightModel extends WidgetModel {
 			// sort ascending and then reverse so descending
 			Collections.sort(bestWords);
 			Collections.reverse(bestWords);
+		
+			// categorize the data for 4 quadrants of scatter plot
+			
+			// sort ascending and then reverse so descending			
+			Collections.sort(data);
+			Collections.reverse(data);
+			
+			// group keywords according to great, good, bad, terrible;	
+			it = data.iterator();
+			while(it.hasNext()){
+				KeyData kd = it.next();
+				if (kd.multipageVisitsPercent >= .5) {
+					if (kd.bounceRate < 50){
+						kd.group = "great";   // level 1
+					} else {
+						kd.group = "bad";     // level 3
+					}
+						
+				} else {
+					if (kd.bounceRate < 50) {
+						kd.group = "good";    // level 2
+					} else {
+						kd.group = "terrible";  // level 4
+					}
+				}
+			}
 
+/*			// test group is in the KeyData object
+			System.out.println();
+			System.out.println("Print groups of best keywords:");
+			it = bestKeywords.iterator();
+			// print group for each best keyword
+			while (it.hasNext()){
+				KeyData kd = it.next();
+				System.out.println("group = "+kd.group);
+			}
+			System.out.println("end group");
+*/
+			
 			// put data into the JSON Object member jsonData
 			this.loadJson(hasPaid, isPaid, helpKeywords, bestKeywords, removeKeywords, allKeywords, bestWords, worstWords); 
 		}
 
-		System.out.println("Hostname = "+hostname.get(0));
 	}
 
 
@@ -456,7 +518,6 @@ public class KeywordInsightModel extends WidgetModel {
 	}
 
 	// put data into JSON object to pass to the view website-performance.jsp 
-	//	this.createJson(organicHelpKeywords, organicBestKeywords, organicRemoveKeywords, organicAllKeywords, organicBestWords, organicWorstWords, helpKeywords, bestKeywords, removeKeywords, allKeywords, bestWords, worstWords); 
 	public void loadJson(boolean hasPaid, boolean isPaid, ArrayList<KeyData> hk, ArrayList<KeyData> bk, ArrayList<KeyData> rk, ArrayList<KeyData> ak, ArrayList<WordData> bw, ArrayList<WordData> ww)  {
 		try {
 
@@ -482,6 +543,7 @@ public class KeywordInsightModel extends WidgetModel {
 			JSONArray allVisitsPercent = new JSONArray();
 			JSONArray allBounceRate = new JSONArray();
 			JSONArray allMultipageVisitsPercent = new JSONArray();
+			JSONArray allGroups = new JSONArray();
 
 
 			Iterator<KeyData> it = rk.iterator();
@@ -511,7 +573,6 @@ public class KeywordInsightModel extends WidgetModel {
 				bestMultipageVisitsPercent.put(d.multipageVisitsPercent);
 			}
 
-
 			Iterator<WordData> itwc = ww.iterator();
 			while (itwc.hasNext()){
 				WordData d = itwc.next();
@@ -527,8 +588,8 @@ public class KeywordInsightModel extends WidgetModel {
 				bestWordsCount.put(d.count);
 				bestWordsMultipageVisitsPercent.put(d.multipageVisitsPercent);
 			}
-
-			// Scatter plot data
+			
+			// all keywords
 			it = ak.iterator();
 			while (it.hasNext()){
 				KeyData d = it.next();
@@ -536,10 +597,11 @@ public class KeywordInsightModel extends WidgetModel {
 				allVisitsPercent.put(d.visitsPercent);			
 				allBounceRate.put(d.bounceRate);
 				allMultipageVisitsPercent.put(Math.round(100.0*d.multipageVisitsPercent)/100.0);
+				allGroups.put(d.group);
 			}
 
 			String[] keys1 = new String[]{"Keywords", "Visits (%)", "Bounce Rate (%)", "Multipage Visits (%)"};
-			String[] keys2 = new String[]{"Word Substring", "Keyword Count", "Multipage Visits (%)"};
+			String[] keys2 = new String[]{"Substring Word", "Keyword Count", "Multipage Visits (%)"};
 			String[] scatterKeys = new String[]{"allBounceRate", "allVisitsPercent"};
 			String[] scatterAxisLabels = new String[]{"Bounce Rate (%)", "Visits (%)"};
 
@@ -553,6 +615,7 @@ public class KeywordInsightModel extends WidgetModel {
 			scatter.put("allVisitsPercent", allVisitsPercent);
 			scatter.put("allBounceRate", allBounceRate);
 			scatter.put("allMultipageVisitsPercent", allMultipageVisitsPercent);
+			scatter.put("allGroups", allGroups);
 			scatter.put("keys", scatterKeys);
 			/* Improve Keywords */
 			JSONObject improve = new JSONObject();
@@ -621,35 +684,6 @@ public class KeywordInsightModel extends WidgetModel {
 			worstSubStr.put(keys2[2], worstWordsMultipageVisitsPercent);
 			worstSubStr.put("keys", keys2);
 
-
-			/*
-			 this.jsonData.put("removeKeywords", removeKeywords);
-			 this.jsonData.put("removeVisitsPercent", removeVisitsPercent);
-			 this.jsonData.put("removeBounceRate", removeBounceRate);
-			 this.jsonData.put("removeMultipageVisitsPercent", removeMultipageVisitsPercent);
-			 this.jsonData.put("helpKeywords", helpKeywords);
-			 this.jsonData.put("helpVisitsPercent", helpVisitsPercent);
-			 this.jsonData.put("helpBounceRate", helpBounceRate);
-			 this.jsonData.put("helpMultipageVisitsPercent", helpMultipageVisitsPercent);
-			 this.jsonData.put("bestKeywords", bestKeywords);
-			 this.jsonData.put("bestVisitsPercent", bestVisitsPercent);
-			 this.jsonData.put("bestBounceRate", bestBounceRate);
-			 this.jsonData.put("bestMultipageVisitsPercent", bestMultipageVisitsPercent);
-			 this.jsonData.put("allCpcKeywords", allCpcKeywords);
-			 this.jsonData.put("allCpcVisitsPercent", allCpcVisitsPercent);
-			 this.jsonData.put("allCpcBounceRate", allCpcBounceRate);
-			 this.jsonData.put("allCpcMultipageVisitsPercent", allCpcMultipageVisitsPercent);
-			 this.jsonData.put("words", words);
-			 this.jsonData.put("wordData", wordData);
-			 this.jsonData.put("multipageVisitsPercent", multipageVisitsPercent);
-			 this.jsonData.put("worstWords", worstWords);
-			 this.jsonData.put("worstWordsCount", worstWordsCount);
-			 this.jsonData.put("worstWordsMultipageVisitsPercent", worstWordsMultipageVisitsPercent);
-			 this.jsonData.put("bestWords", bestWords);
-			 this.jsonData.put("bestWordsCount", bestWordsCount);
-			 this.jsonData.put("bestWordsMultipageVisitsPercent", bestWordsMultipageVisitsPercent);
-			 */
-
 			if (isPaid) {				
 				this.jsonData.put("paidscatter", scatter);
 				this.jsonData.put("paidimprove", improve);
@@ -679,14 +713,10 @@ public class KeywordInsightModel extends WidgetModel {
 					this.jsonData.put("paidworstsubstr", nullobj);
 				}
 			}
-
-
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-
 	} 
 
 
@@ -735,7 +765,9 @@ class KeyData implements Comparable<KeyData>{
 	public double bounceRate;
 	public double multipageVisitsPercent;
 	public double visitsPercent;
-	private List<String> wordList = new ArrayList<String>();
+	public String group;
+	// words contained in the keyword
+	//private List<String> wordList = new ArrayList<String>();
 
 	public KeyData(String keyword, int visits, double bounceRate){
 		this.keyword = keyword;
@@ -743,9 +775,10 @@ class KeyData implements Comparable<KeyData>{
 		this.bounceRate = Math.round(100.0*bounceRate)/100.0;
 		this.multipageVisitsPercent = -1.;
 		this.visitsPercent = -1.;
+		this.group = "";
 	}
 
-	public List<String> getWordList(){
+	/*public List<String> getWordList(){
 		List<String> newlist = new ArrayList<String>(wordList);
 		return newlist;
 	}
@@ -753,12 +786,21 @@ class KeyData implements Comparable<KeyData>{
 	public void setWordList(List<String> list) {
 		wordList.clear();
 		wordList.addAll(list);
-	}
+	} */
 
 	public int compareTo(KeyData kd){
-		return Double.compare(this.multipageVisitsPercent, kd.multipageVisitsPercent);
+		// sort multipage ascending
+		int mpCmp = Double.compare(this.multipageVisitsPercent, kd.multipageVisitsPercent);
+		int result=0;
+		if (mpCmp != 0){
+			result = mpCmp;
+		} else {
+			int brResult = Double.compare(this.bounceRate, kd.bounceRate);
+			// sort bounce rate descending
+			result = (brResult == 0)?  brResult : -brResult;
+		}
+        return result;
 	}
-
 }
 
 //class to holds word, a frequency count, a rank
@@ -784,6 +826,3 @@ class WordData implements Comparable<WordData>{
 	}
 
 }
-
-
-
