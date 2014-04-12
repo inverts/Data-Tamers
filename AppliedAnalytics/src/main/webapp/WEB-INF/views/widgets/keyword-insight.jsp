@@ -17,7 +17,7 @@
 	  <li><a class="best">Best</a></li>
 	  <li><a class="worst">Worst</a></li>
 	  <li><a class="all">All</a></li>
-	  <li><a class="bestsub">BestStr</a></li>
-	  <li><a class="worstsub">WorstStr</a></li>
+	  <li><a class="bestsub">Best Words</a></li>
+	  <li><a class="worstsub">Worst Words</a></li>
 	</ul>
 </div>

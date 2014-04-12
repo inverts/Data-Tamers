@@ -205,16 +205,8 @@ public class WebsitePerformanceModel extends WidgetModel {
 		public void setJsonDataPoints()  {
 			 try {
 				 
-				 /*JSONArray arr1 = new JSONArray();
-				 JSONArray arr2 = new JSONArray();
-				 JSONArray arr3 = new JSONArray();
-				 JSONArray arr4 = new JSONArray();
-				 JSONArray arr5 = new JSONArray();
-				 JSONArray arr6 = new JSONArray();*/
-				 
 				 String[] keys1 = new String[]{"Webpage Title/Link", "Visits (%)", "Bounce Rate (%)", "Exit Rate (%)"};
 				 
-				 //this.jsonData.put(keys1[0], pagePathResults);
 				 this.jsonData.put(keys1[0], pageTitleResults);
 				 this.jsonData.put(keys1[1], visitsPercentResults);
 				 this.jsonData.put(keys1[2], bounceRateResults);

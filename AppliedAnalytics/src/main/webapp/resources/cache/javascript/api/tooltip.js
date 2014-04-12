@@ -30,6 +30,7 @@
     $.fn.tooltip = function (params) {
     	return this.each(function() {
     		var $this = $(this);
+    		
     		var settings = $.extend({}, defaults, params);
     		
     		// if just a string is passed in for open/close events
@@ -78,7 +79,7 @@
     		};
     		
     		$this.data("tooltip-n", tooltip.n); // store the tooltip id # so we can call events on the specific tooltip.
-    		
+
     		// Mouse on/off tooltip event
     		// Not working at the moment
     		/*if (settings.onHover)
@@ -151,6 +152,8 @@
 				title: function() { return tooltip.element.html(); },
 				opacity: settings.opacity
 			});
+			
+			$this.data("hasTooltip", true);
 	
 			
 			/****************************

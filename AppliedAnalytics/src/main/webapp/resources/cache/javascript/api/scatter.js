@@ -6,7 +6,7 @@
 	registerKeyboardHandler = function(callback) {
 		  d3.select(window).on("keydown", callback);  
 		};
-		
+
 	/* global variables */
 	var defaults = {
 			'id'	: '',
@@ -15,7 +15,7 @@
 			'xKey' 	: '',
 			'yKey'	: ''
 	};
-	
+
 	/* function declaration */
 	$.fn.scatter = function (params) {
 		return this.each(function() {
@@ -37,11 +37,11 @@
 			// tooltip
 			//var tip = d3.select("#" + settings.id).append("div")
 			//.attr("class", "tip").style("opacity", 0);
-				
-			
+
+
 			var svg = d3.select("#"+settings.id).append("svg").attr("height", height).attr("width", width);
-						
-			
+
+
 			// get size of object sdata
 			Object.size = function(obj) {
 			    var size = 0, key;
@@ -51,7 +51,7 @@
 			    return size;
 			};
 			var len = Object.size(sdata);	
-			
+
 			var chart;
 			nv.addGraph(function() {
 			  chart = nv.models.scatterChart()
@@ -63,11 +63,12 @@
 			                ;
 
 			  chart.xAxis.axisLabel("Bounce Rates (%)");
+			 // chart.yAxis.axisLabel("Multipage Visit Rates (%)");
 			  chart.yAxis.axisLabel("Visit Rates (%)");
 			  chart.xAxis.tickFormat(d3.format('.02f'));
 			  chart.yAxis.tickFormat(d3.format('.02f'));
-			  
-			  
+
+
 			  //tooltip content
 			  chart.tooltipContent(function(key, y, e, graph) {
 			        var x = String(graph.point.x);
@@ -76,8 +77,8 @@
 			        tooltip_str = '<center><b>'+key+'</b></center>';
 			        return tooltip_str;
 			    });
-			  
-			  
+
+
 			  //append data to chart
 			  svg.datum(formatData(sdata))
 			      .call(chart);
@@ -87,10 +88,10 @@
 			  return chart;
 			});
 
-			
+
 			function getKeywords(sdata){
 				var words = [];
-				for(i=0; i < len; i++){						  
+				for(var i=0; i < len; i++){						  
 					  words[i] = sdata[i].key;
 				  }
 				return words;
@@ -98,12 +99,12 @@
 
 			function formatData(sdata) { 
 			  console.log(sdata)
-			  var data = [],
-			  	xvals = [],
-			  	yvals = [],
-			  	words = [];		
-			  
-			  for(i=0; i < len; i++){						  
+			  var data = [];
+			  var xvals = [];
+			  var yvals = [];
+			  var words = [];		
+
+			  for(var i=0; i < len; i++){						  
 				  xvals[i] = sdata[i].values[0].x;
 				  yvals[i] = sdata[i].values[0].y;
 				  words[i] = sdata[i].key;
@@ -112,18 +113,18 @@
 				// keywords -- sdata[index].key
 				// values BOUNCE RATE -- sdata[index].values[0].x
 				// values VISITS -- sdata[index].values[0].y
-			  
-			  for (i = 0; i < 1; i++) {
+
+			  for (var i = 0; i < 1; i++) {
 				    data.push({
 				      key: 'keywords',
 				      values: []
 				    });
 
-				    for (j = 0; j < len; j++) {
+				    for (var j = 0; j < len; j++) {
 				      data[i].values.push({x: xvals[j], y: yvals[j], kw: words[j]});
 				    }
 				  }
-			  
+
 			  	  console.log(data)
 				  return data;
 				}
@@ -132,7 +133,7 @@
 			/*******************************************************************
 			 * GRAPH PROPERTIES *
 			 ******************************************************************/
-			
+
 			/*
 			var scatter = {
 					"id"	:this.id + "Settings"				
@@ -263,11 +264,8 @@
 			    .attr("y", 15)
 			    .attr("transform", "rotate(-90)")
 			    .text("Webpage Visits (%)"); //("Percentage of Webpage Visits"); */
-			
+
 		});
 	}; 
 
 }(jQuery));
-
-
-
