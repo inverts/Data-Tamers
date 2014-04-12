@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.TreeSet;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
@@ -436,37 +437,115 @@ public class KeywordInsightModel extends WidgetModel {
 			Collections.sort(data);
 			Collections.reverse(data);
 			
-			// group keywords according to great, good, bad, terrible;	
+/*			// group keywords according to great, good, bad, terrible;	
+			it = data.iterator();
+			
+			// find the distance from the previous in percent of max value
+			KeyData prevkd = null;
+			if (it.hasNext()){
+				prevkd = it.next();
+				prevkd.prevDist = 0.0;  // max mpvisit has no prev
+			}
+			double maxMVP = prevkd.multipageVisitsPercent;
+			
+			while (it.hasNext()){
+				KeyData kd = it.next();
+				kd.prevDist = 100* (prevkd.multipageVisitsPercent - kd.multipageVisitsPercent)/maxMVP;
+				prevkd = kd;
+			}
+			
+			// find percent of total number of points for each multipagePercent value
+			Map<String,Integer> dupMap = new HashMap<String,Integer>();
+			// count duplicates
 			it = data.iterator();
 			while(it.hasNext()){
 				KeyData kd = it.next();
-				if (kd.multipageVisitsPercent >= .5) {
-					if (kd.bounceRate < 50){
-						kd.group = "great";   // level 1
-					} else {
-						kd.group = "bad";     // level 3
-					}
-						
+				if (dupMap.containsKey(kd.multipageVisitsPercent+""))
+					dupMap.put(kd.multipageVisitsPercent+"", dupMap.get(kd.multipageVisitsPercent+"")+1);
+				else 
+				    dupMap.put(kd.multipageVisitsPercent+"", 1);
+			}
+			
+			// compute duplicate percent of total number of datapoints (weight)
+		//	for (String k : dupMap.keySet()){		
+		//			dupMap.put(k, 100*dupMap.get(k)/data.size());
+		//	}
+		
+			// if datapoint has less than 5% weight add to previous group
+			it = data.iterator();
+		
+			if (it.hasNext()){
+				prevkd = it.next();
+				prevkd.group = 0;
+			}
+			
+			while(it.hasNext()){
+				KeyData kd = it.next();
+			//	if (dupMap.get(kd.multipageVisitsPercent+"") < 3 && (kd.prevDist < 0 || kd.prevDist > 5)){
+				if (kd.prevDist <0 || kd.prevDist > 5){
+					kd.group = 0;
 				} else {
-					if (kd.bounceRate < 50) {
-						kd.group = "good";    // level 2
-					} else {
-						kd.group = "terrible";  // level 4
-					}
+					kd.group = 1;
 				}
+				prevkd = kd;
+				
+			}
+*/			
+			// group keywords according to level of performance 0-3, 0 is the best 
+			Set<Double> mvpSet = new TreeSet<Double>();
+			it = data.iterator();
+			while (it.hasNext()){
+			    mvpSet.add(it.next().multipageVisitsPercent);
+			}
+		    ArrayList<Double> mvpSetList = new ArrayList<Double>(mvpSet);
+			Collections.sort(mvpSetList);
+			Collections.reverse(mvpSetList);
+			
+			
+			int mvpCount = mvpSetList.size();
+			double limit = -1.0;
+			if (mvpCount < 4){
+				limit = mvpSetList.get(mvpCount-1); // get last value
+				if (limit <= 0 && mvpCount>2){
+					limit = mvpSetList.get(mvpCount-2); // get 2nd to last value		
+				}
+			} else {
+				limit = mvpSetList.get(mvpCount*3/4);
+			}
+			
+			//limit = (mvp.get(iq).multipageVisitsPercent<1.0 ? data.get(iq).multipageVisitsPercent : 1.0);
+
+			it = data.iterator();			
+			while(it.hasNext()){
+				KeyData kd = it.next();
+				if (kd.multipageVisitsPercent> limit)
+					if (kd.bounceRate < 50 )
+						kd.group = 0;
+					else
+						kd.group = 1;
+				else
+					if (kd.bounceRate < 50 )
+						kd.group = 2;
+					else
+						kd.group = 3;
+					
 			}
 
-/*			// test group is in the KeyData object
+			// test group is in the KeyData object
 			System.out.println();
-			System.out.println("Print groups of best keywords:");
-			it = bestKeywords.iterator();
+			System.out.println("Print groups of all keywords:");
+			System.out.println("limit = "+limit);
+			
+			it = data.iterator();
 			// print group for each best keyword
+			
 			while (it.hasNext()){
 				KeyData kd = it.next();
-				System.out.println("group = "+kd.group);
+				//System.out.println(kd.group+", "+dupMap.get(kd.multipageVisitsPercent+"")+", "+kd.prevDist+", "+kd.multipageVisitsPercent+", "+kd.bounceRate+""+kd.keyword);
+				System.out.println(kd.group+", "+kd.multipageVisitsPercent+", "+kd.bounceRate+", "+kd.visitsPercent+","+kd.keyword);
 			}
 			System.out.println("end group");
-*/
+
 			
 			// put data into the JSON Object member jsonData
 			this.loadJson(hasPaid, isPaid, helpKeywords, bestKeywords, removeKeywords, allKeywords, bestWords, worstWords); 
@@ -475,6 +554,66 @@ public class KeywordInsightModel extends WidgetModel {
 	}
 
 
+	public  void cluster1D() {
+
+		int[] data = {1,8,9,3,10,12,-16,-2,-1,0,1,-3};
+
+		int clusters = 2;
+		int length = data.length;
+		int[][] sums = new int[clusters][length];
+		int[][] centroids = {{0, 0, 0}, {1, 8, 9}};
+		int[] count = new int[clusters];
+		int i, j, k;
+		long minimum, difference;
+		boolean converged = false;
+
+		do {
+
+			for(i = 0; i < clusters; i++) {
+				centroids[0][i] = centroids[1][i];
+				count[i] = 0;
+				centroids[1][i] = 0;          }
+
+			for(i = 0; i < length; i++) {
+				sums[0][i] = 0;
+				minimum = centroids[0][0] > data[i] ? centroids[0][0] - data[i] : data[i] - centroids[0][0];
+				k = 0;
+
+				for(j = 1; j < clusters; j++) {
+					sums[j][i] = 0;
+					difference = centroids[0][j] > data[i] ? centroids[0][j] - data[i] : data[i] - centroids[0][j];
+					if(difference < minimum) {
+						minimum = difference;
+						k = j;
+					}
+				}
+				sums[k][i] = data[i];
+				count[k]++;
+			}
+
+			converged = true;
+
+			for(i = 0; i < clusters; i++) {
+				difference = 0;
+				if(count[i] > 0) {
+					for(j = 0; j < length; j++) {
+						centroids[1][i] += sums[i][j] / count[i];
+						difference += sums[i][j] % count[i];
+						centroids[1][i] += difference / count[i];
+						difference %= count[i];
+					}
+				}
+
+				converged &= centroids[0][i] == centroids[1][i];
+			}
+		}while(!converged);
+
+		for(i = 0; i < clusters; i++) {
+
+			System.out.println(centroids[1][i]);
+		}
+	}
+	
 	public int editDistance (String s0, String s1) {
 		int len0 = s0.length()+1;
 		int len1 = s1.length()+1;
@@ -602,8 +741,8 @@ public class KeywordInsightModel extends WidgetModel {
 
 			String[] keys1 = new String[]{"Keywords", "Visits (%)", "Bounce Rate (%)", "Multipage Visits (%)"};
 			String[] keys2 = new String[]{"Substring Word", "Keyword Count", "Multipage Visits (%)"};
-			String[] scatterKeys = new String[]{"allBounceRate", "allVisitsPercent"};
-			String[] scatterAxisLabels = new String[]{"Bounce Rate (%)", "Visits (%)"};
+			String[] scatterKeys = new String[]{"allBounceRate", "allMultipageVisitsPercent"};
+			String[] scatterAxisLabels = new String[]{"Bounce Rate (%)", "Multipage Visits (%)"};
 
 			/* Scatterplot */
 			JSONObject scatter = new JSONObject();
@@ -765,7 +904,8 @@ class KeyData implements Comparable<KeyData>{
 	public double bounceRate;
 	public double multipageVisitsPercent;
 	public double visitsPercent;
-	public String group;
+	public int group;
+	public double prevDist;
 	// words contained in the keyword
 	//private List<String> wordList = new ArrayList<String>();
 
@@ -775,7 +915,8 @@ class KeyData implements Comparable<KeyData>{
 		this.bounceRate = Math.round(100.0*bounceRate)/100.0;
 		this.multipageVisitsPercent = -1.;
 		this.visitsPercent = -1.;
-		this.group = "";
+		this.group = -1;
+		this.prevDist = -1.0;
 	}
 
 	/*public List<String> getWordList(){
@@ -826,3 +967,8 @@ class WordData implements Comparable<WordData>{
 	}
 
 }
+
+
+
+
+ 

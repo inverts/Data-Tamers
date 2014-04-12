@@ -63,7 +63,7 @@
 			                ;
 
 			  chart.xAxis.axisLabel("Bounce Rates (%)");
-			  chart.yAxis.axisLabel("Visit Rates (%)");
+			  chart.yAxis.axisLabel("Multipage Visit Rates (%)");
 			  chart.xAxis.tickFormat(d3.format('.02f'));
 			  chart.yAxis.tickFormat(d3.format('.02f'));
 
