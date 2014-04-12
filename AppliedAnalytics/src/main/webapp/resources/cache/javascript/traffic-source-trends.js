@@ -42,13 +42,20 @@ function getTrafficSourceTrendsData($element, callback) {
 				var id = $element.attr("id");
 				//Convert dataRows to raw data
 				rawData = new Array();
-				
+				var avgDaysInMonth = 30.436875;
 				for(i in dataRows) {
-					changePerMonth = Math.round(dataRows[i]['slope'] * 30.436875 * 10) / 10;
-					variancePerMonth = Math.round(dataRows[i]['confidenceHalfWidth'] * 30.436875 * 10) / 10;
+					changePerMonth = Math.round(dataRows[i]['slope'] * avgDaysInMonth * 10) / 10;
+					variancePerMonth = Math.round(dataRows[i]['confidenceHalfWidth'] * avgDaysInMonth * 10) / 10;
+					lowerBound = Math.round((changePerMonth - variancePerMonth)*10) / 10;
+					upperBound = Math.round((changePerMonth + variancePerMonth)*10) / 10;
+					
 					if (Math.abs(changePerMonth) > 1 && Math.abs(changePerMonth) - variancePerMonth > 0) {
 						row = new Array();
 						row.push(dataRows[i]['sourceName']);
+						if (changePerMonth > 0)
+							row.push(lowerBound + " to " + upperBound + " more visits");
+						else
+							row.push(upperBound + " to " + lowerBound + " less visits");
 						row.push(changePerMonth + " ±" + variancePerMonth + " " + metric);
 						rawData.push(row);
 					}
