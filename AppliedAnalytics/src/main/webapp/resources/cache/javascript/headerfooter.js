@@ -23,19 +23,6 @@ $(function() {
 		updateSettings({ update: 1 }, updateWidgets);
 	});
 	
-	var $tutorial = $(".tutorialToggle");
-	
-	$tutorial.tooltip({
-		gravity: "ne",
-		open: "load",
-		close: { 
-			element: $tutorial,
-			event: "click", 
-			callback: function() { $("video").remove(); $tutorial.hide(); } 
-		},
-		content: "Click here to close the tutorial or drag a widget onto the dashboard."
-	});
-	
 });
 
 
