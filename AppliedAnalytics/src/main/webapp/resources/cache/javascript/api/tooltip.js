@@ -20,8 +20,8 @@
 			'arrow'		: true,			// show arrow or not
 			'onhover'	: null,			// event for when hovering onto a tooltip (currently not implemented)
 			'out'		: null,			// event for when hovering out of a tooltip (currently not implemented)
-			'open'		: { "element": null, "event": "mouseover", "callback": null },	//open element/action; could just be a string depicting the action and it will assume the element is the element portraying the tooltip.
-			'close'		: { "element": null, "event":"mouseout", "callback": null  }, // close element/action; "  "
+			'open'		: "mouseover",	
+			'close'		: "mouseout", 
 			'domReady'	: false // show tooltip when element loads
 	};
 	
@@ -37,7 +37,7 @@
     			var openObj = {"element": $this, "event": settings.open };
     			settings.open = openObj;
     		}
-    		else if (!settings.open.element) 
+    		else if (settings.open && !settings.open.element) 
 	    			settings.open.element = $this;
 	    	
     		
@@ -45,7 +45,7 @@
     			var closeObj = {"element": $this, "event": settings.close };
     			settings.close = closeObj;
     		}
-    		else if (!settings.close.element)
+    		else if (settings.close && !settings.close.element)
     			settings.close.element = $this;
     		
     		// Does not respond to 'hover' so if passed as the event, 
@@ -77,6 +77,8 @@
     				"n"			: nTooltips++
     		};
     		
+    		$this.data("tooltip-n", tooltip.n); // store the tooltip id # so we can call events on the specific tooltip.
+    		
     		// Mouse on/off tooltip event
     		// Not working at the moment
     		/*if (settings.onHover)
@@ -85,7 +87,7 @@
     		/****************************
 			 *  		CONTENT			*
 			 ****************************/ 
-			var content = $this.attr("title");
+    		var content = settings.content || $this.attr("title");
 			
 			// if nothing in the title, check data.
 			if (!content || !content.length) {
@@ -155,7 +157,7 @@
 			 *  Tooltip Trigger Events	*
 			 ****************************/ 
 			
-			var dur = 1500; // timeout duration.
+			var dur = 500; // timeout duration.
 			
 			// Event is a toggle
 			if (settings.open.element[0] == settings.close.element[0] &&
@@ -167,13 +169,18 @@
 							if (tooltip.active) {
 								$this.tipsy("hide");
 								tooltip.active = false;
+								if (settings.close.callback)
+									settings.close.callback();
 
 							}
 							else {
 								$this.tipsy("show");
 								tooltip.active = true;
-								
+
 								$("#tipsy").attr("id", "tipsy" + tooltip.n);
+								
+								if (settings.open.callback)
+									settings.open.callback();
 							}
 
 						});
@@ -188,6 +195,9 @@
 								tooltip.active = true;
 								
 								$("#tipsy").attr("id", "tipsy" + tooltip.n);
+								
+								if (settings.open.callback)
+									settings.open.callback();
 
 							}
 				});
@@ -200,6 +210,8 @@
 							else {
 								$this.tipsy("hide");
 								tooltip.active = false;
+								if (settings.close.callback)
+									settings.close.callback();
 							}
 						}
 				});
@@ -227,8 +239,11 @@
 				tooltip.closeTimer = setTimeout(function() {
 												$this.tipsy("hide");
 												tooltip.active = false;
+												if (settings.close.callback)
+													settings.close.callback();
 											}, duration);
 			}
+			
     		
 			// on DOM ready, open the tooltip.
 			if (settings.domReady)

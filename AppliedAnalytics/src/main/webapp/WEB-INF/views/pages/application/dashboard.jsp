@@ -15,7 +15,7 @@ var dashboardId = ${model.dashboardId};
 /* Check if the URL indicate's we're on a different dashboard. */
 var before = "#dashboards/";
 var after = "/";
-var begin = window.location.href.indexOf(before)
+var begin = window.location.href.indexOf(before);
 if (begin > 0) {
 	begin += before.length;
 	end = window.location.href.indexOf(after, begin);
@@ -34,7 +34,5 @@ loadDashboard(dashboardId);
 </script>
 
 <div id="application-page" class="dashboard">
-	<div class="dashboard-content">
-		
-	</div>
+	<div class="dashboard-content"></div>
 </div>

@@ -4,8 +4,8 @@
 
 (function ($) {
 	registerKeyboardHandler = function(callback) {
-		d3.select(window).on("keydown", callback);  
-	};
+		  d3.select(window).on("keydown", callback);  
+		};
 
 	/* global variables */
 	var defaults = {
@@ -27,10 +27,10 @@
 			var sdata = settings.data;			
 
 			var margin = {
-					"top" : 20,
-					"right" : 15,
-					"bottom" : 50,
-					"left" : 60
+				"top" : 20,
+				"right" : 15,
+				"bottom" : 50,
+				"left" : 60
 			};
 			var width = $this.width();
 			var height = $this.height();			
@@ -44,81 +44,89 @@
 
 			// get size of object sdata
 			Object.size = function(obj) {
-				var size = 0, key;
-				for (key in obj) {
-					if (obj.hasOwnProperty(key)) size++;
-				}
-				return size;
+			    var size = 0, key;
+			    for (key in obj) {
+			        if (obj.hasOwnProperty(key)) size++;
+			    }
+			    return size;
 			};
 			var len = Object.size(sdata);	
 
-			//var chart;
+			var chart;
 			nv.addGraph(function() {
-				var chart = nv.models.scatterChart()
-				//.showDistX(true)
-				//.showDistY(true)
-				//.useVoronoi(false)
-				.color(d3.scale.category10().range())
-				.transitionDuration(300);
+			  chart = nv.models.scatterChart()
+			                //.showDistX(true)
+			                //.showDistY(true)
+			                .useVoronoi(false)
+			                .color(d3.scale.category10().range())
+			                .transitionDuration(300)
+			                ;
 
-				chart.xAxis.tickFormat(d3.format('.02f'));
-				chart.yAxis.tickFormat(d3.format('.02f'));
-				chart.tooltipContent(function(key) {
-					return '<h2>' + key + '</h2>';
-				});
+			  chart.xAxis.axisLabel("Bounce Rates (%)");
+			  chart.yAxis.axisLabel("Visit Rates (%)");
+			  chart.xAxis.tickFormat(d3.format('.02f'));
+			  chart.yAxis.tickFormat(d3.format('.02f'));
 
-				svg.datum(formatData(sdata))
-					.call(chart);
 
-				nv.utils.windowResize(chart.update);
+			  //tooltip content
+			  chart.tooltipContent(function(key, y, e, graph) {
+			        var x = String(graph.point.x);
+			        var y = String(graph.point.y);
+			        var key = String(graph.point.kw);
+			        tooltip_str = '<center><b>'+key+'</b></center>';
+			        return tooltip_str;
+			    });
 
-				return chart;
+
+			  //append data to chart
+			  svg.datum(formatData(sdata))
+			      .call(chart);
+
+			  nv.utils.windowResize(chart.update);
+
+			  return chart;
 			});
 
-			/*			function getKeywords(sdata){
+
+			function getKeywords(sdata){
 				var words = [];
 				for(var i=0; i < len; i++){						  
 					  words[i] = sdata[i].key;
 				  }
 				return words;
-			} */
+			}
 
 			function formatData(sdata) { 
-				console.log(sdata);
-				var data = [];
-				var xvals = [];
-				var yvals = [];
-				var words = [];		
-				console.log("sdata keywords - words");
-				for(var i=0; i < len; i++){						  
-					xvals[i] = sdata[i].values[0].x;
-					yvals[i] = sdata[i].values[0].y;
-					words[i] = sdata[i].key;
-					console.log(sdata[i].key, words[i]);
-				}
-				/* accessing data : */
+			  console.log(sdata)
+			  var data = [];
+			  var xvals = [];
+			  var yvals = [];
+			  var words = [];		
+
+			  for(var i=0; i < len; i++){						  
+				  xvals[i] = sdata[i].values[0].x;
+				  yvals[i] = sdata[i].values[0].y;
+				  words[i] = sdata[i].key;
+			  }
+			  /* accessing data : */
 				// keywords -- sdata[index].key
 				// values BOUNCE RATE -- sdata[index].values[0].x
 				// values VISITS -- sdata[index].values[0].y
-              	
-				for (var i = 0; i < 1; i++) {
-					data.push({
-						key: [],
-						values: []
-					});
 
-					for (var j = 0; j < len; j++) {
-						data[i].values.push({x: xvals[j], y: yvals[j]});
-						data[i].key[j] = words[j];
-					}
-				} 
-/*				console.log();
-				console.log("data array:");
-				console.log();
-				console.log(data);
-*/
-				return data;
-			}
+			  for (var i = 0; i < 1; i++) {
+				    data.push({
+				      key: 'keywords',
+				      values: []
+				    });
+
+				    for (var j = 0; j < len; j++) {
+				      data[i].values.push({x: xvals[j], y: yvals[j], kw: words[j]});
+				    }
+				  }
+
+			  	  console.log(data)
+				  return data;
+				}
 
 
 			/*******************************************************************
@@ -149,11 +157,11 @@
 			var yScale = d3.scale.linear()
 				.domain([0, maxdataY])
 				.range([height-padding, padding]);
-
+			
 			// first color scale
 			var color = d3.scale.category20();
-
-
+						
+			
 			// make circles for each data point
 			svg.selectAll("circle").data(sdata).enter()
 				.append("circle")
@@ -184,7 +192,7 @@
 		               .duration(500)
 		               .style("opacity", 0);
 			      }); 
-
+			
 			// remove duplicates
 		    var legend_data = sdata.filter(function(elem, pos) {
 		        return sdata.indexOf(elem) == pos;
@@ -216,8 +224,8 @@
 		               .style("opacity", 0);
 			      }); 
 
-
-
+			  
+			      
 
 
 
@@ -260,6 +268,3 @@
 	}; 
 
 }(jQuery));
-
-
-

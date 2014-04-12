@@ -13,22 +13,30 @@
 
 function loadDashboard(dashboardId) {
 
-	//TODO: Refactor this callback.
+	$("video").remove(); // in case video was loaded on  previous dashboard session. We dont want this to happen only on success.
+
 	$.ajax({
 		type: 'POST',
 		url: applicationRoot + "application/dashboards/" + dashboardId,
 		data: {},
 		success: function(result) {
-				var $content = newPage("dashboard", dashboardId);
+				//var $content = newPage("dashboard", dashboardId);
+				var $content = $(".dashboard-content").data("id", dashboardId).empty();
 				var dashboard = $.parseJSON(result);
+				var $tutorial = $(".tutorialToggle").hide();
 				if (dashboard.widgets.length > 0) {
+					$("#tipsy" + $tutorial.data("tooltip-n")).remove();
 					var widgets = dashboard.widgets.sort(compareWidgetPriority);
 					loadWidgets($content, widgets);
 				} else {
-					Modal.alert({
-						"title": "Time to add some widgets!",
-						"content": "It looks like you haven't added any widgets to this dashboard yet. To add a widget, drag it into your dashboard from the Trends or Forecast libraries.",
-						"size": 'modal-default'
+					$.post(applicationRoot + "tutorial", null, function(video) {
+						$content.prepend(video);
+						$tutorial.show();
+						Modal.alert({
+							"title": "Time to add some widgets!",
+							"content": "It looks like you haven't added any widgets to this dashboard yet. To add a widget, drag it into your dashboard from the Trends or Forecast libraries.",
+							"size": 'modal-default'
+						});
 					});
 				}
 				
@@ -128,7 +136,7 @@ function loadDashboard(dashboardId) {
 							// widget loaded but data did not! Wait 5 seconds to see if it comes.
 							if ($w.children().length && addedWidget.data && !addedWidget.data.hasData) {
 								updateW = setTimeout(function() {
-									($w.children("img.spinner-content").length) 
+									($w.find("img.spinner-content").length) 
 										? updateWidget(addedWidget.data.widgetTypeId, $w.attr("id"))
 										: clearTimeout(this);
 								}, 5000);
@@ -144,7 +152,7 @@ function loadDashboard(dashboardId) {
 							if ($w.children().length && reloadW || !$w.length)
 								clearTimeout(reloadW);
 							
-							if (!$w.children("img.spinner-content").length && updateW || !$w.length)
+							if (!$w.find("img.spinner-content").length && updateW)
 								clearTimeout(updateW);
 						}
 						else

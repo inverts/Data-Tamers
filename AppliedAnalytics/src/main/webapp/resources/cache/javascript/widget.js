@@ -140,20 +140,6 @@ function widgetEvents($div, elementId, viewClass) {
 		$(selector).parent().siblings(".widget-content").slideToggle("fast");
 	});
 
-	// display trash bin for removal on click and hold
-	/*if ($content.hasClass("dashboard-content") || $content.hasClass("widget-select")) {
-		var timeoutId = 0;
-		$div.on("mousedown.widget", function(e) {
-			// we use a timeout to capture the hold so we don't get flashes
-			// of the trash bin on every single click.
-			timeoutId = setTimeout(function() { $trash.show(); }, 500); 
-		}).bind("mouseup.widget", function(e){
-			// if just a normal click and not hold, we don't want to show the trash bin at all.
-			clearTimeout(timeoutId);
-			$trash.hide();
-		});
-	}*/
-	
 	// Next and Previous view controls
 	if (viewClass) {
 

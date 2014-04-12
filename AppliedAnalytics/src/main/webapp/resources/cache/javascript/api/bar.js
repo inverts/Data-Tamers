@@ -15,18 +15,31 @@
 			var svg = d3.select("#" + this.id).append("svg");
 			var $this = $(this);
 			var settings = $.extend({}, defaults, params);
-			var sdata = settings.data;			
+			var sdata = settings.data;	
+			
+			var margin = {
+					"top" : 20,
+					"right" : 15,
+					"bottom" : 50,
+					"left" : 60
+				};
 			
 			nv.addGraph(function() {
 				  var chart = nv.models.multiBarChart()
-				      .staggerLabels(true)    //Too many bars and not enough room? Try staggering labels.
-				      //.tooltips(false)        //Don't show tooltips
 				      .transitionDuration(350)
 				      .width($this.width() * 2)
-				      .height($this.height());
+				      .height($this.height())
+				      .showXAxis(false)	
+				      .showYAxis(true)
+				      ;
 				  
+				  chart.xAxis.axisLabel("Webpages");				  
+				  chart.yAxis.axisLabel("Values (%)").axisLabelDistance(40);					  
 				  chart.xAxis.tickFormat(function (d) { return sdata["Webpage Title/Link"][d];});
 
+				  
+				  
+				  
 				  svg.datum(formatData(sdata))
 				     .call(chart);
 

@@ -8,6 +8,7 @@
 	</c:if>
 	<div class="widget_header">
 		<div class="widget_title"><fmt:message key="${widget.getTitle()}" /></div>
+		<span class="help glyphicon glyphicon-question-sign"></span>
 	</div>
 	<div class="widget-content">	
 		<img class="spinner-content" src="<c:url value="/cache/images/spinner.gif" />" width="40" height="40" />

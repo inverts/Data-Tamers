@@ -57,6 +57,7 @@ function getPagePerformanceData(id, callback){
 		}
 
 		$("#" + id + " .spinner-content").hide();
+		$("#" + id + " .help").tooltip({ content: d.description });
 		
 		// create table
 		$("#" + id + " #pagePerformanceTable").table({

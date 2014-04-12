@@ -58,6 +58,8 @@ function getDataForecastData(id, callback) {
 			$("#" + id).data("hasData", true); // flag the widget as having data.
 		
 		$("#" + id + " .spinner-content").hide();
+
+		$("#" + id + " .help").tooltip({ content: d.description });
 		
 		$('#' + id + ' #dataForecastData').empty().graph({
 															data: d.data,

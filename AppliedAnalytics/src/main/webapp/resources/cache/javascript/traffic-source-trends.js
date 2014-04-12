@@ -58,6 +58,7 @@ function getTrafficSourceTrendsData($element, callback) {
 				});
 				
 				$("#" + id + " .spinner-content").hide();
+				$("#" + id + " .help").tooltip({ content: dataModel.description });
 				
 				$("#" + id + " #trafficSourceTrendsBest").table({
 					"data"		: dataRows,
