@@ -98,7 +98,6 @@
 			}
 
 			function formatData(sdata) { 
-			  console.log(sdata)
 			  var data = [];
 			  var xvals = [];
 			  var yvals = [];
@@ -125,7 +124,6 @@
 				    }
 				  }
 
-			  	  console.log(data)
 				  return data;
 				}
 

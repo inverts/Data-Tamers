@@ -16,7 +16,11 @@ function loadTrafficSourceTrendsWidget(id, callback) {
 				$element.fadeIn("fast", function() { 
 						$element.html(response);
 						
-						getTrafficSourceTrendsData($element, function() {
+						getTrafficSourceTrendsData($element, function(e) {
+							
+							$("#" + id + " a.line").click(function(e) { changeViewBtn(id, "trafficSourceTrendsLine"); });
+							$("#" + id + " a.tst-table").click(function(e) { changeViewBtn(id, "trafficSourceTrendsTable"); });
+							
 							$element.data("hasData", true); // flag the widget as having data.
 						});
 						
@@ -92,6 +96,7 @@ function getTrafficSourceTrendsData($element, callback) {
 				        "sEmptyTable":     "Nothing to report here for now!"
 				    }
 				}).show();
+				
 				for(index in slopeGraphs) {
 					canvas = drawSlope(slopeGraphSlopes[index], $("#tst-row-" + slopeGraphs[index]), 50, 50, 2);
 					$(canvas).css("border", "2px solid #666");
@@ -103,14 +108,15 @@ function getTrafficSourceTrendsData($element, callback) {
 					if (index != 0)
 						$(element).css("text-align", "center");
 				})
-				
-				//$("#" + $element.attr("id")).show();
+
 		});	
 	
 }
 
 
 function updateTrafficSourceTrends(id, callback) {
-	
-	getTrafficSourceTrendsData($("#" + id));
+	getTrafficSourceTrendsData(id, function() {
+		$("#" + id + " .trafficSourceVisual.active").show();
+	});
+	//getTrafficSourceTrendsData($("#" + id));
 }

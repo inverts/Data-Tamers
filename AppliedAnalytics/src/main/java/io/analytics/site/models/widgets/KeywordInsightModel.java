@@ -13,22 +13,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
 import java.util.TreeSet;
-import java.util.Vector;
-import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,7 +42,6 @@ public class KeywordInsightModel extends WidgetModel {
 	private ArrayList<Double> bounceRate;
 	private int visitsGaTotal;
 	private ArrayList<String> medium;
-	private ArrayList<String> hostname;
 	private ArrayList<KeyData> cpcData;
 	private ArrayList<KeyData> organicData;
 	private Set<String> stopWordsSet;
@@ -140,7 +133,6 @@ public class KeywordInsightModel extends WidgetModel {
 		bounceRate = dataObject.getVisitBounceRate();	
 		visitsGaTotal = dataObject.getVisitsTotal();
 		medium = dataObject.getMedium();
-		hostname = dataObject.getHostname();
 
 		Iterator<String> itk = keywords.iterator();
 		Iterator<Integer> itv = visits.iterator();
@@ -191,9 +183,8 @@ public class KeywordInsightModel extends WidgetModel {
 		ArrayList<KeyData> allKeywords = new ArrayList<KeyData>();
 
 
-		// iterate twice to compute keyword data
-		// for organic search keywords and if available
-		// paid search keywords
+		// iterate twice to compute keyword data for organic search
+		//  keywords and if available paid search keywords
 		boolean isPaid = false;
 		boolean hasPaid = false;
 		int n = 1;  // n is the number of iterations, at least one
@@ -552,7 +543,6 @@ public class KeywordInsightModel extends WidgetModel {
 		}
 
 	}
-
 
 	public  void cluster1D() {
 
