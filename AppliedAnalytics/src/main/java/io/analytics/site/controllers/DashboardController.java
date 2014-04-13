@@ -206,7 +206,7 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 			return new ModelAndView("unavailable");
 		}
 		if (filter == null) {
-			filter = new FilterModel();
+			filter = new FilterModel(settings.getActiveProfile());
 			session.setAttribute("filter", filter);
 		}
 		

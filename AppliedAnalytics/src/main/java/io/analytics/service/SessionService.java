@@ -76,11 +76,11 @@ public class SessionService implements ISessionService {
 		try {
 			 filter = (FilterModel) session.getAttribute("filter");
 			if (filter == null) {
-				filter = new FilterModel();
+				filter = new FilterModel(settings.getActiveProfile());
 				session.setAttribute("filter", filter);
 			}
 		} catch (ClassCastException e) {
-			filter = new FilterModel();
+			filter = new FilterModel(settings.getActiveProfile());
 			session.setAttribute("filter", filter);
 		}
 		this.filter = filter;

@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,14 +48,15 @@ public class SettingsController {
 					throws IOException {
 
 		SettingsModel settings;
-
+		FilterModel filter;
 		try {
 			
 			if (!SessionService.checkAuthorization(session))
 				throw new Exception("Check Authorization failed!");
 			settings = SessionService.getUserSettings();
+			filter = SessionService.getFilter();
 			response.setContentType("text/html");
-			
+
 			//Only one change should be made/possible at a time.
 			if (!accountId.equals("none"))
 				settings.setAccountSelection(accountId);
@@ -62,11 +64,13 @@ public class SettingsController {
 				settings.setPropertySelection(propertyId);
 			else if (!profileId.equals("none"))
 				settings.setProfileSelection(profileId);
-			else if (!update.equals("")) 
+			else if (!update.equals("")) {
+				filter.setActiveProfile(settings.getActiveProfile());
 				if (settings.setActiveProfile())
 					viewMap.addAttribute("update", "Success!"); 
 				else
 					viewMap.addAttribute("update", "Failed to update."); 
+			}
 			
 			//TODO: Change the above to be an update state within the model instead.
 			SessionService.saveUserSettings(session, settings);
@@ -99,11 +103,11 @@ public class SettingsController {
 			SessionService.redirectToLogin(session, request, response);
 			//return new ModelAndView("unavailable");
 		}
-		
 		//If a request for updating dates was made, update the dates in the FilterModel.
 		if (startDate != null && endDate != null) {
 			//Make a formatter to translate the date strings in the view to Date objects.
 			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+			formatter.setTimeZone(TimeZone.getTimeZone(filter.getActiveProfile().getTimezone()));
 			Date start = null;
 			Date end = null;
 			try {
@@ -113,8 +117,10 @@ public class SettingsController {
 				e.printStackTrace();
 				//return new ModelAndView("unavailable"); // Do nothing if you can't parse.
 			}
-			filter.setActiveStartDate(start);
-			filter.setActiveEndDate(end);
+			//Google only returns values for days which we have encompassed fully in our range.
+			long MS_IN_DAY = 1000 * 60 * 60 * 24;
+			filter.setActiveStartDate(new Date(MS_IN_DAY + start.getTime()));
+			filter.setActiveEndDate(new Date(MS_IN_DAY + end.getTime()));
 		}
 		SessionService.saveFilter(session, filter);
 		//return new ModelAndView("unavailable");
