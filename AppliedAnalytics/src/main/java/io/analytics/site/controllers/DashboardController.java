@@ -220,6 +220,8 @@ private static final Logger logger = LoggerFactory.getLogger(ApplicationControll
 			SessionService.redirectToLogin(session, request, response);
 		}
 
+		SessionService.saveModel(session, "sessionModel", sessionModel);
+		
 		Map<String, Object> Sidepanel = (Map<String, Object>) model.asMap().get("SIDEPANEL");
 		
 		//Sidepanel.put("path", "/WEB-INF/views/includes/sidepanel.jsp");

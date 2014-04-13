@@ -1,13 +1,16 @@
 package io.analytics.site.controllers;
 
+import io.analytics.domain.User;
 import io.analytics.service.SessionService;
 import io.analytics.service.interfaces.ISessionService;
 import io.analytics.site.models.FilterModel;
+import io.analytics.site.models.SessionModel;
 import io.analytics.site.models.SettingsModel;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class SettingsController {
 
 	private static final Logger logger = LoggerFactory.getLogger(SettingsController.class);
-	
+
 	@Autowired private ISessionService SessionService;
 	
 	/*
@@ -49,7 +52,6 @@ public class SettingsController {
 			
 			if (!SessionService.checkAuthorization(session))
 				throw new Exception("Check Authorization failed!");
-			
 			settings = SessionService.getUserSettings();
 			response.setContentType("text/html");
 			
@@ -68,6 +70,8 @@ public class SettingsController {
 			
 			//TODO: Change the above to be an update state within the model instead.
 			SessionService.saveUserSettings(session, settings);
+			User user = SessionService.getSessionModel(session).getUser();
+			viewMap.addAttribute("user", user);
 			viewMap.addAttribute("settings", settings);
 		}
 		catch(Exception e) {

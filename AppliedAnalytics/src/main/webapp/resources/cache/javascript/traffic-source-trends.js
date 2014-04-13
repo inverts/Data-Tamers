@@ -52,11 +52,12 @@ function getTrafficSourceTrendsData($element, callback) {
 					if (Math.abs(changePerMonth) > 1 && Math.abs(changePerMonth) - variancePerMonth > 0) {
 						row = new Array();
 						row.push(dataRows[i]['sourceName']);
+						row.push("");
 						if (changePerMonth > 0)
 							row.push(lowerBound + " to " + upperBound + " more visits");
 						else
 							row.push(upperBound + " to " + lowerBound + " less visits");
-						row.push(changePerMonth + " ±" + variancePerMonth + " " + metric);
+						//row.push(changePerMonth + " ±" + variancePerMonth + " " + metric);
 						rawData.push(row);
 					}
 				}
@@ -72,12 +73,13 @@ function getTrafficSourceTrendsData($element, callback) {
 					"rawData"	: rawData,
 					"columnHeaders" : [
 					                   {"name" : "Source"}, 
+					                   {"name" : "<!-- Slope graph view -->"}, 
 					                   {"name" : "Change in " + metric + " per month"}
 					                  ],
 					"m"				: {"length": 3}, // columns
 					"n"				: {"length": dataRows.length, "keys": null}, // rows
 					"title"			: dataModel.name,
-					"sorting"		: [[1, 'desc']],
+					"sorting"		: [[2, 'desc']],
 					"oLanguage": {
 				        "sEmptyTable":     "Nothing to report here for now!"
 				    }

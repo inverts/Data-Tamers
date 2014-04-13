@@ -2,6 +2,7 @@ package io.analytics.site.models;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.springframework.context.annotation.Scope;
@@ -26,10 +27,13 @@ public class FilterModel {
 	 */
 	public FilterModel() {
 		activeMetric = "ga:visits";
-		Date now = new Date();
-		long nowTime = now.getTime() - MS_IN_DAY;
-		long nowMidnight = nowTime - (nowTime % MS_IN_DAY);
-		activeEndDate = new Date(nowMidnight); //Yesterday
+		Calendar midnightToday = Calendar.getInstance();
+		midnightToday.set(Calendar.HOUR_OF_DAY, 0);
+		midnightToday.set(Calendar.MINUTE, 0);
+		midnightToday.set(Calendar.SECOND, 0);
+		midnightToday.set(Calendar.MILLISECOND, 0);
+		Date midnightYesterday = new Date(midnightToday.getTimeInMillis() - MS_IN_DAY);
+		activeEndDate = midnightYesterday; //Yesterday
 		activeStartDate = new Date(activeEndDate.getTime() - (MS_IN_DAY * 30L)); //30 days from yesterday
 	}
 

@@ -2,6 +2,7 @@ package io.analytics.domain;
 
 import io.analytics.security.PasswordUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 
@@ -168,6 +169,11 @@ public class User implements UserDetails {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+	
+	public String getJoinDateAsString() {
+		SimpleDateFormat t = new SimpleDateFormat("MMMMM d, yyyy");
+		return t.format(this.joinDate.getTime());
 	}
 
 }

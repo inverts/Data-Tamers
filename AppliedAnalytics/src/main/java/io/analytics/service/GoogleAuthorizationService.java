@@ -19,7 +19,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson.JacksonFactory;
 
 /**
- * A service for obtaining Google credentials, which are necessary to make
+ * A service for obtaining Google credentials from Google (not the database), which are necessary to make
  * most Analytics calls.
  * 
  * @author Dave Wong
