@@ -9,7 +9,7 @@
 <!-- HOME MASTER -->
 <!-- CSS -->
 <link href="<c:url value="/cache/css/libs/bootstrap.css" />" rel="stylesheet">
-<link href="<c:url value="/cache/css/default.css" />" rel="stylesheet">
+<link href="<c:url value="/cache/css/entry.css" />" rel="stylesheet">
 
 <link rel="shortcut icon" href="<c:url value="/cache/images/icon.ico" />" />
 
