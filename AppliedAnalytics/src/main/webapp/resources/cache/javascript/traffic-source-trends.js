@@ -44,6 +44,8 @@ function getTrafficSourceTrendsData($element, callback) {
 				metric = dataModel.metric.substr(3);
 				
 				var id = $element.attr("id");
+				var slopeGraphs = new Array();
+				var slopeGraphSlopes = new Array();
 				//Convert dataRows to raw data
 				rawData = new Array();
 				var avgDaysInMonth = 30.436875;
@@ -56,11 +58,18 @@ function getTrafficSourceTrendsData($element, callback) {
 					if (Math.abs(changePerMonth) > 1 && Math.abs(changePerMonth) - variancePerMonth > 0) {
 						row = new Array();
 						row.push(dataRows[i]['sourceName']);
+						/*
+						var element = document.createElement("div");
+						$(element).prop("id", "tst-row-" + i);
+						*/
+						slopeGraphs.push(i);
+						slopeGraphSlopes.push(changePerMonth);
+						row.push("<div id='tst-row-" + i + "'></div>");
 						if (changePerMonth > 0)
 							row.push(lowerBound + " to " + upperBound + " more visits");
 						else
 							row.push(upperBound + " to " + lowerBound + " less visits");
-						row.push(changePerMonth + " ±" + variancePerMonth + " " + metric);
+						//row.push(changePerMonth + " ±" + variancePerMonth + " " + metric);
 						rawData.push(row);
 					}
 				}
@@ -76,28 +85,30 @@ function getTrafficSourceTrendsData($element, callback) {
 					"rawData"	: rawData,
 					"columnHeaders" : [
 					                   {"name" : "Source"}, 
+					                   {"name" : "Visual Trend"}, 
 					                   {"name" : "Change in " + metric + " per month"}
 					                  ],
 					"m"				: {"length": 3}, // columns
 					"n"				: {"length": dataRows.length, "keys": null}, // rows
 					"title"			: dataModel.name,
-					"sorting"		: [[1, 'desc']],
+					"sorting"		: [[2, 'desc']],
 					"oLanguage": {
 				        "sEmptyTable":     "Nothing to report here for now!"
 				    }
 				}).show();
-
-				// line chart view
-				/*
-				$("#" + id + " #trafficSourceTrendsLine").empty().line({
-					"id"	: "trafficSourceTrendsLine",
-					"data": dataRows
-				}).hide();
-			
 				
-				if (callback)
-					callback(); */
-				$("#" + $element.attr("id")).show();
+				for(index in slopeGraphs) {
+					canvas = drawSlope(slopeGraphSlopes[index], $("#tst-row-" + slopeGraphs[index]), 50, 50, 2);
+					$(canvas).css("border", "2px solid #666");
+					$(canvas).css("border-radius", "10px");
+					$("#tst-row-" + slopeGraphs[index]).css("margin", "auto");
+				}
+				
+				$.each($("table.dataTable thead tr[role='row'] th"), function(index, element) {
+					if (index != 0)
+						$(element).css("text-align", "center");
+				})
+
 		});	
 	
 }

@@ -17,7 +17,7 @@ $(function() {
 
 	displaySidePanel(function() {
 
-		$('.sidepanel-nav').data('tooltip', function() { return "Get Started!"; })
+		/*$('.sidepanel-nav').data('tooltip', function() { return "Get Started!"; })
 						 .tooltip({
 									size: "large",
 									height: 200,
@@ -27,7 +27,7 @@ $(function() {
 									open: "load",
 									close: "click",
 									domReady: true
-								});
+								});*/
 		
 	});
 	

@@ -740,6 +740,8 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 				result.put("description", this.getDescription());
 				result.put("metric", this.getMetric());
 				result.put("priority", this.getPositionPriority());
+				result.put("endDate", this.getEndDate().getTime());
+				result.put("startDate", this.getStartDate().getTime());
 				result.put("data", this.getJSONPointsFormatted());
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block

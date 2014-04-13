@@ -70,7 +70,7 @@ function getDataForecastData(id, callback) {
 															startIndex: 0, 
 															endIndex: d.data.length - 1, 
 															pointSize: 4,
-															dateLine: new Date().setHours(0,0,0,0) // todays date without time
+															dateLine: d.endDate
 														});
 		
 		if(callback)

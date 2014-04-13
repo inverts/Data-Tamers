@@ -45,14 +45,15 @@ input { font: inherit; }
 #ui-datepicker-div { font-size: 15px; }
 
 /* Modal */
-#modal .prompt { text-align:center; }
+#modal .prompt { text-align:center; z-index:10000; }
 
 /* Error Message */
 .page .error { font:inherit; font-size:1em; color:red; margin-bottom:5px; padding:5px; }
 
 /******RIGHT PANE******/
 .page .right-pane { width:0; height:100%; position:absolute; float:right; background:#333; color:#fff; z-index:10; right: 0; display:none; border-left: 3px solid #ccc; z-index:200; }
-.page .right-pane select, .page .right-pane input { color: #222; }
+.page .right-pane select, .page .right-pane input { color: #222; } 
+.page .right-pane input[type="button"]:hover { background: #e1e1e1; cursor: pointer;}
 
 /******HEADER/FOOTER******/
 .page #header { width:100%; z-index:3; }
@@ -155,6 +156,9 @@ input { font: inherit; }
 .settings tr { height: 40px; }
 .settings h3 { margin-bottom: 10px; }
 .settings-content select { width: 100%; }
+.settings-content #your-account { margin-bottom: 30px; }
+.settings-content a { color: #91CAFC; font-weight: bold; }
+.settings-content .link.glyphicon { color:#D0E4E9; }
 
 /*****APPLICATION*****/
 
