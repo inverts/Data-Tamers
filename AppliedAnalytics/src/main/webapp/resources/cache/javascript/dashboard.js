@@ -14,7 +14,7 @@
 function loadDashboard(dashboardId) {
 
 	$("video").remove(); // in case video was loaded on  previous dashboard session. We dont want this to happen only on success.
-	$(".tipsy").remove();
+	
 	$.ajax({
 		type: 'POST',
 		url: applicationRoot + "application/dashboards/" + dashboardId,

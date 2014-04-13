@@ -17,18 +17,55 @@ $(function() {
 	}, function() {
 		$(this).animate({ backgroundColor: "transparent" }, 0, "swing");
 	});
-
+	
 	// dashboard list open on click.
-	$("#dashboard").click(function() { $(".dashlist").slideToggle("fast"); });
+	$("#dashboard").click(function() { 
+		$(".dashlist").slideToggle("fast", function() {
+			tooltipReposition($(".dashlist"));
+		}); 
+	});
+	
+	var $trendsList = $(".trends-list");
 	
 	// Opens trends library.
-	$("#trends").click(function() { $("#trends-list").slideToggle("fast"); });
+	$("#trends").click(function() { 
+		$("#trends-list").slideToggle("fast", function() {
+			tooltipReposition($(this));
+		});
+	});
+	
+	$trendsList.tooltip({
+		size: "large",
+		height: 200,
+		width: 180,
+		gravity: "w",
+		open: { element: $("#trends"), event: "click" },
+		close: "click",
+		content: "These widgets give information regarding how your site has been performing. Drag a widget of your choice onto your dashboard to immediately see details."
+	});
+	
 	
 	// Setup widget drag and drop for trends library.
 	widgetDragNDrop("trends-list");
 
+	var $forecastList = $(".forecast-list");
+	
 	// Opens forecast library.
-	$("#forecast").click(function() { $("#forecast-list").slideToggle("fast"); });
+	$("#forecast").click(function() { 
+		$("#forecast-list").slideToggle("fast", function() {
+			tooltipReposition($(this));
+		}); 
+	});
+	
+	$forecastList.tooltip({
+		size: "large",
+		height: 200,
+		width: 180,
+		gravity: "w",
+		open: { element: $("#forecast"), event: "click" },
+		close: "click",
+		content: "These widgets give information regarding how your site could potentially do. Drag a widget of your choice onto your dashboard to immediately see details."
+	});
 	
 	// Setup widget drag and drop for forecast library.
 	widgetDragNDrop("forecast-list");
@@ -81,6 +118,10 @@ function widgetDragNDrop(listClass) {
 				loadWidget($div, widgetTypeId);
 				
 				$("video").remove();
+				$(".tutorialToggle").hide(function() {
+					if ($(this).data("hasTooltip"))
+						$("#tipsy" + $(this).data("tooltip-n")).remove();
+				});
 			}
 
 		},
