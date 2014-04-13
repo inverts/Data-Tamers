@@ -31,12 +31,13 @@ public interface ICoreReportingRepository {
 	
 	public GaData getKeywords(Credential credential, String profileID, Date startDate, Date endDate, int maxResults, String filter);
 
-	public GaData getMediumVisitsTotal(Credential credential, String profileID, Date startDate, Date endDate, String medium);
-
 	public GaData getDenseVisitorInfo(Credential credential, String profileID, String startDate, String endDate); 
 	
-//	public GaData getMediumVisitsTotal(Credential credential, String profileID, Date startDate, Date endDate, String medium, String filter);
+	public GaData getOverview(Credential credential, String profileID, Date sDate, Date eDate);
+	
+	public GaData getOverviewDim(Credential credential, String profileID, Date sDate, Date eDate, int maxResults, String dimension);
 }
+
 
 
 

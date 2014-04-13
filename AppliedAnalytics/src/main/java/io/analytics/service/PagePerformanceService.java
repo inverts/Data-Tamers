@@ -128,8 +128,6 @@ public class PagePerformanceService implements IPagePerfomanceService{
 			pathToTitleMap.put(itu.next(), itt.next());
 		}
 		
-	
-		
 		// Create the domain dataObject, add page performance data
 		PagePerformanceData dataObject = new PagePerformanceData();
 		dataObject.setPagePathData(pagePath);
@@ -139,59 +137,6 @@ public class PagePerformanceService implements IPagePerfomanceService{
 		dataObject.setHostname(hostname);
 		dataObject.setPathToTitleMap(pathToTitleMap);
 		
-		// ********************
-		// GA query page title 
-		
-/*		gaData = REPOSITORY.getPageTitle(credential, profileID, startDate, endDate, maxResults);
-		
-		//printColumnHeaders(gaData);
-		//printDataTable(gaData);
-		
-		pagePathColumn = -1; 
-		int pageTitleColumn = -1; 
-		column = -1;
-		for (ColumnHeaders header : gaData.getColumnHeaders()) {
-			column++;
-			String name = header.getName();
-			if (name.equals("ga:pagePath"))
-				pagePathColumn = column;		   
-			if (name.equals("ga:pageTitle"))
-				pageTitleColumn = column;
-				
-		}
-		
-		pagePath = new ArrayList<String>();
-		ArrayList<String> pageTitle = new ArrayList<String>();
-		
-		dataRows = gaData.getRows();
-		try {
-		for(List<String> row : dataRows) {
-			String one = row.get(pagePathColumn);
-			String two = row.get(pageTitleColumn);
-			pagePath.add(one);
-			pageTitle.add(two);
-		}
-		} catch (NumberFormatException e) {
-			//The metric we are retrieving is not numeric.
-			return null;
-		}
-		
-		pagePath.trimToSize();
-		pageTitle.trimToSize();
-		
-		Map<String, String> urlToTitle = new HashMap<String, String>();
-        // add url and titles to map
-		Iterator<String> itu = pagePath.iterator();
-		Iterator<String> itt = pageTitle.iterator();
-	
-		while(itu.hasNext()) {
-			urlToTitle.put(itu.next(), itt.next());
-		}
-		
-		// add page path and  data
-		dataObject.setUrlToTitle(urlToTitle);
-
-*/
 		// ********************
 		// GA query visits (total)
 		
