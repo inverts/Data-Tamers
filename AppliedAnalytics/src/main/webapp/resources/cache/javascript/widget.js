@@ -111,6 +111,25 @@ function loadWidget($div, widgetTypeId, i, callback)
 			$div.attr("id", elementId);
 			loadBoostPerformanceWidget(elementId, function() { widgetEvents($div, elementId); });
 			break;
+			
+		case 8:
+			n = i || $(".overview").length;
+			elementId = "overviewWidget";
+			while($("#" + elementId + n).length) { n++; } // need to ensure that the number is not already used for this widget
+			elementId += n;
+			$div.attr("id", elementId);
+			loadOverviewWidget(elementId, function() { widgetEvents($div, elementId); });
+			break;
+			
+		case 9:
+			n = i || $(".vistorDevices").length;
+			elementId = "visitorDevicesWidget";
+			while($("#" + elementId + n).length) { n++; } // need to ensure that the number is not already used for this widget
+			elementId += n;
+			$div.attr("id", elementId);
+			loadVisitorDevicesWidget(elementId, function() { widgetEvents($div, elementId); });
+			break;
+			
 	}
 
 	// execute callback function if provided.
@@ -210,6 +229,11 @@ function updateWidget(widgetTypeId, elementId) {
 		case 5:
 			updateTrafficSourceTrends(elementId);
 			break;
+		case 8:
+			updateOverview(elementId);
+			break;
+		case 9:
+			updateVisitorDevices(elementId);
 	}
 }
 

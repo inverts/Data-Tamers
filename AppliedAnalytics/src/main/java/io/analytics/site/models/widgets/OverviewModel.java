@@ -122,7 +122,7 @@ public class OverviewModel extends WidgetModel{
 			overviewTotals.put("data",ovArr);
 
 			this.jsonData.put("overviewtotals", overviewTotals);
-
+			this.jsonData.put("totalskeys", keys);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
