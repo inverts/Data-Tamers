@@ -49,10 +49,12 @@ public class OverviewService implements IOverviewService{
 		int pageviewsPerVisitColumn = -1;
 		int avgTimeOnSiteColumn = -1;
 		int column = -1;
-		
+
 		boolean hasData = false;
 
-		// get overview data totals
+		/* * * * * * * * * * *
+		 * Overview totals data 
+		 */
 
 		gaData = REPOSITORY.getOverview(credential, profileID, startDate, endDate);
 
@@ -91,7 +93,7 @@ public class OverviewService implements IOverviewService{
 					percentNewVisits = Double.parseDouble(row.get(percentNewVisitsColumn));
 					visits = Integer.parseInt(row.get(visitsColumn));
 					visitBounceRate = Double.parseDouble(row.get(visitBounceRateColumn));
-					pageviewsPerVisit = Integer.parseInt(row.get(pageviewsPerVisitColumn));
+					pageviewsPerVisit = Double.parseDouble(row.get(pageviewsPerVisitColumn));
 					avgTimeOnSite = Double.parseDouble(row.get(avgTimeOnSiteColumn));
 				}
 			} catch (NumberFormatException e) {
@@ -105,11 +107,78 @@ public class OverviewService implements IOverviewService{
 			dataObject.setVisitBounceRateTotal(visitBounceRate);
 			dataObject.setPageviewsPerVisit(pageviewsPerVisit);
 			dataObject.setAvgTimePerVisit(avgTimeOnSite);
-			
-			// get top two channel overview totals
+		}
 
-			gaData = REPOSITORY.getOverviewDim(credential, profileID, startDate, endDate, 2, CoreReportingRepository.MEDIUM_DIMENSION);
-// TODO parse this data into json
+		/* * * * * * * * *
+		 *  get channel overview data
+		 */
+
+		int mediumColumn = -1;
+		column = -1;
+		
+		gaData = REPOSITORY.getOverviewDim(credential, profileID, startDate, endDate, 5, CoreReportingRepository.MEDIUM_DIMENSION);
+
+		if (gaData!=null) {
+
+			for (ColumnHeaders header : gaData.getColumnHeaders()) {
+				column++;
+				String name = header.getName();
+				if (name.equals("ga:medium"))
+					mediumColumn = column;					
+				if (name.equals("ga:newVisits"))
+					newVisitsColumn = column;
+				if (name.equals("ga:percentNewVisits"))
+					percentNewVisitsColumn = column;
+				if (name.equals("ga:visits"))
+					visitsColumn = column;
+				if (name.equals("ga:visitBounceRate"))
+					visitBounceRateColumn = column;
+				if (name.equals("ga:pageviewsPerVisit"))
+					pageviewsPerVisitColumn = column;
+				if (name.equals("ga:avgTimeOnSite"))
+					avgTimeOnSiteColumn = column;
+
+				dataTypes.add(header.getDataType());
+			}
+
+			ArrayList<String> mediumArr = new ArrayList<String>();
+			ArrayList<Integer> newVisitsArr = new ArrayList<Integer>();
+			ArrayList<Double> percentNewVisitsArr= new ArrayList<Double>();
+			ArrayList<Integer> visitsArr = new ArrayList<Integer>();
+			ArrayList<Double> visitBounceRateArr = new ArrayList<Double>();
+			ArrayList<Double> pageviewsPerVisitArr = new ArrayList<Double>();
+			ArrayList<Double> avgTimeOnSiteArr = new ArrayList<Double>();
+
+			List<List<String>> dataRows = gaData.getRows();
+
+			//TODO: Handle this appropriately - this is just a quick fix.
+			if (dataRows == null)
+				return null;
+
+
+			try {
+				for(List<String> row : dataRows) {
+					mediumArr.add(row.get(mediumColumn));
+					newVisitsArr.add(Integer.parseInt(row.get(newVisitsColumn)));
+					percentNewVisitsArr.add(Double.parseDouble(row.get(percentNewVisitsColumn)));
+					visitsArr.add(Integer.parseInt(row.get(visitsColumn)));
+					visitBounceRateArr.add(Double.parseDouble(row.get(visitBounceRateColumn)));
+					pageviewsPerVisitArr.add(Double.parseDouble(row.get(pageviewsPerVisitColumn)));
+					avgTimeOnSiteArr.add(Double.parseDouble(row.get(avgTimeOnSiteColumn)));
+				}
+			} catch (NumberFormatException e) {
+				//The metric we are retrieving is not numeric.
+				return null;
+			}
+
+			// add data to domain class
+			dataObject.setChannels(mediumArr);
+			dataObject.setChannelNewVisits(newVisitsArr);
+			dataObject.setChannelPercentNewVisits(percentNewVisitsArr);
+			dataObject.setChannelVisits(newVisitsArr);
+			dataObject.setChannelVisitBounceRate(visitBounceRateArr);
+			dataObject.setChannelPageviewsPerVisit(pageviewsPerVisitArr);
+			dataObject.setChannelAvgTimePerVisit(avgTimeOnSiteArr);
 
 			hasData = true;
 		}

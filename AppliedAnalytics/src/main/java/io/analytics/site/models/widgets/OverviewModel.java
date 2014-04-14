@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +33,13 @@ public class OverviewModel extends WidgetModel{
 	private double visitBounceRate;
 	private double pageviewsPerVisit;
 	private double avgTimePerVisit;
+	private List<String> channels;
+	private List<Integer> channelNewVisits;
+	private List<Double> channelPercentNewVisits;
+	private List<Integer> channelVisits;
+	private List<Double> channelVisitBounceRate;
+	private List<Double> channelPageviewsPerVisit;
+	private List<Double> channelAvgTimePerVisit;  
 
 	private final String widgetClass = "overview";
 	private final String widgetTitle = "overview.title";	
@@ -44,6 +52,13 @@ public class OverviewModel extends WidgetModel{
 		this.overviewService = overviewService;
 		this.jsonData = new JSONObject();
 		this.activeProfile = this.overviewService.getProfile();
+		this.channels = new ArrayList<String>();
+		this.channelNewVisits = new ArrayList<Integer>();
+		this.channelPercentNewVisits = new ArrayList<Double>();
+		this.channelVisits = new ArrayList<Integer>();
+		this.channelVisitBounceRate = new ArrayList<Double>();
+		this.channelPageviewsPerVisit = new ArrayList<Double>();
+		this.channelAvgTimePerVisit = new ArrayList<Double>();
 
 		// default dates
 		this.endDate = new Date();
@@ -104,25 +119,56 @@ public class OverviewModel extends WidgetModel{
 		visitBounceRate = dataObject.getVisitBounceRateTotal();
 		pageviewsPerVisit = dataObject.getPageviewsPerVisit();
 		avgTimePerVisit = dataObject.getAvgTimePerVisit();
-
+		this.channels = dataObject.getChannels();
+		this.channelNewVisits = dataObject.getChannelNewVisits();
+		this.channelPercentNewVisits = dataObject.getChannelPercentNewVisits();
+		this.channelVisits = dataObject.getChannelVisits();
+		this.channelVisitBounceRate = dataObject.getChannelVisitBounceRate();
+		this.channelPageviewsPerVisit = dataObject.getChannelPageviewsPerVisit();
+		this.channelAvgTimePerVisit = dataObject.getChannelAvgTimePerVisit();
 
 		// put data into the JSON Object member jsonData
 		this.loadJson(newVisits, percentNewVisits, visits, visitBounceRate, pageviewsPerVisit, avgTimePerVisit); 
+		this.loadJsonChannelData(channels,channelNewVisits,channelPercentNewVisits,channelVisits,channelVisitBounceRate, channelPageviewsPerVisit, channelAvgTimePerVisit);
 	}
 
 	// put data into JSON object to pass to the view website-performance.jsp 
 	public void loadJson(int newVisits, double percentNewVisits, int visits, double visitBounceRate, double pageviewsPerVisit, double avgTimePerVisit)  {
 		try {
 			// Overview totals
-			JSONObject overviewTotals = new JSONObject();
+			JSONObject totals = new JSONObject();
 			
-			String[] keys = new String[]{"New Visits", " New Visits (%)", "Visits", "Bounce Rate (%)", "Pageviews Per Visits", "Avg Visit Duration (sec)"};
+			String[] keys = new String[]{"New Visits", "New Visits (%)", "Visits", "Bounce Rate (%)", "Pageviews Per Visits", "Avg Visit Duration (sec)"};
 			double[] ovArr = {newVisits, percentNewVisits, visits, visitBounceRate, pageviewsPerVisit, avgTimePerVisit}; 
-			overviewTotals.put("title","Website Performance Overview");
-			overviewTotals.put("data",ovArr);
+			totals.put("title","Website Performance Totals");
+			totals.put("data",ovArr);
+            totals.put("keys", keys);
+			this.jsonData.put("totals", totals);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	} 
+	
+	// put data into JSON object to pass to the view website-performance.jsp 
+	public void loadJsonChannelData(List<String>channelsArr, List<Integer> newVisits, List<Double> percentNewVisits, List<Integer> visits, List<Double> visitBounceRate, List<Double> pageviewsPerVisit, List<Double> avgTimePerVisit)  {
+		try {
+			// Overview totals
+			JSONObject channels = new JSONObject();
+			
+			String[] keys = new String[]{"Channels", "New Visits", " New Visits (%)", "Visits", "Visit Bounce Rate (%)", "Pageviews Per Visits", "Avg Visit Duration (sec)"};
 
-			this.jsonData.put("overviewtotals", overviewTotals);
-			this.jsonData.put("totalskeys", keys);
+			channels.put("keys",keys);
+			channels.put("title","Website Performance by Channel");
+			channels.put("channels",channelsArr);
+			channels.put("newvisits", newVisits);
+			channels.put("percentnewvisits",percentNewVisits);
+			channels.put("visits",visits);
+			channels.put("bouncerate",visitBounceRate);
+			channels.put("pagespervisit",pageviewsPerVisit);
+			channels.put("timepervisit",avgTimePerVisit);
+						
+			this.jsonData.put("channel", channels);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

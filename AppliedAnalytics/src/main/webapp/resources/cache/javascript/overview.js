@@ -2,7 +2,7 @@
  * overview.js
  */
 
-function loadOverviewWidget(id, callback) {
+function loadOverview(id, callback) {
 
 	var $element = $("#" + id);
 	$.post(applicationRoot + "Overview", null, 
@@ -16,14 +16,9 @@ function loadOverviewWidget(id, callback) {
 				getOverviewData(id, function() {
 
 					// direct view buttons
-/*					$("#" + id + " a.scatter").click(function(e) { changeViewBtn(id, "keywordInsightScatter"); });
-					$("#" + id + " a.improve").click(function(e) { changeViewBtn(id, "keywordInsightImprove"); });
-					$("#" + id + " a.best").click(function(e) { changeViewBtn(id, "keywordInsightBest"); });
-					$("#" + id + " a.worst").click(function(e) { changeViewBtn(id, "keywordInsightWorst"); });
-					$("#" + id + " a.all").click(function(e) { changeViewBtn(id, "keywordInsightAll"); });
-					$("#" + id + " a.bestsub").click(function(e) { changeViewBtn(id, "keywordInsightBestSub"); });
-					$("#" + id + " a.worstsub").click(function(e) { changeViewBtn(id, "keywordInsightWorstSub"); });
-*/
+					$("#" + id + " a.totals").click(function(e) { changeViewBtn(id, "overviewTotals"); });
+//					$("#" + id + " a.channels").click(function(e) { changeViewBtn(id, "overviewChannels"); });
+
 					$element.data("hasData", true); // flag the widget as having data.
 
 				});
@@ -75,22 +70,22 @@ function getOverviewData(id, callback) {
 		
 		$("#" + id + " .help").tooltip({ content: d.description });
 
-
+		console.log(d.data);
 		// Create each table view
 
 		$("#" + id + " #overviewTotals").table({
-			"data": d.data.improve,
+			"data": d.data.totals.data,
 			"columnHeaders" : [
-			                   {"name" : d.data.totalskeys[0], "width": "45%"}, 
-			                   {"name" : d.data.totalskeys[1]},
-			                   {"name" : d.data.totalskeys[2]},
-			                   {"name" : d.data.totalskeys[3]},
-			                   {"name" : d.data.totalskeys[4]},
-			                   {"name" : d.data.totalskeys[5]}
+			                   {"name" : d.data.totals.keys[0], "width": "45%"}, 
+			                   {"name" : d.data.totals.keys[1]},
+			                   {"name" : d.data.totals.keys[2]},
+			                   {"name" : d.data.totals.keys[3]},
+			                   {"name" : d.data.totals.keys[4]},
+			                   {"name" : d.data.totals.keys[5]}
 			                   ],
-			                   "m"			    : {"length": d.data.totalskeys.length, "keys": d.data.totalskeys, "url": {"links": null, "key": 0}}, // columns
-			                   "n"				: {"length": d.data.overviewtotals[d.data.totalskeys[0]].length, "keys": null}, // rows
-			                   "title"			: d.data.overviewtotals.title
+			                   "m"			    : {"length": d.data.totals.keys.length, "keys": d.data.totals.keys, "url": {"links": null, "key": 0}}, // columns
+			                   "n"				: {"length": d.data.totals.data[0].length, "keys": null}, // rows
+			                   "title"			: d.data.totals.title
 		});
 
 /*		
