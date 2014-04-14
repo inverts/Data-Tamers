@@ -424,6 +424,11 @@ line:hover { opacity: 0.5; }
 .growingProblems .trafficSourceVisual.active { display:block; }
 
 
+/******CSS for OVERVIEW WIDGET ****/
+.overview #overviewData { margin:auto; height:300px; }
+.overview .overviewVisual { width:inherit; height:305px; display:none; margin-bottom:10px; margin:0 auto; }
+.overview .overviewVisual.active { display:block; }
+
 /*****CSS for PAGE PERFORMANCE - BAR CHART WIDGET ****/
 .pagePerformance #pagePerformanceData {
 	height:300px;

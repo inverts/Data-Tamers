@@ -20,7 +20,8 @@
 			"show"			: 5,
 			"title"			: "",
 			"sorting"		: [],
-			"oLanguage"		: { }
+			"oLanguage"		: { },
+			"columnLines"	: 1
 	}; 
 
 	/**
@@ -43,13 +44,16 @@
 				else
 					return 60;
 			}
+			
+			var multiLineHeader = 10 * (settings.columnLines - 1);
+			
 			// Base Cases << What does that mean in this context...??
 			var table = {
 							"id"		: this.id + "DataTable",
 							"data"		: settings.data,
 							"rawData"	: settings.rawData,
 							"title"		: settings.title,
-							"size"		: { "width": $this.width(), "height": $this.height() - heightOffSet() },
+							"size"		: { "width": $this.width(), "height": $this.height() - heightOffSet() - multiLineHeader },
 							"cols"		: {
 											"length": settings.m.length,
 											"headers": {

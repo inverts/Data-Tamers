@@ -67,41 +67,41 @@ function getOverviewData(id, callback) {
 
 
 		$("#" + id + " .spinner-content").hide();
-		
 		$("#" + id + " .help").tooltip({ content: d.description });
 
 		console.log(d.data);
 		// Create each table view
 
+		// add the key for channels into this array.
+		var totalKeys = [d.data.channel.keys[0], d.data.totals.keys[2], d.data.totals.keys[1], d.data.totals.keys[0]];
+		
 		$("#" + id + " #overviewTotals").table({
 			"data": d.data.totals.data,
 			"columnHeaders" : [
-			                   {"name" : d.data.totals.keys[0], "width": "45%"}, 
-			                   {"name" : d.data.totals.keys[1]},
+			                   {"name" : d.data.channel.keys[0]}, // change to channel property in totals property.
 			                   {"name" : d.data.totals.keys[2]},
-			                   {"name" : d.data.totals.keys[3]},
-			                   {"name" : d.data.totals.keys[4]},
-			                   {"name" : d.data.totals.keys[5]}
-			                   ],
-			                   "m"			    : {"length": d.data.totals.keys.length, "keys": d.data.totals.keys, "url": {"links": null, "key": 0}}, // columns
-			                   "n"				: {"length": d.data.totals.data[0].length, "keys": null}, // rows
+			                   {"name" : d.data.totals.keys[1]},
+			                   {"name" : d.data.totals.keys[0]},
+			                  ],
+			                   "m"			    : {"length": totalKeys.length, "keys": totalKeys },
+			                   "n"				: {"length": d.data.totals.Channels.length, "keys": null}, // rows
 			                   "title"			: d.data.totals.title
-		});
+		}).show();
 
-/*		
-		$("#" + id + " #overviewChannels").table({
+		var channelKeys = [ d.data.channel.keys[0], d.data.channel.keys[4], d.data.channel.keys[5], d.data.channel.keys[6]];
+		$("#" + id + " #overviewTotals").table({
 			"data": d.data.best,
 			"columnHeaders" : [
-			                   {"name" : "", "width": "45%"}, 
-			                   {"name" : ""},
-			                   {"name" : ""},
-			                   {"name" : ""}
+			                   {"name" : d.data.channel.keys[0]}, 
+			                   {"name" : d.data.channel.keys[4]},
+			                   {"name" : d.data.channel.keys[5]},
+			                   {"name" : d.data.channel.keys[6]}
 			                   ],
-			                   "m"				: {"length": d.data.best.keys.length, "keys": d.data.best.keys, "url": {"links": null, "key": 0}}, // columns
-			                   "n"				: {"length": d.data.best[d.data.best.keys[0]].length, "keys": null}, // rows
-			                   "title"			: d.data.best.title
+			                   "m"				: {"length": channelKeys, "keys": channelKeys}, // columns
+			                   "n"				: {"length": d.data.channel.channels.length, "keys": null}, // rows
+			                   "title"			: d.data.channel.title,
+			                   "columnLines"	: 3
 		});
-*/
 
 		if(callback)
 			callback();
