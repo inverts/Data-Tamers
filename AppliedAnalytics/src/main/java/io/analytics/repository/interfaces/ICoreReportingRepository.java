@@ -31,7 +31,7 @@ public interface ICoreReportingRepository {
 	
 	public GaData getKeywords(Credential credential, String profileID, Date startDate, Date endDate, int maxResults, String filter);
 
-	public GaData getDenseVisitorInfo(Credential credential, String profileID, String startDate, String endDate); 
+	public GaData getDenseVisitorInfo(Credential credential, String profileID, String startDate, String endDate, int maxResults); 
 	
 	public GaData getOverview(Credential credential, String profileID, Date sDate, Date eDate);
 	

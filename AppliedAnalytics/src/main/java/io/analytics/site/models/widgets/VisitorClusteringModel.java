@@ -1,6 +1,7 @@
 package io.analytics.site.models.widgets;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,7 +32,8 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 	private List<ColumnHeaders> columnHeaders;
 	private List<List<String>> rawData;
 	private List<List<Double>> numericalData;
-	private HashMap<String, Integer> visitorTypeMap = new HashMap<String, Integer>(2);
+	private List<List<Double>> finalRawCentroids;
+	private List<List<String>> finalReadableCentroids;
 
 	private ArrayList<Double> dataPointWeights = new ArrayList<Double>();
 	private HashMap<Integer, Integer> clustering;
@@ -41,31 +43,82 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 		this.sessionService = sessionService;
 		this.coreReportingService = coreReportingService;
 		this.credential = sessionService.getCredentials();
-		visitorTypeMap.put("Returning Visitor", 0);
-		visitorTypeMap.put("New Visitor", 50);
 	}
 	
 	public void updateData() {
+		this.updateData(500000);
+	}
+	public void updateData(int maxRows) {
 		
 		FilterModel filter = this.sessionService.getFilter();
 		SettingsModel settings = this.sessionService.getUserSettings();
 		Date endDate = filter.getActiveEndDate();
-		long msInDay = 24L * 60L * 60L * 1000L;
-		Date startDate = new Date(endDate.getTime() - 90L * msInDay); //90 days
+		Date startDate = filter.getActiveStartDate();
+		//long msInDay = 24L * 60L * 60L * 1000L;
+		//Date startDate = new Date(endDate.getTime() - 90L * msInDay); //90 days
 		String profileId = settings.getActiveProfile().getId();
 		
-		GaData data = coreReportingService.getDenseVisitorInfo(credential, profileId, startDate, endDate);
+		GaData data = coreReportingService.getDenseVisitorInfo(credential, profileId, startDate, endDate, maxRows);
 		this.columnHeaders = data.getColumnHeaders();
 		this.columnCount = this.columnHeaders.size();
 		this.rawData = data.getRows();
 		normalizeData();
-		this.clustering = ClusteringUtils.WeightedEuclideanKMeans(this.numericalData, this.dataPointWeights, 5);
+		List<Integer> clusterSizes = new ArrayList<Integer>();
+		List<List<Double>> centroids = new ArrayList<List<Double>>();
+		this.clustering = ClusteringUtils.WeightedEuclideanKMeans(this.numericalData, this.dataPointWeights, 8, centroids, clusterSizes);
+
+		this.finalRawCentroids = centroids;
+		this.finalReadableCentroids = new ArrayList<List<String>>();
+		
+		Gson g = new Gson();
+		System.out.println("SUPER FORMATTED DATA");
+		System.out.println("Hour\tDay of Week\tLongitude\tLatitude\tNew vs. Returning\tScreen Resolution\tAvg. Time on Site\tPageviews per Visit\tVisits");
+		for (int j=0; j<centroids.size(); j++) {
+			List<Double>centroid = centroids.get(j);
+			ArrayList<String> readableCentroid = new ArrayList<String>();
+			for (int i=0; i<centroid.size(); i++) {
+				String readableValue = decodeColumn(centroid.get(i), i, true);
+				readableCentroid.add(readableValue);
+				System.out.print(readableValue + "\t");
+			}
+			System.out.print(clusterSizes.get(j));
+			System.out.println();
+		}
+		System.out.println("FORMATTED DATA");
+		System.out.println("Hour\tDay of Week\tLongitude\tLatitude\tNew vs. Returning\tScreen Resolution\tAvg. Time on Site\tPageviews per Visit\tVisits");
+		for (int j=0; j<centroids.size(); j++) {
+			List<Double>centroid = centroids.get(j);
+			ArrayList<String> readableCentroid = new ArrayList<String>();
+			for (int i=0; i<centroid.size(); i++) {
+				String readableValue = decodeColumn(centroid.get(i), i, false);
+				readableCentroid.add(readableValue);
+				System.out.print(readableValue + "\t");
+			}
+			this.finalReadableCentroids.add(readableCentroid);
+			System.out.print(clusterSizes.get(j));
+			System.out.println();
+		}
+		System.out.println("RAW DATA");
+		for (int i=0; i<this.columnHeaders.size(); i++)
+			System.out.print(this.columnHeaders.get(i).getName() + "\t");
+			//System.out.println("Hour\tDay of Week\tLongitude\tLatitude\tNew vs. Returning\tScreen Resolution\tAvg. Time on Site\tPageviews per Visit\tVisits");
+
+		System.out.println();
+		for (int j=0; j<centroids.size(); j++) {
+			List<Double>centroid = centroids.get(j);
+			for (int i=0; i<centroid.size(); i++) {
+				System.out.print(centroid.get(i) + "\t");
+			}
+			System.out.print(clusterSizes.get(j));
+			System.out.println();
+		}
 		
 	}
 	
 	/**
 	 * Translates the rawData of this model into numericalData, mapping any non-numeric fields 
 	 * to numeric values so that they can be operated on in Euclidean space.
+	 * In order for a field to be mapped, it must be registered/defined in the convertColumn function.
 	 */
 	private void normalizeData() {
 		this.numericalData = new ArrayList<List<Double>>();
@@ -97,7 +150,12 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 		else if (columnName.equals("ga:browserVersion"))
 			return 0.0;
 		else if (columnName.equals("ga:visitorType"))
-			return visitorTypeMap.get(value);
+			if (value.equals("Returning Visitor"))
+				return 0;
+			else if (value.equals("New Visitor"))
+				return 50;
+			else
+				return -1;
 		else if (columnName.equals("ga:screenResolution"))
 			return scale(parseResolution(value).w, 2000.0, 100.0);
 		else if (columnName.equals("ga:visits"))
@@ -106,7 +164,7 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 			return scale(Double.parseDouble(value), 1800.0, 100.0);
 		else if (columnName.equals("ga:pageviewsPerVisit"))
 			return scale(Double.parseDouble(value), 15.0, 100.0);
-		else if (columnName.equals("ga:deviceCategory")){
+		else if (columnName.equals("ga:deviceCategory"))
 			if (value.equals("mobile"))
 				return 0.0;
 			else if (value.equals("tablet"))
@@ -115,11 +173,64 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 				return 90.0;
 			else
 				return 100;
-		}
-		else if (columnName.equals("ga:keyword"))
-			return 0.0;
+		else if (columnName.equals("ga:longitude"))
+			return scale(180.0 + Double.parseDouble(value), 360.0, 100.0);
+		else if (columnName.equals("ga:latitude"))
+			return scale(90.0 + Double.parseDouble(value), 180.0, 100.0);
 		else
 			return 0.0;
+	}
+	
+	private final String[] weekDays = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+	private String decodeColumn(double value, int columnIndex, boolean pretty) {
+		
+		String columnName = this.columnHeaders.get(columnIndex).getName();
+		if (columnName.equals("ga:hour")) {
+			double num = scale(value, 100.0, 23.0);
+			if (!pretty)
+				return String.valueOf(num);
+			int hour = (int)Math.round(num % 12);
+			return String.valueOf(hour != 0 ? hour : 12) + (num / 12 >= 1.0 ? "pm" : "am");
+		}
+		else if (columnName.equals("ga:dayOfWeek")) {
+			double num = scale(value, 100.0, 6.0);
+			return pretty ? weekDays[(int)Math.round(num)] : String.valueOf(num);
+		}
+		else if (columnName.equals("ga:operatingSystemVersion"))
+			return null;
+		else if (columnName.equals("ga:browserVersion"))
+			return null;
+		else if (columnName.equals("ga:visitorType"))
+			switch((int) value) {
+				case 0: 	return "Returning Visitor";
+				case 50: 	return "New Visitor";
+				default: 	return null;
+			}
+		else if (columnName.equals("ga:screenResolution"))
+			return String.valueOf(scale(value, 100.0, 2000.0));
+		else if (columnName.equals("ga:visits"))
+			return String.valueOf(value);
+		else if (columnName.equals("ga:avgTimeOnSite")) {
+			double num = scale(value, 100.0, 1800.0);
+			if (!pretty)
+				return String.valueOf(num);
+			return String.valueOf((int)Math.floor(num/60)) + ":" + String.valueOf((int)Math.round(num % 60));
+		}
+		else if (columnName.equals("ga:pageviewsPerVisit"))
+			return String.valueOf(scale(value, 100.0, 15.0));
+		else if (columnName.equals("ga:deviceCategory"))
+			switch ((int) value) {
+				case 0: 	return "mobile";
+				case 30: 	return "tablet";
+				case 90: 	return "desktop";
+				default: 	return null;
+			}
+		else if (columnName.equals("ga:longitude"))
+			return String.valueOf(scale(value, 100.0, 360.0)-180.0);
+		else if (columnName.equals("ga:latitude"))
+			return String.valueOf(scale(value, 100.0, 180.0)-90);
+		else
+			return null;
 	}
 	/**
 	 * Scales a positive integer from 0 to maxOutput.
@@ -145,7 +256,7 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 	private Resolution<Integer, Integer> parseResolution(String res) throws NumberFormatException {
 		int middle = res.indexOf("x");
 		if (middle < 0)
-			return null;
+			return new Resolution<Integer, Integer>(0, 0);
 		int width = Integer.parseInt(res.substring(0, middle));
 		int height = Integer.parseInt(res.substring(middle + 1));
 		return new Resolution<Integer, Integer>(width, height);
@@ -159,6 +270,20 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 			this.h = h;
 		}
 	}
+	/**
+	 * @return the finalRawCentroids
+	 */
+	public List<List<Double>> getFinalRawCentroids() {
+		return finalRawCentroids;
+	}
+
+	/**
+	 * @return the finalReadableCentroids
+	 */
+	public List<List<String>> getFinalReadableCentroids() {
+		return finalReadableCentroids;
+	}
+
 	@Override
 	public String getJSONSerialization() {
 		Gson g = new Gson();
@@ -167,16 +292,23 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 		try {
 			raw = new JSONArray(g.toJson(this.rawData));
 			numeric = new JSONArray(g.toJson(this.numericalData));
-			model.put("rawData", raw);
-			model.put("numericalData", numeric);
+			//model.put("rawData", raw);
+			//model.put("numericalData", numeric);
 			model.put("clustering", this.clustering);
+			model.put("finalRawCentroids", this.finalRawCentroids);
+			model.put("finalReadableCentroids", this.finalReadableCentroids);
 			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		return model.toString();
+		try {
+			return model.toString(4);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return model.toString();
+		}
 	}
 
 	@Override
@@ -220,7 +352,8 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 		 * @param k
 		 * @return
 		 */
-		public static HashMap<Integer, Integer> WeightedEuclideanKMeans(List<List<Double>> data, List<Double> weights, int k) {
+		public static HashMap<Integer, Integer> WeightedEuclideanKMeans(List<List<Double>> data, List<Double> weights, int k, 
+				List<List<Double>> centroidsOut, List<Integer> clusterSizesOut) {
 			
 			HashMap<Integer, Integer> keyClusterMap = new HashMap<Integer, Integer>();
 			int[] clusterSizes = new int[k];
@@ -238,7 +371,7 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 			boolean converged = false, timedout = false;
 			int repetitions = 0;
 			long start = System.currentTimeMillis();
-			int timeoutLimit = 10000;
+			int timeoutLimit = 45000;
 			while ( !converged && !timedout) {
 				repetitions += 1;
 
@@ -246,7 +379,7 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 				for (int j=0; j < k; j++) 
 					newCentroids.add(new ArrayList<Double>(Collections.nCopies(numOfDimensions, 0.0)));
 				clusterSizes = new int[k];
-				
+				double totalVisits = 0;
 				// For each point in the data...
 				for(int i=0; i < numOfPoints; i++) {
 					//Determine which cluster it belongs to by min distance.
@@ -261,9 +394,11 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 					}
 					//Update the information we have about clusters.
 					keyClusterMap.put(i, selectedCluster);
-					clusterSizes[selectedCluster] += weights.get(i);
+					clusterSizes[selectedCluster] += weights.get(i).intValue();
+					totalVisits += weights.get(i);
 					addPoints(data.get(i), newCentroids.get(selectedCluster), weights.get(i));
 				}
+				System.out.println("Total visits: " + totalVisits);
 				// Divide the sums of the points in a cluster to get the mean - the new centroid.
 				for (int j=0; j < k; j++) 
 					dividePoint(newCentroids.get(j), clusterSizes[j]);
@@ -272,12 +407,16 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 				centroids = newCentroids;
 				
 			}
+			centroidsOut.clear();
+			centroidsOut.addAll(centroids);
+			
+			clusterSizesOut.clear();
+			for (int i=0; i<clusterSizes.length; i++)
+				clusterSizesOut.add(clusterSizes[i]);
+			
 			if (timedout)
 				System.out.println("Clustering timed out.");
 			System.out.println("Performed " + repetitions + " iterations.");
-			Gson g = new Gson();
-			System.out.println("Cluster sizes:\n" + g.toJson(clusterSizes));
-			System.out.println("Final centroids: \n" + g.toJson(centroids));
 			return keyClusterMap;
 		}
 		

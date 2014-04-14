@@ -625,21 +625,33 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 
 
 		@Override
-		public GaData getDenseVisitorInfo(Credential credential, String profileID, String startDate, String endDate) {
+		public GaData getDenseVisitorInfo(Credential credential, String profileID, String startDate, String endDate, int maxResults) {
 			GaData gaData = null;
 			try {
 
 				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build().data().ga();
 				
-				String metrics = "ga:visits,ga:avgTimeOnSite,ga:pageviewsPerVisit";
-				String dimensions = "ga:hour,ga:dayOfWeek,ga:operatingSystemVersion,ga:browserVersion,ga:visitorType,ga:screenResolution";
-				Ga.Get request = reporting.get("ga:" + profileID, startDate, endDate, metrics) // Metrics.
-						.setDimensions(dimensions)
-						.setSort("-ga:visits")
-						.setMaxResults(10000); //Get all data later.. change..
-				
-				gaData = queryDispatcher.execute(request);
+				String metrics = "ga:avgTimeOnSite,ga:pageviewsPerVisit,ga:visits";
+				String dimensions = "ga:hour,ga:dayOfWeek,ga:longitude,ga:latitude,ga:visitorType,ga:screenResolution";
+				int totalRows = maxResults;
+				int receivedRows = 0;
+				while (receivedRows < maxResults && receivedRows < totalRows) {
+					Ga.Get request = reporting.get("ga:" + profileID, startDate, endDate, metrics) // Metrics.
+							.setDimensions(dimensions)
+							.setSort("-ga:visits")
+							.setMaxResults(10000) //Get all data later.. change..
+							.setStartIndex(receivedRows+1);
+					
+					GaData currentResults = queryDispatcher.execute(request);
+					if (gaData != null)
+						gaData.getRows().addAll(currentResults.getRows());
+					else
+						gaData = currentResults;
+					totalRows = currentResults.getTotalResults();
+					receivedRows = gaData.getRows().size();
+					System.out.println("VisitorClustering:\tGathered " + receivedRows + " of " + Math.max(maxResults, totalRows) + " rows... (" + totalRows + " rows available)");
+				}
 			
 			} catch (GoogleJsonResponseException e) {
 				handleGoogleJsonResponseException(e);

@@ -36,7 +36,7 @@ public interface ICoreReportingService {
 	
 	public ForecastData getForecastData(Credential credential, String profileID);
 	
-	public GaData getDenseVisitorInfo(Credential credential, String profileID, Date startDate, Date endDate); 
+	public GaData getDenseVisitorInfo(Credential credential, String profileID, Date startDate, Date endDate, int maxResults); 
 	
 
 }

@@ -65,8 +65,8 @@ public class CoreReportingService implements ICoreReportingService {
 	}
 
 	@Override
-	public GaData getDenseVisitorInfo(Credential credential, String profileID, Date startDate, Date endDate) {
-		return REPOSITORY.getDenseVisitorInfo(credential, profileID, dateFormat.format(startDate), dateFormat.format(endDate));
+	public GaData getDenseVisitorInfo(Credential credential, String profileID, Date startDate, Date endDate, int maxResults) {
+		return REPOSITORY.getDenseVisitorInfo(credential, profileID, dateFormat.format(startDate), dateFormat.format(endDate), maxResults);
 	}
 	
 
