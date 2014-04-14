@@ -330,7 +330,7 @@ function removeWidget(id) {
 		var widgetId = widget.data("widgetId");
 		var nWidgets = $(".dashboard-content").data("n");
 		var widgetName = $("#" + id + " .widget_title").html();
-
+		
 		$.ajax({
 			type: 'POST',
 			url: applicationRoot + "removeWidget",
@@ -338,11 +338,13 @@ function removeWidget(id) {
 			success: function(response, status, xhr) {
 				if (status != "success")
 					console.warn("There was a problem during the AJAX request.");
-				if (response)
+				if (response) {
 					widget.remove();
-				// decrement the number of widgets on the page.
-				$(".dashboard-content").data("n", --nWidgets);
-					console.warn("removed widget: " + id);
+					removeTooltips(widget);
+					// decrement the number of widgets on the page.
+					$(".dashboard-content").data("n", --nWidgets);
+						console.warn("removed widget: " + id);
+				}
 					
 				//TODO: Make the JSON response the title and content so we can use string properties.
 				Modal.alert({
