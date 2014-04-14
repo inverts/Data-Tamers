@@ -4,11 +4,6 @@
 
 (function ($) {
 
-	/* This looks like a helper function but I don't see it being used anywhere. */
-	registerKeyboardHandler = function(callback) {
-	  d3.select(window).on("keydown", callback);  
-	};
-
 	/* These are the default values for the params object in table(params). */
 	var defaults = {
 			"columnHeaders" : [{"name" : null}],
@@ -20,7 +15,9 @@
 			"show"			: 5,
 			"title"			: "",
 			"sorting"		: [],
-			"oLanguage"		: { }
+			"oLanguage"		: { },
+			"columnLines"	: 1,
+			"subClass"		: null
 	}; 
 
 	/**
@@ -33,23 +30,17 @@
 		return this.each(function() {
 			var $this = $(this);
 			var settings = $.extend({}, defaults, params); // Combine params with the defaults.
-			var heightOffSet = function() {
-				if(settings.title && settings.search)
-					return 110;
-				else if (settings.search)
-					return 90;
-				else if (settings.title)
-					return 80;
-				else
-					return 60;
-			}
+			var heightOffSet = (settings.search || settings.title) ? 85 : 60;
+			var id = settings.id || this.id;
+			var multiLineHeader = 10 * (settings.columnLines - 1);
+			
 			// Base Cases << What does that mean in this context...??
 			var table = {
-							"id"		: this.id + "DataTable",
+							"id"		: id + "DataTable",
 							"data"		: settings.data,
 							"rawData"	: settings.rawData,
 							"title"		: settings.title,
-							"size"		: { "width": $this.width(), "height": $this.height() - heightOffSet() },
+							"size"		: { "width": $this.width(), "height": $this.height() - heightOffSet - multiLineHeader },
 							"cols"		: {
 											"length": settings.m.length,
 											"headers": {
@@ -78,12 +69,17 @@
 						};
 
 			// This is the container that the table will be placed in.
-			var $view = $("#" + $this.attr("id")).empty().attr("style", "display:none;");
+			var $view = $("#" + id).attr("style", "display:none;");
 			
 			
 			// Now we place the table in the container (empty), and keep the reference to this table.
-			table.element = $("<table>").css("width", table.size.width).appendTo($view);
+			table.element = $("<table>").css("width", table.size.width).appendTo((settings.subClass) ? $view.find("." + settings.subClass)
+																									 : $view);
 			
+			var addedDOM = 'l<"subtitle">';
+			
+			if (settings.dom)
+				addedDOM += '<"' + settings.dom.cName + '">';
 
 			//This invokes the jQuery DataTables plugin on the <table> element.
 			//Isn't the correct syntax ".dataTable(..."?
@@ -96,7 +92,7 @@
 										sScrollY: table.size.height + "px",
 										sScrollXInner: "100%",
 										sScrollYInner: "100%",
-										"sDom": 'l<"subtitle'+$this.attr("id")+'">frtip',
+										"sDom": addedDOM + 'frtip',
 										aaData: getData(), 		//Here is where the data actually gets passed in
 										aoColumns: getHeaders(),
 										aoColumnDefs: getDefinitions(),
@@ -106,10 +102,24 @@
 									});
 
 			// If there is a title to the table element, set the contents of all divs on the page
-			// with class "tableTitle" to this title ..... -_
-
-			if (table.title)
-				$("div.subtitle"+$this.attr("id")).html("<b>" + table.title + "</b>");
+			// with class "tableTitle" to this title ..... -_-
+			if (table.title) {
+				(settings.subClass) ? $("#" + id + " ." + settings.subClass + " div.subtitle").html("<b>" + table.title + "</b>")
+									: $("#" + id + " div.subtitle").html("<b>" + table.title + "</b>");
+			}
+			
+			if (settings.dom && settings.dom.content) {
+				var container = (settings.subClass) ? $("#" + id + " ." + settings.subClass + " div." + settings.dom.cName)
+													: $("#" + id + " div." + settings.dom.cName);
+				
+				var c = settings.dom.content;
+				if (typeof(c) == "object")
+					for(var i = 0; i < c.length; i++)
+						container.append(c[i]);
+				else
+					container.append(c);
+				
+			}
 
 			// If search is enabled (a search box element is provided), then bind the filter function
 			// to changes in the search box. But if the search box is empty.. then forget the binding? -_-

@@ -454,10 +454,33 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 		 */
 
 		public GaData getOverview(Credential credential, String profileID, Date sDate, Date eDate) {
-			return getOverviewDim(credential, profileID,sDate, eDate, 1, "");
+			GaData gaData = null;
+			String startDate = dateFormat.format(sDate);
+			String endDate = dateFormat.format(eDate);
+			
+
+			try {
+				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build().data().ga();
+ 
+				Ga.Get request = reporting.get("ga:"+ profileID, // profile id (table id).
+						startDate, // Start date.
+						endDate, // End date.
+						"ga:newVisits,ga:percentNewVisits,ga:visits,ga:visitBounceRate,ga:pageviewsPerVisit,ga:avgTimeOnSite") // Metrics.
+						.setSort("-ga:visits")
+						.setFilters("ga:medium!=(none)");
+				gaData = queryDispatcher.execute(request);
+				
+			} catch (GoogleJsonResponseException e) {
+				handleGoogleJsonResponseException(e);
+			} catch (IOException e) {
+				// Catch general parsing network errors.
+				e.printStackTrace();
+			}
+			return gaData;
 		}
 		/**
-		 * Get aquisition overview data	
+		 * Get aquisition overview data	broken down by channel
 		 *      
 		 * @param sDate
 		 * @param eDate
@@ -479,7 +502,66 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 						endDate, // End date.
 						"ga:newVisits,ga:percentNewVisits,ga:visits,ga:visitBounceRate,ga:pageviewsPerVisit,ga:avgTimeOnSite") // Metrics.
 						.setDimensions(dimension)
+						.setFilters("ga:medium!=(none)")
 						.setSort("-ga:visits")
+						.setMaxResults(maxResults);
+				gaData = queryDispatcher.execute(request);
+				
+			} catch (GoogleJsonResponseException e) {
+				handleGoogleJsonResponseException(e);
+			} catch (IOException e) {
+				// Catch general parsing network errors.
+				e.printStackTrace();
+			}
+			return gaData;
+		}
+		
+		public GaData getMobileOS(Credential credential, String profileID, Date sDate, Date eDate, int maxResults) {
+			GaData gaData = null;
+			String startDate = dateFormat.format(sDate);
+			String endDate = dateFormat.format(eDate);
+			
+
+			try {
+				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build().data().ga();
+ 
+				Ga.Get request = reporting.get("ga:"+ profileID, // profile id (table id).
+						startDate, // Start date.
+						endDate, // End date.
+						"ga:visits") // Metrics.
+						.setDimensions("ga:deviceCategory,ga:operatingSystem")
+						.setSort("-ga:visits")
+						.setFilters("ga:deviceCategory!=desktop")
+						.setMaxResults(maxResults);
+				gaData = queryDispatcher.execute(request);
+				
+			} catch (GoogleJsonResponseException e) {
+				handleGoogleJsonResponseException(e);
+			} catch (IOException e) {
+				// Catch general parsing network errors.
+				e.printStackTrace();
+			}
+			return gaData;
+		}
+		
+		public GaData getDesktopBrowser(Credential credential, String profileID, Date sDate, Date eDate, int maxResults) {
+			GaData gaData = null;
+			String startDate = dateFormat.format(sDate);
+			String endDate = dateFormat.format(eDate);
+			
+
+			try {
+				Ga reporting = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build().data().ga();
+ 
+				Ga.Get request = reporting.get("ga:"+ profileID, // profile id (table id).
+						startDate, // Start date.
+						endDate, // End date.
+						"ga:visits") // Metrics.
+						.setDimensions("ga:deviceCategory,ga:browser")
+						.setSort("-ga:visits")
+						.setFilters("ga:deviceCategory==desktop")
 						.setMaxResults(maxResults);
 				gaData = queryDispatcher.execute(request);
 				

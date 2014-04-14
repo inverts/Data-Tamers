@@ -36,6 +36,10 @@ public interface ICoreReportingRepository {
 	public GaData getOverview(Credential credential, String profileID, Date sDate, Date eDate);
 	
 	public GaData getOverviewDim(Credential credential, String profileID, Date sDate, Date eDate, int maxResults, String dimension);
+	
+	public GaData getMobileOS(Credential credential, String profileID, Date sDate, Date eDate, int maxResults);
+	
+	public GaData getDesktopBrowser(Credential credential, String profileID, Date sDate, Date eDate, int maxResults);
 }
 
 

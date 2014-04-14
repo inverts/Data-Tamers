@@ -111,6 +111,25 @@ function loadWidget($div, widgetTypeId, i, callback)
 			$div.attr("id", elementId);
 			loadBoostPerformanceWidget(elementId, function() { widgetEvents($div, elementId); });
 			break;
+			
+		case 8:
+			n = i || $(".overview").length;
+			elementId = "overviewWidget";
+			while($("#" + elementId + n).length) { n++; } // need to ensure that the number is not already used for this widget
+			elementId += n;
+			$div.attr("id", elementId);
+			loadOverview(elementId, function() { widgetEvents($div, elementId); });
+			break;
+			
+		case 9:
+			n = i || $(".vistorDevices").length;
+			elementId = "visitorDevicesWidget";
+			while($("#" + elementId + n).length) { n++; } // need to ensure that the number is not already used for this widget
+			elementId += n;
+			$div.attr("id", elementId);
+			loadVisitorDevices(elementId, function() { widgetEvents($div, elementId); });
+			break;
+			
 	}
 
 	// execute callback function if provided.
@@ -210,6 +229,11 @@ function updateWidget(widgetTypeId, elementId) {
 		case 5:
 			updateTrafficSourceTrends(elementId);
 			break;
+		case 8:
+			updateOverview(elementId);
+			break;
+		case 9:
+			updateVisitorDevices(elementId);
 	}
 }
 
@@ -306,7 +330,7 @@ function removeWidget(id) {
 		var widgetId = widget.data("widgetId");
 		var nWidgets = $(".dashboard-content").data("n");
 		var widgetName = $("#" + id + " .widget_title").html();
-
+		
 		$.ajax({
 			type: 'POST',
 			url: applicationRoot + "removeWidget",
@@ -314,11 +338,13 @@ function removeWidget(id) {
 			success: function(response, status, xhr) {
 				if (status != "success")
 					console.warn("There was a problem during the AJAX request.");
-				if (response)
+				if (response) {
 					widget.remove();
-				// decrement the number of widgets on the page.
-				$(".dashboard-content").data("n", --nWidgets);
-					console.warn("removed widget: " + id);
+					removeTooltips(widget);
+					// decrement the number of widgets on the page.
+					$(".dashboard-content").data("n", --nWidgets);
+						console.warn("removed widget: " + id);
+				}
 					
 				//TODO: Make the JSON response the title and content so we can use string properties.
 				Modal.alert({

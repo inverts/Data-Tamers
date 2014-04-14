@@ -7,6 +7,7 @@
 <script src="<c:url value="/cache/javascript/keyword-insight.js" />"></script>
 <script src="<c:url value="/cache/javascript/dashboard.js" />"></script>
 <script src="<c:url value="/cache/javascript/traffic-source-trends.js" />"></script>
+<script src="<c:url value="/cache/javascript/overview.js" />"></script>
 <script src="<c:url value="/cache/javascript/boost-performance.js" />"></script>
 
 <script>

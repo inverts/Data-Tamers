@@ -49,10 +49,10 @@ $(function(){ getDashboardList($.parseJSON(dashboards)); });
 
 			
 			<!-- ALERTS -->
-			<div id="suggestions" class="nav-cell">
+			<%--<div id="suggestions" class="nav-cell">
 				<div class="nav-icon" style="background-position:0 -90px;"></div>
 				<a class="nav-txt"><fmt:message key="alerts" /></a>
-			</div>
+			</div>--%>
 		</div>
 	</div>
 </nav>

@@ -1,14 +1,10 @@
+var currentTooltips = [];
+var nTooltips = 0;
+
 (function ($) {
-		
-	/*$.fn.tooltip.defaults = {
-	        opacity: 1.0,
-	        offset: 1,
-	        delayIn: 500,
-	        hoverable: true,
-	        hideOnClick: true
-	    };*/
+
+	$.event.trigger({ type:"reposition" });
 	
-	var nTooltips = 0;
 	
 	var defaults = {
 			'size'		: 'default',	// text size
@@ -71,12 +67,17 @@
     				"title"		: null,
     				"size" 		: {"width": 0, "height": 0},
     				"arrow"		: true,
-    				"color"		: '#F0F0',
-    				"element"	: $("#tooltip").clone(),
+    				"color"		: "#F0F0",
+    				"element"	: { "dom": $("#tooltip").clone(), "position": { 
+    																			"left": $this.position().left, 
+    																			"top": $this.position().top } 
+    																		  },
     				"closeTimer": 0,
     				"active"	: false,
-    				"n"			: nTooltips++
+    				"n"			: nTooltips++,
+    				"position"  : {"top": 0, "left": 0 }
     		};
+    		
     		
     		$this.data("tooltip-n", tooltip.n); // store the tooltip id # so we can call events on the specific tooltip.
 
@@ -100,7 +101,7 @@
 			}
 			
 			// tooltip-content div
-			var ttContent = tooltip.element.find('.tooltip-content');
+			var ttContent = tooltip.element.dom.find('.tooltip-content');
 			
 			// add content to tooltip if there is content,
 			// otherwise log it and return out, we do not want to show empty tooltips.
@@ -149,18 +150,19 @@
 				gravity: settings.gravity,
 				html: true,
 				color: tooltip.color,
-				title: function() { return tooltip.element.html(); },
+				title: function() { return tooltip.element.dom.html(); },
 				opacity: settings.opacity
 			});
 			
 			$this.data("hasTooltip", true);
 	
-			
 			/****************************
 			 *  Tooltip Trigger Events	*
 			 ****************************/ 
 			
 			var dur = 500; // timeout duration.
+			
+			var ttObj = {"dom": $this, "tipsy": null };
 			
 			// Event is a toggle
 			if (settings.open.element[0] == settings.close.element[0] &&
@@ -170,18 +172,30 @@
 						function(e) {
 						
 							if (tooltip.active) {
+								
 								$this.tipsy("hide");
 								tooltip.active = false;
+								
+								// remove tooltip from active list
+								var r = currentTooltips.indexOf(ttObj);
+								if (r > -1)
+									currentTooltips.splice(r, 1);
+								
 								if (settings.close.callback)
 									settings.close.callback();
 
 							}
 							else {
-								$this.tipsy("show");
-								tooltip.active = true;
-
-								$("#tipsy").attr("id", "tipsy" + tooltip.n);
 								
+								$this.tipsy("show"); // show tipsy tooltip.
+								tooltip.active = true; // set active flag.
+								
+								var tipsy = $("#tipsy").attr("id", "tipsy" + tooltip.n);
+								ttObj.tipsy = "#tipsy" + tooltip.n;
+								currentTooltips.push(ttObj);
+								
+								tooltip.position = tipsy.position();
+
 								if (settings.open.callback)
 									settings.open.callback();
 							}
@@ -197,7 +211,11 @@
 								$this.tipsy("show");
 								tooltip.active = true;
 								
-								$("#tipsy").attr("id", "tipsy" + tooltip.n);
+								var tipsy = $("#tipsy").attr("id", "tipsy" + tooltip.n);
+								ttObj.tipsy = "#tipsy" + tooltip.n;
+								currentTooltips.push(ttObj);
+								
+								tooltip.position = tipsy.position();
 								
 								if (settings.open.callback)
 									settings.open.callback();
@@ -213,6 +231,11 @@
 							else {
 								$this.tipsy("hide");
 								tooltip.active = false;
+								
+								var r = currentTooltips.indexOf(ttObj);
+								if (r > -1)
+									currentTooltips.splice(r, 1);
+								
 								if (settings.close.callback)
 									settings.close.callback();
 							}
@@ -242,12 +265,38 @@
 				tooltip.closeTimer = setTimeout(function() {
 												$this.tipsy("hide");
 												tooltip.active = false;
+												var r = currentTooltips.indexOf(ttObj);
+												if (r > -1)
+													currentTooltips.splice(r, 1);
 												if (settings.close.callback)
 													settings.close.callback();
 											}, duration);
 			}
 			
-    		
+			// Event to check to see if parent element moved at all.
+			$this.on("reposition", function() {
+				
+				if (tooltip.element.position.left != 0 && tooltip.element.position.top != 0) {
+					
+					// did the element hide?
+					if (!$this.is(":visible")) {
+						$this.tipsy("hide");
+						tooltip.active = false;
+					}
+					
+					// did the element just move?
+					else if ($this.position().left != tooltip.element.position.left ||
+						$this.position().top != tooltip.element.position.top) {
+						
+						$this.tipsy("hide");
+						$this.tipsy("show");
+					}
+				}
+					
+				tooltip.element.position = $this.position(); 
+				
+			});
+
 			// on DOM ready, open the tooltip.
 			if (settings.domReady)
 				$(function() { settings.open.element.trigger(settings.open.event + ".oTooltip"); });
@@ -262,3 +311,32 @@
 
     
 }(jQuery));
+
+function resetTooltips() {
+	$(".tipsy").remove();
+	nTooltips = 0;
+	currentTooltips = [];
+}
+
+
+function tooltipReposition($element) {
+	
+	$.each(currentTooltips, function(i) {
+		var el = currentTooltips[i].dom;
+		if ($.contains($element.parent()[0], el[0]))
+			el.trigger("reposition");
+	});
+	
+}
+
+function removeTooltips($element) {
+	
+	$.each(currentTooltips, function(i) {
+		var el = currentTooltips[i].dom;
+		if ($.contains($element[0], el[0])) {
+			$(currentTooltips[i].tipsy).remove();		
+			currentTooltips.splice(i, 1);
+		}
+	});
+}
+

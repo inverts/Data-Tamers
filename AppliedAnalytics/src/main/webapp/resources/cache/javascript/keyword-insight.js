@@ -25,7 +25,6 @@ function loadKeywordInsight(id, callback) {
 					$("#" + id + " a.worstsub").click(function(e) { changeViewBtn(id, "keywordInsightWorstSub"); });
 
 					$element.data("hasData", true); // flag the widget as having data.
-
 				});
 
 				if(callback)			
@@ -69,25 +68,6 @@ function getKeywordInsightData(id, callback) {
 			return;
 		}
 
-/*		var sdata = [];
- 		for (var r = 0; r < d.data.scatter.allKeywords.length; r++){
-			sdata.push([d.data.scatter.allBounceRate[r], d.data.scatter.allVisitsPercent[r],d.data.scatter.allKeywords[r]]);
-		} 
- 		
-		// debugging		
-		console.log("bounce rate (%):");
-		for (var r = 0; r<sdata.length; r++)
-			console.log(sdata[r][0]);
-
-		console.log("visits (%):");
-		for (var r = 0; r<sdata.length; r++)
-			console.log(sdata[r][1]);
-
-		console.log("keywords:");
-		for (var r = 0; r<sdata.length; r++)
-			console.log(sdata[r][2]); 
-*/
-// nvd3 sdata
 		var sdata = [];
 		for (var i = 0; i < d.data.scatter.allKeywords.length; i++) {
 			sdata.push({
@@ -103,21 +83,11 @@ function getKeywordInsightData(id, callback) {
 				shape: "circle"  //Configure the shape of each scatter point.
 			});
 		} 
-		
-		/*console.log("keywords:");
-		for (var i = 0; i<sdata.length; i++)
-			console.log(sdata[i].key);
-		console.log("bounce rate:");
-		for (var i = 0; i<sdata.length; i++)
-			console.log(sdata[i].values[0].x);
-		console.log("visits");
-		for (var i = 0; i<sdata.length; i++)
-			console.log(sdata[i].values[0].y);
-		console.log("end keyword data");*/
 
 		$("#" + id + " .spinner-content").hide();
 		
 		$("#" + id + " .help").tooltip({ content: d.description });
+		
 
 		// scatter view
 		$("#" + id + " #keywordInsightScatter").empty().scatter({
@@ -129,105 +99,75 @@ function getKeywordInsightData(id, callback) {
 			"data"	: sdata
 		});
 
-		// Create each table view
-		//createTableView("keywordInsightImprove", d.data.improve);
+		
+		createKITable($("#" + id + " #keywordInsightImprove"), d.data.improve, null, d.data.paidimprove);
+		createKITable($("#" + id + " #keywordInsightBest"), d.data.best, null, d.data.paidbest);	
+		createKITable($("#" + id + " #keywordInsightWorst"), d.data.worst, null, d.data.paidworst);		
+		createKITable($("#" + id + " #keywordInsightAll"), d.data.all, null, d.data.paidall, true);
+		createKITable($("#" + id + " #keywordInsightBestSub"), d.data.bestsubstr, null, d.data.paidsubstr);
+		createKITable($("#" + id + " #keywordInsightWorstSub"), d.data.worstsubstr, null, d.data.paidworstsubstr);
 
-		$("#" + id + " #keywordInsightImprove").table({
-			"data": d.data.improve,
-			"columnHeaders" : [
-			                   {"name" : d.data.improve.keys[0], "width": "45%"}, 
-			                   {"name" : d.data.improve.keys[1]},
-			                   {"name" : d.data.improve.keys[2]},
-			                   {"name" : d.data.improve.keys[3]}
-			                   ],
-			                   "m"			    : {"length": d.data.improve.keys.length, "keys": d.data.improve.keys, "url": {"links": null, "key": 0}}, // columns
-			                   "n"				: {"length": d.data.improve[d.data.improve.keys[0]].length, "keys": null}, // rows
-			                   "title"			: d.data.improve.title
-		});
-
-		//createTableView("keywordInsightBest", d.data.best);
-
-		$("#" + id + " #keywordInsightBest").table({
-			"data": d.data.best,
-			"columnHeaders" : [
-			                   {"name" : d.data.best.keys[0], "width": "45%"}, 
-			                   {"name" : d.data.best.keys[1]},
-			                   {"name" : d.data.best.keys[2]},
-			                   {"name" : d.data.best.keys[3]}
-			                   ],
-			                   "m"				: {"length": d.data.best.keys.length, "keys": d.data.best.keys, "url": {"links": null, "key": 0}}, // columns
-			                   "n"				: {"length": d.data.best[d.data.best.keys[0]].length, "keys": null}, // rows
-			                   "title"			: d.data.best.title
-		});
-
-		//createTableView("keywordInsightWorst", d.data.worst);
-
-		$("#" + id + " #keywordInsightWorst").table({
-			"data": d.data.worst,
-			"columnHeaders" : [
-			                   {"name" : d.data.worst.keys[0], "width": "45%"}, 
-			                   {"name" : d.data.worst.keys[1]},
-			                   {"name" : d.data.worst.keys[2]},
-			                   {"name" : d.data.worst.keys[3]}
-			                   ],
-			                   "m"				: {"length": d.data.worst.keys.length, "keys": d.data.worst.keys, "url": {"links": null, "key": 0}}, // columns
-			                   "n"				: {"length": d.data.worst[d.data.worst.keys[0]].length, "keys": null}, // rows
-			                   "title"			: d.data.worst.title
-		});
-
-		//createTableView("keywordInsightAll", d.data.all);
-
-		$("#" + id + " #keywordInsightAll").table({
-			"data": d.data.all,
-			"columnHeaders" : [
-			                   {"name" : d.data.all.keys[0]}, 
-			                   {"name" : d.data.all.keys[1]},
-			                   {"name" : d.data.all.keys[2]},
-			                   {"name" : d.data.all.keys[3]}
-			                   ],
-			                   "m"				: {"length": d.data.all.keys.length, "keys": d.data.all.keys, "url": {"links": null, "key": 0}}, // columns
-			                   "n"				: {"length": d.data.all[d.data.all.keys[0]].length, "keys": null}, // rows
-			                   "title"			: d.data.all.title,
-			                   "search"		: true,
-			                   "show"			: 0
-		});
-
-		//createTableView("keywordInsightBestSub", d.data.bestsubstr);
-
-		$("#" + id + " #keywordInsightBestSub").table({
-			"data": d.data.bestsubstr,
-			"columnHeaders" : [
-			                   {"name" : d.data.bestsubstr.keys[0], "width": "45%"}, 
-			                   {"name" : d.data.bestsubstr.keys[1]},
-			                   {"name" : d.data.bestsubstr.keys[2]}
-			                   ],
-			                   "m"				: {"length": d.data.bestsubstr.keys.length, "keys": d.data.bestsubstr.keys, "url": {"links": null, "key": 0}}, // columns
-			                   "n"				: {"length": d.data.bestsubstr[d.data.bestsubstr.keys[0]].length, "keys": null}, // rows
-			                   "title"			: d.data.bestsubstr.title
-		});
-
-		//createTableView("keywordInsightWorstSub", d.data.worstsubstr);
-
-		$("#" + id + " #keywordInsightWorstSub").table({
-			"data": d.data.worstsubstr,
-			"columnHeaders" : [
-			                   {"name" : d.data.worstsubstr.keys[0], "width": "45%"}, 
-			                   {"name" : d.data.worstsubstr.keys[1]},
-			                   {"name" : d.data.worstsubstr.keys[2]}
-			                   ],
-			                   "m"				: {"length": d.data.worstsubstr.keys.length, "keys": d.data.worstsubstr.keys, "url": {"links": null, "key": 0}}, // columns
-			                   "n"				: {"length": d.data.worstsubstr[d.data.bestsubstr.keys[0]].length, "keys": null}, // rows
-			                   "title"			: d.data.worstsubstr.title
-		});
 
 		if(callback)
 			callback();
 
 	});
 
-
-
 }
+
+
+function createKITable($tableDiv, data, urls, paidData, search) {
+	
+	var headers = function() {
+		var result = [];
+		for(var i = 0; i < data.keys.length; i++)
+			result.push({name: data.keys[i]});
+		
+		return result;
+	};
+	
+	$tableDiv.children(".organic").empty().table({
+		"data"			: data,
+		"id"			: $tableDiv.attr("id"),
+		"columnHeaders" : headers(),
+        "m"			    : {"length": data.keys.length, "keys": data.keys, "url": urls}, // columns
+        "n"				: {"length": data[data.keys[0]].length, "keys": null}, // rows
+        "title"			: data.title,
+        "search"		: search,
+        "subClass"		: "organic",
+        "dom"			: paidData ? { "cName": "tableCheckBox", "content" : $("<input>").attr({"type": "button", "class": "xelement paidbtn", "value": "View Paid"}), } 
+        						   : null
+	});
+	
+	if (paidData) {
+		$tableDiv.children(".paid").empty().table({
+			"data"			: paidData,
+			"id"			: $tableDiv.attr("id"),
+			"columnHeaders" : headers(),
+	        "m"			    : {"length": paidData.keys.length, "keys": paidData.keys, "url": urls}, // columns
+	        "n"				: {"length": paidData[paidData.keys[0]].length, "keys": null}, // rows
+	        "title"			: paidData.title,
+	        "search"		: search,
+	        "subClass"		: "paid",
+	        "dom"			: { "cName": "tableCheckBox", "content" : $("<input>").attr({"type": "button", "class": "xelement paidbtn", "value": "View Organic"}) }
+		});
+		
+		// setup paid/organic switch event.
+		$tableDiv.find("input.paidbtn").on("click", function() {
+			var active = $tableDiv.children(".active").removeClass("active").attr("class");
+			
+			(active == "organic") ? $tableDiv.children(".paid").addClass("active")
+								  : $tableDiv.children(".organic").addClass("active");
+		});
+		
+	}
+	
+	
+
+	
+}
+
+
 
 //Updates the widget.
 function updateKeywordInsight(id) {

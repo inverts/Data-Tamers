@@ -46,6 +46,8 @@ svg path.domain { stroke:#333; stroke-width:2; }
 .widget .widget-content .tableTitle { float:left; font-size:18px; font-weight:500; }
 .widget .widget-content a:hover { text-decoration:none; }
 .widget .widget-content .overflow { max-height:220px; overflow:auto; }
+.widget .widget-content .subtitle { float:left; }
+.widget .widget-content .xelement { float:left; margin-left:10%; }
 
 
 /*** WIDGET CONTROLS (DEPRECATED)***/
@@ -408,7 +410,11 @@ line:hover { opacity: 0.5; }
 .keywordInsight #keywordInsightData { margin:auto; height:300px; }
 .keywordInsight .main text { font: 10px sans-serif; }
 .keywordInsight .keywordVisual { width:inherit; height:305px; display:none; margin-bottom:10px; margin:0 auto; }
-.keywordInsight .keywordVisual.active { display:block; }
+.keywordInsight .keywordVisual.active, 
+.keywordInsight .keywordVisual .organic.active, 
+.keywordInsight .keywordVisual .paid.active { display:block; }
+.keywordInsight .keywordVisual .organic, .keywordInsight .keywordVisual .paid { width:inherit; height:305px; display:none; }
+
 .keywordInsight .scatter-axis line, .scatter-axis path { shape-rendering: crispEdges; stroke: black; fill: none; }
 .keywordInsight .scatter-axis text { font-family: sans-serif; font-size: 11px; }
 .keywordInsight circle { fill: steelblue; } 
@@ -423,6 +429,11 @@ line:hover { opacity: 0.5; }
 .growingProblems .trafficSourceVisual { width:inherit; height:305px; display:none; margin-bottom:10px; margin:0 auto; }
 .growingProblems .trafficSourceVisual.active { display:block; }
 
+
+/******CSS for OVERVIEW WIDGET ****/
+.overview #overviewData { margin:auto; height:300px; }
+.overview .overviewVisual { width:inherit; height:305px; display:none; margin-bottom:10px; margin:0 auto; }
+.overview .overviewVisual.active { display:block; }
 
 /*****CSS for PAGE PERFORMANCE - BAR CHART WIDGET ****/
 .pagePerformance #pagePerformanceData {

@@ -45,7 +45,7 @@ input { font: inherit; }
 #ui-datepicker-div { font-size: 15px; }
 
 /* Modal */
-#modal .prompt { text-align:center; }
+#modal .prompt { text-align:center; z-index:10000; }
 
 /* Error Message */
 .page .error { font:inherit; font-size:1em; color:red; margin-bottom:5px; padding:5px; }
