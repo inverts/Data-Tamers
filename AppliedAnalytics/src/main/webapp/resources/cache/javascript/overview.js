@@ -76,7 +76,7 @@ function getOverviewData(id, callback) {
 		var totalKeys = [d.data.channel.keys[0], d.data.totals.keys[2], d.data.totals.keys[1], d.data.totals.keys[0]];
 		
 		$("#" + id + " #overviewTotals").table({
-			"data": d.data.totals.data,
+			"data": d.data.totals,
 			"columnHeaders" : [
 			                   {"name" : d.data.channel.keys[0]}, // change to channel property in totals property.
 			                   {"name" : d.data.totals.keys[2]},
@@ -90,7 +90,7 @@ function getOverviewData(id, callback) {
 
 		var channelKeys = [ d.data.channel.keys[0], d.data.channel.keys[4], d.data.channel.keys[5], d.data.channel.keys[6]];
 		$("#" + id + " #overviewTotals").table({
-			"data": d.data.best,
+			"data": d.data.channel,
 			"columnHeaders" : [
 			                   {"name" : d.data.channel.keys[0]}, 
 			                   {"name" : d.data.channel.keys[4]},
