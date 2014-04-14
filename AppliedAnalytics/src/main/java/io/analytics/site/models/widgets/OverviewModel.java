@@ -119,13 +119,27 @@ public class OverviewModel extends WidgetModel{
 		visitBounceRate = dataObject.getVisitBounceRateTotal();
 		pageviewsPerVisit = dataObject.getPageviewsPerVisit();
 		avgTimePerVisit = dataObject.getAvgTimePerVisit();
-		this.channels = dataObject.getChannels();
-		this.channelNewVisits = dataObject.getChannelNewVisits();
+		this.channels.add("All");
+		this.channels.addAll(dataObject.getChannels());
+		
+		for (int i=0; i<channels.size(); i++){
+			if (channels.get(i).equals("cpc"))
+				channels.set(i,"Paid");
+			if (!channels.get(i).startsWith("("))
+				channels.set(i, channels.get(i).substring(0, 1).toUpperCase() + channels.get(i).substring(1)); 
+		}
+		this.channelNewVisits.add(newVisits);
+		this.channelNewVisits.addAll(dataObject.getChannelNewVisits());
+		this.channelPercentNewVisits.add(this.percentNewVisits);
 		this.channelPercentNewVisits = dataObject.getChannelPercentNewVisits();
-		this.channelVisits = dataObject.getChannelVisits();
-		this.channelVisitBounceRate = dataObject.getChannelVisitBounceRate();
-		this.channelPageviewsPerVisit = dataObject.getChannelPageviewsPerVisit();
-		this.channelAvgTimePerVisit = dataObject.getChannelAvgTimePerVisit();
+		this.channelVisits.add(this.visits);
+		this.channelVisits.addAll(dataObject.getChannelVisits());
+		this.channelVisitBounceRate.add(this.visitBounceRate);
+		this.channelVisitBounceRate.addAll(dataObject.getChannelVisitBounceRate());
+		this.channelPageviewsPerVisit.add(this.pageviewsPerVisit);
+		this.channelPageviewsPerVisit.addAll(dataObject.getChannelPageviewsPerVisit());
+		this.channelAvgTimePerVisit.add(this.avgTimePerVisit);
+		this.channelAvgTimePerVisit.addAll(dataObject.getChannelAvgTimePerVisit());
 
 		// put data into the JSON Object member jsonData
 		this.loadJson(newVisits, percentNewVisits, visits, visitBounceRate, pageviewsPerVisit, avgTimePerVisit); 
@@ -138,9 +152,9 @@ public class OverviewModel extends WidgetModel{
 			// Overview totals
 			JSONObject totals = new JSONObject();
 			
-			String[] keys = new String[]{"New Visits", "New Visits (%)", "Visits", "Bounce Rate (%)", "Pageviews Per Visits", "Avg Visit Duration (sec)"};
+			String[] keys = new String[]{"New Visits", "% New Visits", "Visits", "% Bounce Rate", "Pageviews Per Visits", "Avg Visit Duration (sec)"};
 			double[] ovArr = {newVisits, percentNewVisits, visits, visitBounceRate, pageviewsPerVisit, avgTimePerVisit}; 
-			totals.put("title","Website Performance Totals");
+			totals.put("title","Website Performance");
 			totals.put("data",ovArr);
             totals.put("keys", keys);
 			this.jsonData.put("totals", totals);
@@ -156,10 +170,12 @@ public class OverviewModel extends WidgetModel{
 			// Overview totals
 			JSONObject channels = new JSONObject();
 			
-			String[] keys = new String[]{"Channels", "New Visits", "New Visits (%)", "Visits", "Visit Bounce Rate (%)", "Pageviews Per Visits", "Avg Visit Duration (sec)"};
+			String[] keys = new String[]{"Channels", "New Visits", "% New Visits", "Visits", "% Bounce Rate", "Pageviews Per Visits", "Avg Visit Duration (sec)"};
 
 			channels.put("keys",keys);
-			channels.put("title","Website Performance by Channel");
+			channels.put("title","Top Channels"); // use if channels is only one widget page
+			channels.put("title1","Visits: Top Channels");
+			channels.put("title2","Behavior: Top Channels");
 			channels.put("channels",channelsArr);
 			channels.put("newvisits", newVisits);
 			channels.put("percentnewvisits",percentNewVisits);
