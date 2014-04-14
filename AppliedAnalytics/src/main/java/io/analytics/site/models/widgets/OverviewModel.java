@@ -184,7 +184,7 @@ public class OverviewModel extends WidgetModel{
 			channels.put("pagespervisit",pageviewsPerVisit);
 			channels.put("timepervisit",avgTimePerVisit);
 						
-			this.jsonData.put("channel", channels);
+			this.jsonData.put("total", channels);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -225,7 +225,7 @@ public class OverviewModel extends WidgetModel{
 
 	@Override
 	public String getTitle() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return this.widgetTitle;
 	}
 }
