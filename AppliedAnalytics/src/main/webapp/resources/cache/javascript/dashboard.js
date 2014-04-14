@@ -138,7 +138,7 @@ function loadDashboard(dashboardId) {
 							// the widget itself is encapsulated into a container called .widget-select
 							// and needs to be extracted out of it.
 							var $w = addedWidget.widget.children(".w_container");
-			
+							
 							// set the currentItem html to be that of the widget.
 							$(this).data().uiSortable.currentItem.html($w);
 							// remove the encapsulating parent container (currentItem) and leave
@@ -149,6 +149,10 @@ function loadDashboard(dashboardId) {
 								for(var i = 0; i < addedWidget.events[e].length; i++)
 									$w.on(addedWidget.events[e][i].type, addedWidget.events[e][i].selector, addedWidget.events[e][i].handler);
 							}
+							
+							// keep this information in case the addedWidget object gets reset.
+							var wTypeId = addedWidget.data && addedWidget.data.widgetTypeId;
+							var hasData = addedWidget.data && addedWidget.data.hasData;
 
 							// VALIDATION							
 							// widget did not load at all! Wait 5 seconds to see if it loads.
@@ -164,10 +168,10 @@ function loadDashboard(dashboardId) {
 							
 							var updateW;
 							// widget loaded but data did not! Wait 5 seconds to see if it comes.
-							if ($w.children().length && addedWidget.data && !addedWidget.data.hasData) {
+							if ($w.children().length && !hasData) {
 								updateW = setTimeout(function() {
 									($w.find("img.spinner-content").length) 
-										? updateWidget(addedWidget.data.widgetTypeId, $w.attr("id"))
+										? updateWidget(wTypeId, $w.attr("id"))
 										: clearTimeout(this);
 								}, 5000);
 							}
