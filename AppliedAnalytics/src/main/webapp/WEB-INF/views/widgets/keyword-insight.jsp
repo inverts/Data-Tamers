@@ -3,12 +3,30 @@
 
 <div id = "keywordInsightData">
 	<div id="keywordInsightScatter" class="keywordVisual active"></div>
-	<div id="keywordInsightImprove" class="keywordVisual"></div>
-	<div id="keywordInsightBest" class="keywordVisual"></div>
-	<div id="keywordInsightWorst" class="keywordVisual"></div>
-	<div id="keywordInsightAll" class="keywordVisual"></div>
-	<div id="keywordInsightBestSub" class="keywordVisual"></div>
-	<div id="keywordInsightWorstSub" class="keywordVisual"></div>
+	<div id="keywordInsightImprove" class="keywordVisual">
+		<div class="organic active"></div>
+		<div class="paid"></div>
+	</div>
+	<div id="keywordInsightBest" class="keywordVisual">
+		<div class="organic active"></div>
+		<div class="paid"></div>
+	</div>
+	<div id="keywordInsightWorst" class="keywordVisual">
+		<div class="organic active"></div>
+		<div class="paid"></div>
+	</div>
+	<div id="keywordInsightAll" class="keywordVisual">
+		<div class="organic active"></div>
+		<div class="paid"></div>
+	</div>
+	<div id="keywordInsightBestSub" class="keywordVisual">
+		<div class="organic active"></div>
+		<div class="paid"></div>
+	</div>
+	<div id="keywordInsightWorstSub" class="keywordVisual">
+		<div class="organic active"></div>
+		<div class="paid"></div>
+	</div>
 </div>
 <div class="controls">
 	<ul class="pagination">
