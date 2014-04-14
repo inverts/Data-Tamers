@@ -27,6 +27,7 @@ function loadDashboard(dashboardId) {
 				if (dashboard.widgets.length > 0) {
 					var widgets = dashboard.widgets.sort(compareWidgetPriority);
 					loadWidgets($content, widgets);
+					resetTooltips();
 				} else {
 					$.post(applicationRoot + "tutorial", null, function(video) {
 						$content.prepend(video);
@@ -42,6 +43,23 @@ function loadDashboard(dashboardId) {
 										domReady: true,
 										content: "Click here to close the tutorial or drag a widget onto the dashboard."
 									});
+						});
+						
+						// Header Tooltips
+						$("#start-date").tooltip({
+							open: "load",
+							close: {element: $(".hasDatepicker"), event: "click"},
+							gravity: "n",
+							domReady: true,
+							content: "Choose a date range in which to view data."
+						});
+						
+						$("#select-profile").tooltip({
+							open: "load",
+							close: {element: $("#select-profile"), event: "click"},
+							gravity: "ne",
+							domReady: true,
+							content: "Choose the account you want to view data for."
 						});
 						
 						Modal.alert({
