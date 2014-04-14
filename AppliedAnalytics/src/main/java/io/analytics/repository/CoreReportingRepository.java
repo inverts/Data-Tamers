@@ -467,7 +467,8 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 						startDate, // Start date.
 						endDate, // End date.
 						"ga:newVisits,ga:percentNewVisits,ga:visits,ga:visitBounceRate,ga:pageviewsPerVisit,ga:avgTimeOnSite") // Metrics.
-						.setSort("-ga:visits");
+						.setSort("-ga:visits")
+						.setFilters("ga:medium!=(none)");
 				gaData = queryDispatcher.execute(request);
 				
 			} catch (GoogleJsonResponseException e) {
@@ -501,6 +502,7 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 						endDate, // End date.
 						"ga:newVisits,ga:percentNewVisits,ga:visits,ga:visitBounceRate,ga:pageviewsPerVisit,ga:avgTimeOnSite") // Metrics.
 						.setDimensions(dimension)
+						.setFilters("ga:medium!=(none)")
 						.setSort("-ga:visits")
 						.setMaxResults(maxResults);
 				gaData = queryDispatcher.execute(request);

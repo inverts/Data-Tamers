@@ -156,7 +156,7 @@ public class OverviewModel extends WidgetModel{
 			// Overview totals
 			JSONObject channels = new JSONObject();
 			
-			String[] keys = new String[]{"Channels", "New Visits", " New Visits (%)", "Visits", "Visit Bounce Rate (%)", "Pageviews Per Visits", "Avg Visit Duration (sec)"};
+			String[] keys = new String[]{"Channels", "New Visits", "New Visits (%)", "Visits", "Visit Bounce Rate (%)", "Pageviews Per Visits", "Avg Visit Duration (sec)"};
 
 			channels.put("keys",keys);
 			channels.put("title","Website Performance by Channel");

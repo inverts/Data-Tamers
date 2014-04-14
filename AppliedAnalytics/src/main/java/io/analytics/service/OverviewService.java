@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import io.analytics.domain.KeywordInsightData;
 import io.analytics.domain.OverviewData;
 import io.analytics.repository.interfaces.ICoreReportingRepository;
 import io.analytics.service.interfaces.IOverviewService;
@@ -90,11 +89,11 @@ public class OverviewService implements IOverviewService{
 			try {
 				for(List<String> row : dataRows) {
 					newVisits = Integer.parseInt(row.get(newVisitsColumn));
-					percentNewVisits = Double.parseDouble(row.get(percentNewVisitsColumn));
+					percentNewVisits = Math.round(100.0*Double.parseDouble(row.get(percentNewVisitsColumn))/100.0);
 					visits = Integer.parseInt(row.get(visitsColumn));
-					visitBounceRate = Double.parseDouble(row.get(visitBounceRateColumn));
-					pageviewsPerVisit = Double.parseDouble(row.get(pageviewsPerVisitColumn));
-					avgTimeOnSite = Double.parseDouble(row.get(avgTimeOnSiteColumn));
+					visitBounceRate = Math.round(100.0*Double.parseDouble(row.get(visitBounceRateColumn))/100.0);
+					pageviewsPerVisit = Math.round(100.0*Double.parseDouble(row.get(pageviewsPerVisitColumn))/100.0);
+					avgTimeOnSite = Math.round(100.0*Double.parseDouble(row.get(avgTimeOnSiteColumn))/100.0);
 				}
 			} catch (NumberFormatException e) {
 				//The metric we are retrieving is not numeric.
@@ -160,11 +159,11 @@ public class OverviewService implements IOverviewService{
 				for(List<String> row : dataRows) {
 					mediumArr.add(row.get(mediumColumn));
 					newVisitsArr.add(Integer.parseInt(row.get(newVisitsColumn)));
-					percentNewVisitsArr.add(Double.parseDouble(row.get(percentNewVisitsColumn)));
+					percentNewVisitsArr.add(Math.round(100.0*Double.parseDouble(row.get(percentNewVisitsColumn)))/100.0);
 					visitsArr.add(Integer.parseInt(row.get(visitsColumn)));
-					visitBounceRateArr.add(Double.parseDouble(row.get(visitBounceRateColumn)));
-					pageviewsPerVisitArr.add(Double.parseDouble(row.get(pageviewsPerVisitColumn)));
-					avgTimeOnSiteArr.add(Double.parseDouble(row.get(avgTimeOnSiteColumn)));
+					visitBounceRateArr.add(Math.round(100.0*Double.parseDouble(row.get(visitBounceRateColumn)))/100.0);
+					pageviewsPerVisitArr.add(Math.round(100.0*Double.parseDouble(row.get(pageviewsPerVisitColumn)))/100.0);
+					avgTimeOnSiteArr.add(Math.round(100.0*Double.parseDouble(row.get(avgTimeOnSiteColumn)))/100.0);
 				}
 			} catch (NumberFormatException e) {
 				//The metric we are retrieving is not numeric.
