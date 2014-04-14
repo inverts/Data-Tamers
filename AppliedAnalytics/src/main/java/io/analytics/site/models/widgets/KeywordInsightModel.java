@@ -523,7 +523,7 @@ public class KeywordInsightModel extends WidgetModel {
 			}
 
 			// test group is in the KeyData object
-			System.out.println();
+	/*		System.out.println();
 			System.out.println("Print groups of all keywords:");
 			System.out.println("limit = "+limit);
 			
@@ -537,7 +537,7 @@ public class KeywordInsightModel extends WidgetModel {
 			}
 			System.out.println("end group");
 
-			
+	*/	
 			// put data into the JSON Object member jsonData
 			this.loadJson(hasPaid, isPaid, helpKeywords, bestKeywords, removeKeywords, allKeywords, bestWords, worstWords); 
 		}

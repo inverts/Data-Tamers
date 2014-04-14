@@ -28,10 +28,7 @@ public class OverviewService implements IOverviewService{
 	}
 
 	public OverviewData getOverviewData(Credential credential, String profileID, Date startDate, Date endDate){
-		/* * * * * * * * * * * * * * * * * * * * *
-		/* GA query organic keywords, visits, visitBounceRate
-		/* * * * * * * * * * * * * * * * * * * * */
-
+		
 		GaData gaData =null;
 		//printColumnHeaders(gaData);
 		//printDataTable(gaData);
@@ -109,7 +106,7 @@ public class OverviewService implements IOverviewService{
 		}
 
 		/* * * * * * * * *
-		 *  get channel overview data
+		 *  channel overview data
 		 */
 
 		int mediumColumn = -1;
