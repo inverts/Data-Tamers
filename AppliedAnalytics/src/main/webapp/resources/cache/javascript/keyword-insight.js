@@ -101,15 +101,6 @@ function getKeywordInsightData(id, callback) {
 
 		
 		createKITable($("#" + id + " #keywordInsightImprove"), d.data.improve, null, d.data.paidimprove);
-
-		/*$("#" + id + "#keywordInsightImprove div.tableCheckBox").change(function() {
-			if ($(this).is(":checked"))
-				createKITable($("#" + id + " #keywordInsightImprove"), d.data.paidimprove, null, d.data.paidimprove);
-			else
-				createKITable($("#" + id + " #keywordInsightImprove"), d.data.improve, null, d.data.paidimprove);
-		});*/
-		
-
 		createKITable($("#" + id + " #keywordInsightBest"), d.data.best, null, d.data.paidbest);	
 		createKITable($("#" + id + " #keywordInsightWorst"), d.data.worst, null, d.data.paidworst);		
 		createKITable($("#" + id + " #keywordInsightAll"), d.data.all, null, d.data.paidall, true);
@@ -135,7 +126,7 @@ function createKITable($tableDiv, data, urls, paidData, search) {
 		return result;
 	};
 	
-	$tableDiv.children(".organic").table({
+	$tableDiv.children(".organic").empty().table({
 		"data"			: data,
 		"id"			: $tableDiv.attr("id"),
 		"columnHeaders" : headers(),
@@ -149,7 +140,7 @@ function createKITable($tableDiv, data, urls, paidData, search) {
 	});
 	
 	if (paidData) {
-		$tableDiv.children(".paid").table({
+		$tableDiv.children(".paid").empty().table({
 			"data"			: paidData,
 			"id"			: $tableDiv.attr("id"),
 			"columnHeaders" : headers(),
