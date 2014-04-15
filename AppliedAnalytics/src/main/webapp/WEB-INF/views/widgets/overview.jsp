@@ -8,7 +8,7 @@
 
 <div class="controls">
 	<ul class="pagination">
-		<li><a class="totals">Performance Totals</a></li>
-		<li><a class="channels">Channel Breakdown</a></li>
+		<li><a class="totals1">Totals 1</a></li>
+		<li><a class="totals2">Totals 2</a></li>
 	</ul>
 </div>

@@ -118,7 +118,7 @@ function loadWidget($div, widgetTypeId, i, callback)
 			while($("#" + elementId + n).length) { n++; } // need to ensure that the number is not already used for this widget
 			elementId += n;
 			$div.attr("id", elementId);
-			loadOverview(elementId, function() { widgetEvents($div, elementId); });
+			loadOverview(elementId, function() { widgetEvents($div, elementId, "overviewVisual"); });
 			break;
 			
 		case 9:
@@ -234,6 +234,7 @@ function updateWidget(widgetTypeId, elementId) {
 			break;
 		case 9:
 			updateVisitorDevices(elementId);
+			break;
 	}
 }
 

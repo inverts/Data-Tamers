@@ -16,11 +16,10 @@ function loadOverview(id, callback) {
 				getOverviewData(id, function() {
 
 					// direct view buttons
-					$("#" + id + " a.totals").click(function(e) { changeViewBtn(id, "overviewTotals"); });
-//					$("#" + id + " a.channels").click(function(e) { changeViewBtn(id, "overviewChannels"); });
+					$("#" + id + " a.totals1").click(function(e) { changeViewBtn(id, "overviewTotals1"); });
+					$("#" + id + " a.totals2").click(function(e) { changeViewBtn(id, "overviewTotals2"); });
 
 					$element.data("hasData", true); // flag the widget as having data.
-
 				});
 
 				if(callback)			
@@ -73,34 +72,37 @@ function getOverviewData(id, callback) {
 		// Create each table view
 
 		// add the key for channels into this array.
-		var totalKeys1 = [d.data.total.keys[0], d.data.totals.keys[3], d.data.totals.keys[2], d.data.totals.keys[1]];
+		var totalKeys1 = [d.data.total.keys[0], d.data.total.keys[3], d.data.total.keys[2], d.data.total.keys[1]];
 		
 		$("#" + id + " #overviewTotals1").table({
-			"data": d.data.totals,
+			"data": d.data.total,
+			"id": id,
 			"columnHeaders" : [
 			                   {"name" : d.data.total.keys[0]}, // change to channel property in totals property.
 			                   {"name" : d.data.total.keys[3]},
 			                   {"name" : d.data.total.keys[2]},
 			                   {"name" : d.data.total.keys[1]},
 			                  ],
-			                   "m"			    : {"length": totalKeys1.length, "keys": totalKeys1 },
-			                   "n"				: {"length": d.data.total.keys[0].length, "keys": null}, // rows
-			                   "title"			: d.data.total.title1
+           "m"			    : {"length": totalKeys1.length, "keys": totalKeys1 },
+           "n"				: {"length": d.data.total[d.data.total.keys[0]].length, "keys": null}, // rows
+           "title"			: d.data.total.title1,
+           "columnLines"	: 1
 		}).show();
 
 		var totalKeys2 = [ d.data.total.keys[0], d.data.total.keys[4], d.data.total.keys[5], d.data.total.keys[6]];
 		$("#" + id + " #overviewTotals2").table({
-			"data": d.data.channel,
+			"data": d.data.total,
+			"id": id,
 			"columnHeaders" : [
 			                   {"name" : d.data.total.keys[0]}, 
 			                   {"name" : d.data.total.keys[4]},
 			                   {"name" : d.data.total.keys[5]},
 			                   {"name" : d.data.total.keys[6]}
 			                  ],
-			                   "m"				: {"length": totalKeys2.length, "keys": totalKeys2}, // columns
-			                   "n"				: {"length": d.data.total.keys[0].length, "keys": null}, // rows
-			                   "title"			: d.data.total.title2,
-			                   "columnLines"	: 3
+           "m"				: {"length": totalKeys2.length, "keys": totalKeys2}, // columns
+           "n"				: {"length": d.data.total[d.data.total.keys[0]].length, "keys": null}, // rows
+           "title"			: d.data.total.title2,
+           "columnLines"	: 3
 		});
 
 		if(callback)

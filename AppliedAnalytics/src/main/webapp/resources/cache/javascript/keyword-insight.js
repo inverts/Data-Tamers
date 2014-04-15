@@ -101,12 +101,12 @@ function getKeywordInsightData(id, callback) {
 		});
 
 		
-		createKITable(id, $("#" + id + " #keywordInsightImprove"), d.data.improve, null, d.data.paidimprove);
-		createKITable(id, $("#" + id + " #keywordInsightBest"), d.data.best, null, d.data.paidbest);	
-		createKITable(id, $("#" + id + " #keywordInsightWorst"), d.data.worst, null, d.data.paidworst);		
-		createKITable(id, $("#" + id + " #keywordInsightAll"), d.data.all, null, d.data.paidall, true);
-		createKITable(id, $("#" + id + " #keywordInsightBestSub"), d.data.bestsubstr, null, d.data.paidsubstr);
-		createKITable(id, $("#" + id + " #keywordInsightWorstSub"), d.data.worstsubstr, null, d.data.paidworstsubstr);
+		createKITable(id, $("#" + id + " #keywordInsightImprove"), d.data.improve, null, d.data.paidimprove, 2);
+		createKITable(id, $("#" + id + " #keywordInsightBest"), d.data.best, null, d.data.paidbest, 2);	
+		createKITable(id, $("#" + id + " #keywordInsightWorst"), d.data.worst, null, d.data.paidworst, 2);		
+		createKITable(id, $("#" + id + " #keywordInsightAll"), d.data.all, null, d.data.paidall, 2, true);
+		createKITable(id, $("#" + id + " #keywordInsightBestSub"), d.data.bestsubstr, null, d.data.paidsubstr, 2);
+		createKITable(id, $("#" + id + " #keywordInsightWorstSub"), d.data.worstsubstr, null, d.data.paidworstsubstr, 2);
 
 
 		if(callback)
@@ -117,7 +117,7 @@ function getKeywordInsightData(id, callback) {
 }
 
 
-function createKITable(id, $tableDiv, data, urls, paidData, search) {
+function createKITable(id, $tableDiv, data, urls, paidData, colLines, search) {
 	
 	var headers = function() {
 		var result = [];
@@ -137,7 +137,8 @@ function createKITable(id, $tableDiv, data, urls, paidData, search) {
         "title"			: data.title,
         "search"		: search,
         "subClass"		: "organic",
-        "dom"			: paidData ? { "cName": "tableCheckBox", "content" : $("<input>").attr({"type": "button", "class": "xelement paidbtn", "value": "View Paid"}), } 
+        "columnLines"	: colLines || 1,
+        "dom"			: paidData ? { "cName": "tableXtra", "content" : $("<input>").attr({"type": "button", "class": "xelement paidbtn", "value": "View Paid"}), } 
         						   : null
 	});
 	
@@ -152,7 +153,8 @@ function createKITable(id, $tableDiv, data, urls, paidData, search) {
 	        "title"			: paidData.title,
 	        "search"		: search,
 	        "subClass"		: "paid",
-	        "dom"			: { "cName": "tableCheckBox", "content" : $("<input>").attr({"type": "button", "class": "xelement paidbtn", "value": "View Organic"}) }
+	        "columnLines"	: colLines || 1,
+	        "dom"			: { "cName": "tableXtra", "content" : $("<input>").attr({"type": "button", "class": "xelement paidbtn", "value": "View Organic"}) }
 		});
 		
 		// setup paid/organic switch event.

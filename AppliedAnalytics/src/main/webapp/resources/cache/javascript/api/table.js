@@ -30,9 +30,9 @@
 		return this.each(function() {
 			var $this = $(this);
 			var settings = $.extend({}, defaults, params); // Combine params with the defaults.
-			var heightOffSet = (settings.search || settings.title) ? 85 : 60;
+			var heightOffSet = (settings.search || (settings.dom && settings.dom.cName)) ? 71 : 60;
 			var id = settings.elementId || this.id;
-			var multiLineHeader = 10 * (settings.columnLines - 1);
+			var multiLineHeader = 20 * (settings.columnLines - 1);
 			
 			// Base Cases << What does that mean in this context...??
 			var table = {

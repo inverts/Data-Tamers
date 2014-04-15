@@ -47,7 +47,8 @@ svg path.domain { stroke:#333; stroke-width:2; }
 .widget .widget-content a:hover { text-decoration:none; }
 .widget .widget-content .overflow { max-height:220px; overflow:auto; }
 .widget .widget-content .subtitle { float:left; }
-.widget .widget-content .xelement { float:left; margin-left:10%; }
+.widget .widget-content .xelement { margin-left:10%; }
+.widget .widget-content .tableXtra { float:left; height:31px; }
 
 
 /*** WIDGET CONTROLS (DEPRECATED)***/
