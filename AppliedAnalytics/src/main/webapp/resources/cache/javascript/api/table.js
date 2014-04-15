@@ -73,8 +73,8 @@
 			
 			
 			// Now we place the table in the container (empty), and keep the reference to this table.
-			table.element = $("<table>").css("width", table.size.width).appendTo((settings.subClass) ? $view.find("." + settings.subClass)
-																									 : $view);
+			table.element = $("<table>").css("width", table.size.width).appendTo((settings.subClass) ? $view.find("." + settings.subClass).empty()
+																									 : $view.empty());
 			
 			var addedDOM = 'l<"subtitle">';
 			
