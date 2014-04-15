@@ -117,7 +117,7 @@ function widgetDragNDrop(listClass) {
 				
 				loadWidget($div, widgetTypeId);
 				
-				$("video").remove();
+				$("iframe.tutorial").remove();
 				$(".tutorialToggle").hide(function() {
 					if ($(this).data("hasTooltip"))
 						$("#tipsy" + $(this).data("tooltip-n")).remove();
