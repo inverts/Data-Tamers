@@ -34,7 +34,7 @@
 				      ;
 				  
 				  chart.xAxis.axisLabel("Webpages");				  
-				  chart.yAxis.axisLabel("Values (%)").axisLabelDistance(40);					  
+				  chart.yAxis.axisLabel("% Visits ").axisLabelDistance(40);					  
 				  chart.xAxis.tickFormat(function (d) { return sdata["Webpage Title/Link"][d];});
 
 				  // draw x-axis line
@@ -63,7 +63,7 @@
 					var paths = [];
 					var keys= [];					
 					var numKeys = sdata.keys.length;
-					var numVals = sdata["Visits (%)"].length;					
+					var numVals = sdata["% Visits "].length;					
 									
 					for(i=1; i < numKeys; i++){
 						keys[i-1]=(sdata.keys[i]);
