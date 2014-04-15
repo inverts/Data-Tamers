@@ -77,10 +77,11 @@ function getKeywordInsightData(id, callback) {
 
 			sdata[i].values.push({
 				x: d.data.scatter.allBounceRate[i],
-				// y: d.data.scatter.allMultipageVisitsPercent[i],
-				y: d.data.scatter.allVisitsPercent[i],
-				size: .4,   //Configure the size of each scatter point
-				shape: "circle"  //Configure the shape of each scatter point.
+				y: d.data.scatter.allMultipageVisitsPercent[i],
+				//y: d.data.scatter.allVisitsPercent[i],
+				group: d.data.scatter.allGroups[i]
+				//size: .4,   //Configure the size of each scatter point
+				//shape: "circle"  //Configure the shape of each scatter point.
 			});
 		} 
 
