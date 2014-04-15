@@ -106,6 +106,7 @@
 			  var yvals = [];
 			  var words = [];		
 			  var groups = [];		    
+			  var keys = [];
 
 			  /* accessing data : */
 				// keywords -- sdata[index].key
@@ -119,7 +120,10 @@
 				  groups[i] = sdata[i].values[0].group;
 			  }
   
-			  
+			  keys[0] = ("best");
+			  keys[3] = ("worst");
+			  keys[1] = ("better");
+			  keys[2] = ("okay");
 			  
 			  var color0 = "rgb(0,102,0)";
 			  var color1 = "rgb(128,255,0)";
@@ -129,7 +133,7 @@
 			  
 			  for (var i = 0; i < 4; i++) {
 				    data.push({
-				      key: 'Group ' + i,
+				      key: keys[i],
 				      values: []
 				    });
 
