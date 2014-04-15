@@ -117,6 +117,7 @@ function getOverviewData(id, callback) {
 //Updates the widget.
 function updateOverview(id) {
 	getOverviewData(id, function() {
+		$("#" + id + " .overviewVisual").hide();
 		$("#" + id + " .overviewVisual.active").show();
 	}); 
 }
