@@ -114,6 +114,11 @@ public class WebsitePerformanceModel extends WidgetModel {
 	public void updateData() {
 
 		PagePerformanceData dataObject = this.pagePerformanceService.getPagePerformanceData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate, 10000);
+		// over quota error returns no data, must refresh browser to try again
+		if (dataObject==null){
+			this.jsonData=null;
+			return;
+		}
 		this.pagePath = dataObject.getPagePathData();
 		this.visits = dataObject.getVisitsData();
 		this.visitsBounceRate = dataObject.getVisitsBounceRateData();
