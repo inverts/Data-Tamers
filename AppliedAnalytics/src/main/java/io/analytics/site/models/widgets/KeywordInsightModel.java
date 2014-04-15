@@ -729,10 +729,10 @@ public class KeywordInsightModel extends WidgetModel {
 				allGroups.put(d.group);
 			}
 
-			String[] keys1 = new String[]{"Keywords", "Visits (%)", "Bounce Rate (%)", "Multipage Visits (%)"};
-			String[] keys2 = new String[]{"Substring Word", "Keyword Count", "Multipage Visits (%)"};
+			String[] keys1 = new String[]{"Keywords", "% Visits", "% Bounce Rate", "% Multipage Visits"};
+			String[] keys2 = new String[]{"Substring Word", "Keyword Count", "% Multipage Visits"};
 			String[] scatterKeys = new String[]{"allBounceRate", "allMultipageVisitsPercent"};
-			String[] scatterAxisLabels = new String[]{"Bounce Rate (%)", "Multipage Visits (%)"};
+			String[] scatterAxisLabels = new String[]{"% Bounce Rate", "% Visits"};
 
 			/* Scatterplot */
 			JSONObject scatter = new JSONObject();

@@ -72,7 +72,8 @@ function getPagePerformanceData(id, callback){
 			"m"				: {"length": d.data.keys.length, "keys": d.data.keys}, // columns
 			"n"				: {"length": d.data[d.data.keys[0]].length, "keys": null}, // rows
 			"url"			: {"links": d.data.url, "cols": [0]},
-			"title"         : d.data.title
+			"title"         : d.data.title,
+			"columnLines"	: 2
 		}).show();
 		
 		// bar chart view

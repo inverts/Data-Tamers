@@ -1,3 +1,4 @@
+
 /**
  * keyword-insight.js
  */
@@ -54,9 +55,8 @@ function getKeywordInsightData(id, callback) {
 		}
 
 		var d = $.parseJSON(response);
-		
 		console.log(d);
-
+		
 		if (d.data === null || d.data === undefined) {
 			// TODO: Handle null data scenario.
 			console.log("No data for keywordInsight");
@@ -182,5 +182,4 @@ function updateKeywordInsight(id) {
 		$("#" + id + " .keywordVisual.active").show();
 	}); 
 }
-
 
