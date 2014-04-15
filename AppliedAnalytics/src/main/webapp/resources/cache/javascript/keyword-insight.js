@@ -1,3 +1,4 @@
+
 /**
  * keyword-insight.js
  */
@@ -54,7 +55,8 @@ function getKeywordInsightData(id, callback) {
 		}
 
 		var d = $.parseJSON(response);
-
+		console.log(d);
+		
 		if (d.data === null || d.data === undefined) {
 			// TODO: Handle null data scenario.
 			console.log("No data for keywordInsight");
@@ -77,10 +79,10 @@ function getKeywordInsightData(id, callback) {
 
 			sdata[i].values.push({
 				x: d.data.scatter.allBounceRate[i],
-				// y: d.data.scatter.allMultipageVisitsPercent[i],
 				y: d.data.scatter.allVisitsPercent[i],
-				size: .4,   //Configure the size of each scatter point
-				shape: "circle"  //Configure the shape of each scatter point.
+				group: d.data.scatter.allGroups[i]
+				//size: .4,   //Configure the size of each scatter point
+				//shape: "circle"  //Configure the shape of each scatter point.
 			});
 		} 
 
@@ -91,7 +93,7 @@ function getKeywordInsightData(id, callback) {
 
 		// scatter view
 		$("#" + id + " #keywordInsightScatter").empty().scatter({
-			"id"	: "keywordInsightScatter",
+			"id"	: id,
 			"xLabel": d.data.scatter.label[0],
 			"yLabel": d.data.scatter.label[1],
 			"xKey" 	: d.data.scatter.keys[0],
@@ -100,12 +102,12 @@ function getKeywordInsightData(id, callback) {
 		});
 
 		
-		createKITable($("#" + id + " #keywordInsightImprove"), d.data.improve, null, d.data.paidimprove);
-		createKITable($("#" + id + " #keywordInsightBest"), d.data.best, null, d.data.paidbest);	
-		createKITable($("#" + id + " #keywordInsightWorst"), d.data.worst, null, d.data.paidworst);		
-		createKITable($("#" + id + " #keywordInsightAll"), d.data.all, null, d.data.paidall, true);
-		createKITable($("#" + id + " #keywordInsightBestSub"), d.data.bestsubstr, null, d.data.paidsubstr);
-		createKITable($("#" + id + " #keywordInsightWorstSub"), d.data.worstsubstr, null, d.data.paidworstsubstr);
+		createKITable(id, $("#" + id + " #keywordInsightImprove"), d.data.improve, null, d.data.paidimprove, 2);
+		createKITable(id, $("#" + id + " #keywordInsightBest"), d.data.best, null, d.data.paidbest, 2);	
+		createKITable(id, $("#" + id + " #keywordInsightWorst"), d.data.worst, null, d.data.paidworst, 2);		
+		createKITable(id, $("#" + id + " #keywordInsightAll"), d.data.all, null, d.data.paidall, 2, true);
+		createKITable(id, $("#" + id + " #keywordInsightBestSub"), d.data.bestsubstr, null, d.data.paidbestsubstr, 2);
+		createKITable(id, $("#" + id + " #keywordInsightWorstSub"), d.data.worstsubstr, null, d.data.paidworstsubstr, 2);
 
 
 		if(callback)
@@ -116,7 +118,7 @@ function getKeywordInsightData(id, callback) {
 }
 
 
-function createKITable($tableDiv, data, urls, paidData, search) {
+function createKITable(id, $tableDiv, data, urls, paidData, colLines, search) {
 	
 	var headers = function() {
 		var result = [];
@@ -128,28 +130,32 @@ function createKITable($tableDiv, data, urls, paidData, search) {
 	
 	$tableDiv.children(".organic").empty().table({
 		"data"			: data,
-		"id"			: $tableDiv.attr("id"),
+		"id"		 	: id,
+		"elementId"		: $tableDiv.attr("id"),
 		"columnHeaders" : headers(),
         "m"			    : {"length": data.keys.length, "keys": data.keys, "url": urls}, // columns
         "n"				: {"length": data[data.keys[0]].length, "keys": null}, // rows
         "title"			: data.title,
         "search"		: search,
         "subClass"		: "organic",
-        "dom"			: paidData ? { "cName": "tableCheckBox", "content" : $("<input>").attr({"type": "button", "class": "xelement paidbtn", "value": "View Paid"}), } 
+        "columnLines"	: colLines || 1,
+        "dom"			: paidData ? { "cName": "tableXtra", "content" : $("<input>").attr({"type": "button", "class": "xelement paidbtn", "value": "View Paid"}), } 
         						   : null
 	});
 	
 	if (paidData) {
 		$tableDiv.children(".paid").empty().table({
 			"data"			: paidData,
-			"id"			: $tableDiv.attr("id"),
+			"id"		 	: id,
+			"elementId"		: $tableDiv.attr("id"),
 			"columnHeaders" : headers(),
 	        "m"			    : {"length": paidData.keys.length, "keys": paidData.keys, "url": urls}, // columns
 	        "n"				: {"length": paidData[paidData.keys[0]].length, "keys": null}, // rows
 	        "title"			: paidData.title,
 	        "search"		: search,
 	        "subClass"		: "paid",
-	        "dom"			: { "cName": "tableCheckBox", "content" : $("<input>").attr({"type": "button", "class": "xelement paidbtn", "value": "View Organic"}) }
+	        "columnLines"	: colLines || 1,
+	        "dom"			: { "cName": "tableXtra", "content" : $("<input>").attr({"type": "button", "class": "xelement paidbtn", "value": "View Organic"}) }
 		});
 		
 		// setup paid/organic switch event.
@@ -175,5 +181,4 @@ function updateKeywordInsight(id) {
 		$("#" + id + " .keywordVisual.active").show();
 	}); 
 }
-
 

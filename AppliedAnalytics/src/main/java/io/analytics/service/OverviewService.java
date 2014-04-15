@@ -83,6 +83,9 @@ public class OverviewService implements IOverviewService{
 			double avgTimeOnSite = -1.0;
 
 			List<List<String>> dataRows = gaData.getRows();
+			if (dataRows == null)
+				return null;
+
 			try {
 				for(List<String> row : dataRows) {
 					newVisits = Integer.parseInt(row.get(newVisitsColumn));
@@ -103,7 +106,8 @@ public class OverviewService implements IOverviewService{
 			dataObject.setVisitBounceRateTotal(visitBounceRate);
 			dataObject.setPageviewsPerVisit(pageviewsPerVisit);
 			dataObject.setAvgTimePerVisit(avgTimeOnSite);
-		}
+			}
+	
 
 		/* * * * * * * * *
 		 *  channel overview data
@@ -112,7 +116,7 @@ public class OverviewService implements IOverviewService{
 		int mediumColumn = -1;
 		column = -1;
 		
-		gaData = REPOSITORY.getOverviewDim(credential, profileID, startDate, endDate, 5, CoreReportingRepository.MEDIUM_DIMENSION);
+		gaData = REPOSITORY.getOverviewDim(credential, profileID, startDate, endDate, 10, CoreReportingRepository.MEDIUM_DIMENSION);
 
 		if (gaData!=null) {
 

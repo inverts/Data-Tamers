@@ -156,6 +156,10 @@ public class KeywordInsightService implements IKeywordInsightService {
 
 			int datum = -1;
 			List<List<String>> dataRows = gaData.getRows();
+			
+			if (dataRows == null)
+				return null;
+			
 			try {
 				for(List<String> row : dataRows) {
 					datum = Integer.parseInt(row.get(visitsColumn));

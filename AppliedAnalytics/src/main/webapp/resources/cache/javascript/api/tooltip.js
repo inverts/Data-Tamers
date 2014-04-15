@@ -262,9 +262,12 @@ var nTooltips = 0;
 			
 
 			function closeTimeout(duration) {
+				clearTimeout(tooltip.closeTimer);
 				tooltip.closeTimer = setTimeout(function() {
-												$this.tipsy("hide");
-												tooltip.active = false;
+												if ($this.length && $this.is(":visible")) {
+													$this.tipsy("hide");
+													tooltip.active = false;
+												}
 												var r = currentTooltips.indexOf(ttObj);
 												if (r > -1)
 													currentTooltips.splice(r, 1);

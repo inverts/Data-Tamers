@@ -62,6 +62,7 @@ function getPagePerformanceData(id, callback){
 		// create table
 		$("#" + id + " #pagePerformanceTable").table({
 			"data": d.data,
+			"id"  : id,
 			"columnHeaders" : [
 			                   {"name" : d.data.keys[0], "width": "70%"}, 
 			                   {"name" : d.data.keys[1]},
@@ -71,12 +72,13 @@ function getPagePerformanceData(id, callback){
 			"m"				: {"length": d.data.keys.length, "keys": d.data.keys}, // columns
 			"n"				: {"length": d.data[d.data.keys[0]].length, "keys": null}, // rows
 			"url"			: {"links": d.data.url, "cols": [0]},
-			"title"         : d.data.title
+			"title"         : d.data.title,
+			"columnLines"	: 2
 		}).show();
 		
 		// bar chart view
 		$("#" + id + " #pagePerformanceBar").empty().bar({
-			"id"	: "pagePerformanceBar",
+			"id"	: id,
 			"data": d.data
 		}).hide();
 	
@@ -89,6 +91,7 @@ function getPagePerformanceData(id, callback){
 
 function updatePagePerformance(id){
 	getPagePerformanceData(id, function() {
+		$("#" + id + " .pagePerformanceVisual").hide();
 		$("#" + id + " .pagePerformanceVisual.active").show();
 	});
 }

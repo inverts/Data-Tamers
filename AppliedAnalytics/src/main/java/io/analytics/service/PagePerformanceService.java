@@ -86,6 +86,11 @@ public class PagePerformanceService implements IPagePerfomanceService{
 		String hostname = "";
 		
 		List<List<String>> dataRows = gaData.getRows();
+		
+		if (dataRows == null){
+			return null;
+		}
+		
 		boolean hostFound = false;
 		String temp;
 		try {
@@ -156,6 +161,11 @@ public class PagePerformanceService implements IPagePerfomanceService{
 		
 		int datum = -1;
 		dataRows = gaData.getRows();
+		
+		if (dataRows == null){
+			return null;
+		}
+		
 		try {
 		for(List<String> row : dataRows) {
 			datum = Integer.parseInt(row.get(visitsColumn));
