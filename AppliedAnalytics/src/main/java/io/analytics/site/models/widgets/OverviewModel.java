@@ -131,7 +131,7 @@ public class OverviewModel extends WidgetModel{
 		this.channelNewVisits.add(newVisits);
 		this.channelNewVisits.addAll(dataObject.getChannelNewVisits());
 		this.channelPercentNewVisits.add(this.percentNewVisits);
-		this.channelPercentNewVisits = dataObject.getChannelPercentNewVisits();
+		this.channelPercentNewVisits.addAll(dataObject.getChannelPercentNewVisits());
 		this.channelVisits.add(this.visits);
 		this.channelVisits.addAll(dataObject.getChannelVisits());
 		this.channelVisitBounceRate.add(this.visitBounceRate);
