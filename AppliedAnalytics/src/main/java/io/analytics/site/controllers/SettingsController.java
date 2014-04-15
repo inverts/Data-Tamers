@@ -18,6 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.google.api.services.analytics.model.Profile;
+import com.google.api.services.analytics.model.Profiles;
 
 @Controller
 public class SettingsController {
@@ -124,6 +130,36 @@ public class SettingsController {
 		}
 		SessionService.saveFilter(session, filter);
 		//return new ModelAndView("unavailable");
+	}
+	
+	@RequestMapping(value = {"/settings/profiles"} , method = {RequestMethod.GET})
+	public ModelAndView filterProfileView(Model viewMap, HttpServletRequest request,  HttpServletResponse response, HttpSession session) {
+
+		SettingsModel settings = null;
+		if (SessionService.checkAuthorization(session)) {
+			settings = SessionService.getUserSettings();
+		} else {
+			SessionService.redirectToLogin(session, request, response);
+			return new ModelAndView("unavailable");
+		}
+		
+		Profiles profiles = settings.getCurrentProfiles();
+		
+		JSONArray data = new JSONArray();
+		for(Profile p : profiles.getItems()) {
+			JSONObject item = new JSONObject();
+			try {
+				item.put("name", p.getName());
+				item.put("id", p.getId());
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			data.put(item);
+		}
+		viewMap.addAttribute("data", data.toString());
+		
+		return new ModelAndView("plaintext");
 	}
 	
 }

@@ -60,8 +60,26 @@ $(function() {
 				updateSettings({ update: 1 }, function() {
 					updateWidgets();
 					//TODO: This is pretty kludge, I need to reorganize a bunch of things to make this better.
+
+					$.ajax({
+						type: 'GET',
+						url: applicationRoot + "settings/profiles",
+						success: function(data) {
+							profiles = $.parseJSON(data);
+							$(".filter #activeProfileInfo #select-profile").empty();
+							selectedId = $('.settings #select-profile option:selected').val();
+							for (i in profiles) {
+								option = '<option value="' + profiles[i].id + '"' + (selectedId == profiles[i].id ? 'selected' : '') + '>' + profiles[i].name + '</option>';
+								$(".filter #activeProfileInfo #select-profile").append(option);
+							}
+						},
+						error: handleAjaxError
+					});
+					
+					/*
 					$(".filter #activeProfileInfo #select-profile option:selected").removeAttr("selected");
-					$(".filter #activeProfileInfo #select-profile option[value=" + $('.settings #select-profile option:selected').val() + "]").attr("selected", true);
+					$(".filter #activeProfileInfo #select-profile option[value=" +  + "]").attr("selected", true);
+					*/
 				});
 			});
 
