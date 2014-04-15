@@ -62,6 +62,7 @@ function getPagePerformanceData(id, callback){
 		// create table
 		$("#" + id + " #pagePerformanceTable").table({
 			"data": d.data,
+			"id"  : id,
 			"columnHeaders" : [
 			                   {"name" : d.data.keys[0], "width": "70%"}, 
 			                   {"name" : d.data.keys[1]},
@@ -76,7 +77,7 @@ function getPagePerformanceData(id, callback){
 		
 		// bar chart view
 		$("#" + id + " #pagePerformanceBar").empty().bar({
-			"id"	: "pagePerformanceBar",
+			"id"	: id,
 			"data": d.data
 		}).hide();
 	

@@ -2,8 +2,8 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <div id = "overviewData">
-	<div id="overviewTotals" class="overviewVisual active"></div>
-	<div id="overviewChannels" class="overviewVisual"></div>	
+	<div id="overviewTotals1" class="overviewVisual active"></div>
+	<div id="overviewTotals2" class="overviewVisual"></div>	
 </div>
 
 <div class="controls">

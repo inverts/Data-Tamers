@@ -191,7 +191,7 @@ var nTooltips = 0;
 								tooltip.active = true; // set active flag.
 								
 								var tipsy = $("#tipsy").attr("id", "tipsy" + tooltip.n);
-								ttObj.tipsy = tipsy;
+								ttObj.tipsy = "#tipsy" + tooltip.n;
 								currentTooltips.push(ttObj);
 								
 								tooltip.position = tipsy.position();
@@ -212,7 +212,7 @@ var nTooltips = 0;
 								tooltip.active = true;
 								
 								var tipsy = $("#tipsy").attr("id", "tipsy" + tooltip.n);
-								ttObj.tipsy = tipsy;
+								ttObj.tipsy = "#tipsy" + tooltip.n;
 								currentTooltips.push(ttObj);
 								
 								tooltip.position = tipsy.position();
@@ -262,9 +262,15 @@ var nTooltips = 0;
 			
 
 			function closeTimeout(duration) {
+				clearTimeout(tooltip.closeTimer);
 				tooltip.closeTimer = setTimeout(function() {
-												$this.tipsy("hide");
-												tooltip.active = false;
+												if ($this.length && $this.is(":visible")) {
+													$this.tipsy("hide");
+													tooltip.active = false;
+												}
+												var r = currentTooltips.indexOf(ttObj);
+												if (r > -1)
+													currentTooltips.splice(r, 1);
 												if (settings.close.callback)
 													settings.close.callback();
 											}, duration);
@@ -324,5 +330,16 @@ function tooltipReposition($element) {
 			el.trigger("reposition");
 	});
 	
+}
+
+function removeTooltips($element) {
+	
+	$.each(currentTooltips, function(i) {
+		var el = currentTooltips[i].dom;
+		if ($.contains($element[0], el[0])) {
+			$(currentTooltips[i].tipsy).remove();		
+			currentTooltips.splice(i, 1);
+		}
+	});
 }
 

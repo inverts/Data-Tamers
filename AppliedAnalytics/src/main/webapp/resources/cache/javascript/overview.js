@@ -73,33 +73,33 @@ function getOverviewData(id, callback) {
 		// Create each table view
 
 		// add the key for channels into this array.
-		var totalKeys = [d.data.channel.keys[0], d.data.totals.keys[2], d.data.totals.keys[1], d.data.totals.keys[0]];
+		var totalKeys1 = [d.data.total.keys[0], d.data.totals.keys[3], d.data.totals.keys[2], d.data.totals.keys[1]];
 		
-		$("#" + id + " #overviewTotals").table({
+		$("#" + id + " #overviewTotals1").table({
 			"data": d.data.totals,
 			"columnHeaders" : [
-			                   {"name" : d.data.channel.keys[0]}, // change to channel property in totals property.
-			                   {"name" : d.data.totals.keys[2]},
-			                   {"name" : d.data.totals.keys[1]},
-			                   {"name" : d.data.totals.keys[0]},
+			                   {"name" : d.data.total.keys[0]}, // change to channel property in totals property.
+			                   {"name" : d.data.total.keys[3]},
+			                   {"name" : d.data.total.keys[2]},
+			                   {"name" : d.data.total.keys[1]},
 			                  ],
-			                   "m"			    : {"length": totalKeys.length, "keys": totalKeys },
-			                   "n"				: {"length": d.data.totals.Channels.length, "keys": null}, // rows
-			                   "title"			: d.data.totals.title
+			                   "m"			    : {"length": totalKeys1.length, "keys": totalKeys1 },
+			                   "n"				: {"length": d.data.total.keys[0].length, "keys": null}, // rows
+			                   "title"			: d.data.total.title1
 		}).show();
 
-		var channelKeys = [ d.data.channel.keys[0], d.data.channel.keys[4], d.data.channel.keys[5], d.data.channel.keys[6]];
-		$("#" + id + " #overviewTotals").table({
+		var totalKeys2 = [ d.data.total.keys[0], d.data.total.keys[4], d.data.total.keys[5], d.data.total.keys[6]];
+		$("#" + id + " #overviewTotals2").table({
 			"data": d.data.channel,
 			"columnHeaders" : [
-			                   {"name" : d.data.channel.keys[0]}, 
-			                   {"name" : d.data.channel.keys[4]},
-			                   {"name" : d.data.channel.keys[5]},
-			                   {"name" : d.data.channel.keys[6]}
-			                   ],
-			                   "m"				: {"length": channelKeys, "keys": channelKeys}, // columns
-			                   "n"				: {"length": d.data.channel.channels.length, "keys": null}, // rows
-			                   "title"			: d.data.channel.title,
+			                   {"name" : d.data.total.keys[0]}, 
+			                   {"name" : d.data.total.keys[4]},
+			                   {"name" : d.data.total.keys[5]},
+			                   {"name" : d.data.total.keys[6]}
+			                  ],
+			                   "m"				: {"length": totalKeys2.length, "keys": totalKeys2}, // columns
+			                   "n"				: {"length": d.data.total.keys[0].length, "keys": null}, // rows
+			                   "title"			: d.data.total.title2,
 			                   "columnLines"	: 3
 		});
 
@@ -114,7 +114,7 @@ function getOverviewData(id, callback) {
 
 //Updates the widget.
 function updateOverview(id) {
-	getOverview(id, function() {
+	getOverviewData(id, function() {
 		$("#" + id + " .overviewVisual.active").show();
 	}); 
 }

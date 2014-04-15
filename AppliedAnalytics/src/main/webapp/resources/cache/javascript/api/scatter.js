@@ -9,7 +9,6 @@
 
 	/* global variables */
 	var defaults = {
-			'id'	: '',
 			'xLabel': '',
 			'yLabel': '',
 			'xKey' 	: '',
@@ -39,7 +38,7 @@
 			//.attr("class", "tip").style("opacity", 0);
 
 
-			var svg = d3.select("#"+settings.id).append("svg").attr("height", height).attr("width", width);
+			var svg = d3.select(this).append("svg").attr("height", height).attr("width", width);
 
 
 			// get size of object sdata
@@ -59,8 +58,7 @@
 			                //.showDistY(true)
 			                .useVoronoi(false)
 			                .color(d3.scale.category10().range())
-			                .transitionDuration(300)
-			                ;
+			                .transitionDuration(300);
 
 			  chart.xAxis.axisLabel("Bounce Rates (%)");
 			 // chart.yAxis.axisLabel("Multipage Visit Rates (%)");
@@ -127,141 +125,6 @@
 				  return data;
 				}
 
-
-			/*******************************************************************
-			 * GRAPH PROPERTIES *
-			 ******************************************************************/
-
-			/*
-			var scatter = {
-					"id"	:this.id + "Settings"				
-			};
-
-			var svg = d3.select("#"+settings.id).append("svg").attr("height", height).attr("width", width);
-			svg.append("rect").style("fill", "#fff").attr("width", width).attr("height", height).attr("transform", "translate(" + margin.left, + "10)")
-				.style("stroke", "#666").style("stroke-width", 1);
-			var padding = 40; //padding for scale values
-
-			var maxdataX = d3.max(sdata, function(d) {
-				return d[0];
-			});
-			var maxdataY = d3.max(sdata, function(d){
-				return d[1];
-			});
-
-			var xScale = d3.scale.linear()
-				.domain([0, maxdataX])
-				.range([padding, width-padding]);
-
-			var yScale = d3.scale.linear()
-				.domain([0, maxdataY])
-				.range([height-padding, padding]);
-			
-			// first color scale
-			var color = d3.scale.category20();
-						
-			
-			// make circles for each data point
-			svg.selectAll("circle").data(sdata).enter()
-				.append("circle")
-					.attr("cx", function(d) {
-						return xScale(d[0]);
-					})
-					.attr("cy", function(d) {
-						return yScale(d[1]);
-					})
-					.attr("ke", function(d) {
-						return yScale(d[2]);
-					})
-					.attr("r", 5)
-					.style("fill", function(d) { return color(d[2]); })
-					.on("mouseover", function(d) {	
-						d3.select(this).transition().attr("r", 10);
-						tip.transition()
-			               .duration(200)
-			               .style("opacity", .9)
-			               .attr("font-size", "10px");
-						tip.html(d[2])
-						   	.style("left", (this.pageX) + "px")
-						   	.style("bottom", (d3.pageY) + "px");
-			      })
-			      .on("mouseout", function(d) {		
-			    	  d3.select(this).transition().attr("r", 5);
-			          tip.transition()
-		               .duration(500)
-		               .style("opacity", 0);
-			      }); 
-			
-			// remove duplicates
-		    var legend_data = sdata.filter(function(elem, pos) {
-		        return sdata.indexOf(elem) == pos;
-		    });
-			// Legend
-			var legend = svg.selectAll(".legend")
-			      .data(legend_data)
-			    .enter().append("g")
-			      .attr("class", "legend")
-			      .attr("transform", function(d, i) { return "translate(0," + i * 10 + ")"; });
-
-			  legend.append("rect")
-			      .attr("x", width - 18)
-			      .attr("width", 18)
-			      .attr("height", 18)
-			      .style("fill", function(d) { return color(d[2]); })
-			      .on("mouseenter", function(d) {	
-						tip.transition()
-			               .duration(200)
-			               .style("opacity", .9)
-			               .attr("font-size", "10px");
-						tip.html(d[2])
-						//.style("left", (d3.event.pageX+300) + "px")
-			            //.style("top", (d3.event.pageY-150) + "px");
-			      })
-			      .on("mouseleave", function(d) {
-			          tip.transition()
-		               .duration(500)
-		               .style("opacity", 0);
-			      }); 
-
-			  
-			      
-
-
-
-			// add x axes (functions)
-			ticknum = 10;
-			var xAxis = d3.svg.axis().scale(xScale).orient("bottom").ticks(ticknum);
-			svg.append("g").attr("class", "scatter-axis")
-				// clean up axis
-				.attr("transform", "translate(0," + (height-padding) + ")")
-				.call(xAxis);
-
-
-
-			// add y axis (functions)
-			var yAxis = d3.svg.axis().scale(yScale).orient("left").ticks(ticknum);
-			svg.append("g").attr("class", "scatter-axis")
-				.attr("transform", "translate(" + padding + ",0)")
-				.call(yAxis);
-
-
-			// add titles for x and y axis
-			// x axis
-			svg.append("text")
-			    .attr("class", "xlabel")
-			    .attr("text-anchor", "middle")
-			    .attr("x", (width-padding)-10)
-			    .attr("y", height-10)  
-			    .text("Bounce Rate (%)");    //("Percentage of Bounce Rates");
-
-			// y axis
-			svg.append("text")
-			    .attr("class", "ylabel")
-			    .attr("text-anchor", "middle")
-			    .attr("x", -1 * (height/2))
-			    .attr("y", 15)
-			    .attr("transform", "rotate(-90)")
-			    .text("Webpage Visits (%)"); //("Percentage of Webpage Visits"); */
 
 		});
 	}; 

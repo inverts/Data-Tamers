@@ -23,23 +23,6 @@ $(function() {
 		updateSettings({ update: 1 }, updateWidgets);
 	});
 	
-	$("#start-date").tooltip({
-		open: "load",
-		close: {element: $(".hasDatepicker"), event: "click"},
-		gravity: "nw",
-		domReady: true,
-		content: "Choose a date range in which to view data."
-	});
-	
-	
-	$("#select-profile").tooltip({
-		open: "load",
-		close: {element: $("#select-profile"), event: "click"},
-		gravity: "n",
-		domReady: true,
-		content: "Choose the account you want to view data for."
-	});
-	
 	
 });
 

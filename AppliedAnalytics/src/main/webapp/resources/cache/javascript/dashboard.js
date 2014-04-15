@@ -13,7 +13,7 @@
 
 function loadDashboard(dashboardId) {
 
-	$("video").remove(); // in case video was loaded on  previous dashboard session. We dont want this to happen only on success.
+	$("iframe.tutorial").remove(); // in case video was loaded on  previous dashboard session. We dont want this to happen only on success.
 	
 	$.ajax({
 		type: 'POST',
@@ -27,21 +27,40 @@ function loadDashboard(dashboardId) {
 				if (dashboard.widgets.length > 0) {
 					var widgets = dashboard.widgets.sort(compareWidgetPriority);
 					loadWidgets($content, widgets);
+					resetTooltips();
 				} else {
 					$.post(applicationRoot + "tutorial", null, function(video) {
 						$content.prepend(video);
 						$tutorial.show(function() {
+							// tutorial button tooltip
 							$tutorial.tooltip({
 										gravity: "ne",
 										open: "load",
 										close: { 
 											element: $tutorial,
 											event: "click", 
-											callback: function() { $("video").remove(); $tutorial.hide(); } 
+											callback: function() { $("iframe.tutorial").remove(); $tutorial.hide(); } 
 										},
 										domReady: true,
 										content: "Click here to close the tutorial or drag a widget onto the dashboard."
 									});
+						});
+						
+						// Header Tooltips
+						$("#start-date").tooltip({
+							open: "load",
+							close: {element: $(".hasDatepicker"), event: "click"},
+							gravity: "n",
+							domReady: true,
+							content: "Choose a date range in which to view data."
+						});
+						
+						$("#select-profile").tooltip({
+							open: "load",
+							close: {element: $("#select-profile"), event: "click"},
+							gravity: "ne",
+							domReady: true,
+							content: "Choose the account you want to view data for."
 						});
 						
 						Modal.alert({
@@ -120,7 +139,7 @@ function loadDashboard(dashboardId) {
 							// the widget itself is encapsulated into a container called .widget-select
 							// and needs to be extracted out of it.
 							var $w = addedWidget.widget.children(".w_container");
-			
+							
 							// set the currentItem html to be that of the widget.
 							$(this).data().uiSortable.currentItem.html($w);
 							// remove the encapsulating parent container (currentItem) and leave
@@ -131,6 +150,10 @@ function loadDashboard(dashboardId) {
 								for(var i = 0; i < addedWidget.events[e].length; i++)
 									$w.on(addedWidget.events[e][i].type, addedWidget.events[e][i].selector, addedWidget.events[e][i].handler);
 							}
+							
+							// keep this information in case the addedWidget object gets reset.
+							var wTypeId = addedWidget.data && addedWidget.data.widgetTypeId;
+							var hasData = addedWidget.data && addedWidget.data.hasData;
 
 							// VALIDATION							
 							// widget did not load at all! Wait 5 seconds to see if it loads.
@@ -146,10 +169,10 @@ function loadDashboard(dashboardId) {
 							
 							var updateW;
 							// widget loaded but data did not! Wait 5 seconds to see if it comes.
-							if ($w.children().length && addedWidget.data && !addedWidget.data.hasData) {
+							if ($w.children().length && !hasData) {
 								updateW = setTimeout(function() {
 									($w.find("img.spinner-content").length) 
-										? updateWidget(addedWidget.data.widgetTypeId, $w.attr("id"))
+										? updateWidget(wTypeId, $w.attr("id"))
 										: clearTimeout(this);
 								}, 5000);
 							}
