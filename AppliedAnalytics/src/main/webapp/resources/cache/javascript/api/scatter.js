@@ -7,13 +7,13 @@
 		  d3.select(window).on("keydown", callback);  
 		};
 
-	/* global variables */
-	var defaults = {
-			'xLabel': '',
-			'yLabel': '',
-			'xKey' 	: '',
-			'yKey'	: ''
-	};
+		/* global variables */
+		var defaults = {
+				'xLabel': '',
+				'yLabel': '',
+				'xKey' 	: '',
+				'yKey'	: ''
+		};
 
 	/* function declaration */
 	$.fn.scatter = function (params) {
@@ -23,19 +23,16 @@
 			if(settings.data == null){
 				return;
 			}			
-			var sdata = settings.data;			
+			var sdata = settings.data;		
 
 			var margin = {
-				"top" : 20,
-				"right" : 15,
-				"bottom" : 50,
-				"left" : 60
-			};
+					"top" : 20,
+					"right" : 15,
+					"bottom" : 50,
+					"left" : 60
+				};
 			var width = $this.width();
 			var height = $this.height();			
-			// tooltip
-			//var tip = d3.select("#" + settings.id).append("div")
-			//.attr("class", "tip").style("opacity", 0);
 
 
 			var svg = d3.select(this).append("svg").attr("height", height).attr("width", width);
@@ -50,15 +47,21 @@
 			    return size;
 			};
 			var len = Object.size(sdata);	
-
+			var getColors = d3.scale.linear()
+				.domain([0,1,2,3])
+				.range(["green", "yellow", "red"]);
+						
+			
 			var chart;
 			nv.addGraph(function() {
 			  chart = nv.models.scatterChart()
 			                //.showDistX(true)
 			                //.showDistY(true)
+			  			    //.color(colors)
+			  				.color(["rgb(0,255,0)","rgb(128,255,0)","rgb(255,255,0)","rgb(204,0,0)"])
 			                .useVoronoi(false)
-			                .color(d3.scale.category10().range())
-			                .transitionDuration(300);
+			                .transitionDuration(300)
+			                ;
 
 			  chart.xAxis.axisLabel("Bounce Rates (%)");
 			 // chart.yAxis.axisLabel("Multipage Visit Rates (%)");
@@ -100,31 +103,55 @@
 			  var xvals = [];
 			  var yvals = [];
 			  var words = [];		
+			  var groups = [];		    
 
-			  for(var i=0; i < len; i++){						  
-				  xvals[i] = sdata[i].values[0].x;
-				  yvals[i] = sdata[i].values[0].y;
-				  words[i] = sdata[i].key;
-			  }
 			  /* accessing data : */
 				// keywords -- sdata[index].key
 				// values BOUNCE RATE -- sdata[index].values[0].x
 				// values VISITS -- sdata[index].values[0].y
-
-			  for (var i = 0; i < 1; i++) {
+			  	// values GROUP -- sdata[index].values[0].group
+			  for(var i=0; i < len; i++){						  
+				  xvals[i] = sdata[i].values[0].x;
+				  yvals[i] = sdata[i].values[0].y;
+				  words[i] = sdata[i].key;
+				  groups[i] = sdata[i].values[0].group;
+			  }
+			  console.log(groups)
+			  
+			  
+			  
+			  var color0 = "rgb(0,255,0)";
+			  var color1 = "rgb(128,255,0)";
+			  var color2 = "rgb(255,255,0)";
+			  var color3 =  "rgb(204,0,0)";
+			 
+			  
+			  for (var i = 0; i < 4; i++) {
 				    data.push({
-				      key: 'keywords',
+				      key: 'Group ' + i,
 				      values: []
 				    });
 
 				    for (var j = 0; j < len; j++) {
-				      data[i].values.push({x: xvals[j], y: yvals[j], kw: words[j]});
+				      var col = "black";
+				      if(groups[j] == 0){
+				    	  col = color0;
+				      }
+				      else if(groups[j] == 1){
+				    	  col = color1;
+				      }
+				      else if(groups[j] == 2){
+				    	  col = color2;
+				      }
+				      else {
+				    	  col = color3;
+				      }
+				      data[i].values.push({x: xvals[j], y: yvals[j], kw: words[j], color:col});
 				    }
 				  }
 
 				  return data;
-				}
-
+				}			
 
 		});
 	}; 
