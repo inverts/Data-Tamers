@@ -18,9 +18,7 @@ function loadTrafficSourceTrendsWidget(id, callback) {
 						
 						getTrafficSourceTrendsData($element, function(e) {
 							
-							$("#" + id + " a.line").click(function(e) { changeViewBtn(id, "trafficSourceTrendsLine"); });
-							$("#" + id + " a.tst-table").click(function(e) { changeViewBtn(id, "trafficSourceTrendsTable"); });
-							
+						
 							$element.data("hasData", true); // flag the widget as having data.
 						});
 						
