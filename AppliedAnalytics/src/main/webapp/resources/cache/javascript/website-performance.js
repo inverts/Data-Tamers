@@ -91,6 +91,7 @@ function getPagePerformanceData(id, callback){
 
 function updatePagePerformance(id){
 	getPagePerformanceData(id, function() {
+		$("#" + id + " .pagePerformanceVisual").hide();
 		$("#" + id + " .pagePerformanceVisual.active").show();
 	});
 }
