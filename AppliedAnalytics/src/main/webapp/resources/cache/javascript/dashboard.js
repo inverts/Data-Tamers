@@ -32,6 +32,7 @@ function loadDashboard(dashboardId) {
 					$.post(applicationRoot + "tutorial", null, function(video) {
 						$content.prepend(video);
 						$tutorial.show(function() {
+							// tutorial button tooltip
 							$tutorial.tooltip({
 										gravity: "ne",
 										open: "load",

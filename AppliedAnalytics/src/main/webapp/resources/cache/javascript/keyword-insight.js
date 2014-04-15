@@ -91,7 +91,7 @@ function getKeywordInsightData(id, callback) {
 
 		// scatter view
 		$("#" + id + " #keywordInsightScatter").empty().scatter({
-			"id"	: "keywordInsightScatter",
+			"id"	: id,
 			"xLabel": d.data.scatter.label[0],
 			"yLabel": d.data.scatter.label[1],
 			"xKey" 	: d.data.scatter.keys[0],
@@ -100,12 +100,12 @@ function getKeywordInsightData(id, callback) {
 		});
 
 		
-		createKITable($("#" + id + " #keywordInsightImprove"), d.data.improve, null, d.data.paidimprove);
-		createKITable($("#" + id + " #keywordInsightBest"), d.data.best, null, d.data.paidbest);	
-		createKITable($("#" + id + " #keywordInsightWorst"), d.data.worst, null, d.data.paidworst);		
-		createKITable($("#" + id + " #keywordInsightAll"), d.data.all, null, d.data.paidall, true);
-		createKITable($("#" + id + " #keywordInsightBestSub"), d.data.bestsubstr, null, d.data.paidsubstr);
-		createKITable($("#" + id + " #keywordInsightWorstSub"), d.data.worstsubstr, null, d.data.paidworstsubstr);
+		createKITable(id, $("#" + id + " #keywordInsightImprove"), d.data.improve, null, d.data.paidimprove);
+		createKITable(id, $("#" + id + " #keywordInsightBest"), d.data.best, null, d.data.paidbest);	
+		createKITable(id, $("#" + id + " #keywordInsightWorst"), d.data.worst, null, d.data.paidworst);		
+		createKITable(id, $("#" + id + " #keywordInsightAll"), d.data.all, null, d.data.paidall, true);
+		createKITable(id, $("#" + id + " #keywordInsightBestSub"), d.data.bestsubstr, null, d.data.paidsubstr);
+		createKITable(id, $("#" + id + " #keywordInsightWorstSub"), d.data.worstsubstr, null, d.data.paidworstsubstr);
 
 
 		if(callback)
@@ -116,7 +116,7 @@ function getKeywordInsightData(id, callback) {
 }
 
 
-function createKITable($tableDiv, data, urls, paidData, search) {
+function createKITable(id, $tableDiv, data, urls, paidData, search) {
 	
 	var headers = function() {
 		var result = [];
@@ -128,7 +128,8 @@ function createKITable($tableDiv, data, urls, paidData, search) {
 	
 	$tableDiv.children(".organic").empty().table({
 		"data"			: data,
-		"id"			: $tableDiv.attr("id"),
+		"id"		 	: id,
+		"elementId"		: $tableDiv.attr("id"),
 		"columnHeaders" : headers(),
         "m"			    : {"length": data.keys.length, "keys": data.keys, "url": urls}, // columns
         "n"				: {"length": data[data.keys[0]].length, "keys": null}, // rows
@@ -142,7 +143,8 @@ function createKITable($tableDiv, data, urls, paidData, search) {
 	if (paidData) {
 		$tableDiv.children(".paid").empty().table({
 			"data"			: paidData,
-			"id"			: $tableDiv.attr("id"),
+			"id"		 	: id,
+			"elementId"		: $tableDiv.attr("id"),
 			"columnHeaders" : headers(),
 	        "m"			    : {"length": paidData.keys.length, "keys": paidData.keys, "url": urls}, // columns
 	        "n"				: {"length": paidData[paidData.keys[0]].length, "keys": null}, // rows

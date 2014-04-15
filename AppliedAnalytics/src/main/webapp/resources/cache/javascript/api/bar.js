@@ -12,7 +12,7 @@
 	/* function declaration */
 	$.fn.bar = function (params) {
 		return this.each(function() {			
-			var svg = d3.select("#" + this.id).append("svg");
+			var svg = d3.select(this).append("svg");
 			var $this = $(this);
 			var settings = $.extend({}, defaults, params);
 			var sdata = settings.data;	

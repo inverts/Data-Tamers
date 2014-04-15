@@ -31,7 +31,7 @@
 			var $this = $(this);
 			var settings = $.extend({}, defaults, params); // Combine params with the defaults.
 			var heightOffSet = (settings.search || settings.title) ? 85 : 60;
-			var id = settings.id || this.id;
+			var id = settings.elementId || this.id;
 			var multiLineHeader = 10 * (settings.columnLines - 1);
 			
 			// Base Cases << What does that mean in this context...??
@@ -69,7 +69,7 @@
 						};
 
 			// This is the container that the table will be placed in.
-			var $view = $("#" + id).attr("style", "display:none;");
+			var $view = $("#" + settings.id + " #" + id).attr("style", "display:none;");
 			
 			
 			// Now we place the table in the container (empty), and keep the reference to this table.
@@ -104,13 +104,13 @@
 			// If there is a title to the table element, set the contents of all divs on the page
 			// with class "tableTitle" to this title ..... -_-
 			if (table.title) {
-				(settings.subClass) ? $("#" + id + " ." + settings.subClass + " div.subtitle").html("<b>" + table.title + "</b>")
-									: $("#" + id + " div.subtitle").html("<b>" + table.title + "</b>");
+				(settings.subClass) ? $("#" + settings.id + " #" + id + " ." + settings.subClass + " div.subtitle").html("<b>" + table.title + "</b>")
+									: $("#" + settings.id + " #" + id + " div.subtitle").html("<b>" + table.title + "</b>");
 			}
 			
 			if (settings.dom && settings.dom.content) {
-				var container = (settings.subClass) ? $("#" + id + " ." + settings.subClass + " div." + settings.dom.cName)
-													: $("#" + id + " div." + settings.dom.cName);
+				var container = (settings.subClass) ? $("#" + settings.id + " #" + id + " ." + settings.subClass + " div." + settings.dom.cName)
+													: $("#" + settings.id + " #" + id + " div." + settings.dom.cName);
 				
 				var c = settings.dom.content;
 				if (typeof(c) == "object")
