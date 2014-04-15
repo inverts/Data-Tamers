@@ -58,9 +58,10 @@
 			                //.showDistX(true)
 			                //.showDistY(true)
 			  			    //.color(colors)
-			  				.color(["rgb(0,255,0)","rgb(128,255,0)","rgb(255,255,0)","rgb(204,0,0)"])
+			  				.color(["rgb(0,102,0)","rgb(128,255,0)","rgb(255,255,0)","rgb(204,0,0)"])
 			                .useVoronoi(false)
 			                .transitionDuration(300)
+			                .size(50)
 			                ;
 
 			  chart.xAxis.axisLabel("Bounce Rates (%)");
@@ -69,6 +70,7 @@
 			  chart.xAxis.tickFormat(d3.format('.02f'));
 			  chart.yAxis.tickFormat(d3.format('.02f'));
 
+			  //increase size of points
 
 			  //tooltip content
 			  chart.tooltipContent(function(key, y, e, graph) {
@@ -116,11 +118,10 @@
 				  words[i] = sdata[i].key;
 				  groups[i] = sdata[i].values[0].group;
 			  }
-			  console.log(groups)
+  
 			  
 			  
-			  
-			  var color0 = "rgb(0,255,0)";
+			  var color0 = "rgb(0,102,0)";
 			  var color1 = "rgb(128,255,0)";
 			  var color2 = "rgb(255,255,0)";
 			  var color3 =  "rgb(204,0,0)";
