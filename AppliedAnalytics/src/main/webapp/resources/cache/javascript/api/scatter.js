@@ -35,7 +35,7 @@
 			var height = $this.height();			
 
 
-			var svg = d3.select(this).append("svg").attr("height", height).attr("width", width);
+			var svg = d3.select(this).append("svg");
 
 
 			// get size of object sdata
@@ -61,7 +61,8 @@
 			  				.color(["rgb(0,102,0)","rgb(128,255,0)","rgb(255,255,0)","rgb(204,0,0)"])
 			                .useVoronoi(false)
 			                .transitionDuration(300)
-			                .size(50)
+			                .width(637)
+			                .height(255)
 			                ;
 
 			  chart.xAxis.axisLabel("% Bounce Rates");

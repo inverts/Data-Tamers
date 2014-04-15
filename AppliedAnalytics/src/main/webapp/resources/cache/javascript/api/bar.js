@@ -3,34 +3,43 @@
  */
 
 (function ($) {
-		
+			
 	/* global variables */
 	var defaults = {
-			'id'	: ''
+			'id'	: '',
+			'data'	: null
 	};
 	
 	/* function declaration */
 	$.fn.bar = function (params) {
-		return this.each(function() {			
-			var svg = d3.select(this).append("svg");
+		return this.each(function() {	
 			var $this = $(this);
 			var settings = $.extend({}, defaults, params);
-			var sdata = settings.data;	
-			
+			if(settings.data == null){
+				return;
+			}			
+			var sdata = settings.data;		
+
 			var margin = {
 					"top" : 20,
 					"right" : 15,
 					"bottom" : 50,
 					"left" : 60
 				};
+			var width = $this.width();
+			var height = $this.height();			
+
+
+			var svg = d3.select(this).append("svg").attr("height", height).attr("width", width);
 			
 			nv.addGraph(function() {
 				  var chart = nv.models.multiBarChart()
 				      .transitionDuration(350)
-				      .width($this.width() * 2)
-				      .height($this.height())
+				      .width(598)
+				      .height(306)
 				      .showXAxis(false)	
 				      .showYAxis(true)
+				      .showLegend(true)
 				      ;
 				  
 				  chart.xAxis.axisLabel("Webpages");				  
