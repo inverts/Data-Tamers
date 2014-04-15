@@ -72,7 +72,7 @@ function getOverviewData(id, callback) {
 		// Create each table view
 
 		// add the key for channels into this array.
-		var totalKeys1 = [d.data.total.keys[0], d.data.total.keys[3], d.data.total.keys[2], d.data.total.keys[1]];
+		var totalKeys1 = [d.data.total.keys[0], d.data.total.keys[3], d.data.total.keys[2], d.data.total.keys[1], d.data.total.keys[4]];
 		
 		$("#" + id + " #overviewTotals1").table({
 			"data": d.data.total,
@@ -82,6 +82,7 @@ function getOverviewData(id, callback) {
 			                   {"name" : d.data.total.keys[3]},
 			                   {"name" : d.data.total.keys[2]},
 			                   {"name" : d.data.total.keys[1]},
+			                   {"name" : d.data.total.keys[4]}
 			                  ],
            "m"			    : {"length": totalKeys1.length, "keys": totalKeys1 },
            "n"				: {"length": d.data.total[d.data.total.keys[0]].length, "keys": null}, // rows
@@ -89,12 +90,13 @@ function getOverviewData(id, callback) {
            "columnLines"	: 1
 		}).show();
 
-		var totalKeys2 = [ d.data.total.keys[0], d.data.total.keys[4], d.data.total.keys[5], d.data.total.keys[6]];
+		var totalKeys2 = [ d.data.total.keys[0], d.data.total.keys[3], d.data.total.keys[4], d.data.total.keys[5], d.data.total.keys[6]];
 		$("#" + id + " #overviewTotals2").table({
 			"data": d.data.total,
 			"id": id,
 			"columnHeaders" : [
-			                   {"name" : d.data.total.keys[0]}, 
+			                   {"name" : d.data.total.keys[0]},
+			                   {"name" : d.data.total.keys[3]},
 			                   {"name" : d.data.total.keys[4]},
 			                   {"name" : d.data.total.keys[5]},
 			                   {"name" : d.data.total.keys[6]}

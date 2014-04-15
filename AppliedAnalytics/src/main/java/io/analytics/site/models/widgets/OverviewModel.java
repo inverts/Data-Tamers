@@ -174,8 +174,8 @@ public class OverviewModel extends WidgetModel{
 
 			channels.put("keys",keys);
 			channels.put("title","Top Channels"); // use if channels is only one widget page
-			channels.put("title1","Visits: Top Channels");
-			channels.put("title2","Behavior: Top Channels");
+			channels.put("title1","Visits:");
+			channels.put("title2","Behavior:");
 			channels.put(keys[0],channelsArr);
 			channels.put(keys[1], newVisits);
 			channels.put(keys[2],percentNewVisits);

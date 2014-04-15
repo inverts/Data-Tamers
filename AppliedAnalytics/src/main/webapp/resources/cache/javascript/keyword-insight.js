@@ -54,6 +54,8 @@ function getKeywordInsightData(id, callback) {
 		}
 
 		var d = $.parseJSON(response);
+		
+		console.log(d);
 
 		if (d.data === null || d.data === undefined) {
 			// TODO: Handle null data scenario.
@@ -105,7 +107,7 @@ function getKeywordInsightData(id, callback) {
 		createKITable(id, $("#" + id + " #keywordInsightBest"), d.data.best, null, d.data.paidbest, 2);	
 		createKITable(id, $("#" + id + " #keywordInsightWorst"), d.data.worst, null, d.data.paidworst, 2);		
 		createKITable(id, $("#" + id + " #keywordInsightAll"), d.data.all, null, d.data.paidall, 2, true);
-		createKITable(id, $("#" + id + " #keywordInsightBestSub"), d.data.bestsubstr, null, d.data.paidsubstr, 2);
+		createKITable(id, $("#" + id + " #keywordInsightBestSub"), d.data.bestsubstr, null, d.data.paidbestsubstr, 2);
 		createKITable(id, $("#" + id + " #keywordInsightWorstSub"), d.data.worstsubstr, null, d.data.paidworstsubstr, 2);
 
 

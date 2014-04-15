@@ -8,7 +8,7 @@
 
 <div class="controls">
 	<ul class="pagination">
-		<li><a class="totals1">Totals 1</a></li>
-		<li><a class="totals2">Totals 2</a></li>
+		<li><a class="totals1">Visits</a></li>
+		<li><a class="totals2">Behavior</a></li>
 	</ul>
 </div>
