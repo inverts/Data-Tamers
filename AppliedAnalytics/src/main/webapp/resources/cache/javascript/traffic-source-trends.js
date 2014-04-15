@@ -18,9 +18,7 @@ function loadTrafficSourceTrendsWidget(id, callback) {
 						
 						getTrafficSourceTrendsData($element, function(e) {
 							
-							$("#" + id + " a.line").click(function(e) { changeViewBtn(id, "trafficSourceTrendsLine"); });
-							$("#" + id + " a.tst-table").click(function(e) { changeViewBtn(id, "trafficSourceTrendsTable"); });
-							
+						
 							$element.data("hasData", true); // flag the widget as having data.
 						});
 						
@@ -82,6 +80,7 @@ function getTrafficSourceTrendsData($element, callback) {
 				
 				$("#" + id + " #trafficSourceTrendsBest").table({
 					"data"		: dataRows,
+					"id"		: id,
 					"rawData"	: rawData,
 					"columnHeaders" : [
 					                   {"name" : "Source"}, 
@@ -92,9 +91,7 @@ function getTrafficSourceTrendsData($element, callback) {
 					"n"				: {"length": dataRows.length, "keys": null}, // rows
 					"title"			: dataModel.name,
 					"sorting"		: [[2, 'desc']],
-					"oLanguage": {
-				        "sEmptyTable":     "Nothing to report here for now!"
-				    }
+					"oLanguage": { "sEmptyTable": "Nothing to report here for now!" }
 				}).show();
 				
 				for(index in slopeGraphs) {

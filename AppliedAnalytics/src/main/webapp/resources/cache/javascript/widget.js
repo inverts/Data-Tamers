@@ -227,7 +227,7 @@ function updateWidget(widgetTypeId, elementId) {
 			updateKeywordInsight(elementId);
 			break;
 		case 5:
-			updateTrafficSourceTrends(elementId);
+			updateTrafficSourceTrends($("#" + elementId));
 			break;
 		case 8:
 			updateOverview(elementId);

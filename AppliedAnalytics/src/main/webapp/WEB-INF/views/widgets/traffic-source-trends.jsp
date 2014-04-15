@@ -6,11 +6,8 @@
 		<div id="trafficSourceTrendsBest" class="trafficSourceVisual"></div>
 		<div id="trafficSourceTrendsWorst" class="trafficSourceVisual"></div>
 	</div>
-	<div id="trafficSourceTrendsLine" class="trafficSourceVisual"></div>	
 </div>
 <div class="controls">
 	<ul class="pagination">
-	  <li><a class="line">Line</a></li>
-	  <li><a class="tst-table">Table</a></li>
 	</ul>
 </div>
