@@ -13,7 +13,7 @@
 
 function loadDashboard(dashboardId) {
 
-	$("video").remove(); // in case video was loaded on  previous dashboard session. We dont want this to happen only on success.
+	$("iframe.tutorial").remove(); // in case video was loaded on  previous dashboard session. We dont want this to happen only on success.
 	
 	$.ajax({
 		type: 'POST',
@@ -38,7 +38,7 @@ function loadDashboard(dashboardId) {
 										close: { 
 											element: $tutorial,
 											event: "click", 
-											callback: function() { $("video").remove(); $tutorial.hide(); } 
+											callback: function() { $("iframe.tutorial").remove(); $tutorial.hide(); } 
 										},
 										domReady: true,
 										content: "Click here to close the tutorial or drag a widget onto the dashboard."
