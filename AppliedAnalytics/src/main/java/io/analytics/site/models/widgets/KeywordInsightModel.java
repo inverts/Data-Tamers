@@ -92,7 +92,7 @@ public class KeywordInsightModel extends WidgetModel {
 	}
 
 	public String getDescription() {
-		return "View suggestions for adding or removing keywords from Adwords and which keywords to support better.";
+		return "View search keywords ranking from best to worst and which keywords to better support.";
 	}
 
 	public Date getStartDate() {

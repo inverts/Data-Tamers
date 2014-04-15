@@ -76,7 +76,7 @@ public class OverviewModel extends WidgetModel{
 	}
 
 	public String getDescription() {
-		return "View summary data for website performance.";
+		return "View website performance summary data.";
 	}
 
 	public Date getStartDate() {
