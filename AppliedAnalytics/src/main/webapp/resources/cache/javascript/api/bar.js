@@ -37,7 +37,16 @@
 				  chart.yAxis.axisLabel("Values (%)").axisLabelDistance(40);					  
 				  chart.xAxis.tickFormat(function (d) { return sdata["Webpage Title/Link"][d];});
 
-				  
+				  // draw x-axis line
+					var line = svg.append("line")
+						.attr("x1", 60)
+						.attr("y1", $this.height()-45)
+						.attr("x2", $this.width()*2)
+						.attr("y2", $this.height()-45)
+						.style("stroke", "black")
+						.style("fill", "black")
+						.style("stroke-width", 1)
+						.style("opacity", 1);
 				  
 				  
 				  svg.datum(formatData(sdata))
