@@ -28,12 +28,12 @@
 <title>${TITLE}</title>
 </head>
 
+<!-- Site Header -->
+<jsp:include page="${HEADER.path}"/>
 <body>
 
 	<div class="account page">
 		<div class="body">
-			<!-- Site Header -->
-			<jsp:include page="${HEADER.path}"/>
 		
 			
 			<!-- Site Content -->
