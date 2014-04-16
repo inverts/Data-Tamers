@@ -46,9 +46,18 @@ function getPagePerformanceData(id, callback){
 		//console.log(d.data[ d.data.keys[ 2 ] ][0]);
 		//console.log(d.data["Visits (%)"]);
 		
+		$("#" + id + " .spinner-content").hide();
+		$("#" + id + " .help").tooltip({ content: d.description });
 		
 		if (!d.data) {
-			console.log("No data for pagePerformance");		
+			console.log("No data for pagePerformance");
+			
+			// show empty table
+			$("#" + id + " #pagePerformanceTable").table({
+				"data": [],
+				"id" : id,
+				"oLanguage": { "sEmptyTable": "Nothing to report here for now!" }
+			}).show();
 			
 			if (callback)
 				callback();
@@ -56,8 +65,7 @@ function getPagePerformanceData(id, callback){
 			return;
 		}
 
-		$("#" + id + " .spinner-content").hide();
-		$("#" + id + " .help").tooltip({ content: d.description });
+		
 		
 		// create table
 		$("#" + id + " #pagePerformanceTable").table({

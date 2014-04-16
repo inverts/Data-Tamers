@@ -3,6 +3,7 @@
  */
 
 
+
 /**
  * calls each widgets model and view and appends
  * the widget to the associated page.
@@ -163,7 +164,7 @@ function widgetEvents($div, elementId, viewClass) {
 	if (viewClass) {
 
 		// previous
-		$div.on("click",  ".w-prev", function(e) {
+		$div.on("click.scroll",  ".w-prev", function(e) {
 			var $parent = $("#" + elementId + " ." + viewClass).parent();
 			var $prev = $parent.children(".active").prev();
 			$parent.children(".active").removeClass("active").hide("slide", {direction: "right"}, "fast", function() {
@@ -175,7 +176,7 @@ function widgetEvents($div, elementId, viewClass) {
 		});
 		
 		// next
-		$div.on("click", ".w-next", function(e) {
+		$div.on("click.scroll", ".w-next", function(e) {
 			var $parent = $("#" + elementId + " ." + viewClass).parent();
 			var $next = $parent.children(".active").next();
 			$parent.children(".active").removeClass("active").hide("slide", {direction: "left"}, "fast", function() {
@@ -408,6 +409,28 @@ function changeViewBtn(id, view) {
 	
 	$parent.children(".active").removeClass("active").hide();
 	$("#" + id + " #" + view).show().addClass("active");
+}
+
+/**
+ * Direct view button event.
+ * @author - Andrew Riley
+ * @param id - widget element Id
+ * @param view - Id of the view on the widget
+ */
+function nullDataView(id, $view) {
+	
+	var noDataMsg = $("<div>").addClass("noData")
+							  .html("Nothing to report here for now!<span class='whatIsThis'><a>What is this?</a></span>");
+	// append no data message
+	$view.html(noDataMsg);
+	
+	// disable scrolling
+	$("#" + id + " .w-prev").off("click.scroll").hide();
+	$("#" + id + " .w-next").off("click.scroll").hide();
+	$("#" + id + " ul.pagination").hide();
+	
+	// hide spinner
+	$("#" + id + " .spinner-content").hide();
 }
 
 
