@@ -49,10 +49,20 @@ function getOverviewData(id, callback) {
 		}
 
 		var d = $.parseJSON(response);
+		
+		$("#" + id + " .spinner-content").hide();
+		$("#" + id + " .help").tooltip({ content: d.description });
 
 		if (d.data === null || d.data === undefined) {
 			// TODO: Handle null data scenario.
 			console.log("No data for overview");
+			
+			// show empty table
+			$("#" + id + " #overviewTotals1").table({
+				"data": [],
+				"id" : id,
+				"oLanguage": { "sEmptyTable": "Nothing to report here for now!" }
+			}).show();
 			
 			// Even though there is no data, we still need to fire off 
 			// the callback if its in place otherwise when we change to an
@@ -65,10 +75,9 @@ function getOverviewData(id, callback) {
 
 
 
-		$("#" + id + " .spinner-content").hide();
-		$("#" + id + " .help").tooltip({ content: d.description });
+		
 
-		console.log(d.data);
+		//console.log(d.data);
 		// Create each table view
 
 		// add the key for channels into this array.

@@ -58,8 +58,9 @@ function getKeywordInsightData(id, callback) {
 		console.log(d);
 		
 		if (d.data === null || d.data === undefined) {
-			// TODO: Handle null data scenario.
+			
 			console.log("No data for keywordInsight");
+			nullDataView(id, $("#" + id + " #keywordInsightScatter"));
 			
 			// Even though there is no data, we still need to fire off 
 			// the callback if its in place otherwise when we change to an
