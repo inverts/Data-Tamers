@@ -6,8 +6,7 @@
  		<div id="center-box-content">
 	 		<h1>Welcome.</h1>
 	 		<p>
-	 		Analyzing your website traffic can be a pain - we've been there.<br />
-			We're here to help pick out the important parts of your data, and bring you new insights that you might have missed. 		
+	 		Analyzing your website traffic can be a pain - we've been there. We're here to help pick out the important parts of your data, and bring you new insights that you might have missed. 		
 	 		</p>
  		</div>
  		<a href="<c:url value="/application" />">

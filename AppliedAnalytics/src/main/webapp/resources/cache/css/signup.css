@@ -1,5 +1,7 @@
 /*****ACCOUNTS*****/
 
+body { height: 100%; background: #222; }
+
 /* Start */
 .start .pager { font:inherit; padding:0;}
 .start .start-content { margin-top:10px; line-height:35px; }
@@ -22,7 +24,7 @@
 .googleName { color:#00aeef; }
 .personal-info .googleAuth a:hover { cursor:pointer; color:#00aeef; }
 
-.account.page { position: relative; }
+.account.page { position: relative; background: #fff; }
 .account.page .body { padding-bottom: 100px; }
 
 #introduction { display: inline-table; width: 535px; padding-right: 20px; }

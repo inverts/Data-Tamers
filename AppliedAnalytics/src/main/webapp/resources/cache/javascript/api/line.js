@@ -8,6 +8,12 @@
  * The background of the line is colored based on the value of the slope.
  * 
  * Returns the canvas element that the line was drawn on.
+ * 
+ * @author Dave Wong
+ * @param slope The slope to use
+ * @param container The DOM element container or qualified selector.
+ * @param width The width the container and canvas will be sized to.
+ * @param height The height the container and canvas will be sized to.
  */
 function drawSlope(slope, container, width, height, lineWidth) {
 	//Set up the container and canvas.
@@ -53,6 +59,9 @@ function drawSlope(slope, container, width, height, lineWidth) {
 	$(container).append(c);
 	return c;
 }
+
+
+
 
 	/* function declaration */
 		function drawLine(slope, object) {

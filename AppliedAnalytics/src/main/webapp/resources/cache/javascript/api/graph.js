@@ -100,7 +100,9 @@ var nGraphs = 0; // number of graphs currently. Needed for the clipping mask id.
 			 ********************************/
 			graph.x.domain = [d3.min(graph.data, function(d) { return getDate(d[graph.x.key]); }), 
 			                  d3.max(graph.data, function(d) { return getDate(d[graph.x.key]); })];
-			graph.y.domain = [getValueBy(graph.data, graph.y.keys, Math.min) - 15, getValueBy(graph.data, graph.y.keys, Math.max) + 15];
+			//graph.y.domain = [getValueBy(graph.data, graph.y.keys, Math.min) - 15, getValueBy(graph.data, graph.y.keys, Math.max) + 15];
+			maxValue = getValueBy(graph.data, graph.y.keys, Math.max);
+			graph.y.domain = [0, maxValue * 1.1];
 			
 			if (!settings.endIndex)											
 				settings.endIndex = settings.data.length - 1;

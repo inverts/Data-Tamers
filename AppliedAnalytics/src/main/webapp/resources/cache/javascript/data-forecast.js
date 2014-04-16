@@ -27,6 +27,10 @@ function loadDataForecast(id, callback) {
 						$element.on('click', "#rawBtn", function() { toggleLine(id, 'raw', this); });
 						$element.on('click', "#normBtn", function() { toggleLine(id, 'normal', this); });
 						$element.on('click', "#smoothBtn", function() { toggleLine(id, 'smooth', this); });
+
+						$element.on('click', "#dayBtn", function() { toggleAggregation(id, TIMESPAN_DAY); });
+						$element.on('click', "#weekBtn", function() { toggleAggregation(id, TIMESPAN_WEEK); });
+						$element.on('click', "#monBtn", function() { toggleAggregation(id, TIMESPAN_MONTH); });
 						
 						// legend
 						createLegend(id, lineclasses);
@@ -60,6 +64,9 @@ function getDataForecastData(id, callback) {
 		$("#" + id + " .spinner-content").hide();
 
 		$("#" + id + " .help").tooltip({ content: d.description });
+
+		$('#' + id + ' #dataForecastData').data("data", d.data);
+		$('#' + id + ' #dataForecastData').data("endDate", d.endDate);
 		
 		$('#' + id + ' #dataForecastData').empty().graph({
 															data: d.data,
@@ -128,6 +135,70 @@ function toggleLine(id, className, btn) {
 	
 }
 
+function reactivateLines(id) {
+
+	var $buttons = $('#' + id + ' button.active').removeClass('active');		
+	(!$buttons.length) ? $("#" + id + " #rawBtn").click() : $.each($buttons, function() { $(this).click(); });	
+
+}
+
+TIMESPAN_DAY = 0;
+TIMESPAN_WEEK = 1;
+TIMESPAN_MONTH = 2;
+/**
+ * Toggles the different time aggregation views (day/week/month).
+ * 
+ * @author Dave Wong
+ * @param id
+ * @param timeSpanType
+ */
+function toggleAggregation(id, timeSpanType) {
+	numDays = 1;
+	switch(timeSpanType) {
+		case TIMESPAN_DAY:
+			numDays = 1;
+			break;
+		case TIMESPAN_WEEK:
+			numDays = 7;
+			break;
+		case TIMESPAN_MONTH:
+			numDays = 30;
+			break;
+		default:
+			break;
+	}
+
+	data = $('#' + id + ' #dataForecastData').data("data");
+	endDate = $('#' + id + ' #dataForecastData').data("endDate");
+	newData = new Array();
+	for (i in data) {
+		if (i % numDays == 0) {
+			if (i != 0)
+				newData.push(newRow);
+			newRow = new Array();
+			newRow = { jsonDate:null, jsonHitCount: 0, normal: 0, smooth:0 };
+			newRow.jsonDate = data[i].jsonDate; //Set the date for this new row as the first date available.
+			
+		}
+		newRow.jsonHitCount += data[i].jsonHitCount;
+		newRow.normal += data[i].normal;
+		newRow.smooth += data[i].smooth;
+	}
+	$('#' + id + ' #dataForecastData').empty().graph({
+		data: newData,
+		id: id,
+		yKey: dataForecastDataKeys,
+		lineClass: lineclasses,
+		lineType: lineTypes,
+		startIndex: 0, 
+		endIndex: newData.length - 1, 
+		pointSize: 4,
+		dateLine: endDate
+	});
+	
+	//toggleLine(id, 'raw', null);
+	reactivateLines(id);
+}
 
 /**
  * Creates the legend and functionality pertianing
