@@ -88,6 +88,19 @@ function getOverviewData(id, callback) {
 	           "oLanguage": { "sEmptyTable": "Nothing to report here for now!" }
 			});
 			
+			$("#" + id + " #devices").table({
+				"data": [],
+				"id": id,
+				"columnHeaders" : [
+				                   {"name" : d.data.devices.keys[0]},
+				                   {"name" : d.data.devices.keys[1]},
+				                   {"name" : d.data.devices.keys[2]},
+				                  ],
+	           "title"			: d.data.devices.title,
+	           "columnLines"	: 3,
+	           "oLanguage": { "sEmptyTable": "Nothing to report here for now!" }
+			});
+			
 			
 			
 			// Even though there is no data, we still need to fire off 
@@ -140,6 +153,20 @@ function getOverviewData(id, callback) {
            "n"				: {"length": d.data.total[d.data.total.keys[0]].length, "keys": null}, // rows
            "title"			: d.data.total.title2,
            "columnLines"	: 3
+		});
+		
+		$("#" + id + " #devices").table({
+			"data": d.data.devices,
+			"id": id,
+			"columnHeaders" : [
+			                   {"name" : d.data.devices.keys[0]},
+			                   {"name" : d.data.devices.keys[1]},
+			                   {"name" : d.data.devices.keys[2]},
+			                  ],
+           "m"				: {"length": d.data.devices.keys.length, "keys": d.data.devices.keys}, // columns
+           "n"				: {"length": d.data.total[d.data.total.keys[0]].length, "keys": null}, // rows
+           "title"			: d.data.devices.title,
+           "columnLines"	: 1
 		});
 
 		if(callback)
