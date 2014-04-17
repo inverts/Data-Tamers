@@ -298,10 +298,10 @@ public class AccountController {
 			
 			/* Add a default dashboard. */
 			int dashboardId = DashboardService.addNewDashboard(accountId, null, "Default Dashboard");
-			List<WidgetType> widgetTypes = WidgetService.getAllWidgetTypes();
+			/*List<WidgetType> widgetTypes = WidgetService.getAllWidgetTypes();
 			for (WidgetType wt : widgetTypes) {
 				WidgetService.addNewWidget(null, wt.getId(), dashboardId, 0);
-			}
+			}*/
 			
 			/* We've made it! */
 			return "redirect:/application";
