@@ -73,17 +73,31 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 		Gson g = new Gson();
 		System.out.println("SUPER FORMATTED DATA");
 		System.out.println("Hour\tDay of Week\tLongitude\tLatitude\tNew vs. Returning\tScreen Resolution\tAvg. Time on Site\tPageviews per Visit\tVisits");
+		List<Double> averages = new ArrayList<Double>();
+		Integer totalVisits = 0;
 		for (int j=0; j<centroids.size(); j++) {
-			List<Double>centroid = centroids.get(j);
+			List<Double> centroid = centroids.get(j);
 			ArrayList<String> readableCentroid = new ArrayList<String>();
 			for (int i=0; i<centroid.size(); i++) {
+				if (averages.size() != centroid.size())
+					averages.add(centroid.get(i) * clusterSizes.get(j));
+				else
+					averages.set(i, averages.get(i) + centroid.get(i) * clusterSizes.get(j));
 				String readableValue = decodeColumn(centroid.get(i), i, true);
 				readableCentroid.add(readableValue);
 				System.out.print(readableValue + "\t");
 			}
+			totalVisits += clusterSizes.get(j);
 			System.out.print(clusterSizes.get(j));
 			System.out.println();
 		}
+		for (int i=0; i<centroids.get(0).size(); i++) {
+			averages.set(i, averages.get(i) / totalVisits);
+			System.out.print(decodeColumn(averages.get(i), i, true) + "\t");
+		}
+		
+
+		System.out.println();
 		System.out.println("FORMATTED DATA");
 		System.out.println("Hour\tDay of Week\tLongitude\tLatitude\tNew vs. Returning\tScreen Resolution\tAvg. Time on Site\tPageviews per Visit\tVisits");
 		for (int j=0; j<centroids.size(); j++) {
@@ -98,6 +112,11 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 			System.out.print(clusterSizes.get(j));
 			System.out.println();
 		}
+		for (int i=0; i<centroids.get(0).size(); i++) {
+			System.out.print(decodeColumn(averages.get(i), i, false) + "\t");
+		}
+
+		System.out.println();
 		System.out.println("RAW DATA");
 		for (int i=0; i<this.columnHeaders.size(); i++)
 			System.out.print(this.columnHeaders.get(i).getName() + "\t");
@@ -149,7 +168,7 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 			return 0.0;
 		else if (columnName.equals("ga:browserVersion"))
 			return 0.0;
-		else if (columnName.equals("ga:visitorType"))
+		else if (columnName.equals("ga:visitorType") || columnName.equals("ga:userType"))
 			if (value.equals("Returning Visitor"))
 				return 0;
 			else if (value.equals("New Visitor"))
@@ -157,13 +176,13 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 			else
 				return -1;
 		else if (columnName.equals("ga:screenResolution"))
-			return scale(parseResolution(value).w, 2000.0, 100.0);
+			return scale(parseResolution(value).w, 1600.0, 100.0);
 		else if (columnName.equals("ga:visits"))
 			return Double.parseDouble(value);
 		else if (columnName.equals("ga:avgTimeOnSite"))
-			return scale(Double.parseDouble(value), 1800.0, 100.0);
+			return scale(Double.parseDouble(value), 300.0, 100.0);
 		else if (columnName.equals("ga:pageviewsPerVisit"))
-			return scale(Double.parseDouble(value), 15.0, 100.0);
+			return scale(Double.parseDouble(value), 8.0, 100.0);
 		else if (columnName.equals("ga:deviceCategory"))
 			if (value.equals("mobile"))
 				return 0.0;
@@ -200,24 +219,24 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 			return null;
 		else if (columnName.equals("ga:browserVersion"))
 			return null;
-		else if (columnName.equals("ga:visitorType"))
+		else if (columnName.equals("ga:visitorType") || columnName.equals("ga:userType"))
 			switch((int) value) {
 				case 0: 	return "Returning Visitor";
 				case 50: 	return "New Visitor";
 				default: 	return null;
 			}
 		else if (columnName.equals("ga:screenResolution"))
-			return String.valueOf(scale(value, 100.0, 2000.0));
+			return String.valueOf(scale(value, 100.0, 1600.0));
 		else if (columnName.equals("ga:visits"))
 			return String.valueOf(value);
 		else if (columnName.equals("ga:avgTimeOnSite")) {
-			double num = scale(value, 100.0, 1800.0);
+			double num = scale(value, 100.0, 300.0);
 			if (!pretty)
 				return String.valueOf(num);
 			return String.valueOf((int)Math.floor(num/60)) + ":" + String.valueOf((int)Math.round(num % 60));
 		}
 		else if (columnName.equals("ga:pageviewsPerVisit"))
-			return String.valueOf(scale(value, 100.0, 15.0));
+			return String.valueOf(scale(value, 100.0, 8.0));
 		else if (columnName.equals("ga:deviceCategory"))
 			switch ((int) value) {
 				case 0: 	return "mobile";
@@ -371,10 +390,11 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 			boolean converged = false, timedout = false;
 			int repetitions = 0;
 			long start = System.currentTimeMillis();
-			int timeoutLimit = 45000;
+			int timeoutLimit = 120000;
 			while ( !converged && !timedout) {
 				repetitions += 1;
-
+				System.out.println("Clustering... (" + repetitions + ")");
+				
 				newCentroids = new ArrayList<List<Double>>();
 				for (int j=0; j < k; j++) 
 					newCentroids.add(new ArrayList<Double>(Collections.nCopies(numOfDimensions, 0.0)));
@@ -398,7 +418,6 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 					totalVisits += weights.get(i);
 					addPoints(data.get(i), newCentroids.get(selectedCluster), weights.get(i));
 				}
-				System.out.println("Total visits: " + totalVisits);
 				// Divide the sums of the points in a cluster to get the mean - the new centroid.
 				for (int j=0; j < k; j++) 
 					dividePoint(newCentroids.get(j), clusterSizes[j]);
@@ -413,10 +432,13 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 			clusterSizesOut.clear();
 			for (int i=0; i<clusterSizes.length; i++)
 				clusterSizesOut.add(clusterSizes[i]);
-			
+
+			System.out.println("Performed " + repetitions + " iterations.");
 			if (timedout)
 				System.out.println("Clustering timed out.");
-			System.out.println("Performed " + repetitions + " iterations.");
+			else
+				System.out.println("Clustering took " + ((System.currentTimeMillis() - start) / 1000) + " seconds.");
+			
 			return keyClusterMap;
 		}
 		

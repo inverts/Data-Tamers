@@ -26,7 +26,7 @@ var nGraphs = 0; // number of graphs currently. Needed for the clipping mask id.
 			'hideYaxis'	: false,
 			'pointSize'	: 0,
 			'databuffer': 0,
-			'rangeMin'	: 4,
+			'rangeMin'	: 1,
 			'dateLine'	: null,
 			'showLegend': true
 	}; 
@@ -115,9 +115,11 @@ var nGraphs = 0; // number of graphs currently. Needed for the clipping mask id.
 			/********************************
 			 *			BASE CASES			*
 			 ********************************/
+			//Endindex must be less than the length and greater than or equal to the start index.
+			
 			if (settings.endIndex >= settings.data.length || 
 					settings.endIndex < settings.startIndex || 
-					settings.endIndex - settings.startIndex < settings.rangeMin)
+					settings.endIndex - settings.startIndex + 1 < settings.rangeMin)
 				return;
 			
 

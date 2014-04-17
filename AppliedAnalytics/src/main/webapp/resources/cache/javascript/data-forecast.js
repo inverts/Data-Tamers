@@ -184,6 +184,9 @@ function toggleAggregation(id, timeSpanType) {
 		newRow.normal += data[i].normal;
 		newRow.smooth += data[i].smooth;
 	}
+	if (i % numDays != 0)
+		newData.push(newRow);
+	
 	$('#' + id + ' #dataForecastData').empty().graph({
 		data: newData,
 		id: id,
