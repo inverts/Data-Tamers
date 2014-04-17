@@ -96,7 +96,7 @@ function getOverviewData(id, callback) {
            "m"			    : {"length": totalKeys1.length, "keys": totalKeys1 },
            "n"				: {"length": d.data.total[d.data.total.keys[0]].length, "keys": null}, // rows
            "title"			: d.data.total.title1,
-           "columnLines"	: 1
+           "columnLines"	: 2
 		}).show();
 
 		var totalKeys2 = [ d.data.total.keys[0], d.data.total.keys[3], d.data.total.keys[4], d.data.total.keys[5], d.data.total.keys[6]];

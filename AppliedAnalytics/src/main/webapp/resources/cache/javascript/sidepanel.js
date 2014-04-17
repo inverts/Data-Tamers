@@ -35,8 +35,6 @@ $(function() {
 	});
 	
 	$trendsList.tooltip({
-		size: "large",
-		height: 200,
 		width: 180,
 		gravity: "w",
 		open: { element: $("#trends"), event: "click" },
@@ -58,8 +56,6 @@ $(function() {
 	});
 	
 	$forecastList.tooltip({
-		size: "large",
-		height: 200,
 		width: 180,
 		gravity: "w",
 		open: { element: $("#forecast"), event: "click" },

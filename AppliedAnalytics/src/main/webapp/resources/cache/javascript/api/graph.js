@@ -41,7 +41,7 @@ var nGraphs = 0; // number of graphs currently. Needed for the clipping mask id.
 				     		 "top":    settings.title  ? 22 : 5,			// padding required for graph labels
 				    	     "right":  10,
 				    	     "bottom": settings.xLabel ? 60 : 30,
-				    	     "left":   settings.yLabel ? 50 : 25
+				    	     "left":   settings.yLabel ? 50 : 40
 				    	  };
 
 			var width = $this.width(),										// svg takes on width and height of parent element.

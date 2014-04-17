@@ -50,12 +50,11 @@ function getKeywordInsightData(id, callback) {
 
 		// if no data display error message
 		if (response == null) {
-			console.log("Data from Keyword Insight model is null");
+			console.log("No response from Keyword Insight");
 			return;
 		}
 
 		var d = $.parseJSON(response);
-		console.log(d);
 		
 		if (d.data === null || d.data === undefined) {
 			

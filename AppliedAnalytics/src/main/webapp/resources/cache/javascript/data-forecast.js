@@ -9,10 +9,14 @@ var dataForecastDataKeys = ['jsonHitCount', 'smooth', 'normal'];
 var filterStartIndex = 0; //TODO: get filter date start
 //var filterEndIndex = window.newData.length-1; // TODO: get filter date end
 
+//flag  indicating that the widget is loading so not to call the update function which creates a race condition
+var loadingDataForecast = false; 
+
 /**
  * Initally loads the entire widget including model and view.
  */
 function loadDataForecast(id, callback) {
+	loadingDataForecast = true;
 	var $element = $('#' + id);
 	//TODO: Possibly send id number out to append to ids in the model
 	$.post(applicationRoot + "DataForecast", null, function(response) {
@@ -20,24 +24,14 @@ function loadDataForecast(id, callback) {
 		if ($element.length > 0) {
 			$element.fadeIn("fast", function() { 
 					$element.html(response); 
-					
+
 					getDataForecastData(id, function() {
-
-						// Setup forecast buttons
-						$element.on('click', "#rawBtn", function() { toggleLine(id, 'raw', this); });
-						$element.on('click', "#normBtn", function() { toggleLine(id, 'normal', this); });
-						$element.on('click', "#smoothBtn", function() { toggleLine(id, 'smooth', this); });
-
-						$element.on('click', "#dayBtn", function() { toggleAggregation(id, TIMESPAN_DAY); });
-						$element.on('click', "#weekBtn", function() { toggleAggregation(id, TIMESPAN_WEEK); });
-						$element.on('click', "#monBtn", function() { toggleAggregation(id, TIMESPAN_MONTH); });
+						
+						setupButtons(id);
 						
 						// legend
 						createLegend(id, lineclasses);
 
-						// initially turn on RAW
-						$("#" + id + " #rawBtn").click(); // initially turn on raw data.
-						
 					});
 					
 					if(callback)			
@@ -51,6 +45,7 @@ function loadDataForecast(id, callback) {
 
 	});
 	
+	loadingDataForecast = false;
 }
 
 
@@ -65,8 +60,10 @@ function getDataForecastData(id, callback) {
 
 		$("#" + id + " .help").tooltip({ content: d.description });
 
-		$('#' + id + ' #dataForecastData').data("data", d.data);
-		$('#' + id + ' #dataForecastData').data("endDate", d.endDate);
+		$('#' + id + ' #dataForecastData').data({
+													"data": d.data,
+													"endDate": d.endDate
+												});
 		
 		$('#' + id + ' #dataForecastData').empty().graph({
 															data: d.data,
@@ -95,16 +92,42 @@ function getDataForecastData(id, callback) {
  */
 function updateDataForecast(id) {
 	
-	var $buttons = $('#' + id + ' button.active').removeClass('active');
+	if (loadingDataForecast)
+		return;
+	
+	var $buttons = $('#' + id + ' div.left button.active').removeClass('active');
+	var $timeBtn = $('#' + id + ' div.right button.active');
 
 	getDataForecastData(id, function() {
 		
-		(!$buttons.length) ? $("#" + id + " #rawBtn").click()
-						   : $.each($buttons, function() { $(this).click(); });	
+		(!$buttons.length) ? setupButtons(id)
+						   : $.each($buttons, function() { $(this).click(); });
+		
+		$timeBtn.click();
+		
 	});
 
 }
 
+
+function setupButtons(id) {
+	
+	var $element = $("#" + id);
+	
+	$element.off('click.df', "button");
+	
+	// Setup forecast buttons
+	$element.on('click.df', "#rawBtn", function() { toggleLine(id, 'raw', this); });
+	$element.on('click.df', "#normBtn", function() { toggleLine(id, 'normal', this); });
+	$element.on('click.df', "#smoothBtn", function() { toggleLine(id, 'smooth', this); });
+
+	$element.on('click.df', "#dayBtn", function() { toggleAggregation(id, TIMESPAN_DAY, this); });
+	$element.on('click.df', "#weekBtn", function() { toggleAggregation(id, TIMESPAN_WEEK, this); });
+	$element.on('click.df', "#monBtn", function() { toggleAggregation(id, TIMESPAN_MONTH, this); });
+	
+	// initially turn on RAW
+	$("#" + id + " #rawBtn").click(); // initially turn on raw data.
+}
 
 /**
  * Toggles the plot lines on and off
@@ -138,7 +161,8 @@ function toggleLine(id, className, btn) {
 function reactivateLines(id) {
 
 	var $buttons = $('#' + id + ' button.active').removeClass('active');		
-	(!$buttons.length) ? $("#" + id + " #rawBtn").click() : $.each($buttons, function() { $(this).click(); });	
+	(!$buttons.length) ? $("#" + id + " #rawBtn").click()
+					   : $.each($buttons, function() { $(this).click(); });	
 
 }
 
@@ -152,8 +176,9 @@ TIMESPAN_MONTH = 2;
  * @param id
  * @param timeSpanType
  */
-function toggleAggregation(id, timeSpanType) {
+function toggleAggregation(id, timeSpanType, btn) {
 	numDays = 1;
+	$("#" + id + " div.right button").removeClass("active"); // remove active status of old button
 	switch(timeSpanType) {
 		case TIMESPAN_DAY:
 			numDays = 1;
@@ -167,7 +192,7 @@ function toggleAggregation(id, timeSpanType) {
 		default:
 			break;
 	}
-
+	
 	data = $('#' + id + ' #dataForecastData').data("data");
 	endDate = $('#' + id + ' #dataForecastData').data("endDate");
 	newData = new Array();
@@ -201,6 +226,9 @@ function toggleAggregation(id, timeSpanType) {
 	
 	//toggleLine(id, 'raw', null);
 	reactivateLines(id);
+	
+	$(btn).addClass("active"); //set active class on right buttons
+
 }
 
 /**
