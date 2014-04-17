@@ -190,16 +190,21 @@ public class OverviewModel extends WidgetModel{
 	public void setJsonKeys(){
 		JSONObject totals = new JSONObject();
 		JSONObject channels = new JSONObject();
+		JSONObject devices = new JSONObject();
 		String[] keys = new String[]{"New Visits", "% New Visits", "Visits", "% Bounce Rate", "Pageviews Per Visits", "Avg Visit Duration (sec)"};
-		
+		String[] keys2 = new String[]{"Device Categories", "Browser or OS", "Visits"};		
+
 		try {
 			totals.put("keys", keys);
 			totals.put("title","Website Performance");
 			channels.put("title1","Visits totals and channel breakdown:");
 			channels.put("title2","Behavior totals and channel breakdown:");
-			channels.put("keys", keys);
-			this.jsonData.put("total", totals);
+			channels.put("keys", keys);			
+			devices.put("keys", keys2);
+			devices.put("title", "Top Visitor's devices and software interfaces:");
+			this.jsonData.put("totals", totals);
 			this.jsonData.put("total", channels);
+			this.jsonData.put("devices", devices);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
