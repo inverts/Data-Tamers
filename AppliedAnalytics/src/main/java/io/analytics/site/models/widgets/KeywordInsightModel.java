@@ -125,7 +125,8 @@ public class KeywordInsightModel extends WidgetModel {
 		KeywordInsightData dataObject = this.keywordInsightService.getKeywordInsightData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate, 1500);
 		// over quota error returns no data, try again
 		if (dataObject==null){
-			this.jsonData=null;
+			// loads this.jsonData
+			setJsonKeys();
 			return;
 		}
 		keywords = dataObject.getKeywords();
@@ -646,6 +647,46 @@ public class KeywordInsightModel extends WidgetModel {
 		return cost[len0-1];
 	}
 
+	// GA returned null, load json obj with column headers and page titles
+	public void setJsonKeys() {
+		
+		String[] keys1 = new String[]{"Keywords", "% Visits", "% Bounce Rate", "% Multipage Visits"};
+		String[] keys2 = new String[]{"Substring Word", "Keyword Count", "% Multipage Visits"};
+	
+		JSONObject improve = new JSONObject();
+		JSONObject best = new JSONObject();
+		JSONObject worst = new JSONObject();
+		JSONObject all = new JSONObject();
+		JSONObject bestsubstr = new JSONObject();
+		JSONObject worstsubstr = new JSONObject();
+		
+		try {
+			improve.put("keys", keys1);
+			improve.put("title", "Improve website performance for these keywords:");
+			best.put("best", keys1);
+			best.put("title", "Best performing keywords:");
+			worst.put("keys",keys1);
+			worst.put("title", "Worst performing keywords:");
+			all.put("keys",keys1);
+			all.put("title", "All keywords:");
+			bestsubstr.put("keys",keys2);
+			bestsubstr.put("title","Best performing keyword substrings:");
+			worstsubstr.put("keys",keys2);
+			worstsubstr.put("title","Worst performing keyword substrings:");
+			this.jsonData.put("improve", improve);
+			this.jsonData.put("best", best);
+			this.jsonData.put("worst", worst);
+			this.jsonData.put("all", all);
+			this.jsonData.put("bestsubstr", bestsubstr);
+			this.jsonData.put("worstsubstr", worstsubstr);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
 	// put data into JSON object to pass to the view website-performance.jsp 
 	public void loadJson(boolean hasPaid, boolean isPaid, ArrayList<KeyData> hk, ArrayList<KeyData> bk, ArrayList<KeyData> rk, ArrayList<KeyData> ak, ArrayList<WordData> bw, ArrayList<WordData> ww)  {
 		try {
@@ -731,7 +772,7 @@ public class KeywordInsightModel extends WidgetModel {
 
 			String[] keys1 = new String[]{"Keywords", "% Visits", "% Bounce Rate", "% Multipage Visits"};
 			String[] keys2 = new String[]{"Substring Word", "Keyword Count", "% Multipage Visits"};
-			String[] scatterKeys = new String[]{"allBounceRate", "allMultipageVisitsPercent"};
+			String[] scatterKeys = new String[]{"allBounceRate", "allVisitsPercent"};
 			String[] scatterAxisLabels = new String[]{"% Bounce Rate", "% Visits"};
 
 			/* Scatterplot */

@@ -116,7 +116,7 @@ public class WebsitePerformanceModel extends WidgetModel {
 		PagePerformanceData dataObject = this.pagePerformanceService.getPagePerformanceData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate, 10000);
 		// over quota error returns no data, must refresh browser to try again
 		if (dataObject==null){
-			this.jsonData=null;
+			setJsonKeys();
 			return;
 		}
 		this.pagePath = dataObject.getPagePathData();
@@ -204,6 +204,18 @@ public class WebsitePerformanceModel extends WidgetModel {
 
 		this.setJsonDataPoints();
 	}
+		
+	// GA return null, load json with the column headers and page title
+	public void setJsonKeys(){
+		String[] keys1 = new String[]{"Webpage Title/Link", "% Visits ", "% Bounce Rate", "% Exit Rate"};
+		try {
+			this.jsonData.put("keys", keys1);
+			this.jsonData.put("title","Improve the performance of these important webpages:");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	// put data into JSON object to be passed to the view website-performance.jsp 
 
@@ -220,7 +232,6 @@ public class WebsitePerformanceModel extends WidgetModel {
 			this.jsonData.put("url", pageLinkResultsJson);
 			this.jsonData.put("keys", keys1);
 			this.jsonData.put("title","Improve the performance of these important webpages:");
-
 
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

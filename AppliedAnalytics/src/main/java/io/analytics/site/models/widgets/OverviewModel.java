@@ -109,7 +109,7 @@ public class OverviewModel extends WidgetModel{
 		OverviewData dataObject = this.overviewService.getOverviewData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate);
 		// over quota error returns no data, must refresh browser to try again
 		if (dataObject==null){
-			this.jsonData=null;
+			setJsonKeys();
 			return;
 		}
 
@@ -142,12 +142,32 @@ public class OverviewModel extends WidgetModel{
 		this.channelAvgTimePerVisit.addAll(dataObject.getChannelAvgTimePerVisit());
 
 		// put data into the JSON Object member jsonData
-		this.loadJson(newVisits, percentNewVisits, visits, visitBounceRate, pageviewsPerVisit, avgTimePerVisit); 
-		this.loadJsonChannelData(channels,channelNewVisits,channelPercentNewVisits,channelVisits,channelVisitBounceRate, channelPageviewsPerVisit, channelAvgTimePerVisit);
+		this.setJson(newVisits, percentNewVisits, visits, visitBounceRate, pageviewsPerVisit, avgTimePerVisit); 
+		this.setJsonChannelData(channels,channelNewVisits,channelPercentNewVisits,channelVisits,channelVisitBounceRate, channelPageviewsPerVisit, channelAvgTimePerVisit);
 	}
+	
+	public void setJsonKeys(){
+		JSONObject totals = new JSONObject();
+		JSONObject channels = new JSONObject();
+		String[] keys = new String[]{"New Visits", "% New Visits", "Visits", "% Bounce Rate", "Pageviews Per Visits", "Avg Visit Duration (sec)"};
+		
+		try {
+			totals.put("keys", keys);
+			totals.put("title","Website Performance");
+			channels.put("title1","Visits totals and channel breakdown:");
+			channels.put("title2","Behavior totals and channel breakdown:");
+			channels.put("keys", keys);
+			this.jsonData.put("totals", totals);
+			this.jsonData.put("total", channels);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 
 	// put data into JSON object to pass to the view website-performance.jsp 
-	public void loadJson(int newVisits, double percentNewVisits, int visits, double visitBounceRate, double pageviewsPerVisit, double avgTimePerVisit)  {
+	public void setJson(int newVisits, double percentNewVisits, int visits, double visitBounceRate, double pageviewsPerVisit, double avgTimePerVisit)  {
 		try {
 			// Overview totals
 			JSONObject totals = new JSONObject();
@@ -165,7 +185,7 @@ public class OverviewModel extends WidgetModel{
 	} 
 	
 	// put data into JSON object to pass to the view website-performance.jsp 
-	public void loadJsonChannelData(List<String>channelsArr, List<Integer> newVisits, List<Double> percentNewVisits, List<Integer> visits, List<Double> visitBounceRate, List<Double> pageviewsPerVisit, List<Double> avgTimePerVisit)  {
+	public void setJsonChannelData(List<String>channelsArr, List<Integer> newVisits, List<Double> percentNewVisits, List<Integer> visits, List<Double> visitBounceRate, List<Double> pageviewsPerVisit, List<Double> avgTimePerVisit)  {
 		try {
 			// Overview totals
 			JSONObject channels = new JSONObject();
@@ -173,7 +193,6 @@ public class OverviewModel extends WidgetModel{
 			String[] keys = new String[]{"Channels", "New Visits", "% New Visits", "Visits", "% Bounce Rate", "Pages Viewed Per Visit", "Avg Visit Duration (sec)"};
 
 			channels.put("keys",keys);
-			channels.put("title","Top Channels"); // use if channels is only one widget page
 			channels.put("title1","Visits totals and channel breakdown:");
 			channels.put("title2","Behavior totals and channel breakdown:");
 			channels.put(keys[0],channelsArr);
