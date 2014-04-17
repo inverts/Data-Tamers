@@ -56,10 +56,17 @@ function getKeywordInsightData(id, callback) {
 
 		var d = $.parseJSON(response);
 		
-		if (d.data === null || d.data === undefined) {
+		if (d.data.noData) {
 			
 			console.log("No data for keywordInsight");
 			nullDataView(id, $("#" + id + " #keywordInsightScatter"));
+			createNullTables(id, $("#" + id + " #keywordInsightImprove"), d.data.improve, 2);
+			createNullTables(id, $("#" + id + " #keywordInsightBest"), d.data.best, 2);	
+			createNullTables(id, $("#" + id + " #keywordInsightWorst"), d.data.worst, 2);		
+			createNullTables(id, $("#" + id + " #keywordInsightAll"), d.data.all, 2);
+			createNullTables(id, $("#" + id + " #keywordInsightBestSub"), d.data.bestsubstr, 2);
+			createNullTables(id, $("#" + id + " #keywordInsightWorstSub"), d.data.worstsubstr, 2);
+			
 			
 			// Even though there is no data, we still need to fire off 
 			// the callback if its in place otherwise when we change to an
@@ -71,35 +78,36 @@ function getKeywordInsightData(id, callback) {
 		}
 
 		var sdata = [];
-		for (var i = 0; i < d.data.scatter.allKeywords.length; i++) {
-			sdata.push({
-				key: d.data.scatter.allKeywords[i],
-				values: []
-			});
-
-			sdata[i].values.push({
-				x: d.data.scatter.allBounceRate[i],
-				y: d.data.scatter.allVisitsPercent[i],
-				group: d.data.scatter.allGroups[i]
-				//size: .4,   //Configure the size of each scatter point
-				//shape: "circle"  //Configure the shape of each scatter point.
-			});
-		} 
-
-		$("#" + id + " .spinner-content").hide();
 		
-		$("#" + id + " .help").tooltip({ content: d.description });
-		
-
-		// scatter view
-		$("#" + id + " #keywordInsightScatter").empty().scatter({
-			"id"	: id,
-			"xLabel": d.data.scatter.label[0],
-			"yLabel": d.data.scatter.label[1],
-			"xKey" 	: d.data.scatter.keys[0],
-			"yKey"	: d.data.scatter.keys[1],
-			"data"	: sdata
-		});
+			for (var i = 0; i < d.data.scatter.allKeywords.length; i++) {
+				sdata.push({
+					key: d.data.scatter.allKeywords[i],
+					values: []
+				});
+	
+				sdata[i].values.push({
+					x: d.data.scatter.allBounceRate[i],
+					y: d.data.scatter.allVisitsPercent[i],
+					group: d.data.scatter.allGroups[i]
+					//size: .4,   //Configure the size of each scatter point
+					//shape: "circle"  //Configure the shape of each scatter point.
+				});
+			} 
+	
+			$("#" + id + " .spinner-content").hide();
+			
+			$("#" + id + " .help").tooltip({ content: d.description });
+			
+	
+			// scatter view
+			$("#" + id + " #keywordInsightScatter").empty().scatter({
+				"id"	: id,
+				"xLabel": d.data.scatter.label[0],
+				"yLabel": d.data.scatter.label[1],
+				"xKey" 	: d.data.scatter.keys[0],
+				"yKey"	: d.data.scatter.keys[1],
+				"data"	: sdata
+			});
 
 		
 		createKITable(id, $("#" + id + " #keywordInsightImprove"), d.data.improve, null, d.data.paidimprove, 2);
@@ -168,9 +176,28 @@ function createKITable(id, $tableDiv, data, urls, paidData, colLines, search) {
 		
 	}
 	
-	
+}
 
+function createNullTables(id, $tableDiv, data, colLines) {
 	
+	var headers = function() {
+		var result = [];
+		for(var i = 0; i < data.keys.length; i++)
+			result.push({name: data.keys[i]});
+		
+		return result;
+	};
+	
+	$tableDiv.children(".organic").empty().table({
+		"data"			: [],
+		"id"		 	: id,
+		"elementId"		: $tableDiv.attr("id"),
+		"columnHeaders" : headers(),
+        "title"			: data.title,
+        "subClass"		: "organic",
+        "columnLines"	: colLines || 1,
+        "oLanguage": { "sEmptyTable": "Nothing to report here for now!" }
+	});
 }
 
 
