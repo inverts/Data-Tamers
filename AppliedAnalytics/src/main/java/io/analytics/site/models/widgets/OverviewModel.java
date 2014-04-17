@@ -204,6 +204,7 @@ public class OverviewModel extends WidgetModel{
 			devices.put("title", "Top Visitor's devices and software interfaces:");
 			this.jsonData.put("totals", totals);
 			this.jsonData.put("total", channels);
+
 			this.jsonData.put("devices", devices);
 			this.jsonData.put("noData", true); // flag indicating there is no data.
 
