@@ -65,7 +65,7 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 		normalizeData();
 		List<Integer> clusterSizes = new ArrayList<Integer>();
 		List<List<Double>> centroids = new ArrayList<List<Double>>();
-		this.clustering = ClusteringUtils.WeightedEuclideanKMeans(this.numericalData, this.dataPointWeights, 8, centroids, clusterSizes);
+		this.clustering = ClusteringUtils.WeightedEuclideanKMeans(this.numericalData, this.dataPointWeights, 11, centroids, clusterSizes);
 
 		this.finalRawCentroids = centroids;
 		this.finalReadableCentroids = new ArrayList<List<String>>();
@@ -177,7 +177,7 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 				return -1;
 		else if (columnName.equals("ga:screenResolution"))
 			return scale(parseResolution(value).w, 1600.0, 100.0);
-		else if (columnName.equals("ga:visits"))
+		else if (columnName.equals("ga:sessions"))
 			return Double.parseDouble(value);
 		else if (columnName.equals("ga:avgTimeOnSite"))
 			return scale(Double.parseDouble(value), 300.0, 100.0);
@@ -220,14 +220,14 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 		else if (columnName.equals("ga:browserVersion"))
 			return null;
 		else if (columnName.equals("ga:visitorType") || columnName.equals("ga:userType"))
-			switch((int) value) {
+			switch((int)Math.round(value)) {
 				case 0: 	return "Returning Visitor";
 				case 50: 	return "New Visitor";
-				default: 	return null;
+				default: 	return "Unknown";
 			}
 		else if (columnName.equals("ga:screenResolution"))
 			return String.valueOf(scale(value, 100.0, 1600.0));
-		else if (columnName.equals("ga:visits"))
+		else if (columnName.equals("ga:sessions"))
 			return String.valueOf(value);
 		else if (columnName.equals("ga:avgTimeOnSite")) {
 			double num = scale(value, 100.0, 300.0);

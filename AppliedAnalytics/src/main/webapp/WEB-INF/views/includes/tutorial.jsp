@@ -5,6 +5,6 @@
 		width=100% 
 		height=100%
 		frameborder="0" 
-		src="http://www.youtube.com/embed/XGSy3_Czz8k?autoplay=1&loop=1&controls=0&showinfo=0">
+		src="http://www.youtube.com/embed/imKDT3MU_T0?autoplay=1&loop=1&controls=0&showinfo=0">
 	<p>Your browser cannot load tutorial video</p>
 </iframe>
