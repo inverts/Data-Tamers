@@ -10,7 +10,6 @@
  * @returns true if the dashboard successfully loaded, false otherwise.
  */
 
-
 function loadDashboard(dashboardId) {
 
 	$("iframe.tutorial").remove(); // in case video was loaded on  previous dashboard session. We dont want this to happen only on success.
@@ -58,9 +57,30 @@ function loadDashboard(dashboardId) {
 						$("#select-profile").tooltip({
 							open: "load",
 							close: {element: $("#select-profile"), event: "click"},
-							gravity: "ne",
+							gravity: "nw",
 							domReady: true,
 							content: "Choose the account you want to view data for."
+						});
+						
+						// Side Panel Tooltips
+						
+						var $trendsList = $(".trends-list");
+						var $forecastList = $(".forecast-list");
+						
+						$trendsList.tooltip({
+							width: 180,
+							gravity: "w",
+							open: { element: $("#trends"), event: "click" },
+							close: "click",
+							content: "These widgets give information regarding how your site has been performing. Drag a widget of your choice onto your dashboard to immediately see details."
+						});
+						
+						$forecastList.tooltip({
+							width: 180,
+							gravity: "w",
+							open: { element: $("#forecast"), event: "click" },
+							close: "click",
+							content: "These widgets give information regarding how your site could potentially do. Drag a widget of your choice onto your dashboard to immediately see details."
 						});
 						
 						Modal.alert({

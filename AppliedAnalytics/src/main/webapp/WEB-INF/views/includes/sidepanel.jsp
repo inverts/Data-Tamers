@@ -31,7 +31,7 @@ $(function(){ getDashboardList($.parseJSON(dashboards)); });
 			<c:if test="${not empty widgetLibraries}">
 				<c:forEach var="wData" items="${widgetLibraries}">
 					<div id="<c:out value='${wData.getLibraryTitle().toLowerCase()}'/>" class="nav-cell">
-						<div class="nav-icon" style=""></div>
+						<span class="lib-icon glyphicon glyphicon-book"></span>
 						<a class="nav-txt"><c:out value="${wData.getLibraryTitle()}"/></a>
 					</div>
 				    <div id="<c:out value='${wData.getLibraryTitle().toLowerCase()}'/>-list" class="widget-list">

@@ -25,7 +25,6 @@ $(function() {
 		}); 
 	});
 	
-	var $trendsList = $(".trends-list");
 	
 	// Opens trends library.
 	$("#trends").click(function() { 
@@ -34,19 +33,9 @@ $(function() {
 		});
 	});
 	
-	$trendsList.tooltip({
-		width: 180,
-		gravity: "w",
-		open: { element: $("#trends"), event: "click" },
-		close: "click",
-		content: "These widgets give information regarding how your site has been performing. Drag a widget of your choice onto your dashboard to immediately see details."
-	});
-	
-	
 	// Setup widget drag and drop for trends library.
 	widgetDragNDrop("trends-list");
 
-	var $forecastList = $(".forecast-list");
 	
 	// Opens forecast library.
 	$("#forecast").click(function() { 
@@ -55,13 +44,7 @@ $(function() {
 		}); 
 	});
 	
-	$forecastList.tooltip({
-		width: 180,
-		gravity: "w",
-		open: { element: $("#forecast"), event: "click" },
-		close: "click",
-		content: "These widgets give information regarding how your site could potentially do. Drag a widget of your choice onto your dashboard to immediately see details."
-	});
+	
 	
 	// Setup widget drag and drop for forecast library.
 	widgetDragNDrop("forecast-list");
@@ -118,6 +101,8 @@ function widgetDragNDrop(listClass) {
 					if ($(this).data("hasTooltip"))
 						$("#tipsy" + $(this).data("tooltip-n")).remove();
 				});
+				
+				removeTooltips($("#sidepanel"));
 			}
 
 		},
