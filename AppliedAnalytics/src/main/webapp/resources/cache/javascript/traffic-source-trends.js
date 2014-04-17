@@ -95,7 +95,7 @@ function getTrafficSourceTrendsData($element, callback) {
 				}).show();
 				
 				for(index in slopeGraphs) {
-					canvas = drawSlope(slopeGraphSlopes[index], $("#tst-row-" + slopeGraphs[index]), 50, 50, 2);
+					canvas = drawSlope(slopeGraphSlopes[index], $("#" + id + " #tst-row-" + slopeGraphs[index]), 50, 50, 2);
 					$(canvas).css("border", "2px solid #666");
 					$(canvas).css("border-radius", "10px");
 					$("#tst-row-" + slopeGraphs[index]).css("margin", "auto");
