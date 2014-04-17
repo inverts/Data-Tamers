@@ -2,9 +2,11 @@ package io.analytics.site.models.widgets;
 
 import io.analytics.domain.KeywordInsightData;
 import io.analytics.domain.OverviewData;
+import io.analytics.domain.VisitorDeviceData;
 import io.analytics.service.interfaces.IKeywordInsightService;
 import io.analytics.service.interfaces.IOverviewService;
 import io.analytics.service.interfaces.ISessionService;
+import io.analytics.service.interfaces.IVisitorDeviceService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,6 +25,7 @@ public class OverviewModel extends WidgetModel{
 
 	private JSONObject jsonData;
 	private IOverviewService overviewService;
+	private IVisitorDeviceService visitorDeviceService;
 	private ISessionService sessionService;
 	private String activeProfile;
 	private Date startDate;
@@ -39,17 +42,28 @@ public class OverviewModel extends WidgetModel{
 	private List<Integer> channelVisits;
 	private List<Double> channelVisitBounceRate;
 	private List<Double> channelPageviewsPerVisit;
-	private List<Double> channelAvgTimePerVisit;  
+	private List<Double> channelAvgTimePerVisit; 
+	
+	private List<String> mobileCat;
+	private List<String> desktopCat;
+	private List<String> mobileOS;
+	private List<Integer> mobileVisits;
+	private List<String> desktopBrowser;
+	private List<Integer> desktopVisits; 
+	private List<String> deviceCat;
+	private List<String> deviceSoftware;
+	private List<Integer> deviceVisits;
 
 	private final String widgetClass = "overview";
 	private final String widgetTitle = "overview.title";	
 
 	DateFormat presentationFormat = new SimpleDateFormat("MM/dd/yyyy"); 
 
-	public OverviewModel(ISessionService sessionService, IOverviewService overviewService) {
+	public OverviewModel(ISessionService sessionService, IOverviewService overviewService, IVisitorDeviceService visitorDeviceService) {
 
 		this.sessionService = sessionService;
 		this.overviewService = overviewService;
+		this.visitorDeviceService = visitorDeviceService;
 		this.jsonData = new JSONObject();
 		this.activeProfile = this.overviewService.getProfile();
 		this.channels = new ArrayList<String>();
@@ -59,7 +73,16 @@ public class OverviewModel extends WidgetModel{
 		this.channelVisitBounceRate = new ArrayList<Double>();
 		this.channelPageviewsPerVisit = new ArrayList<Double>();
 		this.channelAvgTimePerVisit = new ArrayList<Double>();
-
+		mobileCat = new ArrayList<String>();
+		desktopCat = new ArrayList<String>();
+		mobileOS = new ArrayList<String>();
+		mobileVisits = new ArrayList<Integer>();
+		desktopBrowser = new ArrayList<String>();
+		desktopVisits = new ArrayList<Integer>();
+		deviceCat = new ArrayList<String>();
+		deviceSoftware = new ArrayList<String>();
+		deviceVisits = new ArrayList<Integer>();
+		 
 		// default dates
 		this.endDate = new Date();
 		Calendar cal = new GregorianCalendar();
@@ -107,6 +130,8 @@ public class OverviewModel extends WidgetModel{
 	public void updateData() {
 
 		OverviewData dataObject = this.overviewService.getOverviewData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate);
+		
+		VisitorDeviceData vdDataObject = this.visitorDeviceService.getVisitorDeviceData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate);
 		// over quota error returns no data, must refresh browser to try again
 		if (dataObject==null){
 			setJsonKeys();
@@ -141,9 +166,25 @@ public class OverviewModel extends WidgetModel{
 		this.channelAvgTimePerVisit.add(this.avgTimePerVisit);
 		this.channelAvgTimePerVisit.addAll(dataObject.getChannelAvgTimePerVisit());
 
+		// Get Visitor Device data
+		this.mobileCat.addAll(vdDataObject.getMobileCategories()); 
+		this.desktopCat.addAll(vdDataObject.getDesktopCategories());
+		this.mobileOS.addAll(vdDataObject.getMobileOS());
+		this.mobileVisits.addAll(vdDataObject.getMobileVisits());
+		this.desktopBrowser.addAll(vdDataObject.getDesktopBrowser());
+		this.desktopVisits.addAll(vdDataObject.getDesktopVisits());
+		
+		this.deviceCat.addAll(vdDataObject.getDesktopCategories());
+		this.deviceCat.addAll(vdDataObject.getMobileCategories());
+		this.deviceSoftware.addAll(vdDataObject.getDesktopBrowser());
+		this.deviceSoftware.addAll(vdDataObject.getMobileOS());
+		this.deviceVisits.addAll(vdDataObject.getDesktopVisits());
+		this.deviceVisits.addAll(vdDataObject.getMobileVisits());
+		
 		// put data into the JSON Object member jsonData
 		this.setJson(newVisits, percentNewVisits, visits, visitBounceRate, pageviewsPerVisit, avgTimePerVisit); 
 		this.setJsonChannelData(channels,channelNewVisits,channelPercentNewVisits,channelVisits,channelVisitBounceRate, channelPageviewsPerVisit, channelAvgTimePerVisit);
+		this.setJsonDevice();
 	}
 	
 	public void setJsonKeys(){
@@ -157,7 +198,7 @@ public class OverviewModel extends WidgetModel{
 			channels.put("title1","Visits totals and channel breakdown:");
 			channels.put("title2","Behavior totals and channel breakdown:");
 			channels.put("keys", keys);
-			this.jsonData.put("totals", totals);
+			this.jsonData.put("total", totals);
 			this.jsonData.put("total", channels);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -165,23 +206,42 @@ public class OverviewModel extends WidgetModel{
 		}
 	}
 	
-
-	// put data into JSON object to pass to the view website-performance.jsp 
+	// put data into JSON object to pass to the view over.jsp
+		public void setJsonDevice()  {
+			try {
+		JSONObject devices = new JSONObject();
+				
+				String[] keys2 = new String[]{"Device Categories", "Browser or OS", "Visits"};
+				devices.put("keys", keys2);
+				devices.put("title", "Top Visitor's devices and software interfaces:");
+				devices.put(keys2[0], this.deviceCat);
+				devices.put(keys2[1], this.deviceSoftware);
+				devices.put(keys2[2], this.deviceVisits);
+				this.jsonData.put("devices", devices);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} 
+		
+	// put data into JSON object to pass to the view overview.jsp
 	public void setJson(int newVisits, double percentNewVisits, int visits, double visitBounceRate, double pageviewsPerVisit, double avgTimePerVisit)  {
-		try {
-			// Overview totals
-			JSONObject totals = new JSONObject();
-			
-			String[] keys = new String[]{"New Visits", "% New Visits", "Visits", "% Bounce Rate", "Pageviews Per Visits", "Avg Visit Duration (sec)"};
-			double[] ovArr = {newVisits, percentNewVisits, visits, visitBounceRate, pageviewsPerVisit, avgTimePerVisit}; 
-			totals.put("title","Website Performance");
-			totals.put("data",ovArr);
-            totals.put("keys", keys);
-			this.jsonData.put("totals", totals);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			try {
+				// Overview totals
+				JSONObject total = new JSONObject();
+
+				String[] keys = new String[]{"New Visits", "% New Visits", "Visits", "% Bounce Rate", "Pageviews Per Visits", "Avg Visit Duration (sec)"};
+				double[] ovArr = {newVisits, percentNewVisits, visits, visitBounceRate, pageviewsPerVisit, avgTimePerVisit}; 
+				total.put("title","Website Performance");
+				total.put("data",ovArr);
+	            total.put("keys", keys);
+	            
+				this.jsonData.put("totals", total);
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	} 
 	
 	// put data into JSON object to pass to the view website-performance.jsp 

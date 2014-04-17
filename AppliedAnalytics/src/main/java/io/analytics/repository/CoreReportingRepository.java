@@ -516,6 +516,15 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			return gaData;
 		}
 		
+		/**
+		 * Get vistor device category (not desktop), OS, and visits
+		 *  
+		 * @param credential
+		 * @param sDate
+		 * @param eDate
+		 * @param maxResults
+		 * @return
+		 */
 		public GaData getMobileOS(Credential credential, String profileID, Date sDate, Date eDate, int maxResults) {
 			GaData gaData = null;
 			String startDate = dateFormat.format(sDate);
@@ -545,6 +554,15 @@ public class CoreReportingRepository implements ICoreReportingRepository {
 			return gaData;
 		}
 		
+		/**
+		 * Get vistor desktop Browser, and visits
+		 *  
+		 * @param credential
+		 * @param sDate
+		 * @param eDate
+		 * @param maxResults
+		 * @return
+		 */
 		public GaData getDesktopBrowser(Credential credential, String profileID, Date sDate, Date eDate, int maxResults) {
 			GaData gaData = null;
 			String startDate = dateFormat.format(sDate);

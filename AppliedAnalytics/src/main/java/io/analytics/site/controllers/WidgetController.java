@@ -11,6 +11,7 @@ import io.analytics.service.interfaces.IKeywordInsightService;
 import io.analytics.service.interfaces.IOverviewService;
 import io.analytics.service.interfaces.IPagePerfomanceService;
 import io.analytics.service.interfaces.ISessionService;
+import io.analytics.service.interfaces.IVisitorDeviceService;
 import io.analytics.service.interfaces.IWidgetService;
 import io.analytics.site.models.*;
 import io.analytics.site.models.widgets.BoostPerformanceModel;
@@ -48,6 +49,7 @@ public class WidgetController {
 	@Autowired private IKeywordInsightService KeywordInsightService;
 	@Autowired private IWidgetService WidgetService;
 	@Autowired private IOverviewService OverviewService;
+	@Autowired private IVisitorDeviceService VisitorDeviceService;
 
 	@RequestMapping(value = "/DataForecast", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView DataForecastView(Model viewMap, HttpServletRequest request, HttpServletResponse response, HttpSession session,	
@@ -307,7 +309,7 @@ public class WidgetController {
 
 			//If there is no model available, or if the active profile changed, create a new model.
 			if ((overview == null) || !(settings.getActiveProfile().equals(overview.getActiveProfile()))) {
-				overview = new OverviewModel(this.SessionService, this.OverviewService);
+				overview = new OverviewModel(this.SessionService, this.OverviewService, this.VisitorDeviceService);
 			}
 
 			if (filter != null) {

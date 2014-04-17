@@ -77,7 +77,7 @@ function getOverviewData(id, callback) {
 
 		
 
-		//console.log(d.data);
+		console.log(d.data);
 		// Create each table view
 
 		// add the key for channels into this array.
