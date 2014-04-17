@@ -82,6 +82,7 @@ function loadDashboard(dashboardId) {
 					// somewhere it cannot go.
 					revert: "false",
 					containment: ".wrapper",
+					tolerance: "pointer",
 					forcePlaceholderSize: true, // YOLO property (not sure if its needed).
 					// we need the widgets to be up front when they drag otherwise they do not move
 					// the other widgets around properly due to priority restraints with the html elements.
@@ -171,7 +172,7 @@ function loadDashboard(dashboardId) {
 							// widget loaded but data did not! Wait 5 seconds to see if it comes.
 							if ($w.children().length && !hasData) {
 								updateW = setTimeout(function() {
-									($w.find("img.spinner-content").length) 
+									($w.find("img.spinner-content").is(":visible")) 
 										? updateWidget(wTypeId, $w.attr("id"))
 										: clearTimeout(this);
 								}, 5000);
@@ -187,7 +188,7 @@ function loadDashboard(dashboardId) {
 							if ($w.children().length && reloadW || !$w.length)
 								clearTimeout(reloadW);
 							
-							if (!$w.find("img.spinner-content").length && updateW)
+							if (!$w.find("img.spinner-content").is(":visible") && updateW)
 								clearTimeout(updateW);
 						}
 						else

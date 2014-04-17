@@ -8,7 +8,7 @@
 <div class="controls">
 	<ul class="pagination">
 	  <li><a class="bar">Bar Chart</a></li>
-	  <li><a class="pp-table">URL Table</a></li>
+	  <li><a class="pp-table">Link Table</a></li>
 	</ul>
 </div>
 

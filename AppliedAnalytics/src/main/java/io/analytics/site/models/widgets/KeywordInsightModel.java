@@ -663,7 +663,7 @@ public class KeywordInsightModel extends WidgetModel {
 		try {
 			improve.put("keys", keys1);
 			improve.put("title", "Improve website performance for these keywords:");
-			best.put("best", keys1);
+			best.put("keys", keys1);
 			best.put("title", "Best performing keywords:");
 			worst.put("keys",keys1);
 			worst.put("title", "Worst performing keywords:");
@@ -679,6 +679,7 @@ public class KeywordInsightModel extends WidgetModel {
 			this.jsonData.put("all", all);
 			this.jsonData.put("bestsubstr", bestsubstr);
 			this.jsonData.put("worstsubstr", worstsubstr);
+			this.jsonData.put("noData", true); // flag indicating there is no data.
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

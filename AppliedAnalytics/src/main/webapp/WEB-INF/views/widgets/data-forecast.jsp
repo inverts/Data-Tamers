@@ -12,7 +12,7 @@
    	  <label name="noise"><fmt:message key="dataforecast.checkbox.noise" /></label>
    </div>
    <div class="btn-group btn-group-sm right">
-   	  <button type="button" id="dayBtn" class="btn btn-default"><fmt:message key="dataforecast.button.day" /></button>
+   	  <button type="button" id="dayBtn" class="btn btn-default active"><fmt:message key="dataforecast.button.day" /></button>
    	  <button type="button" id="weekBtn" class="btn btn-default"><fmt:message key="dataforecast.button.week" /></button>
    	  <button type="button" id="monBtn" class="btn btn-default"><fmt:message key="dataforecast.button.month" /></button>
    </div>

@@ -15,6 +15,7 @@
 			"show"			: 5,
 			"title"			: "",
 			"sorting"		: [],
+			"noSort"		: null, // specify columns to not have sorting by [ column Number ]
 			"oLanguage"		: { },
 			"columnLines"	: 1,
 			"subClass"		: null
@@ -163,6 +164,15 @@
 
 				  	  definitions.push(urls);
 			  	}
+				
+				if (settings.noSort) {
+					var noSort = { 
+						"bSortable": false, 
+						"aTargets": settings.noSort 
+					};
+				
+					definitions.push(noSort);
+				}
 
 				return definitions;
 			}

@@ -420,13 +420,10 @@ function changeViewBtn(id, view) {
 function nullDataView(id, $view) {
 	
 	var noDataMsg = $("<div>").addClass("noData")
-							  .html("Nothing to report here for now!<span class='whatIsThis'><a>What is this?</a></span>");
+							  .html("Nothing to show here for now!");
 	// append no data message
 	$view.html(noDataMsg);
 	
-	// disable scrolling
-	$("#" + id + " .w-prev").off("click.scroll").hide();
-	$("#" + id + " .w-next").off("click.scroll").hide();
 	$("#" + id + " ul.pagination").hide();
 	
 	// hide spinner

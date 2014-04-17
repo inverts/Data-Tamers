@@ -53,7 +53,7 @@ function getOverviewData(id, callback) {
 		$("#" + id + " .spinner-content").hide();
 		$("#" + id + " .help").tooltip({ content: d.description });
 
-		if (d.data === null || d.data === undefined) {
+		if (d.data.noData) {
 			// TODO: Handle null data scenario.
 			console.log("No data for overview");
 			
@@ -61,8 +61,34 @@ function getOverviewData(id, callback) {
 			$("#" + id + " #overviewTotals1").table({
 				"data": [],
 				"id" : id,
+				"columnHeaders" : [
+				                   {"name" : d.data.total.keys[0]}, // change to channel property in totals property.
+				                   {"name" : d.data.total.keys[3]},
+				                   {"name" : d.data.total.keys[2]},
+				                   {"name" : d.data.total.keys[1]},
+				                   {"name" : d.data.total.keys[4]}
+				                  ],
+				"title"			: d.data.total.title1,
+				"columnLines"	: 2,
 				"oLanguage": { "sEmptyTable": "Nothing to report here for now!" }
 			}).show();
+			
+			$("#" + id + " #overviewTotals2").table({
+				"data": [],
+				"id": id,
+				"columnHeaders" : [
+				                   {"name" : d.data.total.keys[0]},
+				                   {"name" : d.data.total.keys[3]},
+				                   {"name" : d.data.total.keys[4]},
+				                   {"name" : d.data.total.keys[5]},
+				                   {"name" : d.data.total.keys[6]}
+				                  ],
+	           "title"			: d.data.total.title2,
+	           "columnLines"	: 3,
+	           "oLanguage": { "sEmptyTable": "Nothing to report here for now!" }
+			});
+			
+			
 			
 			// Even though there is no data, we still need to fire off 
 			// the callback if its in place otherwise when we change to an
@@ -96,7 +122,7 @@ function getOverviewData(id, callback) {
            "m"			    : {"length": totalKeys1.length, "keys": totalKeys1 },
            "n"				: {"length": d.data.total[d.data.total.keys[0]].length, "keys": null}, // rows
            "title"			: d.data.total.title1,
-           "columnLines"	: 1
+           "columnLines"	: 2
 		}).show();
 
 		var totalKeys2 = [ d.data.total.keys[0], d.data.total.keys[3], d.data.total.keys[4], d.data.total.keys[5], d.data.total.keys[6]];

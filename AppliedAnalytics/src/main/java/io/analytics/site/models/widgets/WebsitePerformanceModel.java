@@ -211,6 +211,7 @@ public class WebsitePerformanceModel extends WidgetModel {
 		try {
 			this.jsonData.put("keys", keys1);
 			this.jsonData.put("title","Improve the performance of these important webpages:");
+			this.jsonData.put("noData", true); // flag indicating there is no data.
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

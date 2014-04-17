@@ -26,7 +26,7 @@ var nGraphs = 0; // number of graphs currently. Needed for the clipping mask id.
 			'hideYaxis'	: false,
 			'pointSize'	: 0,
 			'databuffer': 0,
-			'rangeMin'	: 4,
+			'rangeMin'	: 1,
 			'dateLine'	: null,
 			'showLegend': true
 	}; 
@@ -41,7 +41,7 @@ var nGraphs = 0; // number of graphs currently. Needed for the clipping mask id.
 				     		 "top":    settings.title  ? 22 : 5,			// padding required for graph labels
 				    	     "right":  10,
 				    	     "bottom": settings.xLabel ? 60 : 30,
-				    	     "left":   settings.yLabel ? 50 : 25
+				    	     "left":   settings.yLabel ? 50 : 40
 				    	  };
 
 			var width = $this.width(),										// svg takes on width and height of parent element.
@@ -115,9 +115,11 @@ var nGraphs = 0; // number of graphs currently. Needed for the clipping mask id.
 			/********************************
 			 *			BASE CASES			*
 			 ********************************/
+			//Endindex must be less than the length and greater than or equal to the start index.
+			
 			if (settings.endIndex >= settings.data.length || 
 					settings.endIndex < settings.startIndex || 
-					settings.endIndex - settings.startIndex < settings.rangeMin)
+					settings.endIndex - settings.startIndex + 1 < settings.rangeMin)
 				return;
 			
 

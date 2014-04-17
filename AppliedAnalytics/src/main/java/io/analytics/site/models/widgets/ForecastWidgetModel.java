@@ -48,14 +48,15 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
         
         
         private SimpleEntry<Double, Double> yRange;
-        private ArrayList<Double> dataOriginal;
         private ArrayList<Double> dataForecast; 
+        private ArrayList<Double> dataForecastWithNoise; 
+        private ArrayList<Double> dataForecastNormalized;
         
         //The exponential smoothing trendline slope at the last data point.
         private double finalTrend = 0.0;
         private ArrayList<Double> dataNormalized;
+        private ArrayList<Double> dataOriginal;
         private ArrayList<Double> dataSmoothNormalized;
-        private ArrayList<Double> dataForecastNormalized;
 
         private Date startDate;
         private Date endDate;
@@ -176,6 +177,7 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
                 int currentDayOfWeek = startingDayOfWeek;
                 ArrayList<double[]> dayOfWeekTotals = new ArrayList<double[]>();
                 double[] week = new double[7];
+                double varSum = 0.0;
                 try {
                         for (int i=0; i < dataRows.size(); i++) {
                                 Double x = Double.parseDouble(dataRows.get(i).get(dayColumn));
@@ -191,7 +193,6 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 
                                 /* Collect statistics */
                                 totalStats.addValue(y);
-                                
                                 /* Operations performed on only visible data */
                                 if (i >= excessDaysNeeded) {
                                         xValuesTemp.add(x);

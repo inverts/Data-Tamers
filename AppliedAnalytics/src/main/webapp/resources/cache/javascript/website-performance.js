@@ -49,15 +49,23 @@ function getPagePerformanceData(id, callback){
 		$("#" + id + " .spinner-content").hide();
 		$("#" + id + " .help").tooltip({ content: d.description });
 		
-		if (!d.data) {
+		if (d.data.noData) {
 			console.log("No data for pagePerformance");
 			
 			// show empty table
 			$("#" + id + " #pagePerformanceTable").table({
 				"data": [],
+				"columnHeaders" : [
+				                   {"name" : d.data.keys[0], "width": "70%"}, 
+				                   {"name" : d.data.keys[1]},
+				                   {"name" : d.data.keys[2]},
+				                   {"name" : d.data.keys[3]}
+				                  ],
 				"id" : id,
 				"oLanguage": { "sEmptyTable": "Nothing to report here for now!" }
 			}).show();
+			
+			nullDataView(id, $("#" + id + " #pagePerformanceBar"));
 			
 			if (callback)
 				callback();
