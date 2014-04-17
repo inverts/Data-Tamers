@@ -112,11 +112,6 @@ function getOverviewData(id, callback) {
 			return;
 		}
 
-
-
-		
-
-		console.log(d.data);
 		// Create each table view
 
 		// add the key for channels into this array.
