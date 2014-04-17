@@ -30,7 +30,7 @@
 </div>
 <div class="controls">
 	<ul class="pagination">
-	  <li><a class="scatter">Plot</a></li>
+	  <li><a class="scatter">Scatter Plot</a></li>
 	  <li><a class="improve">Improve</a></li>
 	  <li><a class="best">Best</a></li>
 	  <li><a class="worst">Worst</a></li>
