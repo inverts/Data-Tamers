@@ -25,12 +25,6 @@
 			}			
 			var sdata = settings.data;		
 
-			var margin = {
-					"top" : 20,
-					"right" : 15,
-					"bottom" : 50,
-					"left" : 60
-				};
 			var width = $this.width();
 			var height = $this.height();			
 
@@ -61,15 +55,15 @@
 			  				.color(["rgb(0,102,0)","rgb(128,255,0)","rgb(255,255,0)","rgb(204,0,0)"])
 			                .useVoronoi(false)
 			                .transitionDuration(300)
-			                .width(637)
-			                .height(255)
-			                ;
+			                .width($this.width())
+			                .height($this.height());
 
 			  chart.xAxis.axisLabel("% Bounce Rates");
-			 // chart.yAxis.axisLabel("Multipage Visit Rates (%)");
 			  chart.yAxis.axisLabel("% Visits");
 			  chart.xAxis.tickFormat(d3.format('.02f'));
 			  chart.yAxis.tickFormat(d3.format('.02f'));
+			  
+			  //d3.selectAll("#" + settings.id + " text.nv-axislabel").style("font-weight", "bolder");
 
 			  //increase size of points
 
@@ -81,7 +75,6 @@
 			        tooltip_str = '<center><b>'+key+'</b></center>';
 			        return tooltip_str;
 			    });
-
 
 			  //append data to chart
 			  svg.datum(formatData(sdata))

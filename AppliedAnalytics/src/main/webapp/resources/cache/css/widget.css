@@ -417,7 +417,7 @@ line:hover { opacity: 0.5; }
 .keywordInsight .keywordVisual .organic.active, 
 .keywordInsight .keywordVisual .paid.active { display:block; }
 .keywordInsight .keywordVisual .organic, .keywordInsight .keywordVisual .paid { width:inherit; height:305px; display:none; }
-
+.keywordInsight .keywordVisual text.nv-axislabel { font-weight:bolder; }
 .keywordInsight .scatter-axis line, .scatter-axis path { shape-rendering: crispEdges; stroke: black; fill: none; }
 .keywordInsight .scatter-axis text { font-family: sans-serif; font-size: 11px; }
 .keywordInsight circle { fill: steelblue; } 
