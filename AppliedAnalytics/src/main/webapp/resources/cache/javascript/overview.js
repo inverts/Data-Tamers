@@ -18,6 +18,7 @@ function loadOverview(id, callback) {
 					// direct view buttons
 					$("#" + id + " a.totals1").click(function(e) { changeViewBtn(id, "overviewTotals1"); });
 					$("#" + id + " a.totals2").click(function(e) { changeViewBtn(id, "overviewTotals2"); });
+					$("#" + id + " a.devices").click(function(e) { changeViewBtn(id, "devices"); });
 
 					$element.data("hasData", true); // flag the widget as having data.
 				});
@@ -159,7 +160,7 @@ function getOverviewData(id, callback) {
 			                   {"name" : d.data.devices.keys[2]},
 			                  ],
            "m"				: {"length": d.data.devices.keys.length, "keys": d.data.devices.keys}, // columns
-           "n"				: {"length": d.data.total[d.data.total.keys[0]].length, "keys": null}, // rows
+           "n"				: {"length": d.data.devices[d.data.devices.keys[0]].length, "keys": null}, // rows
            "title"			: d.data.devices.title,
            "columnLines"	: 1
 		});

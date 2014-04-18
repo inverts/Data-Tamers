@@ -58,7 +58,7 @@ public class DataForecastModel extends ForecastWidgetModel implements Serializab
 
 	@Override
 	public String getDescription() {
-		return "View a forecast of your data depending on hypothetical conditions.";
+		return "View a forecast of your data based on historical data.";
 	}
 	
 	@Override
