@@ -24,6 +24,7 @@ var Modal = {
 									 'size'		: 'modal-default',
 									 'close'	: true,
 									 'options'  : false,
+									 'submit'	: false,
 									 'action'	: function() {}
 								   };
 					
@@ -33,9 +34,9 @@ var Modal = {
 	
 					$('.modal-dialog').attr('class', 'modal-dialog ' + settings.size);
 					$('.modal-header .close').show();
+					$('.modal-title').empty().append((typeof(settings.title) == 'function') ? settings.title() : settings.title);				
+					$('.modal-body').empty().append((typeof(settings.content) == 'function') ? settings.content() : settings.content);	
 					
-					$('.modal-title').empty().append(settings.title);
-					$('.modal-body').empty().append(settings.content);				
 					$('.modal-footer').removeClass('prompt').empty();
 					
 					var buttons = settings.buttons;
@@ -55,8 +56,9 @@ var Modal = {
 						}
 						
 						if (buttons.confirm.name) {
-							$('<button>').attr({ 'id': 'modal_confirm', 'class': 'btn btn-' + buttons.size})
-										 .on('click', buttons.action || settings.action)
+							var $confirm = (settings.submit) ? $('<submit>') : $('<button>');
+							$confirm.attr({ 'id': 'modal_confirm', 'class': 'btn btn-' + buttons.size})
+										 .on('click', buttons.confirm.action || buttons.action || settings.action)
 										 .addClass('btn-primary')
 										 .html(buttons.confirm.name)
 										 .appendTo('.modal-footer');
@@ -67,7 +69,7 @@ var Modal = {
 				},
 				
 				/********************************
-				 * Simply One button modal prompt
+				 * Simple One button modal prompt
 				 ********************************/
 				alert: function(params) {
 					

@@ -50,12 +50,7 @@ $(function() {
 	widgetDragNDrop("forecast-list");
 	
 	// Opens add dashboard pane.
-	$("#addDashboard").click(function() {
-		$(".right-pane")
-			.addClass("addDashboard");
-			
-		showAddDashboardPanel(550, addDashboardPage);
-	});
+	$("#addDashboard").click(addDashboardPage);
 	
 	// mark the page the user is currently on.
 	 currentPage = $("#dashboard .nav-txt").css("color", "#00aeef");
@@ -132,10 +127,18 @@ function getDashboardList(list) {
 	
 	// TODO: Handle case of no dashboards. Should do something besides throw a console error.
 	if (!list.length) {
-		Modal.alert({
+		/*Modal.alert({
 			"title": "No dashboards available!",
 			"content": "It looks like you don't have any dashboards - click the Add New Dashboard link to get started!",
 			"size": 'modal-default'
+		});*/
+		$(".dash-list").tooltip({
+			"content": "It looks like you don't have any dashboards - click the Add New Dashboard link to get started!",
+			"open": "load",
+			"close": {"element": "", "event": "click", 
+				"callback": function() {
+				$(".dash-list").off("load.oTooltip").off("click.cTooltip");
+			}}
 		});
 	}
 	
@@ -154,7 +157,43 @@ function addDashboardPage() {
 		type: 'POST',
 		url: applicationRoot + "addDashboard",
 		success: function(data) {
-			$(".addDashboard").html(data);
+			Modal.call({
+				"content": data,
+				"title": "Create Dashboard",
+				"submit": true,
+				"buttons" : {
+					 			"size": "default", 
+					 			"confirm": {"name": "Create", "action": function(e) {
+			                		e.preventDefault();
+			                		
+			                		var name = $("#dashboardName").val();
+			                		
+			                		
+			                		Modal.call({
+			                			"title": "Create Dashboard",
+			                			"content": "Create new dashboard \"" + name + "\"?",
+			                			"action": function(e) { 
+			                				e.preventDefault();
+			                				$.ajax({
+			                					type: 'POST',
+			                					url: applicationRoot + "application/createDashboard",
+			                					data: { name: name },
+			                					success: function(result) {
+			                						createDashboardLink($.parseJSON(result));
+			                						Modal.alert({
+			                							"title": "Success!",
+			                							"content": name + " has been successfully created!",
+			                						});
+			                					},
+			                					error: handleAjaxError
+			                				}); // end ajax
+			                			} // end action
+			                		}); // end modal
+			                	  } // end action
+					 			}, // end confirm
+					 			"cancel": "Cancel"
+					 		} // end buttons 
+				});
 		},
 		error: handleAjaxError
 	});

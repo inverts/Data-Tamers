@@ -142,7 +142,7 @@ input { font: inherit; }
 #widget-clone { display:none; }
 
 /******ADD DASHBOARD*****/
-.addDashboard-content { margin-top:20px; padding:20px; display:none; }
+.addDashboard-content { margin-top:20px; padding:20px; }
 .addDashboard-content .textbox { height:30px; width:250px; float:right; }
 .addDashboard-content table { cellspacing:2; width:400px; margin-top:20px; }
 .addDashboard-content label { font-weight:200; }
