@@ -1,6 +1,6 @@
 var currentTooltips = [];
 var nTooltips = 0;
-
+var removeInProgress = false;
 (function ($) {
 
 	$.event.trigger({ type:"reposition" });
@@ -72,10 +72,14 @@ var nTooltips = 0;
     																			"left": $this.position().left, 
     																			"top": $this.position().top } 
     																		  },
+    				"open"		: settings.open,
+    				"close"		: settings.close,
     				"closeTimer": 0,
     				"active"	: false,
     				"n"			: nTooltips++,
-    				"position"  : {"top": 0, "left": 0 }
+    				"position"  : {"top": 0, "left": 0 },
+    				"dom" 		: $this,
+    				"tipsy"		: null
     		};
     		
     		
@@ -162,7 +166,7 @@ var nTooltips = 0;
 			
 			var dur = 500; // timeout duration.
 			
-			var ttObj = {"dom": $this, "tipsy": null };
+			//var ttObj = {"dom": $this, "tipsy": null };
 			
 			// Event is a toggle
 			if (settings.open.element[0] == settings.close.element[0] &&
@@ -191,8 +195,8 @@ var nTooltips = 0;
 								tooltip.active = true; // set active flag.
 								
 								var tipsy = $("#tipsy").attr("id", "tipsy" + tooltip.n);
-								ttObj.tipsy = "#tipsy" + tooltip.n;
-								currentTooltips.push(ttObj);
+								tooltip.tipsy = "#tipsy" + tooltip.n;
+								currentTooltips.push(tooltip);
 								
 								tooltip.position = tipsy.position();
 
@@ -212,8 +216,9 @@ var nTooltips = 0;
 								tooltip.active = true;
 								
 								var tipsy = $("#tipsy").attr("id", "tipsy" + tooltip.n);
-								ttObj.tipsy = "#tipsy" + tooltip.n;
-								currentTooltips.push(ttObj);
+								//ttObj.tipsy = "#tipsy" + tooltip.n;
+								tooltip.tipsy = "#tipsy" + tooltip.n;
+								currentTooltips.push(tooltip);
 								
 								tooltip.position = tipsy.position();
 								
@@ -232,7 +237,7 @@ var nTooltips = 0;
 								$this.tipsy("hide");
 								tooltip.active = false;
 								
-								var r = currentTooltips.indexOf(ttObj);
+								var r = currentTooltips.indexOf(tooltip);
 								if (r > -1)
 									currentTooltips.splice(r, 1);
 								
@@ -268,7 +273,7 @@ var nTooltips = 0;
 													$this.tipsy("hide");
 													tooltip.active = false;
 												}
-												var r = currentTooltips.indexOf(ttObj);
+												var r = currentTooltips.indexOf(tooltip);
 												if (r > -1)
 													currentTooltips.splice(r, 1);
 												if (settings.close.callback)
@@ -325,21 +330,33 @@ function resetTooltips() {
 function tooltipReposition($element) {
 	
 	$.each(currentTooltips, function(i) {
-		var el = currentTooltips[i].dom;
-		if ($.contains($element.parent()[0], el[0]))
-			el.trigger("reposition");
+		var el = currentTooltips[i];
+		if (el) {
+			if ($.contains($element.parent()[0], el.dom[0]))
+				el.dom.trigger("reposition");
+		}
 	});
 	
 }
 
 function removeTooltips($element) {
+	if (removeInProgress)
+		return;
 	
+	removeInProgress = true;
 	$.each(currentTooltips, function(i) {
-		var el = currentTooltips[i].dom;
-		if ($.contains($element[0], el[0])) {
-			$(currentTooltips[i].tipsy).remove();		
-			currentTooltips.splice(i, 1);
+		var el = currentTooltips[i];
+		if (el) {
+			if ($.contains($element[0], el.dom[0])) {
+				$(el.tipsy).remove();
+				el.open.element.off(el.open.event + ".oTooltip");
+				el.close.element.off(el.close.event + ".cTooltip");
+				currentTooltips[i] = null;
+			}
 		}
 	});
+
+	removeInProgress = false;
+
 }
 

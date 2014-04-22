@@ -102,7 +102,7 @@ function widgetDragNDrop(listClass) {
 						$("#tipsy" + $(this).data("tooltip-n")).remove();
 				});
 				
-				removeTooltips($("#sidepanel"));
+				removeTooltips($(".sidepanel"));
 			}
 
 		},

@@ -22,9 +22,10 @@
 .widget .widget-content, .widget.widget-select { height:350px;}
 .widget .widget-content { padding:10px 20px 5px 20px; }
 .widget .widgetView { visibility:'hidden'; }
-.widget-placeholder { padding: 8px; width:680px; height:408px; display:inline-block; clear:both; }
+.widget-placeholder { margin:8px; width:680px; height:392px; display:inline-block; clear:both; position:relative; border-radius:5px;
+					  -moxbox-shadow:2px 2px 6px #666; box-shadow:2px 2px 6px #666; border:1px solid #aaa; background:#bbb repeat;}
 .widget .noData { font-size:18px; padding-top:70px; text-align:center; width:inherit; height:inherit; border:1px solid #999; }
-.widget .whatIsThis { font-size: 12px; margin-left:20px; }
+
 
 /*** GENERAL GRAPHING ***/
 svg { font: 10px sans-serif; }

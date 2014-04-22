@@ -30,7 +30,7 @@
 	
 	<beans:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<beans:property name="url" value="jdbc:mysql://ec2-54-186-75-23.us-west-2.compute.amazonaws.com:3306/davidkai_analytics" />
+		<beans:property name="url" value="jdbc:mysql://ec2-54-187-101-244.us-west-2.compute.amazonaws.com:3306/davidkai_analytics" />
 		<beans:property name="username" value="analyticsuser" />
 		<beans:property name="password" value="dGLnLlf4CXYCOrWYc7Vn" />		
 	</beans:bean>
