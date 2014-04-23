@@ -7,7 +7,7 @@
    	  <button type="button" id="smoothBtn" class="btn btn-default"><fmt:message key="dataforecast.button.smoothed" /></button>
    	  <button type="button" id="normBtn" class="btn btn-default"><fmt:message key="dataforecast.button.normal" /></button>
    </div>
-   <div class="noise left">
+   <div class="noise left" style="visibility:hidden">
    	  <input type="checkbox" class="checkbox" name="noise" />
    	  <label name="noise"><fmt:message key="dataforecast.checkbox.noise" /></label>
    </div>
