@@ -23,7 +23,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<input type="button" class="form-control" value="Log Out" style="width:50%" onclick="document.location.href=applicationRoot + '/signout';" />
+	<input type="button" class="form-control" value="Log Out" style="width:50%" onclick="document.location.href=applicationRoot + 'signout';" />
 	</div>
 	<div id="google-account-info">
 	<h3>Google Account Settings</h3>

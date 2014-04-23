@@ -5,7 +5,7 @@
 
 function loadBoostPerformanceWidget(id, callback) {
 	var $element = $('#' + id);
-	$.post(applicationRoot + "/BoostPerformance", null, 
+	$.post(applicationRoot + "BoostPerformance", null, 
 		function(response) {
 			
 			if ($element.length > 0)
