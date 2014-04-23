@@ -10,7 +10,7 @@ $(function(){ getDashboardList($.parseJSON(dashboards)); });
 <nav id="sidepanel" class="sidepanel" data-animate="${SIDEPANEL.animate}">
 	<div class="sidepanel-content" >
 		<div class="sidepanel-header">
-			<a href="/appliedanalytics/"><img src="<c:url value="/cache/images/logo-280.png" />" width=100%/></a>
+			<a href="/appliedanalytics/"><img src="<c:url value="/cache/images/logo-280.png" />" width=95%/></a>
 		</div>
 		<div class="sidepanel-nav">
 			<!-- DASHBOARD -->

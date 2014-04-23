@@ -69,11 +69,10 @@
 				<jsp:include page="${BODY}"/>
 			</div>
 		</div>
-		
-		<!--  Site Footer -->
-		<jsp:include page="${FOOTER.path}"/>
-		
 	</div>
+	
+	<!--  Site Footer -->
+	<jsp:include page="${FOOTER.path}"/>
 	
 	<!-- Site Modal to be used whenever -->
 	<jsp:include page="/WEB-INF/views/includes/modal.jsp"/>

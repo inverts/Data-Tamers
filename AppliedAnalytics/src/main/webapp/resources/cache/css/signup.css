@@ -6,7 +6,7 @@ body { height: 100%; background: #222; }
 .start .pager { font:inherit; padding:0;}
 .start .start-content { margin-top:10px; line-height:35px; }
 
-.body .content { position: relative; min-height: 650px;}
+.body .content { position: relative; height:auto;}
 
 /* Terms */
 .terms .terms-wrapper { width: 900px; }

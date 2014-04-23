@@ -18,7 +18,7 @@
 
 /******GENERAL******/
 /* Styling for basic site modules */
-html{ background:#222; height:100%; overflow:hidden; }
+html{ background:#222; /*height:100%*/; overflow:hidden; }
 body, h1, h2, h3, h4, a, img { padding:0 auto; margin:0 auto; outline: none; border: none; font-family: 'museo-sans-500', 'Trebuchet MS', 'Helvetica', sans-serif; }
 
 a:visited { color: inherit; }
@@ -27,8 +27,8 @@ a:hover { cursor:pointer }
 input[type="checkbox"] { margin:0; }
 
 .page { margin:0 auto; position:relative; background:#fff; height:100%; }
-.page .wrapper { float:left; width:100%; height:95%; position:relative; }
-.page.application .content { margin: 60px 0px 0px 270px; height:100%; }
+.page .wrapper { /*float:left*/; clear:left; display:inline-block; width:100%; /*height:95%*/; position:relative; }
+.page.application .content { margin: 60px 0px 0px 300px; height:100%; padding-top:6px; }
 .page.application .tutorial { padding:20px; }
 body, .application { height:100%; }
 
@@ -62,7 +62,7 @@ input { font: inherit; }
 #header-application, #header-entry { display:none; }
 
 /* header application */
-.header-application { min-height:65px; padding-left:285px; background:#eee; box-shadow:0px 0px 5px -1px; position:absolute; left:0px; right:0px; z-index:5;}
+.header-application { min-height:65px; padding-left:315px; background:#eee; box-shadow:0px 0px 5px -1px; position:absolute; left:0px; right:0px; z-index:5;}
 .header-application .filter { float: left; padding: 10px 70px 0px 0px; }
 .header-application .filter .form-control { display:inline; width: 125px; cursor: pointer; }
 .header-application .filter .form-control[readonly] { background-color: rgb(218, 229, 233); }
@@ -93,8 +93,7 @@ input { font: inherit; }
 */
 
 /* footer */
-#footer { clear: both; z-index:201; position:relative; border-top:#000 solid 1px; }
-.page #footer { background:#222; clear:left; height:100%; position:relative; }
+#footer { background:#222; height:50px; position:fixed; bottom:0; z-index:5000; width:100%; border-top:#000 solid 1px; }
 .footer-nav, .footer-copyright { margin:auto; text-align:center; }
 #footer .footer-content { color:#ddd; }
 #footer .footer-nav { margin-top:15px; }
@@ -104,10 +103,11 @@ input { font: inherit; }
 
 /******SIDE PANEL******/
 .page .sidepanel-background { left:-500px; background:#444; position:absolute; top:0; z-index:4; box-shadow:0 1px 5px #000; width:270px; }
-.page #sidepanel { display:none; float:left; left:-500px; background:#444; position:absolute; top:0; z-index:6; box-shadow:0 1px 5px #000; height: 100%; }
+.page #sidepanel { display:none; float:left; left:-500px; background:#444; position:fixed; top:0; z-index:202; box-shadow:0 1px 5px #000; 
+				   height: 100%; overflow-y:auto; }
 .sidepanel a  { text-decoration:none; }
 .sidepanel li { list-style-type:none; }
-.sidepanel .sidepanel-content { padding:5px; width:270px; position:relative; z-index:4;}
+.sidepanel .sidepanel-content { padding:5px; width:300px; position:relative; z-index:4;}
 .sidepanel .sidepanel-header { height:110px; padding:10px 10px; }
 .sidepanel .sidepanel-nav { padding:10px; }
 .sidepanel .sidepanel-nav .nav-cell { height:20px; margin:20px 0; padding:20px; background:inherit; }
@@ -142,7 +142,7 @@ input { font: inherit; }
 #widget-clone { display:none; }
 
 /******ADD DASHBOARD*****/
-.addDashboard-content { margin-top:20px; padding:20px; }
+.addDashboard-content { margin-top:20px; padding:20px; height:inherit; }
 .addDashboard-content .textbox { height:30px; width:250px; float:right; }
 .addDashboard-content table { cellspacing:2; width:400px; margin-top:20px; }
 .addDashboard-content label { font-weight:200; }
@@ -168,9 +168,9 @@ input { font: inherit; }
 /* Dashboard */
 .page .w_container { display:inline-block !important; vertical-align:top; padding:8px; }
 .dashboard { height:100%; }
-.dashboard .dashboard-content { overflow-y:auto; height:100%; }
+.dashboard .dashboard-content { overflow-y:auto; height:inherit; }
 .dashboard .dashboard-content, .trends .trends-content, 
-.forecast .forecast-content { padding:5px 0 4% 0; overflow-x:hidden;}
+.forecast .forecast-content { padding:5px 0 10px 0; overflow-x:hidden;}
 
 .dashboard .btn.active { z-index: 0; }
 

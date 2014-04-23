@@ -31,6 +31,14 @@ $(function() {
 		
 	});
 	
+	$(window).resize(function(){
+		var viewSize = $(window).height() - $(".header-application").height() - $("#footer").height();
+		//$(".wrapper").height(screenSize);
+		$(".content").height(viewSize);
+	});
+	
+	$(window).resize();
+	
 	/* Settings Event Handlers */
 	$('.profile-image').click(function() {
 		$('.right-pane')

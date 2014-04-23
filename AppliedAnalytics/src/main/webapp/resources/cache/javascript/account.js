@@ -3,6 +3,15 @@
  */
 
 $(function() {
+	
+	$(window).resize(function(){
+		var viewSize = $(window).height() - $(".header-home").height() - $("#footer").height();
+		$(".content").height(viewSize);
+	});
+	
+	$(window).resize();
+	
+	
 	/* Enables continue button when terms are checked. */
 	$('#terms-check').change(function(e) {
 		e.stopPropagation();
