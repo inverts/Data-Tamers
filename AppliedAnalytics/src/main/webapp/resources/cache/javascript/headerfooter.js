@@ -19,8 +19,9 @@ $(function() {
 	
 	
 	$(".filter").on( "change.filter", "#select-profile", function() {
-		updateSettings({ profile: $('#select-profile option:selected').val() });
-		updateSettings({ update: 1 }, updateWidgets);
+		updateSettings({ profile: $('.filter #select-profile option:selected').val() }, function() {
+			updateSettings({ update: 1 }, updateWidgets);
+		});
 	});
 	
 	
