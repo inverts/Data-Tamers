@@ -35,6 +35,7 @@ $(function() {
 		var viewSize = $(window).height() - $(".header-application").height() - $("#footer").height();
 		//$(".wrapper").height(screenSize);
 		$(".content").height(viewSize);
+		$(".sidepanel").height(viewSize + $(".header-application").height());
 	});
 	
 	$(window).resize();
