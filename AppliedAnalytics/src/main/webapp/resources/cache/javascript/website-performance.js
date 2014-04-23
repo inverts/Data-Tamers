@@ -105,10 +105,11 @@ function getPagePerformanceData(id, callback){
 	});
 }
 
-function updatePagePerformance(id){
+function updatePagePerformance(id, callback) {
 	getPagePerformanceData(id, function() {
 		$("#" + id + " .pagePerformanceVisual").hide();
 		$("#" + id + " .pagePerformanceVisual.active").show();
+		callback();
 	});
 }
 

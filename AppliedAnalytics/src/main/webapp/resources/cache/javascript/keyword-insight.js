@@ -203,9 +203,10 @@ function createNullTables(id, $tableDiv, data, colLines) {
 
 
 //Updates the widget.
-function updateKeywordInsight(id) {
+function updateKeywordInsight(id, callback) {
 	getKeywordInsightData(id, function() {
 		$("#" + id + " .keywordVisual.active").show();
+		callback();
 	}); 
 }
 

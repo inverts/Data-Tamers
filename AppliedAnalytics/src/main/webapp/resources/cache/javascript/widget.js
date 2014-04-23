@@ -203,7 +203,12 @@ function updateWidgets() {
 					});
 	
 	for(var i = 0; i < widgets.length; i++) {
-		updateWidget(widgets[i].widgetTypeId, widgets[i].elementId);
+		$currentWidget = $('#' + widgets[i].elementId);
+		$currentWidget.css('opacity', 0.5);
+		function revertOpacity($widget) {
+			return function() { $widget.css('opacity', 1.0); }
+		}
+		updateWidget(widgets[i].widgetTypeId, widgets[i].elementId, revertOpacity($currentWidget));
 	}
 }
 
@@ -213,28 +218,28 @@ function updateWidgets() {
  * @param widgetTypeId - TypeId of the widget
  * @param elementId - Id of the widget container
  */
-function updateWidget(widgetTypeId, elementId) {
+function updateWidget(widgetTypeId, elementId, callback) {
 	
 	// call appropriate widget's update function.
 	switch(widgetTypeId)
 	{
 		case 1:
-			updateDataForecast(elementId);
+			updateDataForecast(elementId, callback);
 			break;
 		case 2:
-			updatePagePerformance(elementId);
+			updatePagePerformance(elementId, callback);
 			break;
 		case 4:
-			updateKeywordInsight(elementId);
+			updateKeywordInsight(elementId, callback);
 			break;
 		case 5:
-			updateTrafficSourceTrends($("#" + elementId));
+			updateTrafficSourceTrends(elementId, callback);
 			break;
 		case 8:
-			updateOverview(elementId);
+			updateOverview(elementId, callback);
 			break;
 		case 9:
-			updateVisitorDevices(elementId);
+			updateVisitorDevices(elementId, callback); //This does not exist...
 			break;
 	}
 }

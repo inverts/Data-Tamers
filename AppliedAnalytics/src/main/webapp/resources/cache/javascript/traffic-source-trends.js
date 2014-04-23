@@ -105,6 +105,10 @@ function getTrafficSourceTrendsData($element, callback) {
 					if (index != 0)
 						$(element).css("text-align", "center");
 				})
+				
+
+				if(typeof callback !== 'undefined' && callback)			
+					callback();
 
 		});	
 	
@@ -112,8 +116,9 @@ function getTrafficSourceTrendsData($element, callback) {
 
 
 function updateTrafficSourceTrends(id, callback) {
-	getTrafficSourceTrendsData(id, function() {
+	getTrafficSourceTrendsData($("#" + id), function() {
 		$("#" + id + " .trafficSourceVisual.active").show();
+		callback();
 	});
 	//getTrafficSourceTrendsData($("#" + id));
 }

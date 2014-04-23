@@ -29,8 +29,6 @@ $(function() {
 
 function updateDates() {
 	$.post( "filter", { startDate: $("#start-date").val(), endDate: $("#end-date").val() }, function( data, status, xhr ) {
-		if (typeof dashboardId != 'undefined') {
-			loadDashboard(dashboardId);
-		}
+		updateWidgets();
 	});
 }

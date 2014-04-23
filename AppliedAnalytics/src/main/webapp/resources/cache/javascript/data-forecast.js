@@ -90,7 +90,7 @@ function getDataForecastData(id, callback) {
  * 
  * @param id - dashboard container id
  */
-function updateDataForecast(id) {
+function updateDataForecast(id, callback) {
 	
 	if (loadingDataForecast)
 		return;
@@ -104,7 +104,7 @@ function updateDataForecast(id) {
 						   : $.each($buttons, function() { $(this).click(); });
 		
 		$timeBtn.click();
-		
+		callback();
 	});
 
 }
