@@ -85,7 +85,7 @@ public class WebsitePerformanceModel extends WidgetModel {
 	}
 
 	public String getDescription() {
-		return "View the prioritized list of webpages that if improved will make the biggest impact on your website performance.";
+		return "View prioritized webpages that if improved will make the biggest impact on your website performance.";
 	}
 
 	public Date getStartDate() {

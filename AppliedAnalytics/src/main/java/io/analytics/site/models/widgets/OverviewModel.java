@@ -1,9 +1,7 @@
 package io.analytics.site.models.widgets;
 
-import io.analytics.domain.KeywordInsightData;
 import io.analytics.domain.OverviewData;
 import io.analytics.domain.VisitorDeviceData;
-import io.analytics.service.interfaces.IKeywordInsightService;
 import io.analytics.service.interfaces.IOverviewService;
 import io.analytics.service.interfaces.ISessionService;
 import io.analytics.service.interfaces.IVisitorDeviceService;
@@ -12,12 +10,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,7 +41,7 @@ public class OverviewModel extends WidgetModel{
 	private List<Double> channelVisitBounceRate;
 	private List<Double> channelPageviewsPerVisit;
 	private List<Double> channelAvgTimePerVisit; 
-	
+
 	private List<String> mobileCat;
 	private List<String> desktopCat;
 	private List<String> mobileOS;
@@ -53,6 +51,14 @@ public class OverviewModel extends WidgetModel{
 	private List<String> deviceCat;
 	private List<String> deviceSoftware;
 	private List<Integer> deviceVisits;
+
+	private String[] overviewKeys = new String[]{"Channels", "New Visits", "% New Visits", "Visits", "% Bounce Rate", "Pages Viewed Per Visit", "Avg Visit Duration (sec)"};
+	private String[] deviceKeys = new String[]{"Device Categories", "Browser or OS", "Visits"};
+	private String[] totalsKeys = new String[]{"New Visits", "% New Visits", "Visits", "% Bounce Rate", "Pages Viewed Per Visit", "Avg Visit Duration (sec)"};
+	private String visitsTitle = "Visits totals and breakdown by channel:";
+	private String behaviorTitle = "Behavior totals and breakdown by channel:";
+	private String deviceTitle = "Top visitor's devices and software interfaces:";
+	private String totalsTitle = "Website performance:";
 
 	private final String widgetClass = "overview";
 	private final String widgetTitle = "overview.title";	
@@ -82,7 +88,7 @@ public class OverviewModel extends WidgetModel{
 		deviceCat = new ArrayList<String>();
 		deviceSoftware = new ArrayList<String>();
 		deviceVisits = new ArrayList<Integer>();
-		 
+
 		// default dates
 		this.endDate = new Date();
 		Calendar cal = new GregorianCalendar();
@@ -99,7 +105,7 @@ public class OverviewModel extends WidgetModel{
 	}
 
 	public String getDescription() {
-		return "View website performance summary data.";
+		return "View summary data that characterize your website performance across channels and visitor devices.";
 	}
 
 	public Date getStartDate() {
@@ -130,7 +136,7 @@ public class OverviewModel extends WidgetModel{
 	public void updateData() {
 
 		OverviewData dataObject = this.overviewService.getOverviewData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate);
-		
+
 		VisitorDeviceData vdDataObject = this.visitorDeviceService.getVisitorDeviceData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate);
 		// over quota error returns no data, must refresh browser to try again
 		if (dataObject==null){
@@ -144,14 +150,16 @@ public class OverviewModel extends WidgetModel{
 		visitBounceRate = dataObject.getVisitBounceRateTotal();
 		pageviewsPerVisit = dataObject.getPageviewsPerVisit();
 		avgTimePerVisit = dataObject.getAvgTimePerVisit();
-		this.channels.add("All");
+		this.channels.add("All Channels");
 		this.channels.addAll(dataObject.getChannels());
-		
+
 		for (int i=0; i<channels.size(); i++){
 			if (channels.get(i).equals("cpc"))
-				channels.set(i,"Paid");
+				channels.set(i,"Paid Search");
 			if (!channels.get(i).startsWith("("))
-				channels.set(i, channels.get(i).substring(0, 1).toUpperCase() + channels.get(i).substring(1)); 
+				channels.set(i, channels.get(i).substring(0, 1).toUpperCase() + channels.get(i).substring(1));
+			if (channels.get(i).equals("Organic"))
+				channels.set(i, "Organic Search");
 		}
 		this.channelNewVisits.add(newVisits);
 		this.channelNewVisits.addAll(dataObject.getChannelNewVisits());
@@ -173,38 +181,67 @@ public class OverviewModel extends WidgetModel{
 		this.mobileVisits.addAll(vdDataObject.getMobileVisits());
 		this.desktopBrowser.addAll(vdDataObject.getDesktopBrowser());
 		this.desktopVisits.addAll(vdDataObject.getDesktopVisits());
-		
+
 		this.deviceCat.addAll(vdDataObject.getDesktopCategories());
 		this.deviceCat.addAll(vdDataObject.getMobileCategories());
+		// Capitalize device categories
+		for (int i = 0; i<deviceCat.size(); i++) {
+			if (!deviceCat.get(i).startsWith("("))
+				deviceCat.set(i, deviceCat.get(i).substring(0, 1).toUpperCase() + deviceCat.get(i).substring(1));	
+		}
 		this.deviceSoftware.addAll(vdDataObject.getDesktopBrowser());
 		this.deviceSoftware.addAll(vdDataObject.getMobileOS());
 		this.deviceVisits.addAll(vdDataObject.getDesktopVisits());
 		this.deviceVisits.addAll(vdDataObject.getMobileVisits());
-		
+
+		List<DeviceData> devices = new ArrayList<DeviceData>();
+		Iterator<String> itc = deviceCat.iterator();
+		Iterator<String> its = deviceSoftware.iterator();
+		Iterator<Integer> itv = deviceVisits.iterator();
+
+		while (itc.hasNext()){
+			devices.add(new DeviceData(itc.next(),its.next(),itv.next()));
+		}
+
+		// sort ascending, reverse so descending
+		Collections.sort(devices);
+		Collections.reverse(devices);
+
+		// put back into original arrays for loading in json
+		deviceCat.clear();
+		deviceSoftware.clear();
+		deviceVisits.clear();
+
+		Iterator<DeviceData> itd = devices.iterator();
+
+		while (itd.hasNext()) {
+			DeviceData dd = itd.next();
+			deviceCat.add(dd.device);
+			deviceSoftware.add(dd.software);
+			deviceVisits.add(dd.visits);
+		}
+
 		// put data into the JSON Object member jsonData
 		this.setJson(newVisits, percentNewVisits, visits, visitBounceRate, pageviewsPerVisit, avgTimePerVisit); 
 		this.setJsonChannelData(channels,channelNewVisits,channelPercentNewVisits,channelVisits,channelVisitBounceRate, channelPageviewsPerVisit, channelAvgTimePerVisit);
 		this.setJsonDevice();
 	}
-	
+
 	public void setJsonKeys(){
 		JSONObject totals = new JSONObject();
 		JSONObject channels = new JSONObject();
 		JSONObject devices = new JSONObject();
-		String[] keys = new String[]{"New Visits", "% New Visits", "Visits", "% Bounce Rate", "Pageviews Per Visits", "Avg Visit Duration (sec)"};
-		String[] keys2 = new String[]{"Device Categories", "Browser or OS", "Visits"};		
 
 		try {
-			totals.put("keys", keys);
-			totals.put("title","Website Performance");
-			channels.put("title1","Visits totals and channel breakdown:");
-			channels.put("title2","Behavior totals and channel breakdown:");
-			channels.put("keys", keys);			
-			devices.put("keys", keys2);
-			devices.put("title", "Top Visitor's devices and software interfaces:");
+			totals.put("keys", totalsKeys);
+			totals.put("title", totalsTitle);
+			channels.put("title1", visitsTitle);
+			channels.put("title2", behaviorTitle);
+			channels.put("keys", overviewKeys);			
+			devices.put("keys", deviceKeys);
+			devices.put("title", deviceTitle);
 			this.jsonData.put("totals", totals);
 			this.jsonData.put("total", channels);
-
 			this.jsonData.put("devices", devices);
 			this.jsonData.put("noData", true); // flag indicating there is no data.
 
@@ -213,64 +250,59 @@ public class OverviewModel extends WidgetModel{
 			e.printStackTrace();
 		}
 	}
-	
-	// put data into JSON object to pass to the view over.jsp
-		public void setJsonDevice()  {
-			try {
-		JSONObject devices = new JSONObject();
-				
-				String[] keys2 = new String[]{"Device Categories", "Browser or OS", "Visits"};
-				devices.put("keys", keys2);
-				devices.put("title", "Top Visitor's devices and software interfaces:");
-				devices.put(keys2[0], this.deviceCat);
-				devices.put(keys2[1], this.deviceSoftware);
-				devices.put(keys2[2], this.deviceVisits);
-				this.jsonData.put("devices", devices);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} 
-		
+
+	// Device data: breakdown by desktop, mobile, tablet and software interface
+	public void setJsonDevice()  {
+		try {
+			JSONObject devices = new JSONObject();
+
+			devices.put("keys", deviceKeys);
+			devices.put("title", deviceTitle);
+			devices.put(deviceKeys[0], this.deviceCat);
+			devices.put(deviceKeys[1], this.deviceSoftware);
+			devices.put(deviceKeys[2], this.deviceVisits);
+			this.jsonData.put("devices", devices);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	} 
+
 	// put data into JSON object to pass to the view overview.jsp
 	public void setJson(int newVisits, double percentNewVisits, int visits, double visitBounceRate, double pageviewsPerVisit, double avgTimePerVisit)  {
-			try {
-				// Overview totals
-				JSONObject total = new JSONObject();
+		try {
+			// Overview totals (unused)
+			JSONObject total = new JSONObject();
 
-				String[] keys = new String[]{"New Visits", "% New Visits", "Visits", "% Bounce Rate", "Pageviews Per Visits", "Avg Visit Duration (sec)"};
-				double[] ovArr = {newVisits, percentNewVisits, visits, visitBounceRate, pageviewsPerVisit, avgTimePerVisit}; 
-				total.put("title","Website Performance");
-				total.put("data",ovArr);
-	            total.put("keys", keys);
-	            
-				this.jsonData.put("totals", total);
-				
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			double[] ovArr = {newVisits, percentNewVisits, visits, visitBounceRate, pageviewsPerVisit, avgTimePerVisit}; 
+			total.put("title",totalsTitle);
+			total.put("data",ovArr);
+			total.put("keys", totalsKeys);
+
+			this.jsonData.put("totals", total);
+
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	} 
-	
-	// put data into JSON object to pass to the view website-performance.jsp 
+
 	public void setJsonChannelData(List<String>channelsArr, List<Integer> newVisits, List<Double> percentNewVisits, List<Integer> visits, List<Double> visitBounceRate, List<Double> pageviewsPerVisit, List<Double> avgTimePerVisit)  {
 		try {
-			// Overview totals
+			// Overview visits and behavior data
 			JSONObject channels = new JSONObject();
-			
-			String[] keys = new String[]{"Channels", "New Visits", "% New Visits", "Visits", "% Bounce Rate", "Pages Viewed Per Visit", "Avg Visit Duration (sec)"};
 
-			channels.put("keys",keys);
-			channels.put("title1","Visits totals and channel breakdown:");
-			channels.put("title2","Behavior totals and channel breakdown:");
-			channels.put(keys[0],channelsArr);
-			channels.put(keys[1], newVisits);
-			channels.put(keys[2],percentNewVisits);
-			channels.put(keys[3],visits);
-			channels.put(keys[4],visitBounceRate);
-			channels.put(keys[5],pageviewsPerVisit);
-			channels.put(keys[6],avgTimePerVisit);
-						
+			channels.put("keys",overviewKeys);
+			channels.put("title1", visitsTitle);
+			channels.put("title2", behaviorTitle);
+			channels.put(overviewKeys[0],channelsArr);
+			channels.put(overviewKeys[1], newVisits);
+			channels.put(overviewKeys[2],percentNewVisits);
+			channels.put(overviewKeys[3],visits);
+			channels.put(overviewKeys[4],visitBounceRate);
+			channels.put(overviewKeys[5],pageviewsPerVisit);
+			channels.put(overviewKeys[6],avgTimePerVisit);
+
 			this.jsonData.put("total", channels);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -288,7 +320,6 @@ public class OverviewModel extends WidgetModel{
 		try {
 			result.put("name", this.getName());
 			result.put("description", this.getDescription());
-			//result.put("metric", this.getMetric());
 			result.put("priority", this.getPositionPriority());
 			result.put("data", this.getDataPoints());
 		} catch (JSONException e) {
@@ -313,5 +344,33 @@ public class OverviewModel extends WidgetModel{
 	@Override
 	public String getTitle() {		
 		return this.widgetTitle;
+	}
+}
+
+//class to hold related device, software, and visits
+class DeviceData implements Comparable<DeviceData>{
+	public String device;
+	public String software;
+	public int visits;
+
+
+	public DeviceData(String d, String sw, int v){
+		this.device = d;
+		this.software = sw;
+		this.visits = v;
+	}
+
+	public int compareTo(DeviceData dd){
+		// sort visits ascending
+		int vCmp = Integer.compare(this.visits, dd.visits);
+		int result=0;
+		if (vCmp != 0){
+			result = vCmp;
+		} else {
+			int catCmp = device.compareTo(dd.device);
+			// sort category descending
+			result = (catCmp == 0)?  catCmp : -catCmp;
+		}
+		return result;
 	}
 }
