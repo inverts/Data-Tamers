@@ -17,7 +17,6 @@ $(function() {
 	if ($("#end-date").length)
 		$("#end-date").change(updateDates);
 	
-	
 	$(".filter").on( "change.filter", "#select-profile", function() {
 		updateSettings({ profile: $('.filter #select-profile option:selected').val() }, function() {
 			updateSettings({ update: 1 }, updateWidgets);
