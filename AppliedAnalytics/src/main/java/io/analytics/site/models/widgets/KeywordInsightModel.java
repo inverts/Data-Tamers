@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.servlet.http.HttpSession;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +36,7 @@ public class KeywordInsightModel extends WidgetModel {
 	private JSONObject jsonData;
 	private IKeywordInsightService keywordInsightService;
 	private ISessionService sessionService;
+	private HttpSession session;
 	private String activeProfile;
 	private Date startDate;
 	private Date endDate;
@@ -51,12 +54,13 @@ public class KeywordInsightModel extends WidgetModel {
 
 	DateFormat presentationFormat = new SimpleDateFormat("MM/dd/yyyy"); 
 
-	public KeywordInsightModel(ISessionService sessionService, IKeywordInsightService keywordInsightService) {
+	public KeywordInsightModel(ISessionService sessionService, IKeywordInsightService keywordInsightService, HttpSession session) {
 
 		this.sessionService = sessionService;
+		this.session = session;
 		this.keywordInsightService = keywordInsightService;
 		this.jsonData = new JSONObject();
-		this.activeProfile = this.keywordInsightService.getProfile();
+		this.activeProfile = sessionService.getUserSettings(session).getActiveProfile().getId();
 
 		// default dates
 		this.endDate = new Date();
@@ -122,7 +126,7 @@ public class KeywordInsightModel extends WidgetModel {
 	 */
 	public void updateData() {
 
-		KeywordInsightData dataObject = this.keywordInsightService.getKeywordInsightData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate, 1500);
+		KeywordInsightData dataObject = this.keywordInsightService.getKeywordInsightData(this.sessionService.getCredentials(session), this.sessionService.getUserSettings(session).getActiveProfile().getId(), this.startDate, this.endDate, 1500);
 		// over quota error returns no data, try again
 		if (dataObject==null){
 			// loads this.jsonData

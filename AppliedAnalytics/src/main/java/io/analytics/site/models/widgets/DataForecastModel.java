@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.servlet.http.HttpSession;
+
 import org.json.*;
 
 
@@ -33,9 +35,9 @@ public class DataForecastModel extends ForecastWidgetModel implements Serializab
 	 * var hypotheticalData = JSON.parse('${ hfModel.???????? }');
 	 * 
 	 */
-	public DataForecastModel(ISessionService sessionService, ICoreReportingService reportingService) {	
-		super(sessionService, reportingService);
-		this.activeProfile = reportingService.getProfile();
+	public DataForecastModel(ISessionService sessionService, ICoreReportingService reportingService, HttpSession session) {	
+		super(sessionService, reportingService, session);
+		this.activeProfile = sessionService.getUserSettings(session).getActiveProfile().getId();
 		this.changePercentage = 10;
 		this.dataPoints = new JSONObject();
 		Integer[] percentageOptions = { 5, 10, 15, 20, 25, 30 };

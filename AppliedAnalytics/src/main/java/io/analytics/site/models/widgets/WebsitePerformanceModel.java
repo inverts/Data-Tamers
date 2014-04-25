@@ -12,6 +12,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,6 +27,7 @@ public class WebsitePerformanceModel extends WidgetModel {
 	private JSONObject jsonData;
 	private IPagePerfomanceService pagePerformanceService;
 	private ISessionService sessionService;
+	private HttpSession session;
 	private String activeProfile;
 	private Date startDate;
 	private Date endDate;
@@ -52,11 +55,12 @@ public class WebsitePerformanceModel extends WidgetModel {
 
 	DateFormat presentationFormat = new SimpleDateFormat("MM/dd/yyyy"); 
 
-	public WebsitePerformanceModel(ISessionService sessionService, IPagePerfomanceService pagePerformanceService) {	
+	public WebsitePerformanceModel(ISessionService sessionService, IPagePerfomanceService pagePerformanceService, HttpSession session) {	
 		this.sessionService = sessionService;
+		this.session = session;
 		this.pagePerformanceService = pagePerformanceService;
 		this.jsonData = new JSONObject();
-		this.activeProfile = this.pagePerformanceService.getProfile();
+		this.activeProfile = sessionService.getUserSettings(session).getActiveProfile().getId();
 		pageTitleResults = new ArrayList<String>();
 		pageLinkResultsJson = new JSONObject();
 		pageLinkResults = new ArrayList<String>();
@@ -113,7 +117,7 @@ public class WebsitePerformanceModel extends WidgetModel {
 	 */
 	public void updateData() {
 
-		PagePerformanceData dataObject = this.pagePerformanceService.getPagePerformanceData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate, 10000);
+		PagePerformanceData dataObject = this.pagePerformanceService.getPagePerformanceData(this.sessionService.getCredentials(session), this.sessionService.getUserSettings(session).getActiveProfile().getId(), this.startDate, this.endDate, 10000);
 		// over quota error returns no data, must refresh browser to try again
 		if (dataObject==null){
 			setJsonKeys();

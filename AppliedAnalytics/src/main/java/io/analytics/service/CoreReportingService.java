@@ -33,10 +33,6 @@ public class CoreReportingService implements ICoreReportingService {
 		this.profile = profileId;
 	}*/
 	
-	public String getProfile() {
-		//return this.profile;
-		return sessionService.getUserSettings().getActiveProfile().getId();
-	}
 	
 	public CoreReportingData getMetricByDay(Credential credential, String profileID, String metric, Date startDate, Date endDate, int maxResult )  {
 		return REPOSITORY.getMetricByDay(credential, profileID, metric, dateFormat.format(startDate), dateFormat.format(endDate), maxResult);

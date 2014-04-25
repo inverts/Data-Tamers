@@ -17,6 +17,8 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +29,7 @@ public class OverviewModel extends WidgetModel{
 	private IOverviewService overviewService;
 	private IVisitorDeviceService visitorDeviceService;
 	private ISessionService sessionService;
+	private HttpSession session;
 	private String activeProfile;
 	private Date startDate;
 	private Date endDate;
@@ -59,13 +62,14 @@ public class OverviewModel extends WidgetModel{
 
 	DateFormat presentationFormat = new SimpleDateFormat("MM/dd/yyyy"); 
 
-	public OverviewModel(ISessionService sessionService, IOverviewService overviewService, IVisitorDeviceService visitorDeviceService) {
+	public OverviewModel(ISessionService sessionService, IOverviewService overviewService, IVisitorDeviceService visitorDeviceService, HttpSession session) {
 
 		this.sessionService = sessionService;
+		this.session = session;
 		this.overviewService = overviewService;
 		this.visitorDeviceService = visitorDeviceService;
 		this.jsonData = new JSONObject();
-		this.activeProfile = this.overviewService.getProfile();
+		this.activeProfile = sessionService.getUserSettings(session).getActiveProfile().getId();
 		this.channels = new ArrayList<String>();
 		this.channelNewVisits = new ArrayList<Integer>();
 		this.channelPercentNewVisits = new ArrayList<Double>();
@@ -129,9 +133,9 @@ public class OverviewModel extends WidgetModel{
 	 */
 	public void updateData() {
 
-		OverviewData dataObject = this.overviewService.getOverviewData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate);
+		OverviewData dataObject = this.overviewService.getOverviewData(this.sessionService.getCredentials(session), this.sessionService.getUserSettings(session).getActiveProfile().getId(), this.startDate, this.endDate);
 		
-		VisitorDeviceData vdDataObject = this.visitorDeviceService.getVisitorDeviceData(this.sessionService.getCredentials(), this.sessionService.getUserSettings().getActiveProfile().getId(), this.startDate, this.endDate);
+		VisitorDeviceData vdDataObject = this.visitorDeviceService.getVisitorDeviceData(this.sessionService.getCredentials(session), this.sessionService.getUserSettings(session).getActiveProfile().getId(), this.startDate, this.endDate);
 		// over quota error returns no data, must refresh browser to try again
 		if (dataObject==null){
 			setJsonKeys();

@@ -1,8 +1,11 @@
 package io.analytics.site.models;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.analytics.model.*;
 
 import io.analytics.domain.GoogleUserData;
@@ -28,6 +31,8 @@ public class SettingsModel {
 	 */
 	
 	private ISessionService sessionService;
+	private HttpSession session;
+	private Credential credential;
 	private IManagementService management;
 	private GoogleUserData googleUserData;
 	
@@ -47,11 +52,13 @@ public class SettingsModel {
 	private boolean ecommerceTrackingEnabled;
 	
 	
-	public SettingsModel(ISessionService sessionService, IManagementService management) {
+	public SettingsModel(ISessionService sessionService, IManagementService management, HttpSession session) {
 		this.sessionService = sessionService;
 		this.management = management;
-		currentAccounts = management.getAccounts(sessionService.getCredentials());
-		googleUserData = management.getGoogleUserData(sessionService.getCredentials());
+		this.session = session;
+		this.credential = sessionService.getCredentials(session);
+		currentAccounts = management.getAccounts(this.credential);
+		googleUserData = management.getGoogleUserData(this.credential);
 		//Select the first available account by default. 
 		if (currentAccounts != null && currentAccounts.getItems() != null && !currentAccounts.getItems().isEmpty() ) {
 			setAccountSelection(currentAccounts.getItems().get(0));
@@ -61,8 +68,8 @@ public class SettingsModel {
 	}
 	
 	
-	public SettingsModel(ISessionService sessionService, IManagementService management, Profile activeProfile) {
-		this(sessionService, management); 
+	public SettingsModel(ISessionService sessionService, IManagementService management, HttpSession session, Profile activeProfile) {
+		this(sessionService, management, session); 
 		this.setActiveProfile(activeProfile);
 	}
 
@@ -145,8 +152,8 @@ public class SettingsModel {
 			
 			//This may all be redundant:
 			//TODO: Evaluate redundancy and determine if we can remove the lines below.
-			currentWebproperties = management.getWebproperties(activeProfile.getAccountId());
-			currentProfiles = management.getProfiles(activeProfile.getAccountId(), activeProfile.getWebPropertyId());
+			currentWebproperties = management.getWebproperties(activeProfile.getAccountId(), this.credential);
+			currentProfiles = management.getProfiles(activeProfile.getAccountId(), activeProfile.getWebPropertyId(), this.credential);
 			accountSelection = findAccount(currentAccounts, activeProfile.getAccountId());
 			propertySelection = findWebproperty(currentWebproperties, activeProfile.getWebPropertyId());
 			profileSelection = activeProfile;
@@ -170,7 +177,7 @@ public class SettingsModel {
 	public void setAccountSelection(Account accountSelection) {
 		if (accountSelection != null) {
 			this.accountSelection = accountSelection;
-			currentWebproperties = management.getWebproperties(accountSelection);
+			currentWebproperties = management.getWebproperties(accountSelection, this.credential);
 			currentProfiles = null;
 			//Select the first available property by default. 
 			if (currentWebproperties != null && currentWebproperties.getItems() != null && !currentWebproperties.getItems().isEmpty() ) {
@@ -193,7 +200,7 @@ public class SettingsModel {
 	public void setPropertySelection(Webproperty propertySelection) {
 		if (propertySelection != null) {
 			this.propertySelection = propertySelection;
-			currentProfiles = management.getProfiles(this.accountSelection, this.propertySelection);
+			currentProfiles = management.getProfiles(this.accountSelection, this.propertySelection, this.credential);
 			//Select the first available profile by default. 
 			if (currentProfiles != null && currentProfiles.getItems() != null && !currentProfiles.getItems().isEmpty() ) {
 				setProfileSelection(currentProfiles.getItems().get(0));

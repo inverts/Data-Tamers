@@ -22,13 +22,9 @@ public class VisitorDeviceService implements IVisitorDeviceService {
 	@Autowired private ICoreReportingRepository REPOSITORY;
 	@Autowired private ISessionService sessionService;
 
-	public String getProfile() {
-		return sessionService.getUserSettings().getActiveProfile().getId();
-	}
-
 	public VisitorDeviceData getVisitorDeviceData(Credential credential, String profileID, Date startDate, Date endDate){
 
-		GaData gaData =null;
+		GaData gaData = null;
 		//printColumnHeaders(gaData);
 		//printDataTable(gaData);
 

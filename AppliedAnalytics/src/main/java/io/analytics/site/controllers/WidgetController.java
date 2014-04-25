@@ -63,9 +63,9 @@ public class WidgetController {
 		FilterModel filter;
 
 		if (SessionService.checkAuthorization(session)) {
-			credential = SessionService.getCredentials();
-			filter = SessionService.getFilter();
-			settings = SessionService.getUserSettings();
+			credential = SessionService.getCredentials(session);
+			filter = SessionService.getFilter(session);
+			settings = SessionService.getUserSettings(session);
 		} else {
 			SessionService.redirectToLogin(session, request, response);
 			return new ModelAndView("unavailable");
@@ -81,7 +81,7 @@ public class WidgetController {
 
 		//If there is no model available, or if the active profile changed, create a new model.
 		if ((dataForecast == null) || !(settings.getActiveProfile().equals(dataForecast.getActiveProfile()))) {
-			dataForecast = new DataForecastModel(this.SessionService, this.CoreReportingService);
+			dataForecast = new DataForecastModel(this.SessionService, this.CoreReportingService, session);
 		}
 
 		if (filter != null) {
@@ -119,9 +119,9 @@ public class WidgetController {
 		SettingsModel settings;
 		FilterModel filter;
 		if (SessionService.checkAuthorization(session)) {
-			credential = SessionService.getCredentials();
-			filter = SessionService.getFilter();
-			settings = SessionService.getUserSettings();
+			credential = SessionService.getCredentials(session);
+			filter = SessionService.getFilter(session);
+			settings = SessionService.getUserSettings(session);
 		} else {
 			SessionService.redirectToLogin(session, request, response);
 			return new ModelAndView("unavailable");
@@ -200,9 +200,9 @@ public class WidgetController {
 		SettingsModel settings;
 		FilterModel filter;
 		if (SessionService.checkAuthorization(session)) {
-			credential = SessionService.getCredentials();
-			filter = SessionService.getFilter();
-			settings = SessionService.getUserSettings();
+			credential = SessionService.getCredentials(session);
+			filter = SessionService.getFilter(session);
+			settings = SessionService.getUserSettings(session);
 		} else {
 			SessionService.redirectToLogin(session, request, response);
 			return new ModelAndView("unavailable");
@@ -239,9 +239,9 @@ public class WidgetController {
 		SettingsModel settings;
 		FilterModel filter;
 		if (SessionService.checkAuthorization(session)) {
-			credential = SessionService.getCredentials();
-			filter = SessionService.getFilter();
-			settings = SessionService.getUserSettings();
+			credential = SessionService.getCredentials(session);
+			filter = SessionService.getFilter(session);
+			settings = SessionService.getUserSettings(session);
 		} else {
 			SessionService.redirectToLogin(session, request, response);
 			return new ModelAndView("unavailable");
@@ -256,7 +256,7 @@ public class WidgetController {
 
 		//If there is no model available, or if the active profile changed, create a new model.
 		if ((webPerform == null) || !(settings.getActiveProfile().equals(webPerform.getActiveProfile()))) {
-			webPerform = new WebsitePerformanceModel(this.SessionService, this.PagePerformanceService);
+			webPerform = new WebsitePerformanceModel(this.SessionService, this.PagePerformanceService, session);
 		}
 
 		if (filter != null) {
@@ -292,9 +292,9 @@ public class WidgetController {
 			SettingsModel settings;
 			FilterModel filter;
 			if (SessionService.checkAuthorization(session)) {
-				credential = SessionService.getCredentials();
-				filter = SessionService.getFilter();
-				settings = SessionService.getUserSettings();
+				credential = SessionService.getCredentials(session);
+				filter = SessionService.getFilter(session);
+				settings = SessionService.getUserSettings(session);
 			} else {
 				SessionService.redirectToLogin(session, request, response);
 				return new ModelAndView("unavailable");
@@ -309,7 +309,7 @@ public class WidgetController {
 
 			//If there is no model available, or if the active profile changed, create a new model.
 			if ((overview == null) || !(settings.getActiveProfile().equals(overview.getActiveProfile()))) {
-				overview = new OverviewModel(this.SessionService, this.OverviewService, this.VisitorDeviceService);
+				overview = new OverviewModel(this.SessionService, this.OverviewService, this.VisitorDeviceService, session);
 			}
 
 			if (filter != null) {
@@ -346,9 +346,9 @@ public class WidgetController {
 			SettingsModel settings;
 			FilterModel filter;
 			if (SessionService.checkAuthorization(session)) {
-				credential = SessionService.getCredentials();
-				filter = SessionService.getFilter();
-				settings = SessionService.getUserSettings();
+				credential = SessionService.getCredentials(session);
+				filter = SessionService.getFilter(session);
+				settings = SessionService.getUserSettings(session);
 			} else {
 				SessionService.redirectToLogin(session, request, response);
 				return new ModelAndView("unavailable");
@@ -363,7 +363,7 @@ public class WidgetController {
 
 			//If there is no model available, or if the active profile changed, create a new model.
 			if ((keyInsight == null) || !(settings.getActiveProfile().equals(keyInsight.getActiveProfile()))) {
-				keyInsight = new KeywordInsightModel(this.SessionService, this.KeywordInsightService);
+				keyInsight = new KeywordInsightModel(this.SessionService, this.KeywordInsightService, session);
 			}
 
 			if (filter != null) {
@@ -496,7 +496,7 @@ public class WidgetController {
 				return new ModelAndView("unavailable");
 			}
 
-			TrafficSourceTrendsModel model = new TrafficSourceTrendsModel(SessionService, CoreReportingService);
+			TrafficSourceTrendsModel model = new TrafficSourceTrendsModel(SessionService, CoreReportingService, session);
 			viewMap.addAttribute("widget", model);
 			return new ModelAndView("widget", "view", "/WEB-INF/views/widgets/traffic-source-trends.jsp");
 		}
@@ -510,7 +510,7 @@ public class WidgetController {
 				return new ModelAndView("unavailable");
 			}
 
-			TrafficSourceTrendsModel model = new TrafficSourceTrendsModel(SessionService, CoreReportingService);
+			TrafficSourceTrendsModel model = new TrafficSourceTrendsModel(SessionService, CoreReportingService, session);
 			model.getTrafficSourceDataList();
 			viewMap.addAttribute("data", model.getJSONSerialization());
 			return new ModelAndView("plaintext");
@@ -524,7 +524,7 @@ public class WidgetController {
 				return new ModelAndView("unavailable");
 			}
 
-			VisitorClusteringModel model = new VisitorClusteringModel(SessionService, CoreReportingService);
+			VisitorClusteringModel model = new VisitorClusteringModel(SessionService, CoreReportingService, session);
 			model.updateData();
 
 			viewMap.addAttribute("data", model.getJSONSerialization());

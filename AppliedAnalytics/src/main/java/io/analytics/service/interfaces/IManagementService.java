@@ -16,11 +16,11 @@ public interface IManagementService {
 
 	public Accounts getAccounts(Credential credential);
 	
-	public Webproperties getWebproperties(Account a);
+	public Webproperties getWebproperties(Account a, Credential credential);
 	
-	public Profiles getProfiles(Account a, Webproperty w);
+	public Profiles getProfiles(Account a, Webproperty w, Credential credential);
 	
-	public Webproperties getWebproperties(String accountId);
+	public Webproperties getWebproperties(String accountId, Credential credential);
 	
-	public Profiles getProfiles(String accountId, String webpropertyId);
+	public Profiles getProfiles(String accountId, String webpropertyId, Credential credential);
 }

@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import javax.servlet.http.HttpSession;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +29,7 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 
 	private ICoreReportingService coreReportingService;
 	private ISessionService sessionService;
+	private HttpSession session;
 	private Credential credential;
 	private int columnCount;
 	private List<ColumnHeaders> columnHeaders;
@@ -38,11 +41,12 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 	private ArrayList<Double> dataPointWeights = new ArrayList<Double>();
 	private HashMap<Integer, Integer> clustering;
 
-	public VisitorClusteringModel(ISessionService sessionService, ICoreReportingService coreReportingService) {
+	public VisitorClusteringModel(ISessionService sessionService, ICoreReportingService coreReportingService, HttpSession session) {
 		super();
 		this.sessionService = sessionService;
+		this.session = session;
 		this.coreReportingService = coreReportingService;
-		this.credential = sessionService.getCredentials();
+		this.credential = sessionService.getCredentials(session);
 	}
 	
 	public void updateData() {
@@ -50,8 +54,8 @@ public class VisitorClusteringModel extends WidgetModel implements JSONSerializa
 	}
 	public void updateData(int maxRows) {
 		
-		FilterModel filter = this.sessionService.getFilter();
-		SettingsModel settings = this.sessionService.getUserSettings();
+		FilterModel filter = this.sessionService.getFilter(session);
+		SettingsModel settings = this.sessionService.getUserSettings(session);
 		Date endDate = filter.getActiveEndDate();
 		Date startDate = filter.getActiveStartDate();
 		//long msInDay = 24L * 60L * 60L * 1000L;

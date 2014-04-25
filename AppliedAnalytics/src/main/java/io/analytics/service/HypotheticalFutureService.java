@@ -20,11 +20,6 @@ public class HypotheticalFutureService implements IHypotheticalFutureService {
 
 	@Autowired private ICoreReportingRepository REPOSITORY;
 	@Autowired private ISessionService sessionService;
-  
-	public String getProfile() {
-		//return this.profile;
-		return sessionService.getUserSettings().getActiveProfile().getId();
-	}
 	
 	public HypotheticalFutureData getHypotheticalFutureData(Credential credential, String profileID, String metric, Date startDate, Date endDate, int maxResults){
 		GaData gaData = REPOSITORY.getTopTrafficSources1(credential, profileID, metric, startDate, endDate, maxResults);

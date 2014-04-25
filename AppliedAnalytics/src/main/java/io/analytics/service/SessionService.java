@@ -33,10 +33,6 @@ public class SessionService implements ISessionService {
 	@Autowired private IManagementService ManagementService;
 	private ServletContext servletContext;
 	
-	private static SettingsModel userSettings = null;
-	private static FilterModel filter = null;
-	private static Credential credentials = null;
-	private static HashMap<String, Object> models = new HashMap<String, Object>();
 
 	/**
 	 * Checks to see if the user's current session is authorized.
@@ -64,10 +60,8 @@ public class SessionService implements ISessionService {
 			return false;
 		}
 		else if (settings == null) {
-			this.credentials = credentials;
-			settings = new SettingsModel(this, ManagementService);
+			settings = new SettingsModel(this, ManagementService, session);
 			session.setAttribute("settings", settings);
-			this.userSettings = settings;
 			
 		}
 
@@ -83,32 +77,29 @@ public class SessionService implements ISessionService {
 			filter = new FilterModel(settings.getActiveProfile());
 			session.setAttribute("filter", filter);
 		}
-		this.filter = filter;
 		
 		return true;
 		
 	}
 
-	public SettingsModel getUserSettings() {
-		return userSettings;
+	public SettingsModel getUserSettings(HttpSession session) {
+		return (SettingsModel) session.getAttribute("settings");
 	}
 	
 	public void saveUserSettings(HttpSession session, SettingsModel settings) {
 		session.setAttribute("settings", settings);
-		this.userSettings = settings;
 	}
 
-	public FilterModel getFilter() {
-		return filter;
+	public FilterModel getFilter(HttpSession session) {
+		return (FilterModel) session.getAttribute("filter");
 	}
 	
 	public void saveFilter(HttpSession session, FilterModel filter) {
 		session.setAttribute("filter", filter);
-		this.filter = filter;
 	}
 
-	public Credential getCredentials() {
-		return credentials;
+	public Credential getCredentials(HttpSession session) {
+		return (Credential) session.getAttribute("credentials");
 	}
 	
 	public SessionModel getSessionModel(HttpSession session) {

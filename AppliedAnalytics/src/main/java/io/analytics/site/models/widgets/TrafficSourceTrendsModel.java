@@ -14,6 +14,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 import org.json.*;
 
@@ -34,16 +36,18 @@ public class TrafficSourceTrendsModel extends WidgetModel {
 
 	private ICoreReportingService coreReportingService;
 	private ISessionService sessionService;
+	private HttpSession session;
 	private Credential credential;
 	
 	private Date startDate, endDate;
 	private String profileId, metric;
 	
-	public TrafficSourceTrendsModel(ISessionService sessionService, ICoreReportingService coreReportingService) {
+	public TrafficSourceTrendsModel(ISessionService sessionService, ICoreReportingService coreReportingService, HttpSession session) {
 		super();
 		this.sessionService = sessionService;
+		this.session = session;
 		this.coreReportingService = coreReportingService;
-		this.credential = sessionService.getCredentials();
+		this.credential = sessionService.getCredentials(session);
 	}
 	
 	public String getName() {
@@ -55,13 +59,13 @@ public class TrafficSourceTrendsModel extends WidgetModel {
 	}
 
 	public String getActiveProfile() {
-		return sessionService.getUserSettings().getActiveProfile().getId();
+		return sessionService.getUserSettings(session).getActiveProfile().getId();
 	}
 	
 	public List<TrafficSourceData> getTrafficSourceDataList() {
 		
-		FilterModel filter = this.sessionService.getFilter();
-		SettingsModel settings = this.sessionService.getUserSettings();
+		FilterModel filter = this.sessionService.getFilter(session);
+		SettingsModel settings = this.sessionService.getUserSettings(session);
 		Date endDate = filter.getActiveEndDate();
 		long msInDay = 24L * 60L * 60L * 1000L;
 		Date startDate = new Date(endDate.getTime() - 91L * msInDay);
