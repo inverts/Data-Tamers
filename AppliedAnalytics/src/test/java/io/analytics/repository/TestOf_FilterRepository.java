@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.Calendar;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -19,7 +20,7 @@ import io.analytics.repository.interfaces.IFilterRepository;
 public class TestOf_FilterRepository {
 	
 	@Autowired private IFilterRepository filterRepository;
-	
+	@Ignore
 	@Test
 	public void testAddNewFilter() {
 		/*
