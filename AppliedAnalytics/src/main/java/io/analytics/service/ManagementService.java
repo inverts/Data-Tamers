@@ -34,19 +34,19 @@ public class ManagementService implements IManagementService {
 		return REPOSITORY.getAccounts(credential);
 	}
 
-	public Webproperties getWebproperties(Account a) {
-		return REPOSITORY.getWebproperties(a);
+	public Webproperties getWebproperties(Account a, Credential credential) {
+		return REPOSITORY.getWebproperties(a, credential);
 	}
 
-	public Profiles getProfiles(Account a, Webproperty w) {
-		return REPOSITORY.getProfiles(a, w);
+	public Profiles getProfiles(Account a, Webproperty w, Credential credential) {
+		return REPOSITORY.getProfiles(a, w, credential);
 	}
 	
-	public Webproperties getWebproperties(String accountId) {
-		return REPOSITORY.getWebproperties(accountId);
+	public Webproperties getWebproperties(String accountId, Credential credential) {
+		return REPOSITORY.getWebproperties(accountId, credential);
 	}
 	
-	public Profiles getProfiles(String accountId, String webpropertyId) {
-		return REPOSITORY.getProfiles(accountId, webpropertyId);
+	public Profiles getProfiles(String accountId, String webpropertyId, Credential credential) {
+		return REPOSITORY.getProfiles(accountId, webpropertyId, credential);
 	}
 }

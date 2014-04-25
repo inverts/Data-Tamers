@@ -15,23 +15,23 @@ import com.google.api.client.auth.oauth2.Credential;
 
 public interface ISessionService extends Serializable {
 	
-boolean checkAuthorization(HttpSession session);
+	boolean checkAuthorization(HttpSession session);
 	
 	void saveUserSettings(HttpSession session, SettingsModel settings);
 	
-	SettingsModel getUserSettings();
-	
-	FilterModel getFilter();
-	
 	void saveFilter(HttpSession session, FilterModel filter);
 	
-	Credential getCredentials();
+	public SettingsModel getUserSettings(HttpSession session);
+	
+	public FilterModel getFilter(HttpSession session);
+	
+	public Credential getCredentials(HttpSession session);
 	
 	public SessionModel getSessionModel(HttpSession session);
 	
-	HashMap<String, Object> getModels(HttpSession session);
+	public HashMap<String, Object> getModels(HttpSession session);
 	
-	<T> T getModel(HttpSession session, String s, Class<T> c);
+	public <T> T getModel(HttpSession session, String s, Class<T> c);
 	
 	void saveModel(HttpSession session, String s, Object model);
 

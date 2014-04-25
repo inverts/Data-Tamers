@@ -59,8 +59,8 @@ public class SettingsController {
 			
 			if (!SessionService.checkAuthorization(session))
 				throw new Exception("Check Authorization failed!");
-			settings = SessionService.getUserSettings();
-			filter = SessionService.getFilter();
+			settings = SessionService.getUserSettings(session);
+			filter = SessionService.getFilter(session);
 			response.setContentType("text/html");
 
 			//Only one change should be made/possible at a time.
@@ -104,7 +104,7 @@ public class SettingsController {
 
 		FilterModel filter = null;
 		if (SessionService.checkAuthorization(session)) {
-			filter = SessionService.getFilter();
+			filter = SessionService.getFilter(session);
 		} else {
 			SessionService.redirectToLogin(session, request, response);
 			//return new ModelAndView("unavailable");
@@ -137,7 +137,7 @@ public class SettingsController {
 
 		SettingsModel settings = null;
 		if (SessionService.checkAuthorization(session)) {
-			settings = SessionService.getUserSettings();
+			settings = SessionService.getUserSettings(session);
 		} else {
 			SessionService.redirectToLogin(session, request, response);
 			return new ModelAndView("unavailable");

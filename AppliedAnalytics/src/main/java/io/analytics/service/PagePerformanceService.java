@@ -37,10 +37,6 @@ public class PagePerformanceService implements IPagePerfomanceService{
 	@Autowired private ICoreReportingRepository REPOSITORY;
 	@Autowired private ISessionService sessionService;
 	
-	public String getProfile() {
-		//return this.profile;
-		return sessionService.getUserSettings().getActiveProfile().getId();
-	}
 	
 	public PagePerformanceData getPagePerformanceData(Credential credential, String profileID, Date startDate, Date endDate, int maxResults){
 		

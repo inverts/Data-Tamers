@@ -22,11 +22,6 @@ public class ForecastService implements IForecastService {
 	@Autowired private ICoreReportingRepository REPOSITORY;
 	@Autowired private ISessionService sessionService;
   
-	public String getProfile() {
-		//return this.profile;
-		return sessionService.getUserSettings().getActiveProfile().getId();
-	}
-
 	public ForecastData getForecastData (Credential credential, String profileID, String metric, Date startDate, Date endDate, int maxResults){
 		/* * * * * * * * * * * * * * * 
 		 * get 2D metric data by day

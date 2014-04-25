@@ -148,7 +148,7 @@ public class AccountController {
 
 			settings = (SettingsModel) session.getAttribute("settings");
 			model.addAttribute("settings", settings);
-			GoogleUserData googleData = SessionService.getUserSettings().getGoogleUserData();
+			GoogleUserData googleData = SessionService.getUserSettings(session).getGoogleUserData();
 			
 			// Only pre-populate fields that the user has no input in.
 			if (form.getFirstname() == null || form.getFirstname().isEmpty())
@@ -264,9 +264,9 @@ public class AccountController {
 				return "redirect:/accounts/newaccount";
 			
 			/* Add Filter to database. */
-			Profile activeProfile = SessionService.getUserSettings().getActiveProfile();
+			Profile activeProfile = SessionService.getUserSettings(session).getActiveProfile();
 			Filter f = new Filter(0);
-			FilterModel fm = SessionService.getFilter();
+			FilterModel fm = SessionService.getFilter(session);
 			Calendar start = Calendar.getInstance();
 			start.setTime(fm.getActiveStartDate());
 			Calendar end = Calendar.getInstance();
@@ -287,7 +287,7 @@ public class AccountController {
 			int accountId = a.getId();
 
 			/* Add GoogleAccount to database. */
-			Credential c = SessionService.getCredentials();
+			Credential c = SessionService.getCredentials(session);
 			if (c == null || c.getRefreshToken() == null)
 				return "redirect:/accounts/newaccount";
 			GoogleAccount ga = new GoogleAccount(0);

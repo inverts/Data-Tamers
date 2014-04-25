@@ -23,10 +23,6 @@ public class OverviewService implements IOverviewService{
 	@Autowired private ICoreReportingRepository REPOSITORY;
 	@Autowired private ISessionService sessionService;
 
-	public String getProfile() {
-		return sessionService.getUserSettings().getActiveProfile().getId();
-	}
-
 	public OverviewData getOverviewData(Credential credential, String profileID, Date startDate, Date endDate){
 		
 		GaData gaData =null;

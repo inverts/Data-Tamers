@@ -25,9 +25,9 @@ public interface IManagementRepository {
 	 */
 	public Accounts getAccounts(Credential credential);
 	
-	public Webproperties getWebproperties(Account a);
+	public Webproperties getWebproperties(Account a, Credential credential);
 	
-	public Profiles getProfiles(Account a, Webproperty w);
+	public Profiles getProfiles(Account a, Webproperty w, Credential credential);
 
 	/**
 	 * Gets a list of web properties for an account.
@@ -35,7 +35,7 @@ public interface IManagementRepository {
 	 * @param a
 	 * @return
 	 */
-	public Webproperties getWebproperties(String a);
+	public Webproperties getWebproperties(String a, Credential credential);
 	
-	public Profiles getProfiles(String a, String w);
+	public Profiles getProfiles(String a, String w, Credential credential);
 }

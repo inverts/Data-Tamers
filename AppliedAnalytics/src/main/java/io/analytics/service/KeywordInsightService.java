@@ -34,11 +34,6 @@ public class KeywordInsightService implements IKeywordInsightService {
 	@Autowired private ICoreReportingRepository REPOSITORY;
 	@Autowired private ISessionService sessionService;
 
-	public String getProfile() {
-		//return this.profile;
-		return sessionService.getUserSettings().getActiveProfile().getId();
-	}
-
 	public KeywordInsightData getKeywordInsightData(Credential credential, String profileID, Date startDate, Date endDate, int maxResults){
 
 		/* * * * * * * * * * * * * * * * * * * * *

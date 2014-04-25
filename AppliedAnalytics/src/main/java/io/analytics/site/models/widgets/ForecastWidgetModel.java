@@ -14,6 +14,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 import org.json.JSONArray;
@@ -71,6 +73,7 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
 
 		private ISessionService sessionService;
         private ICoreReportingService reportingService;
+        private HttpSession session;
 
         DateFormat presentationFormat = new SimpleDateFormat("MM/dd/yyyy");
         
@@ -87,8 +90,9 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
          * @param sessionService
          * @param reportingService
          */
-        public ForecastWidgetModel(ISessionService sessionService, ICoreReportingService reportingService) {
-                this.sessionService = sessionService;
+        public ForecastWidgetModel(ISessionService sessionService, ICoreReportingService reportingService, HttpSession session) {
+	            this.sessionService = sessionService;
+	            this.session = session;
                 this.reportingService = reportingService;
                 
                 endDate = new Date();
@@ -137,8 +141,8 @@ public class ForecastWidgetModel extends LineGraphWidgetModel {
                 adjustedStartDateC.setTime(new Date(startDate.getTime() - excessDaysNeeded * MS_IN_DAY));
                 
                 /* Getting data from Google Analytics */
-                 CoreReportingData data = reportingService.getMetricByDay(sessionService.getCredentials(), 
-							                		sessionService.getUserSettings().getActiveProfile().getId(), 
+                 CoreReportingData data = reportingService.getMetricByDay(sessionService.getCredentials(session), 
+							                		sessionService.getUserSettings(session).getActiveProfile().getId(), 
 							                		metric, adjustedStartDateC.getTime(), 
 							                		futureEndDate, 
 							                		(int) (days + excessDaysNeeded));

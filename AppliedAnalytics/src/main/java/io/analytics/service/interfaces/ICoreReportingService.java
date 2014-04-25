@@ -12,8 +12,6 @@ import com.google.api.services.analytics.model.GaData;
 
 public interface ICoreReportingService {
 	
-	public String getProfile();
-	
 	public CoreReportingData getMetricByDay(Credential credential, String profileID, String metric, Date startDate, Date endDate, int maxResult);
 	
 	public CoreReportingData getMetricByDayOfWeek(Credential credential, String profileID, String metric, Date startDate, Date endDate, int maxResults);

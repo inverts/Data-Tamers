@@ -113,10 +113,10 @@ public class ManagementRepository implements IManagementRepository {
 		Accounts accounts = null;
 		try {
 			// Just create the Analytics.Builder here.
-			this.MANAGEMENT = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+			Analytics.Management mgmt = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
 										           .setApplicationName(APPLICATION_NAME).build().management();
 			this.refreshToken(credential);
-			accounts = this.MANAGEMENT.accounts().list().execute();
+			accounts = mgmt.accounts().list().execute();
 
 		} catch (GoogleJsonResponseException e) {
 			handleGoogleJsonResponseException(e);
@@ -127,19 +127,21 @@ public class ManagementRepository implements IManagementRepository {
 		return accounts;
 	}
 
-	public Webproperties getWebproperties(Account a) {
-		return getWebproperties(a.getId());
+	public Webproperties getWebproperties(Account a, Credential credential) {
+		return getWebproperties(a.getId(), credential);
 	}
 
-	public Profiles getProfiles(Account a, Webproperty w) {
-		return getProfiles(a.getId(), w.getId());
+	public Profiles getProfiles(Account a, Webproperty w, Credential credential) {
+		return getProfiles(a.getId(), w.getId(), credential);
 	}
 
-	public Webproperties getWebproperties(String accountId) {
+	public Webproperties getWebproperties(String accountId, Credential credential) {
 		Webproperties properties = null;
 		try {
 
-			properties = MANAGEMENT.webproperties().list(accountId).execute();
+			Analytics.Management mgmt = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+										           .setApplicationName(APPLICATION_NAME).build().management();
+			properties = mgmt.webproperties().list(accountId).execute();
 
 		} catch (GoogleJsonResponseException e) {
 			handleGoogleJsonResponseException(e);
@@ -150,11 +152,13 @@ public class ManagementRepository implements IManagementRepository {
 		return properties;
 	}
 	
-	public Profiles getProfiles(String accountId, String webpropertyId) {
+	public Profiles getProfiles(String accountId, String webpropertyId, Credential credential) {
 		Profiles profiles = null;
 		try {
 
-			profiles = MANAGEMENT.profiles().list(accountId, webpropertyId).execute();
+			Analytics.Management mgmt = new Analytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+										           .setApplicationName(APPLICATION_NAME).build().management();
+			profiles = mgmt.profiles().list(accountId, webpropertyId).execute();
 
 		} catch (GoogleJsonResponseException e) {
 			handleGoogleJsonResponseException(e);
