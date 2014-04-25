@@ -2,6 +2,7 @@ package io.analytics.repository;
 
 import static org.junit.Assert.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -16,7 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class TestOf_AccountRepository {
 	
 	//@Autowired private IAccountRepository accountRepository;
-	
+	@Ignore
 	@Test
 	public void testAddNewAccount() {
 		

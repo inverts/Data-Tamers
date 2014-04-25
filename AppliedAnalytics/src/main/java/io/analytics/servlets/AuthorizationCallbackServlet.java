@@ -58,6 +58,7 @@ public class AuthorizationCallbackServlet extends AbstractAuthorizationCodeCallb
 		String destination = (String) req.getSession().getAttribute("destinationURL");
 		//System.out.println("Destination: \"" + destination + "\"");
 		session.setAttribute("credentials", credential);
+		session.removeAttribute("settings");
 		session.setAttribute("googleAuthorization", "success");
 		resp.sendRedirect(destination);
 		//resp.sendRedirect(contextPath + "/application");

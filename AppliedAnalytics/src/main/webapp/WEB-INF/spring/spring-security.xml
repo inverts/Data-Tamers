@@ -16,6 +16,7 @@
 	  <intercept-url pattern="/cache/**" access="permitAll" />
 	  <intercept-url pattern="/accounts/**" access="permitAll" />
 	  <intercept-url pattern="/galogin/**" access="permitAll" />
+	  <intercept-url pattern="/about*" access="permitAll" />
 	  <intercept-url pattern="/login*" access="permitAll" />
 	  <intercept-url pattern="/signout" access="permitAll" />
 	  <intercept-url pattern="/oauth2callback*" access="permitAll" />

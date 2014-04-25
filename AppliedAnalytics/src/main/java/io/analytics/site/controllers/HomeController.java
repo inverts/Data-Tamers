@@ -51,6 +51,27 @@ public class HomeController {
 		return homepage;
 	}
 	
+
+	@Reset
+	@RequestMapping(value = "/about", method = RequestMethod.GET)
+	public ModelAndView about(Locale locale, Model model, HttpSession session) {
+		
+		
+		ModelAndView homepage = new ModelAndView("about");
+		User u = (User)session.getAttribute("user");
+		
+		if (u != null) {
+			homepage.addObject("loggedin", true);
+			String name = u.getFirstName();
+			if (name == null || name.isEmpty())
+				name = u.getUsername();
+			homepage.addObject("name", name);
+		}
+		model.addAttribute("isEntry", "something");
+		
+		return homepage;
+	}
+	
 	
 	
 	

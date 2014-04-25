@@ -79,7 +79,8 @@ function widgetDragNDrop(listClass) {
 		connectToSortable: ".dashboard-content",
 		// fetches the widget via loadWidget function in widget.js
 		helper: function(e, ui) { 
-			var helper = $("<div>").addClass("widget widget-select").html("<img src=\"/appliedanalytics/cache/images/spinner.gif\" width = \"30\" height = \"30\" />");
+			var helper = $("<div>").addClass("widget widget-select").html("<img src=\"" + applicationRoot + "cache/images/spinner.gif\" width = \"30\" height = \"30\" />");
+			
 			return helper;
 		},
 		start: function(e, ui) {

@@ -7,6 +7,7 @@ import io.analytics.security.PasswordUtils;
 
 import java.util.Calendar;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -19,7 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 public class TestOf_UserRepository {
 
 	@Autowired private IUserRepository userRepository;
-	
+	@Ignore
 	@Test
 	public void testAddNewUser() {
 		/*
