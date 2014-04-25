@@ -1,0 +1,126 @@
+@CHARSET "ISO-8859-1";
+/* CSS to be used for the ENTRY PAGE ONLY */
+
+
+/******FONTS******/
+/* Museo Sans 500 Font */
+@font-face {
+    font-family: 'museo-sans-500';
+    src: url('../fonts/museosans-500-webfont.eot');
+    src: url('../fonts/museosans-500-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/museosans-500-webfont.woff') format('woff'),
+         url('../fonts/museosans-500-webfont.ttf') format('truetype'),
+         url('../fonts/museosans-500-webfont.svg#museo_sans500') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+/*****GLOBAL STANDARDS CLASSES****/
+.checkbox, .button, .textbox { border-radius:5px; }
+.textbox { height: 40px; padding: 5px; width: 260px; font-size: 13px;}
+.disabled { opacity:0.5; }
+.checkbox { width:18px; height:18px; vertical-align:middle; display:inline; min-height:auto; margin-top:0;}
+
+#ui-datepicker-div { font-size: 15px; }
+
+/* Modal */
+#modal .prompt { text-align:center; }
+
+/* Error Message */
+.page .error { font:inherit; font-size:1em; color:red; margin-bottom:5px; padding:5px; }
+
+/******GENERAL******/
+/* Styling for basic site modules */
+body, h1, h2, h3, h4, a, img { padding:0 auto; margin:0 auto; outline: none; border: none; font-family: 'museo-sans-500', 'Trebuchet MS', 'Helvetica', sans-serif; }
+
+html {
+	height: 100%;
+}
+body {
+	height: 100%;
+}
+div.page {
+	height: 100%;
+	background: #222;
+}
+
+/******HEADER/FOOTER******/
+.page #header { width:inherit; z-index:3; height: 110px; }
+.page #footer { width: 100%; height: 100px; background: #222; border-top:#444 solid 1px; }
+
+#header-application, #header-entry { display:none; }
+
+/* Standard page size and position */
+.login, .terms, .start, .main-goal { padding-top: 30px; width: 1080px; margin: 0px auto; position: relative; }
+
+/* header application */
+.header-application { height:60px; padding-left:340px; background:#eee; box-shadow:0px 0px 5px -1px; position:absolute; left:0px; right:0px;}
+.header-application .filter { float: left; padding: 10px 0px 0px 20px; }
+.header-application .avatar, .messages { height:50px; width:50px; float:right; margin:5px 20px 5px 0; }
+.header-application .messages { background-color:#239371; }
+
+#header .profile-info { width: 250px; height: 250px; margin: 10px; padding: 10px; border: 3px solid #aaa; }
+#header .profile-image { cursor: pointer; }
+
+/* header home */
+.header-home { height:110px; z-index:2; background:#454545; box-shadow:0px 0px 5px 3px; position: absolute; width: 100%;}
+.header-home .nav-item { margin-left:30px; color:#ddd; font-size:20px; box-shadow:none; display:inline-block; }
+.header-home .nav-item.dropdown:hover { cursor:pointer; }
+.header-home .nav-item.dropdown .dropdown-menu { background:#eee; }
+.header-home .nav-item.dropdown .dropdown-menu .divider { background:#aaa; }
+.header-home .nav-item.dropdown .dropdown-menu li a:hover { background:#00aeef; color:#fff; }
+.header-home .entry-wrapper { margin: auto; width: 1080px; padding-top: 30px; height: 83px; }
+.header-home .entry-wrapper .right { float: right; margin-top: 20px; }
+.header-home a { color:#ccc; text-decoration:none; }
+.header-home a:hover { color:#fff; }
+.header-home a:visited { border:none; }
+.header-home .logo { float:left; height:50px;}
+
+
+/* footer */
+.footer-nav, .footer-copyright { margin:auto; text-align:center; }
+#footer .footer-content { padding:20px; color:#ddd; }
+#footer .footer-nav { margin-top:30px; }
+#footer .footer-copyright { font: .85em Times New Roman; margin-top: 30px; }
+
+
+
+/******LOGIN*******/
+.login td { width:320px; padding: 5px 0;}
+.login a, .login a:visited { text-decoration:none; }
+.login .input-text { width:100%; border-radius:5px; margin-top:15px;}
+.login .remember { line-height:1.0em; }
+.login .checkbox { display:inline; }
+.login .btn { float:right; }
+.login .submit { padding-top:15px; }
+.login .register-div { height:40px; padding-top:10px; vertical-align:middle; }
+.login .register-div a { text-decoration:underline; }
+
+.top-section {
+	height: 1227px;
+	background: url('../images/pin-bg.jpg') center -110px no-repeat #161615;
+	opacity: 0.0;
+}
+
+.wrapper { width: 1300px; margin: auto; position: relative; }
+.catch { position: relative; color: #fff; font-size: 48px; text-shadow: 2px 2px 5px #000; }
+.emp-orange { color: #ff6c00; font-size: 72px; }
+.linetext { position: absolute; color: #fff; font-size: 30px; font-family:'museo-sans-500'; text-shadow: 2px 2px 5px #000; }
+
+#line-canvas { position: absolute; top:0px; left:0px; }
+
+#catch-top { top: 70px; left: 0px; }
+#linetext-1 { top: 250px; left: 282px; }
+#linetext-2 { top: 355px; left: 855px; }
+#linetext-3 { top: 655px; left: 705px; }
+
+.info-box { position: relative; background: rgba(255,255,255,0.64); height: 342px; width: 822px; border-radius: 4px; padding: 30px; color: #262626; }
+#top-info-box { top: 710px; left: 400px; }
+.info-box .lead-word { font-size: 36px; margin-right: 5px; }
+.info-box-content { font-size: 18px; line-height: 30px; }
+
+.info-box .btn-container { position: absolute; bottom: 30px; right: 30px; }
+.info-box .blue-btn { display: inline-block; height: 73px; width: 263px; background: url('../images/blue-btn.png') no-repeat 0px 0px; font-size: 24px; color: #fff; text-align: center; }
+.info-box .blue-btn:hover { background-position-y: -73px; cursor: pointer; }
+.info-box .blue-btn .btn-label { vertical-align: middle; line-height: 73px; }

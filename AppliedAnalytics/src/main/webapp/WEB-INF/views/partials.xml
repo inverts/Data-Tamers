@@ -41,5 +41,9 @@
 	<bean id="tutorialVideo" class="org.springframework.web.servlet.view.JstlView">
 		<property name="url" value="/WEB-INF/views/includes/tutorial.jsp" />
 	</bean>
+	
+	<bean id="about" class="org.springframework.web.servlet.view.JstlView">
+		<property name="url" value="/WEB-INF/views/pages/about/about.jsp" />
+	</bean>
 
 </beans>   
