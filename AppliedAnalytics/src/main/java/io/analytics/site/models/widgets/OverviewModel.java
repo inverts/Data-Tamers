@@ -367,7 +367,7 @@ class DeviceData implements Comparable<DeviceData>{
 
 	public int compareTo(DeviceData dd){
 		// sort visits ascending
-		int vCmp = Integer.compare(this.visits, dd.visits);
+		int vCmp = this.visits - dd.visits;
 		int result=0;
 		if (vCmp != 0){
 			result = vCmp;
