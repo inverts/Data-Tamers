@@ -7,7 +7,7 @@
 		<h1><fmt:message key="login.title" /></h1>
 		<div class="register-div">
 			<h4><fmt:message key="login.register.1" />
-				<a href="/appliedanalytics/accounts/getstarted"><fmt:message key="login.register.link" /></a>
+				<a href="<c:url value="/accounts/getstarted" />"><fmt:message key="login.register.link" /></a>
 				<fmt:message key="login.register.2" />
 			</h4>
 		</div>

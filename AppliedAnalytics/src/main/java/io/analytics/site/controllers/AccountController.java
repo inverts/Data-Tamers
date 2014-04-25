@@ -85,7 +85,7 @@ public class AccountController {
 	 * @param accepted
 	 */
 	@RequestMapping(value = "/accounts/acceptterms", method = RequestMethod.POST)
-	private void acceptTerms(Model model, HttpServletResponse response, HttpSession session,
+	private void acceptTerms(Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session,
 							@RequestParam("accept_terms") boolean accepted)
 	{
 		try {
@@ -93,11 +93,11 @@ public class AccountController {
 			if (!accepted) {
 				// the user somehow bypassed the terms without accepting. Kill the session and start over.
 				session.invalidate();
-				response.sendRedirect("/appliedanalytics/");
+				response.sendRedirect(request.getContextPath() + "/");
 			}
 			else {
 				model.addAttribute("acceptTerms", accepted);
-				response.sendRedirect("/appliedanalytics/accounts/newaccount");
+				response.sendRedirect(request.getContextPath() + "/accounts/newaccount");
 			}
 		}
 		catch(IOException e) {

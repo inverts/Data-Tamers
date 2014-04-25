@@ -61,7 +61,7 @@
 			<div class="header-home">
 				<div class="entry-wrapper">
 					<div class="logo">
-						<a href="/appliedanalytics/"><img src="<c:url value="/cache/images/logo-280.png" />" /></a>
+						<a href="<c:url value="/" />"><img src="<c:url value="/cache/images/logo-280.png" />" /></a>
 					</div>
 					<div class="right">
 						<c:choose>
