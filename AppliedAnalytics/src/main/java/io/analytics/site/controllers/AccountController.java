@@ -151,14 +151,11 @@ public class AccountController {
 			GoogleUserData googleData = SessionService.getUserSettings(session).getGoogleUserData();
 			
 			// Only pre-populate fields that the user has no input in.
-			if (form.getFirstname() == null || form.getFirstname().isEmpty())
-				form.setFirstname(googleData.getGiven_name());
-			if (form.getLastname() == null || form.getLastname().isEmpty())
-				form.setLastname(googleData.getFamily_name());
-			if (form.getEmail() == null || form.getEmail().isEmpty()) {
-				form.setEmail(googleData.getEmail());
-				form.setConfirmEmail(googleData.getEmail());
-			}
+			
+			form.setFirstname(googleData.getGiven_name());
+			form.setLastname(googleData.getFamily_name());
+			form.setEmail(googleData.getEmail());
+			form.setConfirmEmail(googleData.getEmail());
 			
 			model.addAttribute("accountForm", form);
 			//String googleEmail = googleData.getEmail();
