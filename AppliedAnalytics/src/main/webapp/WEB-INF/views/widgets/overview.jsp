@@ -11,6 +11,6 @@
 	<ul class="pagination">
 		<li><a class="totals1">Visits</a></li>
 		<li><a class="totals2">Behavior</a></li>
-		<li><a class="devices">Devices</a></li>
+		<li><a class="devices">Visitor's Devices</a></li>
 	</ul>
 </div>
